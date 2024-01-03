@@ -1,0 +1,18 @@
+body{
+ background-image: url("https://img.freepik.com/premium-photo/business-intelligence-bi-key-performance-indicator-kpi-analysis-dashboard-transparent-blurred-background_161452-1847.jpg");    
+background-repeat: no-repeat;
+background-size: cover;
+}
+.loginbuttons {
+    display: flex;
+    justify-content: flex-end;
+    margin: 18px 30px 0px 0px;
+    gap: 20px;
+    
+}
+
+.welcometext {
+    color: #000;
+    font-size: 79px;
+    font-family: system-ui;
+}

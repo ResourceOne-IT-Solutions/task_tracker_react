@@ -1,0 +1,15 @@
+form{
+    width: 30%;
+    margin: auto;
+}
+h1{
+    color: white;
+}
+.logindiv{
+    margin-top: 10%;
+    color: aliceblue;
+}
+
+.error{
+    color: red;
+}

@@ -5,6 +5,7 @@ function App() {
   return (
     <div className="App">
       <h1>Welcome To ResourceOne</h1>
+      <p>this is home page branch</p>
     </div>
   );
 }

@@ -1,10 +1,11 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Routespage from "./Routes/Routespage";
 
 function App() {
   return (
     <div className="App">
-      <h1>Welcome To ResourceOne</h1>
+      <Routespage />
     </div>
   );
 }

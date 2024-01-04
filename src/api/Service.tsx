@@ -1,15 +1,25 @@
-import { Datainterface } from "../pages/loginpage/Login";
+import { BE_URL } from "../utils/Constants";
 
 
-const post = async ( url:string, data:Datainterface) => {
-  const apiResponse = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  const apiData = apiResponse.json(); 
-  return apiData;
-};
-export {post}
+async function post<T>(
+  path: string,
+  data: T
+): Promise<Response> {
+  try {
+    const response = await fetch(BE_URL + path, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json()
+    if (response.status > 399) {
+      throw new Error(result.error)
+    }
+    return result;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+export default { post }

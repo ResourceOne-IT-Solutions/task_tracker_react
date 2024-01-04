@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Timezones from "../../components/features/timezone/Timezones";
-import { post } from "../../api/Service";
+import httpMethods from "../../api/service";
 
 export interface Datainterface{
   userId: string,
@@ -34,21 +34,16 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
-    try {
-      const apiData = await post(
-        "http://192.168.10.30:1234/users/login",
-        data
-      );
-      setData({ ...data, userId: "", password: "", isAdmin: false });
-      if (apiData.error) {
-        setError(apiData.error);
-      } else {
-        navigate("/admindashboard", { state: apiData });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      throw error;
-    }
+      httpMethods.post("/users/login",
+      data)
+      .then(data => {
+        setData({ ...data, userId: "", password: "", isAdmin: false });
+        navigate("/admindashboard", { state: data });
+      })
+      .catch((e:any) => {
+        console.log('ERR::', e)
+        setError(e.message);
+      })
   };
   return (
     <div className="login-main">

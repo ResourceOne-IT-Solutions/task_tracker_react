@@ -9,7 +9,7 @@ async function post<T>(path: string, data: T): Promise<Response> {
       },
       body: JSON.stringify(data),
     });
-    console.log('eeee')
+    console.log('ok ')
     const result = await response.json();
     if (response.status > 399) {
       throw new Error(result.error);

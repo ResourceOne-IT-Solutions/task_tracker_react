@@ -3,6 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
+import {
+  UserContext,
+  UserModal,
+  useUserContext,
+} from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/service";
 
@@ -13,6 +18,8 @@ export interface Datainterface{
 }
 const Login = () => {
   const navigate = useNavigate();
+  const userContext = useUserContext();
+  const { setCurrentUser } = userContext as UserContext;
   const [data, setData] = useState<Datainterface>({
     userId: "",
     password: "",
@@ -30,7 +37,7 @@ const Login = () => {
   };
 
   const handleSubmit = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     setError("");

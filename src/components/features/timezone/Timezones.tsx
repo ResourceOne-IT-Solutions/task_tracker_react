@@ -1,67 +1,30 @@
 import React, { useState, useEffect } from "react";
 import "./Timezones.css";
+
+const time = (timeZone: string, date: Date = new Date()) => {
+  return date.toLocaleString("en-US", {
+    timeZone,
+    hour12: true,
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  });
+};
+
 const Timezones = () => {
   const [timeByZones, setTimeByZones] = useState({
-    EST: new Date().toLocaleString("en-US", {
-      timeZone: "America/New_York",
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }),
-    PST: new Date().toLocaleString("en-US", {
-      timeZone: "America/Los_Angeles",
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }),
-    CST: new Date().toLocaleString("en-US", {
-      timeZone: "America/Chicago",
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }),
-    IST: new Date().toLocaleString("en-US", {
-      timeZone: "Asia/Kolkata",
-      hour12: true,
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-    }),
+    EST: time("America/New_York"),
+    PST: time("America/Los_Angeles"),
+    CST: time("America/Chicago"),
+    IST: time("Asia/Kolkata"),
   });
   useEffect(() => {
     const interval = setInterval(() => {
       const d = new Date();
-      const EST = d.toLocaleTimeString("en-US", {
-        timeZone: "America/New_York",
-        hour12: true,
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      });
-      const CST = d.toLocaleTimeString("en-US", {
-        timeZone: "America/Chicago",
-        hour12: true,
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      });
-      const PST = d.toLocaleTimeString("en-US", {
-        timeZone: "America/Los_Angeles",
-        hour12: true,
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      });
-      const IST = d.toLocaleTimeString("en-US", {
-        timeZone: "Asia/Kolkata",
-        hour12: true,
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      });
+      const EST = time("America/New_York", d);
+      const CST = time("America/Chicago", d);
+      const PST = time("America/Los_Angeles", d);
+      const IST = time("Asia/Kolkata", d);
       setTimeByZones({ EST, CST, PST, IST });
     }, 1000);
     return () => clearInterval(interval);

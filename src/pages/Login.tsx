@@ -1,11 +1,14 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {  useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Login.css";
+import "./Login.css"; 
+import { UserContext, UserModal, useUserContext } from "../components/Authcontext/AuthContext";
 
 const Login = ()=> {
   const navigate = useNavigate();
+  const userContext = useUserContext()
+  const {setCurrentUser} = userContext as UserContext
   const [data, setData] = useState({
     userId: "",
     password: "",
@@ -15,7 +18,7 @@ const Login = ()=> {
   const { name } = useParams();
   console.log(name);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
       isAdmin: name === "Admin" ? true : false,
@@ -36,13 +39,15 @@ const Login = ()=> {
       },
       body: JSON.stringify(data),
     });
-    const apidata = await apiJsonData.json();
-    console.log(apidata, "2626");
+    const apiData = await apiJsonData.json();
+    console.log(apiData, "2626");
     setData({ ...data, userId: "", password: "", isAdmin: false });
-    if (apidata.error) {
-      setError(apidata.error);
+    if (apiData.error) {
+      setError(apiData.error);
     } else {
-      navigate("/admindashboard", { state: apidata });
+      localStorage.setItem("currentUser",JSON.stringify(apiData))
+      setCurrentUser(apiData as UserModal)
+      navigate("/admindashboard", { state: apiData });
     }
   };
   return (

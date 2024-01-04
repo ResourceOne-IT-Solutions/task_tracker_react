@@ -1,8 +1,9 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
+import Timezones from "../components/features/Timezones";
 
 const Login = ()=> {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Login = ()=> {
   const { name } = useParams();
   console.log(name);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
       isAdmin: name === "Admin" ? true : false,
@@ -73,12 +74,13 @@ const Login = ()=> {
         <div className="error">{error}</div>
         <Button
           type="submit"
-          variant="success"
+          variant="outline-success"
           onClick={(e) => handleSubmit(e)}
         >
           {name} Login
         </Button>
       </Form>
+      <Timezones/>
     </div>
   );
 }

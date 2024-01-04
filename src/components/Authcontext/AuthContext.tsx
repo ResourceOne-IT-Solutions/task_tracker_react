@@ -2,9 +2,9 @@ import React, { createContext, useContext, useState } from "react";
 
 const UserContext = createContext<UserContext | null>(null);
 export interface UserContext {
-  isLoggedin: Boolean;
-  currentUser: {};
-  setCurrentUser: React.Dispatch<React.SetStateAction<{}>>;
+  isLoggedin: boolean;
+  currentUser: object;
+  setCurrentUser: React.Dispatch<React.SetStateAction<object>>;
 }
 export interface UserModal {
   firstName: string;
@@ -16,9 +16,9 @@ export interface UserModal {
   userId: string;
   empId: string;
   joinedDate: Date;
-  isAdmin: Boolean;
+  isAdmin: boolean;
   lastActive: string;
-  isActive: Boolean;
+  isActive: boolean;
   designation: string;
   address: string;
   profileImageUrl: string;
@@ -33,7 +33,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   if (storedData !== null) {
     user = storedData;
   }
-  const [currentUser, setCurrentUser] = useState<UserModal | {}>(user);
+  const [currentUser, setCurrentUser] = useState<UserModal | object>(user);
   const value: UserContext = {
     isLoggedin: (currentUser as UserModal).lastActive ? true : false,
     currentUser,

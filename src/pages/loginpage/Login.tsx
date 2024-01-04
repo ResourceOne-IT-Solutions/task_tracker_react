@@ -9,12 +9,12 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
-import httpMethods from "../../api/service";
+import httpMethods from "../../api/Service";
 
-export interface Datainterface{
-  userId: string,
-  password: string,
-  isAdmin: Boolean,
+export interface Datainterface {
+  userId: string;
+  password: string;
+  isAdmin: boolean;
 }
 const Login = () => {
   const navigate = useNavigate();
@@ -41,16 +41,16 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
-      httpMethods.post("/users/login",
-      data)
-      .then(data => {
+    httpMethods
+      .post<Datainterface, UserModal>("/users/login", data)
+      .then((result) => {
+        setCurrentUser(result);
         setData({ ...data, userId: "", password: "", isAdmin: false });
-        navigate("/admindashboard", { state: data });
+        navigate("/admindashboard", { state: result });
       })
-      .catch((e:any) => {
-        console.log('ERR::', e)
+      .catch((e: any) => {
         setError(e.message);
-      })
+      });
   };
   return (
     <div className="login-main">

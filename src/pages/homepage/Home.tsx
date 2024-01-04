@@ -2,7 +2,7 @@ import React from "react";
 import "./Home.css";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-const Home = ()=> {
+const Home = () => {
   const navigate = useNavigate();
   const handleClick = (name: string) => {
     navigate("/login/" + name);
@@ -23,6 +23,6 @@ const Home = ()=> {
       </div>
     </div>
   );
-}
+};
 
 export default Home;

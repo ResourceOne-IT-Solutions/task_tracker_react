@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
-import Timezones from "../components/features/Timezones";
+import Timezones from "../../components/features/timezone/Timezones";
 
 const Login = () => {
   const navigate = useNavigate();

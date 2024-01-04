@@ -9,13 +9,18 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
-import { BE_URL } from "../../utils/Constants";
+import httpMethods from "../../api/service";
 
+export interface Datainterface{
+  userId: string,
+  password: string,
+  isAdmin: Boolean,
+}
 const Login = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { setCurrentUser } = userContext as UserContext;
-  const [data, setData] = useState({
+  const [data, setData] = useState<Datainterface>({
     userId: "",
     password: "",
     isAdmin: false,
@@ -36,23 +41,16 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
-    const apiJsonData = await fetch(BE_URL + "/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const apiData = await apiJsonData.json();
-    console.log(apiData, "2626");
-    setData({ ...data, userId: "", password: "", isAdmin: false });
-    if (apiData.error) {
-      setError(apiData.error);
-    } else {
-      localStorage.setItem("currentUser", JSON.stringify(apiData));
-      setCurrentUser(apiData as UserModal);
-      navigate("/admindashboard", { state: apiData });
-    }
+      httpMethods.post("/users/login",
+      data)
+      .then(data => {
+        setData({ ...data, userId: "", password: "", isAdmin: false });
+        navigate("/admindashboard", { state: data });
+      })
+      .catch((e:any) => {
+        console.log('ERR::', e)
+        setError(e.message);
+      })
   };
   return (
     <div className="login-main">

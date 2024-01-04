@@ -1,12 +1,11 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import './App.css';
+import React from "react";
+import "./App.css";
+import Routespage from "./Routes/Routespage";
 
 function App() {
   return (
     <div className="App">
-      
-    
+      <Routespage />
     </div>
   );
 }

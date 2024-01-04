@@ -1,0 +1,13 @@
+form {
+  width: 30%;
+  margin: auto;
+}
+.loginmain {
+  color: aliceblue;
+  padding-top: 6%;
+  padding-bottom: 18.4%;
+  background-color: rgba(7, 7, 7, 0.733);
+}
+.error {
+  color: red;
+}

@@ -35,11 +35,10 @@ const Login = () => {
     event.preventDefault();
     setError("");
     try {
-      const apiResponse = await post(
+      const apiData = await post(
         "http://192.168.10.30:1234/users/login",
         data
       );
-      const apiData = await apiResponse.json();
       setData({ ...data, userId: "", password: "", isAdmin: false });
       if (apiData.error) {
         setError(apiData.error);

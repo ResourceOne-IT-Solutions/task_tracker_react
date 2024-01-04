@@ -9,6 +9,7 @@ const post = async ( url:string, data:Datainterface) => {
     },
     body: JSON.stringify(data),
   });
-  return apiResponse;
+  const apiData = apiResponse.json(); 
+  return apiData;
 };
 export {post}

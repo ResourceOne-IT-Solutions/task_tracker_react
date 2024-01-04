@@ -25,9 +25,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "npm run test && npm run build",
     "deploy": "gh-pages -d build",
-    "format": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|md)\""
+    "format": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|md)\"",
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@types/react-router-dom": "^5.3.3",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
     "gh-pages": "^6.1.1",
     "prettier": "3.1.1"
   }

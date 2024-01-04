@@ -4,5 +4,17 @@
 }
 .timezonebtns div {
   margin: 1%;
-  font-size: 20px;
+  font-size: 23px;
+  color: black;
+  padding: 28px;
+  border-radius: 50% !important;
+  width: 150px;
+  height: 150px;
+}
+.timezoneistbtn div{
+    font-size: 23px;
+    color: black;
+    width: 20%;
+    margin: auto;
+    padding: 10px;
 }

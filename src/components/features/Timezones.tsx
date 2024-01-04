@@ -69,12 +69,12 @@ const Timezones = () => {
   return (
     <div>
       <div className="timezonebtns">
-        <div className="bg-primary rounded p-3">PST : {timeByZones.PST}</div>
-        <div className="bg-warning rounded p-3">CST : {timeByZones.CST}</div>
-        <div className="bg-danger rounded p-3">EST : {timeByZones.EST}</div>
+        <div className="bg-light rounded">PST : {timeByZones.PST}</div>
+        <div className="bg-light rounded">CST : {timeByZones.CST}</div>
+        <div className="bg-light rounded">EST : {timeByZones.EST}</div>
       </div>
-      <div className="timezonebtns">
-        <div className="bg-info rounded p-3">IST : {timeByZones.IST}</div>
+      <div className="timezoneistbtn">
+        <div className="bg-info rounded">IST : {timeByZones.IST}</div>
       </div>
     </div>
   );

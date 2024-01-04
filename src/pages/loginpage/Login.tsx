@@ -1,16 +1,20 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import "./Login.css"; 
-import { UserContext, UserModal, useUserContext } from "../../components/Authcontext/AuthContext";
+import "./Login.css";
+import {
+  UserContext,
+  UserModal,
+  useUserContext,
+} from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
 import { BE_URL } from "../../utils/Constants";
 
 const Login = () => {
   const navigate = useNavigate();
-  const userContext = useUserContext()
-  const {setCurrentUser} = userContext as UserContext
+  const userContext = useUserContext();
+  const { setCurrentUser } = userContext as UserContext;
   const [data, setData] = useState({
     userId: "",
     password: "",
@@ -28,11 +32,11 @@ const Login = () => {
   };
 
   const handleSubmit = async (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
     setError("");
-    const apiJsonData = await fetch(BE_URL+"/users/login", {
+    const apiJsonData = await fetch(BE_URL + "/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,8 +49,8 @@ const Login = () => {
     if (apiData.error) {
       setError(apiData.error);
     } else {
-      localStorage.setItem("currentUser",JSON.stringify(apiData))
-      setCurrentUser(apiData as UserModal)
+      localStorage.setItem("currentUser", JSON.stringify(apiData));
+      setCurrentUser(apiData as UserModal);
       navigate("/admindashboard", { state: apiData });
     }
   };

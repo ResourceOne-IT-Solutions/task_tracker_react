@@ -11,8 +11,17 @@
         "jsx": true
       }
     },
-    "plugins": ["react", "react-hooks"],
+    "plugins": ["react", "react-hooks", "plugin:prettier/recommended"],
     "rules": {
       //add customize rules here as per your project's needs
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          "selector": "variable",
+          "format": ["camelCase", "UPPER_CASE"]
+        }
+      ],
+      "react/prop-typ": "warn",
+      "react/destructuring-assignment": ["warn", "always"]
     }
 }

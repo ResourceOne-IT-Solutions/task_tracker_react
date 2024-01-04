@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
-import AdminDashboard from "../pages/dashboard/AdminDashboard"
+import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
@@ -12,7 +12,7 @@ const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   if (userContext == null) {
     return <Navigate to="/" />;
   }
-  const { isLoggedin } = userContext; 
+  const { isLoggedin } = userContext;
   return isLoggedin ? element : <Navigate to="/" />;
 };
 const Routespage = () => {
@@ -27,9 +27,12 @@ const Routespage = () => {
         <Routes>
           <Route
             path="/"
-            element={isLoggedin ? <Navigate to='/admindashboard'/> : <Home />}
+            element={isLoggedin ? <Navigate to="/admindashboard" /> : <Home />}
           />
-          <Route path="/login/:name" element={isLoggedin ? <Navigate to='/admindashboard'/> :<Login />} />
+          <Route
+            path="/login/:name"
+            element={isLoggedin ? <Navigate to="/admindashboard" /> : <Login />}
+          />
           <Route
             path="/admindashboard"
             element={<ProtectedRoute element={<AdminDashboard />} />}
@@ -41,5 +44,3 @@ const Routespage = () => {
 };
 
 export default Routespage;
-
-

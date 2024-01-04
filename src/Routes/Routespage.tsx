@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import AdminDashboard from "../pages/AdminDashboard";
+import Home from "../pages/homepage/Home";
+import Login from "../pages/loginpage/Login";
+import AdminDashboard from "../pages/dashboard/AdminDashboard"
 import { useUserContext } from "../components/Authcontext/AuthContext";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
@@ -41,3 +41,5 @@ const Routespage = () => {
 };
 
 export default Routespage;
+
+

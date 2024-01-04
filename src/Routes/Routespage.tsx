@@ -27,9 +27,9 @@ const Routespage = () => {
         <Routes>
           <Route
             path="/"
-            element={isLoggedin ? <AdminDashboard /> : <Home />}
+            element={isLoggedin ? <Navigate to='/admindashboard'/> : <Home />}
           />
-          <Route path="/login/:name" element={<Login />} />
+          <Route path="/login/:name" element={isLoggedin ? <Navigate to='/admindashboard'/> :<Login />} />
           <Route
             path="/admindashboard"
             element={<ProtectedRoute element={<AdminDashboard />} />}

@@ -23,10 +23,10 @@ export interface UserModal {
     address: string,
     profileImageUrl: string
 }
-interface props {
+interface AuthContextProps {
     children: React.ReactNode
 }
-const AuthContext = ({ children }: props) => {
+const AuthContext = ({ children }: AuthContextProps) => {
     const storedDataString = localStorage.getItem("currentUser");
     const storedData = storedDataString ? JSON.parse(storedDataString) : null;
     let user = {}

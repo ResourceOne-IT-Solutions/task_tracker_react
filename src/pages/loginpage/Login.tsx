@@ -4,10 +4,16 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Timezones from "../../components/features/timezone/Timezones";
+import { post } from "../../api/Service";
 
+export interface Datainterface{
+  userId: string,
+  password: string,
+  isAdmin: Boolean,
+}
 const Login = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({
+  const [data, setData] = useState<Datainterface>({
     userId: "",
     password: "",
     isAdmin: false,
@@ -28,19 +34,21 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
-    const apiJsonData = await fetch("http://192.168.10.30:1234/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-    const apidata = await apiJsonData.json();
-    setData({ ...data, userId: "", password: "", isAdmin: false });
-    if (apidata.error) {
-      setError(apidata.error);
-    } else {
-      navigate("/admindashboard", { state: apidata });
+    try {
+      const apiResponse = await post(
+        "http://192.168.10.30:1234/users/login",
+        data
+      );
+      const apiData = await apiResponse.json();
+      setData({ ...data, userId: "", password: "", isAdmin: false });
+      if (apiData.error) {
+        setError(apiData.error);
+      } else {
+        navigate("/admindashboard", { state: apiData });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      throw error;
     }
   };
   return (

@@ -17,7 +17,6 @@ const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
 };
 const Routespage = () => {
   const userContext = useUserContext();
-  console.log(userContext, "USER::");
   if (userContext === null) {
     return <Navigate to="/" />;
   }

@@ -44,7 +44,7 @@ const Login = () => {
     httpMethods
       .post<Datainterface, UserModal>("/users/login", data)
       .then((result) => {
-        setCurrentUser(result)
+        setCurrentUser(result);
         setData({ ...data, userId: "", password: "", isAdmin: false });
         navigate("/admindashboard", { state: result });
       })

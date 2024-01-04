@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Timezones from "../components/features/Timezones";
 
-const Login = ()=> {
+const Login = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     userId: "",
@@ -14,7 +14,6 @@ const Login = ()=> {
   });
   const [error, setError] = useState("");
   const { name } = useParams();
-  console.log(name);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -28,7 +27,6 @@ const Login = ()=> {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    console.log(data, "DATA");
     setError("");
     const apiJsonData = await fetch("http://192.168.10.30:1234/users/login", {
       method: "POST",
@@ -38,7 +36,6 @@ const Login = ()=> {
       body: JSON.stringify(data),
     });
     const apidata = await apiJsonData.json();
-    console.log(apidata, "2626");
     setData({ ...data, userId: "", password: "", isAdmin: false });
     if (apidata.error) {
       setError(apidata.error);
@@ -80,9 +77,9 @@ const Login = ()=> {
           {name} Login
         </Button>
       </Form>
-      <Timezones/>
+      <Timezones />
     </div>
   );
-}
+};
 
 export default Login;

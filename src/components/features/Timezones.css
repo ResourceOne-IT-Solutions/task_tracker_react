@@ -1,8 +1,8 @@
-.timezonebtns{
-    display: flex;
-    justify-content: center;
+.timezonebtns {
+  display: flex;
+  justify-content: center;
 }
-.timezonebtns div{
-    margin: 1%;
-    font-size:20px;
+.timezonebtns div {
+  margin: 1%;
+  font-size: 20px;
 }

@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Timezones from "../../components/features/timezone/Timezones";
+import { BE_URL } from "../../utils/Constants";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
-    const apiJsonData = await fetch("http://192.168.10.30:1234/users/login", {
+    const apiJsonData = await fetch(BE_URL+"/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

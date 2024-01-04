@@ -9,7 +9,7 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
-import httpMethods from "../../api/service";
+import httpMethods from "../../api/Service";
 
 export interface Datainterface {
   userId: string;

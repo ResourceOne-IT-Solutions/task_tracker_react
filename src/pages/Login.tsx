@@ -44,7 +44,7 @@ const Login = () => {
     }
   };
   return (
-    <div className="loginmain">
+    <div className="login-main">
       <h1>{name} Login Page</h1>
       <Form>
         <Form.Group className="mb-3">

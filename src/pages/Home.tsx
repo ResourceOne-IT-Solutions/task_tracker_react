@@ -8,7 +8,7 @@ const Home = ()=> {
     navigate("/login/" + name);
   };
   return (
-    <div className="homemain">
+    <div className="home-main">
       <div className="btns">
         <Button variant="secondary" onClick={() => handleClick("Admin")}>
           Admin Login

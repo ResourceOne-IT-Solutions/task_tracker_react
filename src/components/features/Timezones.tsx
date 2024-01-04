@@ -68,12 +68,12 @@ const Timezones = () => {
   }, []);
   return (
     <div>
-      <div className="timezonebtns">
+      <div className="timezone-btns">
         <div className="bg-light rounded">PST : {timeByZones.PST}</div>
         <div className="bg-light rounded">CST : {timeByZones.CST}</div>
         <div className="bg-light rounded">EST : {timeByZones.EST}</div>
       </div>
-      <div className="timezoneistbtn">
+      <div className="timezone-ist-btn">
         <div className="bg-info rounded">IST : {timeByZones.IST}</div>
       </div>
     </div>

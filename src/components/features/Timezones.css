@@ -1,8 +1,8 @@
-.timezonebtns {
+.timezone-btns {
   display: flex;
   justify-content: center;
 }
-.timezonebtns div {
+.timezone-btns div {
   margin: 1%;
   font-size: 23px;
   color: black;
@@ -11,7 +11,7 @@
   width: 150px;
   height: 150px;
 }
-.timezoneistbtn div{
+.timezone-ist-btn div{
     font-size: 23px;
     color: black;
     width: 20%;

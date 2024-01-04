@@ -3,9 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css"; 
-import { UserContext, UserModal, useUserContext } from "../components/Authcontext/AuthContext";
+import { UserContext, UserModal, useUserContext } from "../../components/Authcontext/AuthContext";
+import Timezones from "../../components/features/timezone/Timezones";
+import { BE_URL } from "../../utils/Constants";
 
-const Login = ()=> {
+const Login = () => {
   const navigate = useNavigate();
   const userContext = useUserContext()
   const {setCurrentUser} = userContext as UserContext
@@ -16,7 +18,6 @@ const Login = ()=> {
   });
   const [error, setError] = useState("");
   const { name } = useParams();
-  console.log(name);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -30,9 +31,8 @@ const Login = ()=> {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    console.log(data, "DATA");
     setError("");
-    const apiJsonData = await fetch("http://192.168.10.30:1234/users/login", {
+    const apiJsonData = await fetch(BE_URL+"/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const Login = ()=> {
     }
   };
   return (
-    <div className="loginmain">
+    <div className="login-main">
       <h1>{name} Login Page</h1>
       <Form>
         <Form.Group className="mb-3">
@@ -78,14 +78,15 @@ const Login = ()=> {
         <div className="error">{error}</div>
         <Button
           type="submit"
-          variant="success"
+          variant="outline-success"
           onClick={(e) => handleSubmit(e)}
         >
           {name} Login
         </Button>
       </Form>
+      <Timezones />
     </div>
   );
-}
+};
 
 export default Login;

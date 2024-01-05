@@ -1,33 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
-import { useLocation } from "react-router-dom";
 import httpMethods from "../../api/Service";
 import { Button } from "react-bootstrap";
+import {
+  UserContext,
+  useUserContext,
+} from "../../components/Authcontext/AuthContext";
+import { calculateWorkingFrom } from "../../utils/utils";
 
-function calculateWorkingFrom(joinDate: any) {
-  const currentDate = new Date();
-  const joinDateObj = new Date(joinDate);
-
-  if (isNaN(joinDateObj.getTime())) {
-    return {
-      years: 0,
-      months: 0,
-      days: 0,
-    };
-  }
-  const timeDiff = currentDate.getTime() - joinDateObj.getTime();
-  const oneDay = 24 * 60 * 60 * 1000;
-  const daysDiff = Math.floor(timeDiff / oneDay);
-  const years = Math.floor(daysDiff / 365);
-  const remainingDays = daysDiff % 365;
-  const months = Math.floor(remainingDays / 30);
-  const remainingDaysAfterMonths = remainingDays % 30;
-  return {
-    years,
-    months,
-    days: remainingDaysAfterMonths,
-  };
-}
 export interface TicketsModal {
   user: {
     id: string;
@@ -38,74 +18,71 @@ export interface TicketsModal {
     name: string;
   };
   description: string;
-  assignedDate: string;
-  closedDate: string;
-  receivedDate: string;
+  assignedDate: Date;
+  closedDate: Date;
+  receivedDate: Date;
   status: string;
   technology: string;
   comments: string;
 }
 
 const UserDashboard = () => {
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
+  const [tableData, setTableData] = useState<TicketsModal[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const joinDate = currentUser.joinedDate;
+  const workingDuration = calculateWorkingFrom(joinDate);
+  const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
+
   useEffect(() => {
+    setIsLoading(true);
     httpMethods
       .get<TicketsModal[]>("/tickets")
-      .then((result) => setTableData(result))
-      .catch((err: any) => err);
+      .then((result) => {
+        setTableData(result);
+        setIsLoading(false);
+      })
+      .catch(() => setIsLoading(false));
   }, []);
-  const [tableData, setTableData] = useState<null | any>(null);
-  const userdata = useLocation().state;
-  const joinDate = userdata.joinedDate;
-  const workingDuration = calculateWorkingFrom(joinDate);
-
-  const convertedJoiningDate = new Date(userdata.joinedDate);
-  const joiningDate =
-    convertedJoiningDate.toLocaleDateString() +
-    "," +
-    convertedJoiningDate.toLocaleTimeString();
-  const dateConversion = (date: string) => {
-    const datechanger = new Date(date);
-    const actual_date = datechanger.toLocaleDateString();
-    return actual_date;
-  };
   return (
     <>
       <div className="userdashboard">
-        <p className="username">Welcome back, {userdata.firstName}</p>
+        <p className="username">Welcome back, {currentUser.firstName}</p>
         <div className="usernavbar">
           <div className="nav_img_container">
-            <img src={`${userdata.profileImageUrl}`} />
+            <img src={`${currentUser.profileImageUrl}`} />
           </div>
           <p>
-            {userdata.firstName}
-            {userdata.lastName}
+            {currentUser.firstName}
+            {currentUser.lastName}
           </p>
           <span
             className="active_inactive_circle"
-            style={{ backgroundColor: userdata.isActive ? "green" : "red" }}
+            style={{ backgroundColor: currentUser.isActive ? "green" : "red" }}
           ></span>
-          <p>({userdata.userId})</p>
+          <p>({currentUser.userId})</p>
         </div>
         <div className="userdetails">
           <div className="userleft">
             <p>Profile Image</p>
-            <img src={`${userdata.profileImageUrl}`} />
+            <img src={`${currentUser.profileImageUrl}`} />
             <div className="employee-details">
               <ul>
                 <li>Employee Details</li>
-                <li>Emp ID: {userdata.empId}</li>
-                <li>First Name : {userdata.firstName}</li>
-                <li>Last Name : {userdata.lastName}</li>
-                <li>Email : {userdata.email}</li>
-                <li>Phone : {userdata.mobile}</li>
-                <li>Role : {userdata.designation}</li>
+                <li>Emp ID: {currentUser.empId}</li>
+                <li>First Name : {currentUser.firstName}</li>
+                <li>Last Name : {currentUser.lastName}</li>
+                <li>Email : {currentUser.email}</li>
+                <li>Phone : {currentUser.mobile}</li>
+                <li>Role : {currentUser.designation}</li>
               </ul>
             </div>
           </div>
           <div className="usercenter">
             <div className="emprole">
               <p>Role</p>
-              <p>{userdata.designation}</p>
+              <p>{currentUser.designation}</p>
               <p>TEAM</p>
               <p>React Community</p>
             </div>
@@ -125,7 +102,7 @@ const UserDashboard = () => {
           <div className="userright">
             <div className="joiningdate">
               <p>Joined On</p>
-              <p>{joiningDate}</p>
+              <p>{dateConversion(currentUser.joinedDate)}</p>
               <p>Working from</p>
               <p>
                 {workingDuration.years} years {workingDuration.months} Months{" "}
@@ -138,7 +115,7 @@ const UserDashboard = () => {
                 <li>Browser : Google Chrome</li>
                 <li>IP Address: 192.168.10.29</li>
                 <li>Login Time: 1/5/2024, 10:08:50 AM</li>
-                <li>Location: {userdata.address}</li>
+                <li>Location: {currentUser.address}</li>
                 <li>
                   Map: <a href="_blank">Click here </a>(Approximate location)
                 </li>
@@ -165,8 +142,15 @@ const UserDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {tableData &&
-            tableData?.map((items: TicketsModal, index: any) => {
+          {isLoading && (
+            <tr>
+              <td colSpan={11}>
+                <h1>Data Loading...</h1>
+              </td>
+            </tr>
+          )}
+          {tableData.length &&
+            tableData.map((items: TicketsModal, index: any) => {
               return (
                 <tr key={index}>
                   <td>{items.user.name}</td>

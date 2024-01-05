@@ -143,5 +143,5 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
   );
 });
 
-TaskTable.displayName = 'TaskTable'
+TaskTable.displayName = "TaskTable";
 export default TaskTable;

@@ -7,7 +7,7 @@ import {
   UserContext,
   UserModal,
   useUserContext,
-} from "../../components/Authcontext/AuthContext";
+} from "../../components/authContext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/Service";
 

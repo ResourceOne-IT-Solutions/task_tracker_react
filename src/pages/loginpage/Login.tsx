@@ -51,8 +51,8 @@ const Login = () => {
         setData({ ...data, userId: "", password: "", isAdmin: false });
         setIsLoading(false);
         result.isAdmin
-          ? navigate("/admindashboard", { state: result })
-          : navigate("/userdashboard", { state: result });
+          ? navigate("/admindashboard")
+          : navigate("/userdashboard");
       })
       .catch((e: any) => {
         setError(e.message);

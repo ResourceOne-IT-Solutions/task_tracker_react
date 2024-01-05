@@ -1,0 +1,46 @@
+.task-table {
+  width: 100%;
+}
+
+.task-table tr td,
+.task-table tr th {
+  padding: 10px;
+}
+.table-pagination {
+  display: flex;
+  justify-content: center;
+}
+.table-pagination span,
+.table-pagination .prev-btn,
+.table-pagination .next-btn {
+  padding: 10px;
+  background-color: beige;
+  margin-inline: 2px;
+  border-radius: 8px;
+  color: #000;
+}
+.table-pagination .prev-btn,
+.table-pagination .next-btn {
+  background-color: aquamarine;
+  border: none;
+}
+.table-pagination .selected {
+  background-color: cadetblue;
+  color: aquamarine;
+}
+.table-pagesize-dropdown {
+  border-radius: 8px;
+  padding: 10px;
+}
+.table-thead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.table-thead .sort-fields {
+  display: flex;
+  flex-direction: column;
+}
+.sort-fields span {
+  cursor: pointer;
+}

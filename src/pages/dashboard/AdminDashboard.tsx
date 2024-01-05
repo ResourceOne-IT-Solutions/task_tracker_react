@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import "./AdminDashboard.css";
 import httpMethods from "../../api/Service";
-import { UserModal } from "../../components/Authcontext/AuthContext";
+import {
+  UserContext,
+  UserModal,
+  useUserContext,
+} from "../../components/Authcontext/AuthContext";
 import AddUserModal from "../../utils/modal/AddUserModal";
 
 interface ClientModal {
@@ -17,9 +20,8 @@ interface ClientModal {
 }
 
 const AdminDashboard = () => {
-  const adminData = useLocation().state;
-  let dob: string | Date = new Date(adminData.dob);
-  dob = dob.toLocaleDateString();
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [tableData, setTableData] = useState<null | any>(null);
   const [tableName, setTableName] = useState<string>("");
 
@@ -27,9 +29,7 @@ const AdminDashboard = () => {
     httpMethods
       .get<UserModal>(url)
       .then((result) => setTableData(result))
-      .catch((err: any) => {
-        // console.log(err);
-      });
+      .catch((err) => err);
   };
   const displayTable = (name: string) => {
     setTableData(null);
@@ -41,7 +41,6 @@ const AdminDashboard = () => {
     setTableName("/users");
     settingData("/users");
   }, []);
-  // console.log(tableData, tableName, "TableDta");
   return (
     <div>
       <div className="header-nav">
@@ -138,35 +137,35 @@ const AdminDashboard = () => {
       </div>
       <div className="admin-details">
         <div className="heading-pic">
-          <img src={`${adminData.profileImageUrl}`} alt="img" />
+          <img src={`${currentUser.profileImageUrl}`} alt="img" />
           <h4>
-            {adminData.firstName} {" " + adminData.lastName + " "}
+            {currentUser.firstName} {" " + currentUser.lastName + " "}
             <span
               className="active-not"
               style={{
-                backgroundColor: adminData.isActive ? "#15a757" : "red",
+                backgroundColor: currentUser.isActive ? "#15a757" : "red",
               }}
             ></span>{" "}
-            <span>{`(${adminData.userId})`}</span>
+            <span>{`(${currentUser.userId})`}</span>
           </h4>
         </div>
         <div className="all-details">
           <div className="pf">
             <h6>Profile Image</h6>
-            <img src={`${adminData.profileImageUrl}`} alt="image" />
+            <img src={`${currentUser.profileImageUrl}`} alt="image" />
           </div>
           <div>
             <h6>Admin Details</h6>
             <ul>
-              <li>EmpId : {adminData.empId}</li>
-              <li>FirstName : {adminData.firstName}</li>
-              <li>LastName : {adminData.lastName}</li>
-              <li>Email : {adminData.email}</li>
-              <li>Mobile : {adminData.mobile}</li>
-              <li>Email : {adminData.email}</li>
-              <li>Designation : {adminData.designation}</li>
-              <li>DOB : {dob}</li>
-              <li>Address : {adminData.address}</li>
+              <li>EmpId : {currentUser.empId}</li>
+              <li>FirstName : {currentUser.firstName}</li>
+              <li>LastName : {currentUser.lastName}</li>
+              <li>Email : {currentUser.email}</li>
+              <li>Mobile : {currentUser.mobile}</li>
+              <li>Email : {currentUser.email}</li>
+              <li>Designation : {currentUser.designation}</li>
+              <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
+              <li>Address : {currentUser.address}</li>
             </ul>
           </div>
         </div>

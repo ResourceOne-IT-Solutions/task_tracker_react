@@ -45,6 +45,7 @@ const Login = () => {
       .post<Datainterface, UserModal>("/users/login", data)
       .then((result) => {
         setCurrentUser(result);
+        localStorage.setItem("currentUser", JSON.stringify(result));
         setData({ ...data, userId: "", password: "", isAdmin: false });
         navigate("/admindashboard", { state: result });
       })

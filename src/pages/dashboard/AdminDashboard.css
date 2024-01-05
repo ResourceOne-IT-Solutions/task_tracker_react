@@ -1,0 +1,79 @@
+.admin-details {
+  width: 60%;
+  border: 1px solid rgb(185, 11, 185);
+  margin: 4px;
+  border-radius: 12px;
+}
+.heading-pic {
+  display: flex;
+  justify-content: center;
+}
+.heading-pic img {
+  width: 10%;
+  height: 50px;
+}
+.heading-pic h4 {
+  padding-top: 7px;
+}
+.all-details {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+.pf img {
+  width: 200px;
+  height: 200px;
+  border: 1px solid blue;
+  border-radius: 10%;
+}
+ul {
+  list-style-type: none;
+  text-align: left;
+}
+.active-not {
+  display: inline-block;
+  border: 1px solid white;
+  padding: 8px;
+  border-radius: 100%;
+}
+.admin-btns {
+  display: flex;
+  justify-content: left;
+  margin: 5px;
+}
+.admin-btns button {
+  color: aliceblue;
+  padding: 5px;
+  width: 10%;
+  border-radius: 20px !important;
+  margin: 5px;
+}
+table {
+  width: 100%;
+}
+td img {
+  width: 25%;
+}
+th {
+  padding: 29px;
+}
+td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px;
+}
+tr {
+  border-top: 2px solid rgb(8, 212, 248) !important;
+  border-bottom: 2px solid rgb(8, 212, 248) !important;
+}
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.418) !important;
+  cursor: pointer;
+  color: aliceblue;
+}
+.column-to-reduce {
+  width: 15%;
+}
+input {
+  width: 80%;
+}

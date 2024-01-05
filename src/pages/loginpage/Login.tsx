@@ -47,7 +47,9 @@ const Login = () => {
         setCurrentUser(result);
         localStorage.setItem("currentUser", JSON.stringify(result));
         setData({ ...data, userId: "", password: "", isAdmin: false });
-        navigate("/admindashboard", { state: result });
+        if (result.isAdmin) {
+          navigate("/admindashboard", { state: result });
+        }
       })
       .catch((e: any) => {
         setError(e.message);

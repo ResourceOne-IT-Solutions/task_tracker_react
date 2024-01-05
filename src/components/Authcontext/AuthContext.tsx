@@ -22,6 +22,8 @@ export interface UserModal {
   designation: string;
   address: string;
   profileImageUrl: string;
+  totalTickets: number;
+  helpedTickets: number;
 }
 interface AuthContextProps {
   children: React.ReactNode;

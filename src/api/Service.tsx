@@ -19,6 +19,19 @@ async function post<T, R>(path: string, data: T): Promise<R> {
   }
 }
 
+async function get<S>(path: string): Promise<S> {
+  try {
+    const response = await fetch(BE_URL + path);
+    const result = await response.json();
+    if (response.status > 399) {
+      throw new Error(result.error);
+    }
+    return result;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
 async function put<T, R>(url: string, data: T): Promise<R> {
   try {
     const response = await fetch(BE_URL + url, {
@@ -53,5 +66,5 @@ async function deleteCall<T>(url: string): Promise<T> {
   }
 }
 
-const httpMethods = { post, put, deleteCall };
+const httpMethods = { post, put, deleteCall, get };
 export default httpMethods;

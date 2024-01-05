@@ -26,6 +26,7 @@ const Login = () => {
     isAdmin: false,
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { name } = useParams();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,18 +42,21 @@ const Login = () => {
   ) => {
     event.preventDefault();
     setError("");
+    setIsLoading(true);
     httpMethods
       .post<Datainterface, UserModal>("/login", data)
       .then((result) => {
         setCurrentUser(result);
         localStorage.setItem("currentUser", JSON.stringify(result));
         setData({ ...data, userId: "", password: "", isAdmin: false });
+        setIsLoading(false);
         result.isAdmin
           ? navigate("/admindashboard", { state: result })
           : navigate("/userdashboard", { state: result });
       })
       .catch((e: any) => {
         setError(e.message);
+        setIsLoading(false);
       });
   };
   return (
@@ -86,7 +90,7 @@ const Login = () => {
           variant="outline-success"
           onClick={(e) => handleSubmit(e)}
         >
-          {name} Login
+          {isLoading ? "Loading..." : `${name} Login`}
         </Button>
       </Form>
       <Timezones />

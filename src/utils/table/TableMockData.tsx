@@ -75,4 +75,4 @@
 //     format: (val: any) => <a href={`mailto:${val.email}`}>{val.email}</a>,
 //   },
 // ];
-export const ccheck = "123"
+export const ccheck = "123";

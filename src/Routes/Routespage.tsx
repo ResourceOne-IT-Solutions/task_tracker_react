@@ -4,6 +4,7 @@ import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
+import UserDashboard from "../pages/dashboard/UserDashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -30,12 +31,24 @@ const Routespage = () => {
             element={isLoggedin ? <Navigate to="/admindashboard" /> : <Home />}
           />
           <Route
+            path="/"
+            element={isLoggedin ? <Navigate to="/userdashboard" /> : <Home />}
+          />
+          <Route
             path="/login/:name"
             element={isLoggedin ? <Navigate to="/admindashboard" /> : <Login />}
           />
           <Route
+            path="/login/:name"
+            element={isLoggedin ? <Navigate to="/userdashboard" /> : <Login />}
+          />
+          <Route
             path="/admindashboard"
             element={<ProtectedRoute element={<AdminDashboard />} />}
+          />
+          <Route
+            path="/userdashboard"
+            element={<ProtectedRoute element={<UserDashboard />} />}
           />
         </Routes>
       </BrowserRouter>

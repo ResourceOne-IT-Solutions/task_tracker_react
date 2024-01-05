@@ -66,5 +66,5 @@ async function deleteCall<T>(url: string): Promise<T> {
   }
 }
 
-const httpMethods = { post, put, deleteCall , get };
+const httpMethods = { post, put, deleteCall, get };
 export default httpMethods;

@@ -30,5 +30,5 @@
     rgba(0, 0, 0, 0.774),
     rgba(0, 0, 0, 0.616)
   );
-  height: 100vh;
+  min-height: 100vh;
 }

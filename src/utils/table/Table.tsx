@@ -22,7 +22,7 @@ interface TableProps<T, R> {
 
 const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
   const {
-    handleRowClick = () => {},
+    handleRowClick = (obj) => obj,
     headers = [],
     tableData = [],
     tHeadClassName = "",
@@ -143,4 +143,5 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
   );
 });
 
+TaskTable.displayName = 'TaskTable'
 export default TaskTable;

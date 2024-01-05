@@ -69,9 +69,10 @@
 //     key: "technology",
 //   },
 // ];
-export const defaultTdFormat = [
-  {
-    key: "email",
-    format: (val: any) => <a href={`mailto:${val.email}`}>{val.email}</a>,
-  },
-];
+// export const defaultTdFormat = [
+//   {
+//     key: "email",
+//     format: (val: any) => <a href={`mailto:${val.email}`}>{val.email}</a>,
+//   },
+// ];
+export const ccheck = "123"

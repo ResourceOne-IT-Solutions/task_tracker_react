@@ -42,7 +42,7 @@ const Login = () => {
     event.preventDefault();
     setError("");
     httpMethods
-      .post<Datainterface, UserModal>("/users/login", data)
+      .post<Datainterface, UserModal>("/login", data)
       .then((result) => {
         setCurrentUser(result);
         localStorage.setItem("currentUser", JSON.stringify(result));

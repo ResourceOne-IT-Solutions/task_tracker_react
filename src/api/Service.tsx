@@ -18,18 +18,6 @@ async function post<T, R>(path: string, data: T): Promise<R> {
     throw new Error(error.message);
   }
 }
-async function get<S>(path: string): Promise<S> {
-  try {
-    const response = await fetch(BE_URL + path);
-    const result = await response.json();
-    if (response.status > 399) {
-      throw new Error(result.error);
-    }
-    return result;
-  } catch (e: any) {
-    throw new Error(e.message);
-  }
-}
 
 async function get<S>(path: string): Promise<S> {
   try {

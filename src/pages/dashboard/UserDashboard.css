@@ -1,0 +1,130 @@
+.userdashboard {
+  min-height: 100vh;
+}
+/* left section design */
+.userdetails {
+  border: 1px solid rgb(37, 155, 151);
+  margin: 10px 5px 5px 5px;
+  padding: 5px;
+  border-radius: 10px;
+}
+.username {
+  font-size: 40px;
+  font-family: sans-serif;
+  color: dimgrey;
+}
+
+.userdetails {
+  display: flex;
+}
+.userleft {
+  /* border: 1px solid red; */
+  width: 33%;
+  margin: 5px;
+}
+.userleft p {
+  color: rgb(136, 136, 136);
+  text-align: left;
+  margin-left: 33px;
+}
+/* center section design */
+.usercenter {
+  /* border: 1px solid red; */
+  width: 33%;
+  margin: 5px;
+}
+.usercenter p {
+  text-align: left;
+  margin-left: 33px;
+}
+.stats ul {
+  list-style: none;
+  text-align: left;
+}
+.stats ul :first-child {
+  color: rgb(136, 136, 136);
+}
+.emprole {
+  margin-bottom: 175px;
+}
+.emprole p:nth-child(3) {
+  color: rgb(136, 136, 136);
+}
+.emprole p:first-child {
+  color: rgb(136, 136, 136);
+}
+/* last section design */
+.userright {
+  /* border: 1px solid red; */
+  width: 33%;
+  margin: 5px;
+}
+.employee-details p {
+  text-align: left;
+}
+.employee-details ul {
+  list-style: none;
+  text-align: left;
+}
+.employee-details ul :first-child {
+  color: rgb(136, 136, 136);
+}
+.joiningdate p {
+  text-align: left;
+  margin-left: 33px;
+}
+.joiningdate p:first-child {
+  color: rgb(136, 136, 136);
+}
+.joiningdate p:nth-child(3) {
+  color: rgb(136, 136, 136);
+}
+.joiningdate {
+  margin-bottom: 175px;
+}
+.lastlogindata ul {
+  list-style: none;
+  text-align: left;
+}
+.lastlogindata ul li:first-child {
+  color: rgb(136, 136, 136);
+}
+/* user navbar */
+.usernavbar {
+  display: flex;
+  align-items: baseline;
+  margin-left: 90px;
+}
+.nav_img_container img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+.usernavbar p {
+  margin-right: 15px;
+  margin-left: 10px;
+}
+.active_inactive_circle {
+  display: "inline-block";
+  border: 1px solid white;
+  padding: 8px;
+  border-radius: 100%;
+}
+/* table design */
+
+table {
+  border: 1px solid black !important;
+  width: 100%;
+}
+th {
+  border-bottom: 1px solid rgb(66, 60, 60) !important;
+  background-color: rgb(159, 243, 240) !important;
+}
+tr {
+  border-bottom: 1px solid rgb(37, 155, 151) !important;
+}
+tr:hover {
+  background-color: rgb(116, 112, 112);
+  cursor: pointer !important;
+}

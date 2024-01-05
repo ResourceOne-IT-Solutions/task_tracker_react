@@ -3,8 +3,8 @@ import React, { createContext, useContext, useState } from "react";
 const UserContext = createContext<UserContext | null>(null);
 export interface UserContext {
   isLoggedin: boolean;
-  currentUser: object;
-  setCurrentUser: React.Dispatch<React.SetStateAction<object>>;
+  currentUser: UserModal;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
 export interface UserModal {
   firstName: string;
@@ -31,11 +31,11 @@ interface AuthContextProps {
 const AuthContext = ({ children }: AuthContextProps) => {
   const storedDataString = localStorage.getItem("currentUser");
   const storedData = storedDataString ? JSON.parse(storedDataString) : null;
-  let user = {};
+  let user = {} as UserModal;
   if (storedData !== null) {
     user = storedData;
   }
-  const [currentUser, setCurrentUser] = useState<UserModal | object>(user);
+  const [currentUser, setCurrentUser] = useState<UserModal>(user);
   const value: UserContext = {
     isLoggedin: (currentUser as UserModal).lastActive ? true : false,
     currentUser,

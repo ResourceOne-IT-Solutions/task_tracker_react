@@ -18,4 +18,5 @@ async function post<T, R>(path: string, data: T): Promise<R> {
     throw new Error(error.message);
   }
 }
-export default { post };
+const httpMethods = { post };
+export default httpMethods;

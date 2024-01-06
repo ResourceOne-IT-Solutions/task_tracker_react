@@ -22,7 +22,7 @@ const Routespage = () => {
     return <Navigate to="/" />;
   }
   const { isLoggedin, currentUser } = userContext;
-  const isAdmin = currentUser;
+  const isAdmin = currentUser.isAdmin;
   return (
     <div>
       <BrowserRouter basename={process.env.PUBLIC_URL}>

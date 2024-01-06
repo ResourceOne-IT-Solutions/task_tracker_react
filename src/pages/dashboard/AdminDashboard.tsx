@@ -265,93 +265,13 @@ const AdminDashboard = () => {
           Show Clients
         </button>
       </div>
-      {/* {tableName === "/users" ? (
-        <table className="table table-light table-hover admin-user-tabl">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Mobile</th>
-              <th>Technology</th>
-              <th className="column-to-reduce">Profile Image</th>
-              <th>Active User</th>
-              <th>Uploaded Issues</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: UserModal) => {
-                return (
-                  <tr key={user._id} className="table-rows">
-                    <td>{user.firstName + " " + user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.designation}</td>
-                    <td>
-                      <img src={`${user.profileImageUrl}`} />
-                    </td>
-                    <td>{user.isActive ? "Yes" : "No"}</td>
-                    <td>
-                      <button className="btn btn-primary">Click Here</button>
-                    </td>
-                    <td>
-                      <button className="btn btn-info">Update</button>
-                      <button className="btn btn-danger">Remove</button>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
-      ) : (
-        <table className="table table-light table-hover admin-client-tabl">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Mobile</th>
-              <th>Technology</th>
-              <th>Location</th>
-              <th>Zone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: ClientModal) => {
-                return (
-                  <tr key={user._id}>
-                    <td>{user.firstName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.technology}</td>
-                    <td>{user.location.area}</td>
-                    <td>{user.location.zone}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
-      )} */}
-      {tableName === "/clients" ? (
-        <TaskTable
-          pagination
-          headers={clientTableHeaders}
-          tableData={tableData}
-        />
-      ) : (
-        <TaskTable pagination headers={empTableHeaders} tableData={tableData} />
-      )}
+      <TaskTable
+        pagination
+        headers={
+          tableName === "/clients" ? clientTableHeaders : empTableHeaders
+        }
+        tableData={tableData}
+      />
       <AddUserModal />
     </div>
   );

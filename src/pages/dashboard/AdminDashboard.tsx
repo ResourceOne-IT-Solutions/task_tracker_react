@@ -7,6 +7,9 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext";
 import AddUserModal from "../../utils/modal/AddUserModal";
+import TaskTable from "../../utils/table/Table";
+import { Button } from "react-bootstrap";
+import { GreenDot, RedDot } from "../../utils/Dots/Dots";
 
 interface ClientModal {
   firstName: string;
@@ -17,13 +20,16 @@ interface ClientModal {
   mobile: string;
   technology: string;
   email: string;
+  _id: string;
 }
 
 const AdminDashboard = () => {
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
-  const [tableData, setTableData] = useState<null | any>(null);
+  const [tableData, setTableData] = useState<UserModal | ClientModal | any>([]);
   const [tableName, setTableName] = useState<string>("");
+
+  const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
 
   const settingData = (url: string) => {
     httpMethods
@@ -32,7 +38,7 @@ const AdminDashboard = () => {
       .catch((err) => err);
   };
   const displayTable = (name: string) => {
-    setTableData(null);
+    setTableData([]);
     setTableName(name);
     settingData(name);
   };
@@ -41,6 +47,73 @@ const AdminDashboard = () => {
     setTableName("/users");
     settingData("/users");
   }, []);
+
+  const clientTableHeaders = [
+    { title: "Sl. No", key: "serialNo" },
+    { title: "Consultant Name", key: "firstName" },
+    { title: "Email", key: "email" },
+    { title: "Phone", key: "phone" },
+    { title: "Technology", key: "technology" },
+    { title: "Location", key: "location.area" },
+    { title: "Location", key: "location.zone" },
+  ];
+  const empTableHeaders = [
+    { title: "Sl. No", key: "serialNo" },
+    { title: "Consultant Name", key: "firstName" },
+    { title: "Email", key: "email" },
+    { title: "Mobile", key: "mobile" },
+    { title: "Role", key: "designation" },
+    {
+      title: "Profile Image",
+      key: "",
+      tdFormat: (user: { isActive: boolean; profileImageUrl: string }) => (
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            cursor: "pointer",
+            position: "relative",
+          }}
+        >
+          {user.isActive ? (
+            <GreenDot styles={statusIndicatorStyle} title={undefined} />
+          ) : (
+            <RedDot styles={statusIndicatorStyle} title={undefined} />
+          )}
+          <img
+            src={user.profileImageUrl}
+            alt="image"
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Active User",
+      key: "isActive",
+      tdFormat: (user: { isActive: boolean; isAdmin: boolean }) => (
+        <span>
+          {user.isActive ? "Yes" : "No"}
+          {user.isAdmin && " (Admin)"}{" "}
+        </span>
+      ),
+    },
+    {
+      title: "Uploaded Issues",
+      key: "",
+      tdFormat: (user: { _id: string }) => <Button>Click Here</Button>,
+    },
+    {
+      title: "Actions",
+      key: "",
+      tdFormat: (user: { _id: string; mobile: string }) => (
+        <>
+          <Button variant="info">Update</Button>
+          <Button variant="danger">Remove</Button>
+        </>
+      ),
+    },
+  ];
   return (
     <div>
       <div className="header-nav">
@@ -192,80 +265,13 @@ const AdminDashboard = () => {
           Show Clients
         </button>
       </div>
-      {tableName === "/users" ? (
-        <table>
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Technology</th>
-            <th className="column-to-reduce">Profile Image</th>
-            <th>Active User</th>
-            <th>Uploaded Issues</th>
-            <th>Actions</th>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: UserModal) => {
-                return (
-                  <tr key={user.empId}>
-                    <td>{user.firstName + " " + user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.designation}</td>
-                    <td>
-                      <img src={`${user.profileImageUrl}`} />
-                    </td>
-                    <td>{user.isActive ? "Yes" : "No"}</td>
-                    <td>
-                      <button className="btn btn-primary">Click Here</button>
-                    </td>
-                    <td>
-                      <button className="btn btn-info">Update</button>
-                      <button className="btn btn-danger">Remove</button>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
-      ) : (
-        <table>
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Technology</th>
-            <th>Location</th>
-            <th>Zone</th>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: ClientModal) => {
-                return (
-                  <tr key={user.firstName}>
-                    <td>{user.firstName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.technology}</td>
-                    <td>{user.location.area}</td>
-                    <td>{user.location.zone}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
-      )}
+      <TaskTable
+        pagination
+        headers={
+          tableName === "/clients" ? clientTableHeaders : empTableHeaders
+        }
+        tableData={tableData}
+      />
       <AddUserModal />
     </div>
   );

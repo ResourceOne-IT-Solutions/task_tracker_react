@@ -1,0 +1,26 @@
+.modal-body input,textarea{
+    margin: 12px;
+    padding: 5px;
+}
+.admin-not input[type="radio"]{
+    margin: 0px;
+    padding: 0px;
+    width: 7%;
+}
+.errmsg{
+    color: red;
+    font-size: 19px;
+}
+.success-msg{
+    color: green;
+    font-size: 14px;
+}
+.success-msg span{
+    display: block;
+}
+.modal-footer>.sub-footer{
+    width: 50%;
+}
+.modal-footer button{
+    margin-right: 4px;
+}

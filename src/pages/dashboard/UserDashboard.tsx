@@ -7,6 +7,7 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext";
 import { calculateWorkingFrom } from "../../utils/utils";
+import PieChart from "../../components/pieChart/PieChart";
 
 export interface TicketsModal {
   user: {
@@ -45,6 +46,11 @@ const UserDashboard = () => {
       })
       .catch(() => setIsLoading(false));
   }, []);
+  const TicketsData = {
+    totalTickets: 10,
+    resolved: 6,
+    pending: 4,
+  };
   return (
     <>
       <div className="userdashboard">
@@ -74,6 +80,7 @@ const UserDashboard = () => {
                 <li>First Name : {currentUser.firstName}</li>
                 <li>Last Name : {currentUser.lastName}</li>
                 <li>Email : {currentUser.email}</li>
+                <li>Dob : {dateConversion(currentUser.dob)}</li>
                 <li>Phone : {currentUser.mobile}</li>
                 <li>Role : {currentUser.designation}</li>
               </ul>
@@ -101,13 +108,18 @@ const UserDashboard = () => {
           </div>
           <div className="userright">
             <div className="joiningdate">
-              <p>Joined On</p>
-              <p>{dateConversion(currentUser.joinedDate)}</p>
-              <p>Working from</p>
-              <p>
-                {workingDuration.years} years {workingDuration.months} Months{" "}
-                {workingDuration.days} Days
-              </p>
+              <div>
+                <p>Joined On</p>
+                <p>{dateConversion(currentUser.joinedDate)}</p>
+                <p>Working from</p>
+                <p>
+                  {workingDuration.years} years {workingDuration.months} Months{" "}
+                </p>
+                <p>{workingDuration.days} Days</p>
+              </div>
+              <div>
+                <PieChart data={TicketsData} />
+              </div>
             </div>
             <div className="lastlogindata">
               <ul>
@@ -127,8 +139,8 @@ const UserDashboard = () => {
       <table>
         <thead>
           <tr>
-            <th>User</th>
             <th>Consultant</th>
+            <th>User</th>
             <th>Technology</th>
             <th>Received Date</th>
             <th>Assigned Date</th>
@@ -153,8 +165,8 @@ const UserDashboard = () => {
             tableData.map((items: TicketsModal, index: any) => {
               return (
                 <tr key={index}>
-                  <td>{items.user.name}</td>
                   <td>{items.client.name}</td>
+                  <td>{items.user.name}</td>
                   <td>{items.technology}</td>
                   <td>{dateConversion(items.receivedDate)}</td>
                   <td>
@@ -166,6 +178,9 @@ const UserDashboard = () => {
                   <td>{items.comments}</td>
                   <td>{dateConversion(items.closedDate)}</td>
                   <td>{items.status}</td>
+                  <td>
+                    <Button variant="success">Update Ticket</Button>
+                  </td>
                 </tr>
               );
             })}

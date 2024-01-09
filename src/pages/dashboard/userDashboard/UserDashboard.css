@@ -56,7 +56,7 @@
 /* last section design */
 .userright {
   /* border: 1px solid red; */
-  width: 33%;
+  width: 50%;
   margin: 5px;
 }
 .employee-details p {
@@ -80,7 +80,7 @@
   color: rgb(136, 136, 136);
 }
 .joiningdate {
-  margin-bottom: 175px;
+  display: flex;
 }
 .lastlogindata ul {
   list-style: none;

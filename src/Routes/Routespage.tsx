@@ -4,8 +4,9 @@ import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
 import AdminDashboard from "../pages/dashboard/adminDashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
-import UserDashboard from "../pages/dashboard/UserDashboard";
+
 import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
+import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,

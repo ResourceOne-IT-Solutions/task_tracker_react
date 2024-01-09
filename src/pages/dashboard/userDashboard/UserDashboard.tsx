@@ -35,7 +35,12 @@ const UserDashboard = () => {
   const joinDate = currentUser.joinedDate;
   const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
-
+  const pieChartData = [
+    { name: "PendingTickets", value: 40 },
+    { name: "AssignedTickets", value: 60 },
+    { name: "TotalTickets", value: 100 },
+  ];
+  const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56"];
   useEffect(() => {
     setIsLoading(true);
     httpMethods
@@ -113,7 +118,10 @@ const UserDashboard = () => {
                 <p>{workingDuration.days} Days</p>
               </div>
               <div>
-                <PieChartComponent />
+                <PieChartComponent
+                  data={pieChartData}
+                  colors={pieChartColors}
+                />
               </div>
             </div>
             <div className="lastlogindata">

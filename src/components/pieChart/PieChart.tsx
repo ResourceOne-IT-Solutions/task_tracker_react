@@ -1,21 +1,12 @@
 import React from "react";
 import { PieChart, Pie, Legend, Tooltip, Cell } from "recharts";
 
-interface UserData {
-  name: string;
-  value: number;
+interface PieChartProps {
+  data: { name: string; value: number }[];
+  colors: string[];
 }
 
-const PieChartComponent: React.FC = () => {
-  // Sample data for the pie chart
-  const data: UserData[] = [
-    { name: "PendingTickets", value: 40 },
-    { name: "AssignedTickets", value: 60 },
-    { name: "TotalTickets", value: 100 },
-  ];
-
-  const colors = ["#FF6384", "#36A2EB", "#FFCE56"]; // Customize colors
-
+const PieChartComponent: React.FC<PieChartProps> = ({ data, colors }) => {
   return (
     <PieChart width={400} height={400}>
       <Pie

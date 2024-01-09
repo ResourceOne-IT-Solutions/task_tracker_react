@@ -35,16 +35,42 @@ const UserDashboard = () => {
   const joinDate = currentUser.joinedDate;
   const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
-  const pieChartData = [
-    { name: "PendingTickets", value: 40 },
-    { name: "AssignedTickets", value: 60 },
-    { name: "TotalTickets", value: 100 },
-  ];
+
   const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56"];
+  const [pieChartData, setPieChartData] = useState([
+    { name: "PendingTickets", value: 0 },
+    { name: "ResolvedTickets", value: 0 },
+    { name: "TotalTickets", value: 0 },
+  ]);
   useEffect(() => {
     setIsLoading(true);
     httpMethods
-      .get<TicketsModal[]>("/tickets")
+      .get<TicketsModal[]>("/users/tickets/" + currentUser._id)
+      .then((result) => {
+        setTableData(result);
+
+        const pendingTickets = result.filter(
+          (ticket) => ticket.status === "Pending",
+        ).length;
+        const resolvedTickets = result.filter(
+          (ticket) => ticket.status === "Resolved",
+        ).length;
+        const totalTickets = result.length;
+
+        setPieChartData([
+          { name: "PendingTickets", value: pendingTickets },
+          { name: "ResolvedTickets", value: resolvedTickets },
+          { name: "TotalTickets", value: totalTickets },
+        ]);
+
+        setIsLoading(false);
+      })
+      .catch(() => setIsLoading(false));
+  }, []);
+  useEffect(() => {
+    setIsLoading(true);
+    httpMethods
+      .get<TicketsModal[]>("/users/tickets/" + currentUser._id)
       .then((result) => {
         setTableData(result);
         setIsLoading(false);

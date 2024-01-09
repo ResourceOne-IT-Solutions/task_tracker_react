@@ -26,7 +26,7 @@ export interface TicketsModal {
   status: string;
   technology: string;
   comments: string;
-  _id: string
+  _id: string;
 }
 
 const UserDashboard = () => {
@@ -220,7 +220,7 @@ const UserDashboard = () => {
                     <Button
                       variant="success"
                       onClick={() =>
-                        setShowUpdateModal({ show: true, ticketData: items})
+                        setShowUpdateModal({ show: true, ticketData: items })
                       }
                     >
                       Update Ticket
@@ -233,7 +233,9 @@ const UserDashboard = () => {
       </table>
       <UpdateTicket
         show={showUpdateModal.show}
-        onHide={() => setShowUpdateModal({ show: false, ticketData: {} as TicketsModal})}
+        onHide={() =>
+          setShowUpdateModal({ show: false, ticketData: {} as TicketsModal })
+        }
         ticketData={showUpdateModal.ticketData}
       />
     </>

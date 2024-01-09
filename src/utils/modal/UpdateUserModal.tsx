@@ -31,7 +31,6 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
   // Update the form data when the ticketData prop changes
   React.useEffect(() => {
     if (ticketData?.client) {
-      console.log("34:::", ticketData);
       setFormData({
         clientName: ticketData.client.name,
         description: ticketData.description,
@@ -42,7 +41,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
   }, [ticketData]);
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -61,7 +60,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     httpMethods
       .put<{ id: string; data: UpdatePayload }, TicketsModal>(
         `/tickets/update`,
-        { id: ticketData._id, data: updatedTicket }
+        { id: ticketData._id, data: updatedTicket },
       )
       .then((result) => {
         const data = tableData.map((user) => {
@@ -70,14 +69,12 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
           }
           return user;
         });
-        console.log("RES::::", result, data);
         setTableData(data);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
     onHide();
   };
-  console.log(tableData, "6161::");
 
   return (
     <Modal show={show} onHide={onHide}>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
-import httpMethods from "../../api/Service";
+import httpMethods from "../../../api/Service";
 import { Button } from "react-bootstrap";
 import {
   UserContext,
   useUserContext,
-} from "../../components/Authcontext/AuthContext";
-import { calculateWorkingFrom } from "../../utils/utils";
-import PieChart from "../../components/pieChart/PieChart";
+} from "../../../components/Authcontext/AuthContext";
+import { calculateWorkingFrom } from "../../../utils/utils";
+import PieChartComponent from "../../../components/pieChart/PieChart";
 
 export interface TicketsModal {
   user: {
@@ -46,11 +46,6 @@ const UserDashboard = () => {
       })
       .catch(() => setIsLoading(false));
   }, []);
-  const TicketsData = {
-    totalTickets: 10,
-    resolved: 6,
-    pending: 4,
-  };
   return (
     <>
       <div className="userdashboard">
@@ -118,7 +113,7 @@ const UserDashboard = () => {
                 <p>{workingDuration.days} Days</p>
               </div>
               <div>
-                <PieChart data={TicketsData} />
+                <PieChartComponent />
               </div>
             </div>
             <div className="lastlogindata">

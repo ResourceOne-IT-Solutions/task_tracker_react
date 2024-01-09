@@ -1,65 +1,40 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
+import { PieChart, Pie, Legend, Tooltip, Cell } from "recharts";
 
-interface PieChartProps {
-  data: {
-    totalTickets: number;
-    resolved: number;
-    pending: number;
-  };
+interface UserData {
+  name: string;
+  value: number;
 }
 
-const PieChart: React.FC<PieChartProps> = ({ data }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const totalTicketsData = [data.totalTickets, data.resolved, data.pending];
-  const labels = ["Total", "Resolved", "Pending"];
-  useEffect(() => {
-    if (!canvasRef.current) return;
+const PieChartComponent: React.FC = () => {
+  // Sample data for the pie chart
+  const data: UserData[] = [
+    { name: "PendingTickets", value: 40 },
+    { name: "AssignedTickets", value: 60 },
+    { name: "TotalTickets", value: 100 },
+  ];
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
+  const colors = ["#FF6384", "#36A2EB", "#FFCE56"]; // Customize colors
 
-    if (!ctx) return;
-
-    const total = totalTicketsData.reduce((acc, value) => acc + value, 0);
-    let startAngle = 0;
-
-    const colors = ["#FFFF00", "#00FF00", "#FF0000"]; // Yellow, Green ,Red
-
-    totalTicketsData.forEach((value, index) => {
-      const sliceAngle = (value / total) * (2 * Math.PI);
-
-      // Draw the pie segment
-      ctx.beginPath();
-      ctx.fillStyle = colors[index];
-      ctx.moveTo(canvas.width / 2, canvas.height / 2);
-      ctx.arc(
-        canvas.width / 2,
-        canvas.height / 2,
-        canvas.width / 3,
-        startAngle,
-        startAngle + sliceAngle,
-      );
-      ctx.closePath();
-      ctx.fill();
-
-      // Draw text in the center of each segment
-      const textX =
-        canvas.width / 2 +
-        (canvas.width / 3 / 2) * Math.cos(startAngle + sliceAngle / 2);
-      const textY =
-        canvas.height / 2 +
-        (canvas.width / 3 / 2) * Math.sin(startAngle + sliceAngle / 2);
-
-      ctx.fillStyle = "#000000"; // Set text color
-      ctx.font = "12px Arial"; // Set font size and type
-      ctx.textAlign = "center";
-      ctx.fillText(`${value} ${labels[index]}`, textX, textY);
-
-      startAngle += sliceAngle;
-    });
-  }, [data]);
-
-  return <canvas ref={canvasRef} width={350} height={350}></canvas>;
+  return (
+    <PieChart width={400} height={400}>
+      <Pie
+        data={data}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={80}
+        label
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  );
 };
 
-export default PieChart;
+export default PieChartComponent;

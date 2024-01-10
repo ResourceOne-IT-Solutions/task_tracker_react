@@ -6,7 +6,7 @@ import {
   useUserContext,
 } from "../../components/Authcontext/AuthContext"; 
 import UserDashboard from "./userDashboard/UserDashboard";
-import AdminDashboard from "./AdminDashboard";
+import AdminDashboard from "./adminDashboard/AdminDashboard";
 
 const Dashboard = () => {
   const userContext = useUserContext();

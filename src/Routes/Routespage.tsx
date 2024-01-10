@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
 import AdminDashboard from "../pages/dashboard/adminDashboard/AdminDashboard";

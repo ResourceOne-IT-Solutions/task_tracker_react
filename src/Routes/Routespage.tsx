@@ -1,9 +1,11 @@
 import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
-import AdminDashboard from "../pages/dashboard/AdminDashboard";
+import AdminDashboard from "../pages/dashboard/adminDashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
+
+import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
 import Dashboard from "../pages/dashboard";
 
@@ -64,7 +66,24 @@ const Routespage = () => {
             path="/userdashboard"
             element={<ProtectedRoute element={<UserDashboard />} />}
           />
+
           <Route path="/dashboard" element={<Dashboard />} />
+
+          <Route
+            path="/admindashboard/adduser"
+            element={
+              isLoggedin ? (
+                isAdmin ? (
+                  <AddUserpage />
+                ) : (
+                  <Navigate to="/" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+
         </Routes>
       </BrowserRouter>
     </div>

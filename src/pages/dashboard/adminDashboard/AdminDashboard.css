@@ -48,31 +48,14 @@ ul {
   border-radius: 20px !important;
   margin: 5px;
 }
-table {
-  width: 100%;
-}
-td img {
+.admin-user-tabl img {
   width: 25%;
-}
-th {
-  padding: 29px;
-}
-td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 10px;
-}
-tr {
-  border-top: 2px solid rgb(8, 212, 248) !important;
-  border-bottom: 2px solid rgb(8, 212, 248) !important;
-}
-tr:hover {
-  background-color: rgba(0, 0, 0, 0.418) !important;
-  cursor: pointer;
-  color: aliceblue;
 }
 .column-to-reduce {
   width: 15%;
+}
+th {
+  padding: 29px !important;
 }
 input {
   width: 80%;

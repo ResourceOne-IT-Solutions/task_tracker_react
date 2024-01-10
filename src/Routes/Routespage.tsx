@@ -2,8 +2,10 @@ import React from "react";
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
 import Login from "../pages/loginpage/Login";
-import AdminDashboard from "../pages/dashboard/AdminDashboard";
+import AdminDashboard from "../pages/dashboard/adminDashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
+
+import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
@@ -62,6 +64,20 @@ const Routespage = () => {
           <Route
             path="/userdashboard"
             element={<ProtectedRoute element={<UserDashboard />} />}
+          />
+          <Route
+            path="/admindashboard/adduser"
+            element={
+              isLoggedin ? (
+                isAdmin ? (
+                  <AddUserpage />
+                ) : (
+                  <Navigate to="/" />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
         </Routes>
       </BrowserRouter>

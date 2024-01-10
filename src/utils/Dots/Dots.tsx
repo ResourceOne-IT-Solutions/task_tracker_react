@@ -1,11 +1,11 @@
 import React from "react";
 
 interface Props {
-  title: any;
-  styles: any;
+  title?: string;
+  styles?: any;
 }
 
-export const GreenDot = ({ title, styles }: Props) => {
+export const GreenDot = ({ title='', styles={} }: Props) => {
   return (
     <span
       title={title}

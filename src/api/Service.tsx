@@ -1,4 +1,4 @@
-import { BE_URL } from "../utils/Constants";
+import { BE_URL, TOKEN } from "../utils/Constants";
 
 async function post<T, R>(path: string, data: T): Promise<R> {
   try {
@@ -6,6 +6,7 @@ async function post<T, R>(path: string, data: T): Promise<R> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: TOKEN,
       },
       body: JSON.stringify(data),
     });
@@ -21,7 +22,11 @@ async function post<T, R>(path: string, data: T): Promise<R> {
 
 async function get<S>(path: string): Promise<S> {
   try {
-    const response = await fetch(BE_URL + path);
+    const response = await fetch(BE_URL + path, {
+      headers: {
+        Authorization: TOKEN,
+      },
+    });
     const result = await response.json();
     if (response.status > 399) {
       throw new Error(result.error);
@@ -38,6 +43,7 @@ async function put<T, R>(url: string, data: T): Promise<R> {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: TOKEN,
       },
       body: JSON.stringify(data),
     });
@@ -55,6 +61,9 @@ async function deleteCall<T>(url: string): Promise<T> {
   try {
     const response = await fetch(BE_URL + url, {
       method: "DELETE",
+      headers: {
+        Authorization: TOKEN,
+      },
     });
     const result = await response.json();
     if (response.status > 399) {

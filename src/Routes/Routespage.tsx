@@ -7,6 +7,7 @@ import { useUserContext } from "../components/Authcontext/AuthContext";
 
 import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
+import Dashboard from "../pages/dashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -65,6 +66,9 @@ const Routespage = () => {
             path="/userdashboard"
             element={<ProtectedRoute element={<UserDashboard />} />}
           />
+
+          <Route path="/dashboard" element={<Dashboard />} />
+
           <Route
             path="/admindashboard/adduser"
             element={

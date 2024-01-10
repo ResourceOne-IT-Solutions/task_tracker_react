@@ -6,13 +6,16 @@ import {
   UserModal,
   useUserContext,
 } from "../../../components/Authcontext/AuthContext";
-import AddUserModal from "../../../utils/modal/AddUserModal";
 import TaskTable from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { useNavigate } from "react-router-dom";
+import ReusableModal from "../../../utils/modal/ReusableModal";
+import AddClient from "../../../utils/modal/AddClient";
+import AddTicket from "../../../utils/modal/AddTicket";
+import UpdateUser from "../../../utils/modal/UpdateUser";
 
-interface ClientModal {
+export interface ClientModal {
   firstName: string;
   location: {
     area: string;
@@ -28,25 +31,36 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
-  const [tableData, setTableData] = useState<UserModal | ClientModal | any>([]);
+  const [usersData, setUsersData] = useState<UserModal | any>([]);
+  const [clientsData, setClientsData] = useState<ClientModal | any>([]);
+  const [ticketsData, setTicketsData] = useState<any>([]);
   const [tableName, setTableName] = useState<string>("");
-  // const [showModal, setShowModal] = useState<boolean>(false);
-  // const [modalProps, setModalProps] = useState({
-  //   title: "",
-  //   show_or_not: handleShowModal,
-  //   show: showModal,
-  // });
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalName, setModalname] = useState<string>("");
+  const [modalProps, setModalProps] = useState({
+    title: "",
+    setShowModal,
+    show: showModal,
+  });
+  const [updateReference, setUpdateReference] = useState<UserModal | any>({});
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
 
   const settingData = (url: string) => {
     httpMethods
       .get<UserModal>(url)
-      .then((result) => setTableData(result))
+      .then((result) => {
+        if (url == "/users") {
+          setUsersData(result);
+        } else if (url == "/clients") {
+          setClientsData(result);
+        } else {
+          setTicketsData(result);
+        }
+      })
       .catch((err) => err);
   };
   const displayTable = (name: string) => {
-    setTableData([]);
     setTableName(name);
     settingData(name);
   };
@@ -54,13 +68,24 @@ const AdminDashboard = () => {
   useEffect(() => {
     setTableName("/users");
     settingData("/users");
+    settingData("/clients");
   }, []);
 
+  const handleUpdate = (user: UserModal) => {
+    setModalname("update_user");
+    setUpdateReference(user);
+    setModalProps({
+      title: "Update User",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
   const clientTableHeaders = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
     { title: "Email", key: "email" },
-    { title: "Phone", key: "phone" },
+    { title: "Phone", key: "mobile" },
     { title: "Technology", key: "technology" },
     { title: "Location", key: "location.area" },
     { title: "Location", key: "location.zone" },
@@ -114,28 +139,26 @@ const AdminDashboard = () => {
     {
       title: "Actions",
       key: "",
-      tdFormat: (user: { _id: string; mobile: string }) => (
+      tdFormat: (user: UserModal) => (
         <>
-          <Button variant="info">Update</Button>
+          <Button variant="info" onClick={() => handleUpdate(user)}>
+            Update
+          </Button>
           <Button variant="danger">Remove</Button>
         </>
       ),
     },
   ];
-  // const handleNavigate = (value: string) => {
-  //   setShowModal(true);
-  //   if (value == "user") {
-  //     const propsToPass = {
-  //       title: "Add User",
-  //       show_or_not: handleShowModal,
-  //       show: true,
-  //     };
-  //     setModalProps(propsToPass);
-  //   }
-  // };
-  // function handleShowModal() {
-  //   setShowModal(false);
-  // }
+
+  const handleClick = (str: string) => {
+    setModalname(str);
+    setModalProps({
+      title: str == "Client" ? "Create Client" : "Create Ticket",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
   return (
     <div>
       <div className="header-nav">
@@ -270,10 +293,20 @@ const AdminDashboard = () => {
           className="btn btn-dark"
           onClick={() => navigate("/admindashboard/adduser")}
         >
-          Add User
+          Create User
         </button>
-        <button className="btn btn-success">Add Client</button>
-        <button className="btn btn-warning">Create Ticket</button>
+        <button
+          className="btn btn-success"
+          onClick={() => handleClick("Client")}
+        >
+          Create Client
+        </button>
+        <button
+          className="btn btn-warning"
+          onClick={() => handleClick("Ticket")}
+        >
+          Create Ticket
+        </button>
       </div>
       <div className="admin-btns">
         <button className="btn btn-info" onClick={() => displayTable("/users")}>
@@ -291,12 +324,23 @@ const AdminDashboard = () => {
         headers={
           tableName === "/clients" ? clientTableHeaders : empTableHeaders
         }
-        tableData={tableData}
+        tableData={tableName === "/clients" ? clientsData : usersData}
       />
-      {/* <AddUserModal /> */}
-      {/* <ModalPopup allvals={modalProps}>
-        <AddUserModal />
-      </ModalPopup> */}
+      {showModal && modalName == "Client" && (
+        <ReusableModal vals={modalProps}>
+          <AddClient />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "Ticket" && (
+        <ReusableModal vals={modalProps}>
+          <AddTicket clientsData={clientsData} />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "update_user" && (
+        <ReusableModal vals={modalProps}>
+          <UpdateUser updateref={updateReference} />
+        </ReusableModal>
+      )}
     </div>
   );
 };

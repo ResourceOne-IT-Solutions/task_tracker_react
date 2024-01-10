@@ -7,60 +7,42 @@ import {
 } from "../../components/Authcontext/AuthContext";
 import UserDashboard from "./userDashboard/UserDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, isLoggedin } =
+  const { currentUser, setCurrentUser, isLoggedin, setIsLoggedIn } =
     userContext as UserContext;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    function getCookie(userInfo: string) {
-      const name = `${userInfo}=`;
-      const decodedCookie = decodeURIComponent(document.cookie);
-      const cookieArray = decodedCookie.split(";");
-
-      for (let i = 0; i < cookieArray.length; i++) {
-        const cookie = cookieArray[i].trim();
-        if (cookie.indexOf(name) === 0) {
-          return cookie.substring(name.length, cookie.length);
-        }
-      }
-      return null;
-    }
-
-    const userCookie = getCookie("userCookie");
-
-    if (userCookie) {
-      setIsLoading(true);
-      const token = JSON.parse(userCookie);
-
-      httpMethods
-        .get("/get-user")
-        .then((response: any) => {
-          const userData = response;
-          setCurrentUser(userData);
-        })
-        .catch((error) => {
-          error;
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+    httpMethods
+      .get<UserModal>("/get-user")
+      .then((response) => {
+        setCurrentUser(response);
+        setIsLoggedIn(true);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, []);
-  if (!currentUser.firstName) {
-    return <h3>Component Loading.....</h3>;
+
+  if (!isLoading && !isLoggedin) {
+    return <Navigate to="/" />;
   }
 
   return (
     <div>
       {isLoading ? (
         <div>Loading....</div>
-      ) : currentUser.isAdmin ? (
-        <AdminDashboard />
       ) : (
-        <UserDashboard />
+        <>
+          {isLoggedin && currentUser.isAdmin && <AdminDashboard />}
+          {isLoggedin && <UserDashboard />}
+        </>
       )}
     </div>
   );

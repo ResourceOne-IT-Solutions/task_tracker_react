@@ -6,7 +6,7 @@ async function post<T, R>(path: string, data: T): Promise<R> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: TOKEN,
+        Authorization: TOKEN(),
       },
       body: JSON.stringify(data),
     });
@@ -24,7 +24,7 @@ async function get<S>(path: string): Promise<S> {
   try {
     const response = await fetch(BE_URL + path, {
       headers: {
-        Authorization: TOKEN,
+        Authorization: TOKEN(),
       },
     });
     const result = await response.json();
@@ -43,7 +43,7 @@ async function put<T, R>(url: string, data: T): Promise<R> {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: TOKEN,
+        Authorization: TOKEN(),
       },
       body: JSON.stringify(data),
     });
@@ -62,7 +62,7 @@ async function deleteCall<T>(url: string): Promise<T> {
     const response = await fetch(BE_URL + url, {
       method: "DELETE",
       headers: {
-        Authorization: TOKEN,
+        Authorization: TOKEN(),
       },
     });
     const result = await response.json();

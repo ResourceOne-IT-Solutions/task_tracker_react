@@ -86,6 +86,13 @@ const UserDashboard = () => {
     show: false,
     ticketData: {} as TicketsModal,
   });
+  const updateTableData = (updatedTicket: TicketsModal) => {
+    setTableData((prevTableData) =>
+      prevTableData.map((ticket) =>
+        ticket._id === updatedTicket._id ? updatedTicket : ticket,
+      ),
+    );
+  };
   return (
     <>
       <div className="userdashboard">
@@ -237,6 +244,7 @@ const UserDashboard = () => {
           setShowUpdateModal({ show: false, ticketData: {} as TicketsModal })
         }
         ticketData={showUpdateModal.ticketData}
+        updateTableData={updateTableData}
       />
     </>
   );

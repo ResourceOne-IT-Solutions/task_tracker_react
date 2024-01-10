@@ -9,6 +9,7 @@ interface UpdateTicketProps {
   show: boolean;
   onHide: () => void;
   ticketData: TicketsModal;
+  updateTableData: (updatedTicket: TicketsModal) => void;
 }
 interface UpdatePayload {
   description: string;
@@ -20,6 +21,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
   show,
   onHide,
   ticketData,
+  updateTableData,
 }) => {
   const [formData, setFormData] = useState({
     clientName: "",
@@ -46,7 +48,6 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const [tableData, setTableData] = useState<TicketsModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const updatedTicket: UpdatePayload = {
@@ -63,13 +64,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
         { id: ticketData._id, data: updatedTicket },
       )
       .then((result) => {
-        const data = tableData.map((user) => {
-          if (user._id == result._id) {
-            return result;
-          }
-          return user;
-        });
-        setTableData(data);
+        updateTableData(result);
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
@@ -147,7 +142,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onHide}>
-          Close
+          Cancel
         </Button>
         <Button variant="primary" onClick={handleSaveChanges}>
           Update Changes

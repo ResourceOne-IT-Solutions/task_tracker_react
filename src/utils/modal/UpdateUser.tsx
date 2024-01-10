@@ -111,7 +111,7 @@ function UpdateUser({ updateref }: Prop) {
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
             <Button variant="primary" type="submit">
-              {loading ? "Creating" : "Update"}
+              {loading ? "Updating" : "Update"}
             </Button>{" "}
           </Form.Group>
         </Row>

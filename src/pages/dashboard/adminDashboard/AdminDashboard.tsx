@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
-import httpMethods from "../../api/Service";
+import httpMethods from "../../../api/Service";
 import {
   UserContext,
   UserModal,
   useUserContext,
-} from "../../components/Authcontext/AuthContext";
-import AddUserModal from "../../utils/modal/AddUserModal";
-import TaskTable from "../../utils/table/Table";
+} from "../../../components/Authcontext/AuthContext";
+import AddUserModal from "../../../utils/modal/AddUserModal";
+import TaskTable from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, RedDot } from "../../utils/Dots/Dots";
+import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { useNavigate } from "react-router-dom";
 
 interface ClientModal {
   firstName: string;
@@ -24,10 +25,17 @@ interface ClientModal {
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
   const [tableData, setTableData] = useState<UserModal | ClientModal | any>([]);
   const [tableName, setTableName] = useState<string>("");
+  // const [showModal, setShowModal] = useState<boolean>(false);
+  // const [modalProps, setModalProps] = useState({
+  //   title: "",
+  //   show_or_not: handleShowModal,
+  //   show: showModal,
+  // });
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
 
@@ -114,6 +122,20 @@ const AdminDashboard = () => {
       ),
     },
   ];
+  // const handleNavigate = (value: string) => {
+  //   setShowModal(true);
+  //   if (value == "user") {
+  //     const propsToPass = {
+  //       title: "Add User",
+  //       show_or_not: handleShowModal,
+  //       show: true,
+  //     };
+  //     setModalProps(propsToPass);
+  //   }
+  // };
+  // function handleShowModal() {
+  //   setShowModal(false);
+  // }
   return (
     <div>
       <div className="header-nav">
@@ -246,8 +268,7 @@ const AdminDashboard = () => {
       <div className="admin-btns">
         <button
           className="btn btn-dark"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          onClick={() => navigate("/admindashboard/adduser")}
         >
           Add User
         </button>
@@ -272,7 +293,10 @@ const AdminDashboard = () => {
         }
         tableData={tableData}
       />
-      <AddUserModal />
+      {/* <AddUserModal /> */}
+      {/* <ModalPopup allvals={modalProps}>
+        <AddUserModal />
+      </ModalPopup> */}
     </div>
   );
 };

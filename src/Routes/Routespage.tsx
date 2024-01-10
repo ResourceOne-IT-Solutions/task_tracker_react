@@ -1,13 +1,10 @@
 import React from "react";
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
-import Login from "../pages/loginpage/Login";
-import AdminDashboard from "../pages/dashboard/adminDashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
-
 import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
-import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
 import Dashboard from "../pages/dashboard";
+import Login from "../pages/loginpage/Login";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -32,55 +29,17 @@ const Routespage = () => {
         <Routes>
           <Route
             path="/"
-            element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <Navigate to="/admindashboard" />
-                ) : (
-                  <Navigate to="/userdashboard" />
-                )
-              ) : (
-                <Home />
-              )
-            }
+            element={isLoggedin ? <Navigate to="/dashboard" /> : <Home />}
           />
-          <Route
-            path="/login/:name"
-            element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <Navigate to="/admindashboard" />
-                ) : (
-                  <Navigate to="/userdashboard" />
-                )
-              ) : (
-                <Login />
-              )
-            }
-          />
-          <Route
-            path="/admindashboard"
-            element={<ProtectedRoute element={<AdminDashboard />} />}
-          />
-          <Route
-            path="/userdashboard"
-            element={<ProtectedRoute element={<UserDashboard />} />}
-          />
-
           <Route path="/dashboard" element={<Dashboard />} />
-
+          <Route
+            path="/login"
+            element={isLoggedin ? <Dashboard /> : <Login />}
+          />
           <Route
             path="/admindashboard/adduser"
             element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <AddUserpage />
-                ) : (
-                  <Navigate to="/" />
-                )
-              ) : (
-                <Navigate to="/" />
-              )
+              isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           />
         </Routes>

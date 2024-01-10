@@ -31,8 +31,8 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
-  const [usersData, setUsersData] = useState<UserModal | any>([]);
-  const [clientsData, setClientsData] = useState<ClientModal | any>([]);
+  const [usersData, setUsersData] = useState<UserModal[]>([]);
+  const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<any>([]);
   const [tableName, setTableName] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -46,14 +46,14 @@ const AdminDashboard = () => {
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
 
-  const settingData = (url: string) => {
+  const getData = (url: string) => {
     httpMethods
-      .get<UserModal>(url)
+      .get<UserModal[] | ClientModal[]>(`/${url}`)
       .then((result) => {
-        if (url == "/users") {
-          setUsersData(result);
-        } else if (url == "/clients") {
-          setClientsData(result);
+        if (url == "users") {
+          setUsersData(result as UserModal[]);
+        } else if (url == "clients") {
+          setClientsData(result as ClientModal[]);
         } else {
           setTicketsData(result);
         }
@@ -62,13 +62,12 @@ const AdminDashboard = () => {
   };
   const displayTable = (name: string) => {
     setTableName(name);
-    settingData(name);
   };
 
   useEffect(() => {
-    setTableName("/users");
-    settingData("/users");
-    settingData("/clients");
+    setTableName("users");
+    getData("users");
+    getData("clients");
   }, []);
 
   const handleUpdate = (user: UserModal) => {
@@ -309,22 +308,19 @@ const AdminDashboard = () => {
         </button>
       </div>
       <div className="admin-btns">
-        <button className="btn btn-info" onClick={() => displayTable("/users")}>
-          Show Users
-        </button>
         <button
-          className="btn btn-dark"
-          onClick={() => displayTable("/clients")}
+          className="btn btn-info"
+          onClick={() =>
+            displayTable(tableName == "users" ? "clients" : "users")
+          }
         >
-          Show Clients
+          Show {tableName == "users" ? "clients" : "users"}
         </button>
       </div>
       <TaskTable
         pagination
-        headers={
-          tableName === "/clients" ? clientTableHeaders : empTableHeaders
-        }
-        tableData={tableName === "/clients" ? clientsData : usersData}
+        headers={tableName === "clients" ? clientTableHeaders : empTableHeaders}
+        tableData={tableName === "clients" ? clientsData : usersData}
       />
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>

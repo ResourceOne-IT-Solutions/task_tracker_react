@@ -4,9 +4,9 @@ import {
   UserContext,
   UserModal,
   useUserContext,
-} from "../../components/Authcontext/AuthContext";
-import AdminDashboard from "./AdminDashboard";
+} from "../../components/Authcontext/AuthContext"; 
 import UserDashboard from "./userDashboard/UserDashboard";
+import AdminDashboard from "./AdminDashboard";
 
 const Dashboard = () => {
   const userContext = useUserContext();
@@ -58,7 +58,7 @@ const Dashboard = () => {
       {isLoading ? (
         <div>Loading....</div>
       ) : currentUser.isAdmin ? (
-        <AdminDashboard />
+        <AdminDashboard/>
       ) : (
         <UserDashboard />
       )}

@@ -5,6 +5,7 @@ import Login from "../pages/loginpage/Login";
 import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
+import Dashboard from "../pages/dashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -63,6 +64,7 @@ const Routespage = () => {
             path="/userdashboard"
             element={<ProtectedRoute element={<UserDashboard />} />}
           />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </div>

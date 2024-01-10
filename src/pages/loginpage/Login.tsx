@@ -46,22 +46,37 @@ const Login = () => {
     event.preventDefault();
     setError("");
     setIsLoading(true);
+    // httpMethods
+    //   .post<Datainterface, UserModal>("/login", data)
+    //   .then((result) => {
+    //     setCurrentUser(result);
+    //     // localStorage.setItem("currentUser", JSON.stringify(result));
+    //     document.cookie = `${JSON.stringify(result)}`
+    //     setData({ ...data, userId: "", password: "", isAdmin: false });
+    //     setIsLoading(false);
+    //     // result.isAdmin
+    //     //   ? navigate("/admindashboard")
+    //     //   : navigate("/userdashboard");
+    //     result && navigate("/dashboard");
+    //   })
+    //   .catch((e: any) => {
+    //     setError(e.message);
+    //     setIsLoading(false);
+    //   });
     httpMethods
-      .post<Datainterface, UserModal>("/login", data)
+      .post<Datainterface, { token: string }>("/verify-login", data)
       .then((result) => {
-        setCurrentUser(result);
-        localStorage.setItem("currentUser", JSON.stringify(result));
-        setData({ ...data, userId: "", password: "", isAdmin: false });
+        document.cookie = `userCookie=${JSON.stringify(result.token)}`;
         setIsLoading(false);
-        result.isAdmin
-          ? navigate("/admindashboard")
-          : navigate("/userdashboard");
+
+        result && navigate("/dashboard");
       })
       .catch((e: any) => {
         setError(e.message);
         setIsLoading(false);
       });
   };
+
   return (
     <div className="login-main">
       <h1>{name} Login Page</h1>
@@ -96,7 +111,7 @@ const Login = () => {
           {isLoading ? "Loading..." : `${name} Login`}
         </Button>
       </Form>
-      <p>
+      <p className="logintext">
         <span className="anchorclick" onClick={handleClick}>
           click here
         </span>{" "}

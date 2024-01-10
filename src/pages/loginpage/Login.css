@@ -11,3 +11,10 @@
 .error {
   color: red;
 }
+.anchorclick {
+  text-decoration: underline;
+  color: rgb(62, 62, 236); 
+}
+.anchorclick:hover {
+  cursor: pointer;
+}

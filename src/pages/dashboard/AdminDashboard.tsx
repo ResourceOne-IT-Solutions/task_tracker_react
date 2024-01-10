@@ -76,9 +76,9 @@ const AdminDashboard = () => {
           }}
         >
           {user.isActive ? (
-            <GreenDot styles={statusIndicatorStyle} title={undefined} />
+            <GreenDot styles={statusIndicatorStyle} />
           ) : (
-            <RedDot styles={statusIndicatorStyle} title={undefined} />
+            <RedDot styles={statusIndicatorStyle} />
           )}
           <img
             src={user.profileImageUrl}

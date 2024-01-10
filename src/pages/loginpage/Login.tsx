@@ -37,6 +37,9 @@ const Login = () => {
     });
   };
 
+  const handleClick = () => {
+    navigate(name == "User" ? "/login/Admin" : "/login/User");
+  };
   const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -93,6 +96,12 @@ const Login = () => {
           {isLoading ? "Loading..." : `${name} Login`}
         </Button>
       </Form>
+      <p>
+        <span className="anchorclick" onClick={handleClick}>
+          click here
+        </span>{" "}
+        to navigate to {name == "User" ? "Admin" : "User"} login page
+      </p>
       <Timezones />
     </div>
   );

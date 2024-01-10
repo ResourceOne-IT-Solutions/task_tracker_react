@@ -13,8 +13,11 @@
 }
 .anchorclick {
   text-decoration: underline;
-  color: rgb(62, 62, 236); 
+  color: rgb(62, 62, 236);
 }
 .anchorclick:hover {
   cursor: pointer;
+}
+.logintext {
+  font-family: monospace;
 }

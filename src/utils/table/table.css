@@ -32,11 +32,11 @@
   border-radius: 8px;
   padding: 10px;
 }
-.table-thead {
+/* .table-thead {
   display: flex;
   align-items: center;
   gap: 10px;
-}
+} */
 .table-thead .sort-fields {
   display: flex;
   flex-direction: column;

@@ -83,7 +83,6 @@ const Routespage = () => {
               )
             }
           />
-
         </Routes>
       </BrowserRouter>
     </div>

@@ -5,7 +5,7 @@ interface Props {
   styles?: any;
 }
 
-export const GreenDot = ({ title = '', styles = {} }: Props) => {
+export const GreenDot = ({ title = "", styles = {} }: Props) => {
   return (
     <span
       title={title}

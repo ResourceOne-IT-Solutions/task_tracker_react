@@ -8,6 +8,7 @@ import {
 } from "../../../components/Authcontext/AuthContext";
 import { calculateWorkingFrom } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
+import UpdateTicket from "../../../utils/modal/UpdateUserModal";
 
 export interface TicketsModal {
   user: {
@@ -25,6 +26,7 @@ export interface TicketsModal {
   status: string;
   technology: string;
   comments: string;
+  _id: string;
 }
 
 const UserDashboard = () => {
@@ -77,6 +79,20 @@ const UserDashboard = () => {
       })
       .catch(() => setIsLoading(false));
   }, []);
+  const [showUpdateModal, setShowUpdateModal] = useState<{
+    show: boolean;
+    ticketData: TicketsModal;
+  }>({
+    show: false,
+    ticketData: {} as TicketsModal,
+  });
+  const updateTableData = (updatedTicket: TicketsModal) => {
+    setTableData((prevTableData) =>
+      prevTableData.map((ticket) =>
+        ticket._id === updatedTicket._id ? updatedTicket : ticket,
+      ),
+    );
+  };
   return (
     <>
       <div className="userdashboard">
@@ -208,13 +224,28 @@ const UserDashboard = () => {
                   <td>{dateConversion(items.closedDate)}</td>
                   <td>{items.status}</td>
                   <td>
-                    <Button variant="success">Update Ticket</Button>
+                    <Button
+                      variant="success"
+                      onClick={() =>
+                        setShowUpdateModal({ show: true, ticketData: items })
+                      }
+                    >
+                      Update Ticket
+                    </Button>
                   </td>
                 </tr>
               );
             })}
         </tbody>
       </table>
+      <UpdateTicket
+        show={showUpdateModal.show}
+        onHide={() =>
+          setShowUpdateModal({ show: false, ticketData: {} as TicketsModal })
+        }
+        ticketData={showUpdateModal.ticketData}
+        updateTableData={updateTableData}
+      />
     </>
   );
 };

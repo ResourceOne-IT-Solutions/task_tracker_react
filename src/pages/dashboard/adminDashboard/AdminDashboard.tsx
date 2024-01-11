@@ -11,9 +11,10 @@ import { Button } from "react-bootstrap";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient from "../../../utils/modal/AddClient";
+import AddClient, { ClientInterface } from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
+import UpdateClient from "../../../utils/modal/UpdateClient";
 
 export interface ClientModal {
   firstName: string;
@@ -42,9 +43,21 @@ const AdminDashboard = () => {
     setShowModal,
     show: showModal,
   });
-  const [updateReference, setUpdateReference] = useState<UserModal | any>({});
+  const [updateReference, setUpdateReference] = useState<UserModal | any | ClientModal>({});
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
+  function updateUserTableData(updatedUser:UserModal){
+    setUsersData((prevTableData) =>
+      prevTableData.map((user) =>
+        user._id === updatedUser._id ? updatedUser : user,
+      ))
+  }
+  function updateClientTableData(updatedClient:ClientModal){
+    setClientsData((prevTableData) =>
+      prevTableData.map((client) =>
+        client._id === updatedClient._id ? updatedClient : client,
+      ))
+  }
 
   const getData = (url: string) => {
     httpMethods
@@ -71,15 +84,29 @@ const AdminDashboard = () => {
   }, []);
 
   const handleUpdate = (user: UserModal) => {
-    setModalname("update_user");
-    setUpdateReference(user);
-    setModalProps({
-      title: "Update User",
-      setShowModal: setShowModal,
-      show: !showModal,
-    });
+    console.log(user,"74::::")
+    if(!user.empId){
+      console.log("update_client")
+      setModalname("update_client");
+      setUpdateReference(user);
+      setModalProps({
+        title: "Update Client",
+        setShowModal: setShowModal,
+        show: !showModal,
+      });
+    setShowModal(true);
+    }
+    else{
+      setModalname("update_user");
+      setUpdateReference(user);
+      setModalProps({
+        title: "Update User",
+        setShowModal: setShowModal,
+        show: !showModal,
+      });
     setShowModal(true);
   };
+}
   const clientTableHeaders = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
@@ -88,6 +115,18 @@ const AdminDashboard = () => {
     { title: "Technology", key: "technology" },
     { title: "Location", key: "location.area" },
     { title: "Location", key: "location.zone" },
+    {
+      title: "Actions",
+      key: "",
+      tdFormat: (user: UserModal) => (
+        <>
+          <Button variant="info" onClick={() => handleUpdate(user)} style={{marginRight:"4px"}}>
+            Update
+          </Button>
+          <Button variant="danger">Remove</Button>
+        </>
+      ),
+    },
   ];
   const empTableHeaders = [
     { title: "Sl. No", key: "serialNo" },
@@ -140,7 +179,7 @@ const AdminDashboard = () => {
       key: "",
       tdFormat: (user: UserModal) => (
         <>
-          <Button variant="info" onClick={() => handleUpdate(user)}>
+          <Button variant="info" onClick={() => handleUpdate(user)} style={{marginBottom:"4px"}}>
             Update
           </Button>
           <Button variant="danger">Remove</Button>
@@ -334,7 +373,12 @@ const AdminDashboard = () => {
       )}
       {showModal && modalName == "update_user" && (
         <ReusableModal vals={modalProps}>
-          <UpdateUser updateref={updateReference} />
+          <UpdateUser updateref={updateReference} updateUserTableData={updateUserTableData}/>
+        </ReusableModal>
+      )}
+      {showModal && modalName == "update_client" && (
+        <ReusableModal vals={modalProps}>
+          <UpdateClient updateref={updateReference} updateClientTableData={updateClientTableData}/>
         </ReusableModal>
       )}
     </div>

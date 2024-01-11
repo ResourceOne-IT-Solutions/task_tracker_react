@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { UserModal } from "../../../components/Authcontext/AuthContext";
 import httpMethods from "../../../api/Service";
 import Form from "react-bootstrap/Form";
@@ -54,6 +54,7 @@ function AddUserpage() {
   const [userError, setUserError] = useState<string>("");
   const [userSuccess, setUserSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const formRef = useRef<any>(null);
   const handleChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -93,6 +94,21 @@ function AddUserpage() {
         setUserError("");
         setTimeout(() => {
           setLoading(false);
+          setUserData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            mobile: "",
+            password: "",
+            dob: "",
+            joinedDate: "",
+            isAdmin: null,
+            designation: "",
+            profileImageUrl: null,
+            address: "",
+          });
+          //image field is not getting empty we are reseting the form
+          formRef.current.reset();
           setUserSuccess(true);
         }, 2000);
       })
@@ -104,7 +120,11 @@ function AddUserpage() {
   };
   return (
     <div>
-      <Form onSubmit={(e) => submitUserData(e)} className="add-user">
+      <Form
+        ref={formRef}
+        onSubmit={(e) => submitUserData(e)}
+        className="add-user"
+      >
         <h2>Add User</h2>
         <Row className="mb-3">
           <Form.Group
@@ -150,6 +170,7 @@ function AddUserpage() {
               aria-describedby="inputGroupPrepend"
               name="email"
               onChange={handleChange}
+              value={email}
             />
           </Form.Group>
           <Form.Group
@@ -176,6 +197,7 @@ function AddUserpage() {
               name="password"
               id="password"
               onChange={handleChange}
+              value={password}
             />
           </Form.Group>
           <Form.Group as={Col} md="1">
@@ -256,7 +278,10 @@ function AddUserpage() {
             <Form.Control
               as={"textarea"}
               placeholder="Enter Address"
+              name="address"
               rows={2}
+              onChange={handleChange}
+              value={address}
             />
           </Form.Group>
         </Row>

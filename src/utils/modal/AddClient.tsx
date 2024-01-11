@@ -8,7 +8,7 @@ export interface ClientInterface {
   firstName: string;
   email: string;
   mobile: string;
-  location: string;
+  location: string | {area: string, zone: string};
   technology: string;
   companyName: string;
   applicationType: string;
@@ -112,7 +112,7 @@ function AddClient() {
             <Form.Control
               type="text"
               name="location"
-              value={location}
+              value={location as string}
               onChange={handleChange}
               placeholder="Enter Location"
             />

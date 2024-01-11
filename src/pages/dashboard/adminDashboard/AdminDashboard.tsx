@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
-import httpMethods from "../../api/Service";
+import httpMethods from "../../../api/Service";
 import {
   UserContext,
   UserModal,
   useUserContext,
-} from "../../components/Authcontext/AuthContext";
-import AddUserModal from "../../utils/modal/AddUserModal";
+} from "../../../components/Authcontext/AuthContext";
+import TaskTable from "../../../utils/table/Table";
+import { Button } from "react-bootstrap";
+import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { useNavigate } from "react-router-dom";
+import ReusableModal from "../../../utils/modal/ReusableModal";
+import AddClient from "../../../utils/modal/AddClient";
+import AddTicket from "../../../utils/modal/AddTicket";
+import UpdateUser from "../../../utils/modal/UpdateUser";
 
-interface ClientModal {
+export interface ClientModal {
   firstName: string;
   location: {
     area: string;
@@ -17,30 +24,140 @@ interface ClientModal {
   mobile: string;
   technology: string;
   email: string;
+  _id: string;
 }
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
-  const [tableData, setTableData] = useState<null | any>(null);
+  const [usersData, setUsersData] = useState<UserModal[]>([]);
+  const [clientsData, setClientsData] = useState<ClientModal[]>([]);
+  const [ticketsData, setTicketsData] = useState<any>([]);
   const [tableName, setTableName] = useState<string>("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalName, setModalname] = useState<string>("");
+  const [modalProps, setModalProps] = useState({
+    title: "",
+    setShowModal,
+    show: showModal,
+  });
+  const [updateReference, setUpdateReference] = useState<UserModal | any>({});
 
-  const settingData = (url: string) => {
+  const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
+
+  const getData = (url: string) => {
     httpMethods
-      .get<UserModal>(url)
-      .then((result) => setTableData(result))
+      .get<UserModal[] | ClientModal[]>(`/${url}`)
+      .then((result) => {
+        if (url == "users") {
+          setUsersData(result as UserModal[]);
+        } else if (url == "clients") {
+          setClientsData(result as ClientModal[]);
+        } else {
+          setTicketsData(result);
+        }
+      })
       .catch((err) => err);
   };
   const displayTable = (name: string) => {
-    setTableData(null);
     setTableName(name);
-    settingData(name);
   };
 
   useEffect(() => {
-    setTableName("/users");
-    settingData("/users");
+    setTableName("users");
+    getData("users");
+    getData("clients");
   }, []);
+
+  const handleUpdate = (user: UserModal) => {
+    setModalname("update_user");
+    setUpdateReference(user);
+    setModalProps({
+      title: "Update User",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
+  const clientTableHeaders = [
+    { title: "Sl. No", key: "serialNo" },
+    { title: "Consultant Name", key: "firstName" },
+    { title: "Email", key: "email" },
+    { title: "Phone", key: "mobile" },
+    { title: "Technology", key: "technology" },
+    { title: "Location", key: "location.area" },
+    { title: "Location", key: "location.zone" },
+  ];
+  const empTableHeaders = [
+    { title: "Sl. No", key: "serialNo" },
+    { title: "Consultant Name", key: "firstName" },
+    { title: "Email", key: "email" },
+    { title: "Mobile", key: "mobile" },
+    { title: "Role", key: "designation" },
+    {
+      title: "Profile Image",
+      key: "",
+      tdFormat: (user: { isActive: boolean; profileImageUrl: string }) => (
+        <div
+          style={{
+            width: "100px",
+            height: "100px",
+            cursor: "pointer",
+            position: "relative",
+          }}
+        >
+          {user.isActive ? (
+            <GreenDot styles={statusIndicatorStyle} />
+          ) : (
+            <RedDot styles={statusIndicatorStyle} />
+          )}
+          <img
+            src={user.profileImageUrl}
+            alt="image"
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+      ),
+    },
+    {
+      title: "Active User",
+      key: "isActive",
+      tdFormat: (user: { isActive: boolean; isAdmin: boolean }) => (
+        <span>
+          {user.isActive ? "Yes" : "No"}
+          {user.isAdmin && " (Admin)"}{" "}
+        </span>
+      ),
+    },
+    {
+      title: "Uploaded Issues",
+      key: "",
+      tdFormat: (user: { _id: string }) => <Button>Click Here</Button>,
+    },
+    {
+      title: "Actions",
+      key: "",
+      tdFormat: (user: UserModal) => (
+        <>
+          <Button variant="info" onClick={() => handleUpdate(user)}>
+            Update
+          </Button>
+          <Button variant="danger">Remove</Button>
+        </>
+      ),
+    },
+  ];
+
+  const handleClick = (str: string) => {
+    setModalname(str);
+    setModalProps({
+      title: str == "Client" ? "Create Client" : "Create Ticket",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
   return (
     <div>
       <div className="header-nav">
@@ -173,100 +290,53 @@ const AdminDashboard = () => {
       <div className="admin-btns">
         <button
           className="btn btn-dark"
-          data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          onClick={() => navigate("/admindashboard/adduser")}
         >
-          Add User
-        </button>
-        <button className="btn btn-success">Add Client</button>
-        <button className="btn btn-warning">Create Ticket</button>
-      </div>
-      <div className="admin-btns">
-        <button className="btn btn-info" onClick={() => displayTable("/users")}>
-          Show Users
+          Create User
         </button>
         <button
-          className="btn btn-dark"
-          onClick={() => displayTable("/clients")}
+          className="btn btn-success"
+          onClick={() => handleClick("Client")}
         >
-          Show Clients
+          Create Client
+        </button>
+        <button
+          className="btn btn-warning"
+          onClick={() => handleClick("Ticket")}
+        >
+          Create Ticket
         </button>
       </div>
-      {tableName === "/users" ? (
-        <table>
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Technology</th>
-            <th className="column-to-reduce">Profile Image</th>
-            <th>Active User</th>
-            <th>Uploaded Issues</th>
-            <th>Actions</th>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: UserModal) => {
-                return (
-                  <tr key={user.empId}>
-                    <td>{user.firstName + " " + user.lastName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.designation}</td>
-                    <td>
-                      <img src={`${user.profileImageUrl}`} />
-                    </td>
-                    <td>{user.isActive ? "Yes" : "No"}</td>
-                    <td>
-                      <button className="btn btn-primary">Click Here</button>
-                    </td>
-                    <td>
-                      <button className="btn btn-info">Update</button>
-                      <button className="btn btn-danger">Remove</button>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
-      ) : (
-        <table>
-          <thead>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Technology</th>
-            <th>Location</th>
-            <th>Zone</th>
-          </thead>
-          <tbody>
-            {tableData ? (
-              tableData.map((user: ClientModal) => {
-                return (
-                  <tr key={user.firstName}>
-                    <td>{user.firstName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.mobile}</td>
-                    <td>{user.technology}</td>
-                    <td>{user.location.area}</td>
-                    <td>{user.location.zone}</td>
-                  </tr>
-                );
-              })
-            ) : (
-              <div style={{ textAlign: "center" }}>
-                Data is Loading.....................
-              </div>
-            )}
-          </tbody>
-        </table>
+      <div className="admin-btns">
+        <button
+          className="btn btn-info"
+          onClick={() =>
+            displayTable(tableName == "users" ? "clients" : "users")
+          }
+        >
+          Show {tableName == "users" ? "clients" : "users"}
+        </button>
+      </div>
+      <TaskTable
+        pagination
+        headers={tableName === "clients" ? clientTableHeaders : empTableHeaders}
+        tableData={tableName === "clients" ? clientsData : usersData}
+      />
+      {showModal && modalName == "Client" && (
+        <ReusableModal vals={modalProps}>
+          <AddClient />
+        </ReusableModal>
       )}
-      <AddUserModal />
+      {showModal && modalName == "Ticket" && (
+        <ReusableModal vals={modalProps}>
+          <AddTicket clientsData={clientsData} />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "update_user" && (
+        <ReusableModal vals={modalProps}>
+          <UpdateUser updateref={updateReference} />
+        </ReusableModal>
+      )}
     </div>
   );
 };

@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import httpMethods from "../../api/Service";
 
 const UserContext = createContext<UserContext | null>(null);
 export interface UserContext {
   isLoggedin: boolean;
   currentUser: UserModal;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
+  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export interface UserModal {
   firstName: string;
@@ -30,18 +32,26 @@ interface AuthContextProps {
   children: React.ReactNode;
 }
 const AuthContext = ({ children }: AuthContextProps) => {
-  const storedDataString = localStorage.getItem("currentUser");
-  const storedData = storedDataString ? JSON.parse(storedDataString) : null;
-  let user = {} as UserModal;
-  if (storedData !== null) {
-    user = storedData;
-  }
-  const [currentUser, setCurrentUser] = useState<UserModal>(user);
+  const [currentUser, setCurrentUser] = useState<UserModal>({} as UserModal);
+  const [isLoggedin, setIsLoggedIn] = useState<boolean>(false);
   const value: UserContext = {
-    isLoggedin: (currentUser as UserModal).lastActive ? true : false,
+    isLoggedin,
     currentUser,
     setCurrentUser,
+    setIsLoggedIn,
   };
+  useEffect(() => {
+    httpMethods
+      .get<UserModal>("/get-user")
+      .then((data) => {
+        setCurrentUser(data);
+        setIsLoggedIn(true);
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setCurrentUser({} as UserModal);
+      });
+  }, []);
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 export const useUserContext = () => useContext(UserContext);

@@ -52,10 +52,10 @@ const UserDashboard = () => {
         setTableData(result);
 
         const pendingTickets = result.filter(
-          (ticket) => ticket.status === "Pending"
+          (ticket) => ticket.status === "Pending",
         ).length;
         const resolvedTickets = result.filter(
-          (ticket) => ticket.status === "Resolved"
+          (ticket) => ticket.status === "Resolved",
         ).length;
         const totalTickets = result.length;
 
@@ -89,8 +89,8 @@ const UserDashboard = () => {
   const updateTableData = (updatedTicket: TicketsModal) => {
     setTableData((prevTableData) =>
       prevTableData.map((ticket) =>
-        ticket._id === updatedTicket._id ? updatedTicket : ticket
-      )
+        ticket._id === updatedTicket._id ? updatedTicket : ticket,
+      ),
     );
   };
   return (

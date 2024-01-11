@@ -38,7 +38,6 @@ const UserDashboard = () => {
   const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
-  const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56", "#878787"];
   const [pieChartData, setPieChartData] = useState([
     { name: "PendingTickets", value: 0 },
     { name: "ResolvedTickets", value: 0 },
@@ -168,7 +167,6 @@ const UserDashboard = () => {
               <div>
                 <PieChartComponent
                   data={pieChartData}
-                  colors={pieChartColors}
                   totalTickets={tableData.length}
                 />
               </div>

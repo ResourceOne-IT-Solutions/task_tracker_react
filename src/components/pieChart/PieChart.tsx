@@ -3,15 +3,19 @@ import { PieChart, Pie, Legend, Tooltip, Cell } from "recharts";
 
 interface PieChartProps {
   data: { name: string; value: number }[];
-  colors: string[];
   totalTickets: number;
 }
+const mainColors = [
+  "#FF6384",
+  "#36A2EB",
+  "#FFCE56",
+  "#878787",
+  "#FCFCFC",
+  "#8656FF",
+];
 
-const PieChartComponent: React.FC<PieChartProps> = ({
-  data,
-  colors,
-  totalTickets,
-}) => {
+const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
+  const colors = mainColors.slice(0, data.length);
   return (
     <>
       <PieChart width={400} height={400}>

@@ -4,11 +4,14 @@ import httpMethods from "../../../api/Service";
 import { Button } from "react-bootstrap";
 import {
   UserContext,
+  UserModal,
   useUserContext,
 } from "../../../components/Authcontext/AuthContext";
 import { calculateWorkingFrom } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
+import { setCookie } from "../../../utils/Util";
+import { useNavigate } from "react-router";
 
 export interface TicketsModal {
   user: {
@@ -30,8 +33,10 @@ export interface TicketsModal {
 }
 
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, setCurrentUser, setIsLoggedIn } =
+    userContext as UserContext;
   const [tableData, setTableData] = useState<TicketsModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const joinDate = currentUser.joinedDate;
@@ -93,9 +98,20 @@ const UserDashboard = () => {
       ),
     );
   };
+  const handleLogoutClick = () => {
+    setCookie("", 0);
+    setCurrentUser({} as UserModal);
+    setIsLoggedIn(false);
+    navigate("/");
+  };
   return (
     <>
       <div className="userdashboard">
+        <div className="user-logout-button">
+          <Button variant="danger" onClick={handleLogoutClick}>
+            Logout
+          </Button>
+        </div>
         <p className="username">Welcome back, {currentUser.firstName}</p>
         <div className="usernavbar">
           <div className="nav_img_container">

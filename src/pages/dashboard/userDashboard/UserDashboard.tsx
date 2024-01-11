@@ -52,10 +52,10 @@ const UserDashboard = () => {
         setTableData(result);
 
         const pendingTickets = result.filter(
-          (ticket) => ticket.status === "Pending",
+          (ticket) => ticket.status === "Pending"
         ).length;
         const resolvedTickets = result.filter(
-          (ticket) => ticket.status === "Resolved",
+          (ticket) => ticket.status === "Resolved"
         ).length;
         const totalTickets = result.length;
 
@@ -89,8 +89,8 @@ const UserDashboard = () => {
   const updateTableData = (updatedTicket: TicketsModal) => {
     setTableData((prevTableData) =>
       prevTableData.map((ticket) =>
-        ticket._id === updatedTicket._id ? updatedTicket : ticket,
-      ),
+        ticket._id === updatedTicket._id ? updatedTicket : ticket
+      )
     );
   };
   return (
@@ -199,43 +199,58 @@ const UserDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {isLoading && (
+          {isLoading ? (
             <tr>
               <td colSpan={11}>
                 <h1>Data Loading...</h1>
               </td>
             </tr>
-          )}
-          {tableData.length &&
-            tableData.map((items: TicketsModal, index: any) => {
-              return (
-                <tr key={index}>
-                  <td>{items.client.name}</td>
-                  <td>{items.user.name}</td>
-                  <td>{items.technology}</td>
-                  <td>{dateConversion(items.receivedDate)}</td>
-                  <td>
-                    {items.assignedDate
-                      ? dateConversion(items.assignedDate)
-                      : "Not assigned"}
-                  </td>
-                  <td>{items.description}</td>
-                  <td>{items.comments}</td>
-                  <td>{dateConversion(items.closedDate)}</td>
-                  <td>{items.status}</td>
-                  <td>
-                    <Button
-                      variant="success"
-                      onClick={() =>
-                        setShowUpdateModal({ show: true, ticketData: items })
-                      }
-                    >
-                      Update Ticket
-                    </Button>
+          ) : (
+            <>
+              {tableData.length ? (
+                <>
+                  {tableData.map((items: TicketsModal, index: any) => {
+                    return (
+                      <tr key={index}>
+                        <td>{items.client.name}</td>
+                        <td>{items.user.name}</td>
+                        <td>{items.technology}</td>
+                        <td>{dateConversion(items.receivedDate)}</td>
+                        <td>
+                          {items.assignedDate
+                            ? dateConversion(items.assignedDate)
+                            : "Not assigned"}
+                        </td>
+                        <td>{items.description}</td>
+                        <td>{items.comments}</td>
+                        <td>{dateConversion(items.closedDate)}</td>
+                        <td>{items.status}</td>
+                        <td>
+                          <Button
+                            variant="success"
+                            onClick={() =>
+                              setShowUpdateModal({
+                                show: true,
+                                ticketData: items,
+                              })
+                            }
+                          >
+                            Update Ticket
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              ) : (
+                <tr>
+                  <td colSpan={11}>
+                    <h1>NO Data</h1>
                   </td>
                 </tr>
-              );
-            })}
+              )}
+            </>
+          )}
         </tbody>
       </table>
       <UpdateTicket

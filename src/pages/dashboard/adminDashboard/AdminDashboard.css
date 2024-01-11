@@ -64,3 +64,15 @@ input {
 .admin-logout-button {
   margin: 0px 2px 0px 10px;
 }
+
+.admin-pie-chart {
+  display: flex;
+}
+.admin-pie-chart .admin-details {
+  width: 60%;
+}
+.admin-pie-chart .pie-chart {
+  width: 40%;
+  border: 1px solid grey;
+  border-radius: 20px;
+}

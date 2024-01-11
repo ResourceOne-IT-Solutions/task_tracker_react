@@ -5,20 +5,19 @@ interface PieChartProps {
   data: { name: string; value: number }[];
   totalTickets: number;
 }
-const mainColors = [
-  "#FF6384",
-  "#36A2EB",
-  "#FFCE56",
-  "#878787",
-  "#FCFCFC",
-  "#8656FF",
-];
 
 const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
-  const colors = mainColors.slice(0, data.length);
+  const allColors: any = {
+    "NotAssigned Tickets": "#FF6384",
+    "Assigned Tickets": "#36A2EB",
+    "In Progress Tickets": "#FFCE56",
+    "Pending Tickets": "#b80301",
+    "Resolved Tickets": "#168f01",
+    "Helped Tickets": "#FF6384",
+  };
   return (
-    <>
-      <PieChart width={400} height={400}>
+    <div>
+      <PieChart width={400} height={400} style={{ margin: "auto" }}>
         <Pie
           data={data}
           dataKey="value"
@@ -29,14 +28,14 @@ const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
           label
         >
           {data.map((_, index) => (
-            <Cell key={`cell-${index}`} fill={colors[index]} />
+            <Cell key={`cell-${index}`} fill={allColors[_.name]} />
           ))}
         </Pie>
         <Tooltip />
         <Legend />
       </PieChart>
-      <h4 style={{ color: colors[1] }}>Total Tickets: {totalTickets}</h4>
-    </>
+      <h4 style={{ color: "#000000" }}>Total Tickets: {totalTickets}</h4>
+    </div>
   );
 };
 

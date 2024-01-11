@@ -38,11 +38,12 @@ const UserDashboard = () => {
   const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
-  const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56"];
+  const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56", "#878787"];
   const [pieChartData, setPieChartData] = useState([
     { name: "PendingTickets", value: 0 },
     { name: "ResolvedTickets", value: 0 },
-    { name: "TotalTickets", value: 0 },
+    { name: "In Progress Tickets", value: 0 },
+    { name: "Helped Tickets", value: currentUser.helpedTickets },
   ]);
   useEffect(() => {
     setIsLoading(true);
@@ -57,12 +58,16 @@ const UserDashboard = () => {
         const resolvedTickets = result.filter(
           (ticket) => ticket.status === "Resolved",
         ).length;
+        const progressTickets = result.filter(
+          (ticket) => ticket.status === "Progress",
+        ).length;
         const totalTickets = result.length;
 
         setPieChartData([
           { name: "PendingTickets", value: pendingTickets },
           { name: "ResolvedTickets", value: resolvedTickets },
-          { name: "TotalTickets", value: totalTickets },
+          { name: "In Progress Tickets", value: progressTickets },
+          { name: "Helped Tickets", value: currentUser.helpedTickets },
         ]);
 
         setIsLoading(false);
@@ -163,6 +168,7 @@ const UserDashboard = () => {
                 <PieChartComponent
                   data={pieChartData}
                   colors={pieChartColors}
+                  totalTickets={tableData.length}
                 />
               </div>
             </div>

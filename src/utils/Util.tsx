@@ -21,7 +21,7 @@ export const cookieComp = (): string => {
     if (user) {
       return user;
     } else {
-      setCookie("63daa3b51d791ebc79fdff21db51", 2);
+      setCookie("", 2);
       return "";
     }
   };

@@ -26,6 +26,9 @@ export interface UserModal {
   profileImageUrl: string;
   totalTickets: number;
   helpedTickets: number;
+  resolvedTickets: number;
+  pendingTickets: number;
+  progressTickets: number;
   _id: string;
 }
 interface AuthContextProps {

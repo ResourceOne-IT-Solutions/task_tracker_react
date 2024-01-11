@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   const handleClick = () => {
-    navigate(path == "User" ? "/login/Admin" : "/login/User");
+    navigate("/login", { state: path === "Admin" ? "User" : "Admin" });
   };
   const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,

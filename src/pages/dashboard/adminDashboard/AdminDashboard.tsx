@@ -31,7 +31,8 @@ export interface ClientModal {
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, setCurrentUser, setIsLoggedIn } =
+    userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<any>([]);
@@ -208,6 +209,12 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
+  const handleLogoutClick = () => {
+    setCookie("", 0);
+    setCurrentUser({} as UserModal);
+    setIsLoggedIn(false);
+    navigate("/");
+  };
   return (
     <div>
       <div className="header-nav">
@@ -297,6 +304,11 @@ const AdminDashboard = () => {
                 <button className="btn btn-outline-success" type="submit">
                   Search
                 </button>
+                <div className="admin-logout-button">
+                  <Button variant="danger" onClick={handleLogoutClick}>
+                    Logout
+                  </Button>
+                </div>
               </form>
             </div>
           </div>

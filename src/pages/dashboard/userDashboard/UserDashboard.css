@@ -128,3 +128,9 @@ tr:hover {
   background-color: rgb(116, 112, 112);
   cursor: pointer !important;
 }
+/* logout btn */
+.user-logout-button {
+  display: flex;
+  justify-content: end;
+  margin: 10px 20px 0px 0px;
+}

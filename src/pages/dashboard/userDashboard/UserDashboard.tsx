@@ -111,10 +111,7 @@ const UserDashboard = () => {
           <div className="nav_img_container">
             <img src={`${currentUser.profileImageUrl}`} />
           </div>
-          <p>
-            {currentUser.firstName}
-            {currentUser.lastName}
-          </p>
+          <p> {`${currentUser.firstName} ${currentUser.lastName}`} </p>
           <span
             className="active_inactive_circle"
             style={{ backgroundColor: currentUser.isActive ? "green" : "red" }}

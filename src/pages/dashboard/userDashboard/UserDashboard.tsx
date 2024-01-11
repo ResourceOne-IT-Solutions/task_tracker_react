@@ -230,7 +230,7 @@ const UserDashboard = () => {
                         setShowUpdateModal({ show: true, ticketData: items })
                       }
                     >
-                      Update  Ticket
+                      Update Ticket
                     </Button>
                   </td>
                 </tr>

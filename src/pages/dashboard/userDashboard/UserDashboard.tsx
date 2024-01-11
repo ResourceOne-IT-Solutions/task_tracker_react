@@ -44,10 +44,10 @@ const UserDashboard = () => {
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
   const [pieChartData, setPieChartData] = useState([
-    { name: "PendingTickets", value: 0 },
-    { name: "ResolvedTickets", value: 0 },
     { name: "In Progress Tickets", value: 0 },
+    { name: "ResolvedTickets", value: 0 },
     { name: "Helped Tickets", value: currentUser.helpedTickets },
+    { name: "Pending Tickets", value: 0 },
   ]);
   useEffect(() => {
     setIsLoading(true);
@@ -63,13 +63,13 @@ const UserDashboard = () => {
           (ticket) => ticket.status === "Resolved",
         ).length;
         const progressTickets = result.filter(
-          (ticket) => ticket.status === "Progress",
+          (ticket) => ticket.status === "In Progress",
         ).length;
         const totalTickets = result.length;
 
         setPieChartData([
-          { name: "PendingTickets", value: pendingTickets },
-          { name: "ResolvedTickets", value: resolvedTickets },
+          { name: "Pending Tickets", value: pendingTickets },
+          { name: "Resolved Tickets", value: resolvedTickets },
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: currentUser.helpedTickets },
         ]);

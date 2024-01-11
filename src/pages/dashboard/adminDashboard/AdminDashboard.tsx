@@ -15,6 +15,7 @@ import AddClient, { ClientInterface } from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
+import { setCookie } from "../../../utils/Util";
 
 export interface ClientModal {
   firstName: string;

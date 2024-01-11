@@ -43,20 +43,24 @@ const AdminDashboard = () => {
     setShowModal,
     show: showModal,
   });
-  const [updateReference, setUpdateReference] = useState<UserModal | any | ClientModal>({});
+  const [updateReference, setUpdateReference] = useState<
+    UserModal | any | ClientModal
+  >({});
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
-  function updateUserTableData(updatedUser:UserModal){
+  function updateUserTableData(updatedUser: UserModal) {
     setUsersData((prevTableData) =>
       prevTableData.map((user) =>
         user._id === updatedUser._id ? updatedUser : user,
-      ))
+      ),
+    );
   }
-  function updateClientTableData(updatedClient:ClientModal){
+  function updateClientTableData(updatedClient: ClientModal) {
     setClientsData((prevTableData) =>
       prevTableData.map((client) =>
         client._id === updatedClient._id ? updatedClient : client,
-      ))
+      ),
+    );
   }
 
   const getData = (url: string) => {
@@ -84,9 +88,9 @@ const AdminDashboard = () => {
   }, []);
 
   const handleUpdate = (user: UserModal) => {
-    console.log(user,"74::::")
-    if(!user.empId){
-      console.log("update_client")
+    console.log(user, "74::::");
+    if (!user.empId) {
+      console.log("update_client");
       setModalname("update_client");
       setUpdateReference(user);
       setModalProps({
@@ -94,9 +98,8 @@ const AdminDashboard = () => {
         setShowModal: setShowModal,
         show: !showModal,
       });
-    setShowModal(true);
-    }
-    else{
+      setShowModal(true);
+    } else {
       setModalname("update_user");
       setUpdateReference(user);
       setModalProps({
@@ -104,9 +107,9 @@ const AdminDashboard = () => {
         setShowModal: setShowModal,
         show: !showModal,
       });
-    setShowModal(true);
+      setShowModal(true);
+    }
   };
-}
   const clientTableHeaders = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
@@ -120,7 +123,11 @@ const AdminDashboard = () => {
       key: "",
       tdFormat: (user: UserModal) => (
         <>
-          <Button variant="info" onClick={() => handleUpdate(user)} style={{marginRight:"4px"}}>
+          <Button
+            variant="info"
+            onClick={() => handleUpdate(user)}
+            style={{ marginRight: "4px" }}
+          >
             Update
           </Button>
           <Button variant="danger">Remove</Button>
@@ -179,7 +186,11 @@ const AdminDashboard = () => {
       key: "",
       tdFormat: (user: UserModal) => (
         <>
-          <Button variant="info" onClick={() => handleUpdate(user)} style={{marginBottom:"4px"}}>
+          <Button
+            variant="info"
+            onClick={() => handleUpdate(user)}
+            style={{ marginBottom: "4px" }}
+          >
             Update
           </Button>
           <Button variant="danger">Remove</Button>
@@ -373,12 +384,18 @@ const AdminDashboard = () => {
       )}
       {showModal && modalName == "update_user" && (
         <ReusableModal vals={modalProps}>
-          <UpdateUser updateref={updateReference} updateUserTableData={updateUserTableData}/>
+          <UpdateUser
+            updateref={updateReference}
+            updateUserTableData={updateUserTableData}
+          />
         </ReusableModal>
       )}
       {showModal && modalName == "update_client" && (
         <ReusableModal vals={modalProps}>
-          <UpdateClient updateref={updateReference} updateClientTableData={updateClientTableData}/>
+          <UpdateClient
+            updateref={updateReference}
+            updateClientTableData={updateClientTableData}
+          />
         </ReusableModal>
       )}
     </div>

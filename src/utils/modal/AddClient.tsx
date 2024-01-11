@@ -8,7 +8,7 @@ export interface ClientInterface {
   firstName: string;
   email: string;
   mobile: string;
-  location: string | {area: string, zone: string};
+  location: string | { area: string; zone: string };
   technology: string;
   companyName: string;
   applicationType: string;

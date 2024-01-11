@@ -7,9 +7,9 @@ import { Button } from "react-bootstrap";
 import httpMethods from "../../api/Service";
 interface Prop {
   updateref: UserModal;
-  updateUserTableData:(updatedUser: UserModal) => void;
+  updateUserTableData: (updatedUser: UserModal) => void;
 }
-function UpdateUser({ updateref ,updateUserTableData}: Prop) {
+function UpdateUser({ updateref, updateUserTableData }: Prop) {
   const [updatedData, setUpdatedData] = useState({
     id: updateref._id,
     data: {
@@ -45,7 +45,7 @@ function UpdateUser({ updateref ,updateUserTableData}: Prop) {
         setTimeout(() => {
           setLoading(false);
           setUpdateSuccess(true);
-          updateUserTableData(result)
+          updateUserTableData(result);
         }, 2000);
       })
       .catch((e: any) => {

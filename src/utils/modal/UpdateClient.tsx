@@ -23,9 +23,9 @@ export interface Dummy {
 }
 interface Prop {
   updateref: Dummy;
-  updateClientTableData:(updatedClient: ClientModal) => void;
+  updateClientTableData: (updatedClient: ClientModal) => void;
 }
-function UpdateClient({ updateref,updateClientTableData }: Prop) {
+function UpdateClient({ updateref, updateClientTableData }: Prop) {
   const [updatedData, setUpdatedData] = useState({
     id: updateref._id,
     data: {
@@ -51,8 +51,8 @@ function UpdateClient({ updateref,updateClientTableData }: Prop) {
   const [selectedItem, setSelectedItem] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name=="area"){
-      console.log("first")
+    if (e.target.name == "area") {
+      console.log("first");
       setUpdatedData({
         ...updatedData,
         data: {
@@ -60,10 +60,10 @@ function UpdateClient({ updateref,updateClientTableData }: Prop) {
           location: { ...updatedData.data.location, area: e.target.value },
         },
       });
-    }
-    else{
+    } else {
       setUpdatedData({
-        ...updatedData,data:{...updatedData.data,[e.target.name]:e.target.value}
+        ...updatedData,
+        data: { ...updatedData.data, [e.target.name]: e.target.value },
       });
     }
   };
@@ -78,7 +78,7 @@ function UpdateClient({ updateref,updateClientTableData }: Prop) {
         setTimeout(() => {
           setLoading(false);
           setUpdateSuccess(true);
-          updateClientTableData(result)
+          updateClientTableData(result);
         }, 2000);
       })
       .catch((e: any) => {

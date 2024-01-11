@@ -163,7 +163,7 @@ const UserDashboard = () => {
                 <li>Today Tickets: {currentUser.totalTickets}</li>
                 <li>Progress Tickets: {currentUser.progressTickets}</li>
                 <li>Pending: {currentUser.pendingTickets}</li>
-                <li>Resolved: {currentUser.helpedTickets}</li>
+                <li>Resolved: {currentUser.resolvedTickets}</li>
                 <li>Helped Tickets: {currentUser.helpedTickets}</li>
                 <li>Total Tickets : {currentUser.totalTickets}</li>
               </ul>

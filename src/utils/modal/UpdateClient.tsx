@@ -52,7 +52,6 @@ function UpdateClient({ updateref, updateClientTableData }: Prop) {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.name == "area") {
-      console.log("first");
       setUpdatedData({
         ...updatedData,
         data: {
@@ -101,7 +100,6 @@ function UpdateClient({ updateref, updateClientTableData }: Prop) {
   useEffect(() => {
     setSelectedItem(zone);
   }, []);
-  console.log(updatedData, "8282");
   return (
     <div>
       <Form onSubmit={(e) => handleUpdate(e)}>

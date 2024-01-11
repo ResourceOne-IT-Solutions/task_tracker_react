@@ -90,9 +90,7 @@ const AdminDashboard = () => {
   }, []);
 
   const handleUpdate = (user: UserModal) => {
-    console.log(user, "74::::");
     if (!user.empId) {
-      console.log("update_client");
       setModalname("update_client");
       setUpdateReference(user);
       setModalProps({

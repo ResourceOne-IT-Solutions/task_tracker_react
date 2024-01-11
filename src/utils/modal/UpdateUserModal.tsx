@@ -27,7 +27,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     clientName: "",
     description: "",
     comments: "",
-    status: "PROGRESS",
+    status: "In Progress",
   });
 
   // Update the form data when the ticketData prop changes
@@ -133,9 +133,9 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
               onChange={handleChange}
               style={{ flex: "1", minWidth: "150px" }}
             >
-              <option value="PROGRESS">In Progress</option>
-              <option value="RESOLVED">Resolved</option>
-              <option value="PENDING">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Pending">Pending</option>
             </Form.Select>
           </Form.Group>
         </Form>

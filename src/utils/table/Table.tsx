@@ -2,11 +2,6 @@ import React, { memo, useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
 
-interface Loader {
-  component: JSX.Element;
-  loading: boolean;
-}
-
 interface TableProps<T, R> {
   handleRowClick?: (obj: any) => void;
   headers: Array<T>;
@@ -17,7 +12,8 @@ interface TableProps<T, R> {
   pagination?: boolean;
   paginationAlign?: string;
   paginationClassName?: string;
-  loader?: Loader;
+  loader?: JSX.Element;
+  loading: boolean;
 }
 
 const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
@@ -31,7 +27,8 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
     pagination = false,
     paginationAlign = "center",
     paginationClassName = "table-pagination",
-    loader = { component: <>Loading..</>, loading: false },
+    loader = <>Loading..</>,
+    loading = false,
     ...args
   } = props;
   const dt = tableData.map((val, idx) => {
@@ -118,10 +115,10 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
           <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>
         </thead>
         <tbody className={tBodyClassName}>
-          {loader.loading ? (
+          {loading ? (
             <tr>
               <td colSpan={headers.length}>
-                {loader.component ? loader.component : <div>Loading...</div>}
+                {loader ? loader : <div>Loading...</div>}
               </td>
             </tr>
           ) : (

@@ -1,4 +1,4 @@
-import { cookieComp } from "./Util";
+import { cookieComp } from "./utils";
 
 const BE_SERVER = "https://task-tracker-server-2njm.onrender.com";
 const BE_LOCAL = "http://192.168.10.30:1234";

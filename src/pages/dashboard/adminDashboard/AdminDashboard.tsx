@@ -15,7 +15,7 @@ import AddClient, { ClientInterface } from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { setCookie } from "../../../utils/Util";
+import { getData, setCookie } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import { TicketsModal } from "../userDashboard/UserDashboard";
 
@@ -42,6 +42,7 @@ const AdminDashboard = () => {
   const [tableName, setTableName] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [modalProps, setModalProps] = useState({
     title: "",
     setShowModal,
@@ -73,20 +74,22 @@ const AdminDashboard = () => {
       ),
     );
   }
-
-  const getData = (url: string) => {
-    httpMethods
-      .get<UserModal[] | ClientModal[]>(`/${url}`)
-      .then((result) => {
-        if (url == "users") {
-          setUsersData(result as UserModal[]);
-        } else if (url == "clients") {
-          setClientsData(result as ClientModal[]);
-        } else {
-          setTicketsData(result);
-        }
+  const getAllData = () => {
+    setLoading(true);
+    Promise.all([
+      getData<UserModal>("users"),
+      getData<ClientModal>("clients"),
+      getData<any>("tickets"),
+    ])
+      .then((results) => {
+        setUsersData(results[0]);
+        setClientsData(results[1]);
+        setTicketsData(results[2]);
       })
-      .catch((err) => err);
+      .catch((err) => err)
+      .finally(() => {
+        setLoading(false);
+      });
   };
   const displayTable = (name: string) => {
     setTableName(name);
@@ -94,8 +97,9 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     setTableName("users");
-    getData("users");
-    getData("clients");
+    // getData("users");
+    // getData("clients");
+    getAllData();
   }, []);
 
   const handleUpdate = (user: UserModal) => {
@@ -434,6 +438,7 @@ const AdminDashboard = () => {
         pagination
         headers={tableName === "clients" ? clientTableHeaders : empTableHeaders}
         tableData={tableName === "clients" ? clientsData : usersData}
+        loading={loading}
       />
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>

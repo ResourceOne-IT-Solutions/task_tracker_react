@@ -43,11 +43,11 @@ const UserDashboard = () => {
   const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
-  const pieChartColors = ["#FF6384", "#36A2EB", "#FFCE56"];
   const [pieChartData, setPieChartData] = useState([
     { name: "PendingTickets", value: 0 },
     { name: "ResolvedTickets", value: 0 },
-    { name: "TotalTickets", value: 0 },
+    { name: "In Progress Tickets", value: 0 },
+    { name: "Helped Tickets", value: currentUser.helpedTickets },
   ]);
   useEffect(() => {
     setIsLoading(true);
@@ -62,14 +62,23 @@ const UserDashboard = () => {
         const resolvedTickets = result.filter(
           (ticket) => ticket.status === "Resolved",
         ).length;
+        const progressTickets = result.filter(
+          (ticket) => ticket.status === "Progress",
+        ).length;
         const totalTickets = result.length;
 
         setPieChartData([
           { name: "PendingTickets", value: pendingTickets },
           { name: "ResolvedTickets", value: resolvedTickets },
-          { name: "TotalTickets", value: totalTickets },
+          { name: "In Progress Tickets", value: progressTickets },
+          { name: "Helped Tickets", value: currentUser.helpedTickets },
         ]);
-
+        setCurrentUser((data) => ({
+          ...data,
+          pendingTickets,
+          resolvedTickets,
+          progressTickets,
+        }));
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
@@ -117,10 +126,7 @@ const UserDashboard = () => {
           <div className="nav_img_container">
             <img src={`${currentUser.profileImageUrl}`} />
           </div>
-          <p>
-            {currentUser.firstName}
-            {currentUser.lastName}
-          </p>
+          <p> {`${currentUser.firstName} ${currentUser.lastName}`} </p>
           <span
             className="active_inactive_circle"
             style={{ backgroundColor: currentUser.isActive ? "green" : "red" }}
@@ -153,14 +159,13 @@ const UserDashboard = () => {
             </div>
             <div className="stats">
               <ul>
-                <li>stats</li>
-                <li>Total Tickets : 0</li>
-                <li>Resolved: 0</li>
-                <li>Pending: 0</li>
-                <li>Fixed: 0</li>
-                <li>Today Tickets: 0</li>
-                <li>Solved with another Dev: 0</li>
-                <li>Helped Tickets: 0</li>
+                <li>Stats</li>
+                <li>Today Tickets: {currentUser.totalTickets}</li>
+                <li>Progress Tickets: {currentUser.progressTickets}</li>
+                <li>Pending: {currentUser.pendingTickets}</li>
+                <li>Resolved: {currentUser.helpedTickets}</li>
+                <li>Helped Tickets: {currentUser.helpedTickets}</li>
+                <li>Total Tickets : {currentUser.totalTickets}</li>
               </ul>
             </div>
           </div>
@@ -178,7 +183,7 @@ const UserDashboard = () => {
               <div>
                 <PieChartComponent
                   data={pieChartData}
-                  colors={pieChartColors}
+                  totalTickets={tableData.length}
                 />
               </div>
             </div>

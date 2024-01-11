@@ -7,7 +7,14 @@ interface PieChartProps {
 }
 
 const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
-  const allColors:any={"NotAssigned Tickets":"#FF6384","Assigned Tickets":"#36A2EB","In Progress Tickets":"#FFCE56","Pending Tickets":"#b80301","Resolved Tickets":"#168f01","Helped Tickets":"#FF6384"}
+  const allColors: any = {
+    "NotAssigned Tickets": "#FF6384",
+    "Assigned Tickets": "#36A2EB",
+    "In Progress Tickets": "#FFCE56",
+    "Pending Tickets": "#b80301",
+    "Resolved Tickets": "#168f01",
+    "Helped Tickets": "#FF6384",
+  };
   return (
     <div>
       <PieChart width={400} height={400} style={{ margin: "auto" }}>

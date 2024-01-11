@@ -147,7 +147,7 @@ const UserDashboard = () => {
             </div>
             <div className="stats">
               <ul>
-                <li>stats</li>
+                <li>Stats</li>
                 <li>Today Tickets: {currentUser.totalTickets}</li>
                 <li>Progress Tickets: {currentUser.progressTickets}</li>
                 <li>Pending: {currentUser.pendingTickets}</li>

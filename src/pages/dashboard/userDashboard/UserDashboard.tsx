@@ -10,7 +10,7 @@ import {
 import { calculateWorkingFrom } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
-import { setCookie } from "../../../utils/Util";
+import { setCookie } from "../../../utils/utils";
 import { useNavigate } from "react-router";
 
 export interface TicketsModal {

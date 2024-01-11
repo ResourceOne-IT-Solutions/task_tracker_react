@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import "./Login.css";
 import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/Service";
-import { setCookie } from "../../utils/Util";
+import { setCookie } from "../../utils/utils";
 
 export interface Datainterface {
   userId: string;

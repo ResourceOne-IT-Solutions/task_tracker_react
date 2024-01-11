@@ -115,7 +115,7 @@ function UpdateClient({ updateref, updateClientTableData }: Prop) {
           </Form.Group>
         </Row>
         <Row className="mb-3">
-          <Form.Group as={Col} md="12">
+          <Form.Group as={Col} md="9">
             <Form.Control
               type="text"
               name="area"
@@ -124,9 +124,7 @@ function UpdateClient({ updateref, updateClientTableData }: Prop) {
               placeholder="Enter Location Area"
             />
           </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="12">
+          <Form.Group as={Col} md="3">
             <Dropdown onSelect={handleSelect}>
               <Dropdown.Toggle variant="success" id="dropdown-basic">
                 {selectedItem ? selectedItem : "Select Zone"}

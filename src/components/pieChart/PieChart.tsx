@@ -25,7 +25,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
           label
         >
           {data.map((_, index) => (
-            <Cell key={`cell-${index}-${Math.random()}`} fill={colors[index]} />
+            <Cell key={`cell-${index}`} fill={colors[index]} />
           ))}
         </Pie>
         <Tooltip />

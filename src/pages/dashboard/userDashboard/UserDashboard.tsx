@@ -31,7 +31,7 @@ export interface TicketsModal {
 
 const UserDashboard = () => {
   const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, setCurrentUser } = userContext as UserContext;
   const [tableData, setTableData] = useState<TicketsModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const joinDate = currentUser.joinedDate;
@@ -69,7 +69,12 @@ const UserDashboard = () => {
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: currentUser.helpedTickets },
         ]);
-
+        setCurrentUser((data) => ({
+          ...data,
+          pendingTickets,
+          resolvedTickets,
+          progressTickets,
+        }));
         setIsLoading(false);
       })
       .catch(() => setIsLoading(false));
@@ -143,13 +148,12 @@ const UserDashboard = () => {
             <div className="stats">
               <ul>
                 <li>stats</li>
-                <li>Total Tickets : 0</li>
-                <li>Resolved: 0</li>
-                <li>Pending: 0</li>
-                <li>Fixed: 0</li>
-                <li>Today Tickets: 0</li>
-                <li>Solved with another Dev: 0</li>
-                <li>Helped Tickets: 0</li>
+                <li>Today Tickets: {currentUser.totalTickets}</li>
+                <li>Progress Tickets: {currentUser.progressTickets}</li>
+                <li>Pending: {currentUser.pendingTickets}</li>
+                <li>Resolved: {currentUser.helpedTickets}</li>
+                <li>Helped Tickets: {currentUser.helpedTickets}</li>
+                <li>Total Tickets : {currentUser.totalTickets}</li>
               </ul>
             </div>
           </div>

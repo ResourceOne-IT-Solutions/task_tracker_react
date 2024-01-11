@@ -16,6 +16,8 @@ import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
 import { getData, setCookie } from "../../../utils/utils";
+import PieChartComponent from "../../../components/pieChart/PieChart";
+import { TicketsModal } from "../userDashboard/UserDashboard";
 
 export interface ClientModal {
   firstName: string;
@@ -49,6 +51,13 @@ const AdminDashboard = () => {
   const [updateReference, setUpdateReference] = useState<
     UserModal | any | ClientModal
   >({});
+  const [pieChartData, setPieChartData] = useState([
+    { name: "NotAssigned Tickets", value: 0 },
+    { name: "Assigned Tickets", value: 0 },
+    { name: "In Progress Tickets", value: 0 },
+    { name: "Pending Tickets", value: 0 },
+    { name: "Resolved Tickets", value: 0 },
+  ]);
 
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
   function updateUserTableData(updatedUser: UserModal) {
@@ -218,6 +227,41 @@ const AdminDashboard = () => {
     setIsLoggedIn(false);
     navigate("/");
   };
+  useEffect(() => {
+    httpMethods.get<TicketsModal[]>("/tickets").then((result) => {
+      setTicketsData(result);
+      const notAssignedTickets = result.filter(
+        (ticket) => ticket.status === "Not Assigned",
+      ).length;
+      const assignedTickets = result.filter(
+        (ticket) => ticket.status === "Assigned",
+      ).length;
+      const progressTickets = result.filter(
+        (ticket) => ticket.status === "In Progress",
+      ).length;
+      const pendingTickets = result.filter(
+        (ticket) => ticket.status === "Pending",
+      ).length;
+      const resolvedTickets = result.filter(
+        (ticket) => ticket.status === "Resolved",
+      ).length;
+      const totalTickets = result.length;
+
+      setPieChartData([
+        { name: "NotAssigned Tickets", value: notAssignedTickets },
+        { name: "Assigned Tickets", value: assignedTickets },
+        { name: "In Progress Tickets", value: progressTickets },
+        { name: "Pending Tickets", value: pendingTickets },
+        { name: "Resolved Tickets", value: resolvedTickets },
+      ]);
+      setCurrentUser((data) => ({
+        ...data,
+        pendingTickets,
+        resolvedTickets,
+        progressTickets,
+      }));
+    });
+  }, []);
   return (
     <div>
       <div className="header-nav">
@@ -317,39 +361,47 @@ const AdminDashboard = () => {
           </div>
         </nav>
       </div>
-      <div className="admin-details">
-        <div className="heading-pic">
-          <img src={`${currentUser.profileImageUrl}`} alt="img" />
-          <h4>
-            {currentUser.firstName} {" " + currentUser.lastName + " "}
-            <span
-              className="active-not"
-              style={{
-                backgroundColor: currentUser.isActive ? "#15a757" : "red",
-              }}
-            ></span>{" "}
-            <span>{`(${currentUser.userId})`}</span>
-          </h4>
+      <div className="admin-pie-chart">
+        <div className="admin-details">
+          <div className="heading-pic">
+            <img src={`${currentUser.profileImageUrl}`} alt="img" />
+            <h4>
+              {currentUser.firstName} {" " + currentUser.lastName + " "}
+              <span
+                className="active-not"
+                style={{
+                  backgroundColor: currentUser.isActive ? "#15a757" : "red",
+                }}
+              ></span>{" "}
+              <span>{`(${currentUser.userId})`}</span>
+            </h4>
+          </div>
+          <div className="all-details">
+            <div className="pf">
+              <h6>Profile Image</h6>
+              <img src={`${currentUser.profileImageUrl}`} alt="image" />
+            </div>
+            <div>
+              <h6>Admin Details</h6>
+              <ul>
+                <li>EmpId : {currentUser.empId}</li>
+                <li>FirstName : {currentUser.firstName}</li>
+                <li>LastName : {currentUser.lastName}</li>
+                <li>Email : {currentUser.email}</li>
+                <li>Mobile : {currentUser.mobile}</li>
+                <li>Email : {currentUser.email}</li>
+                <li>Designation : {currentUser.designation}</li>
+                <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
+                <li>Address : {currentUser.address}</li>
+              </ul>
+            </div>
+          </div>
         </div>
-        <div className="all-details">
-          <div className="pf">
-            <h6>Profile Image</h6>
-            <img src={`${currentUser.profileImageUrl}`} alt="image" />
-          </div>
-          <div>
-            <h6>Admin Details</h6>
-            <ul>
-              <li>EmpId : {currentUser.empId}</li>
-              <li>FirstName : {currentUser.firstName}</li>
-              <li>LastName : {currentUser.lastName}</li>
-              <li>Email : {currentUser.email}</li>
-              <li>Mobile : {currentUser.mobile}</li>
-              <li>Email : {currentUser.email}</li>
-              <li>Designation : {currentUser.designation}</li>
-              <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
-              <li>Address : {currentUser.address}</li>
-            </ul>
-          </div>
+        <div className="pie-chart">
+          <PieChartComponent
+            data={pieChartData}
+            totalTickets={ticketsData.length}
+          />
         </div>
       </div>
       <div className="admin-btns">

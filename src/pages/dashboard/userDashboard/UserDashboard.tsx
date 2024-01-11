@@ -226,7 +226,17 @@ const UserDashboard = () => {
                         <td>{dateConversion(items.closedDate)}</td>
                         <td>{items.status}</td>
                         <td>
-                          <Button variant="success">Update Ticket</Button>
+                          <Button
+                            variant="success"
+                            onClick={() =>
+                              setShowUpdateModal({
+                                show: true,
+                                ticketData: items,
+                              })
+                            }
+                          >
+                            Update Ticket
+                          </Button>
                         </td>
                       </tr>
                     );

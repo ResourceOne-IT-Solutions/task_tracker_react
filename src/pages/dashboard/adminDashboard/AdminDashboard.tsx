@@ -227,6 +227,9 @@ const AdminDashboard = () => {
     setIsLoggedIn(false);
     navigate("/");
   };
+  const handleChatClick = () => {
+    navigate("/chat");
+  };
   useEffect(() => {
     httpMethods.get<TicketsModal[]>("/tickets").then((result) => {
       setTicketsData(result);
@@ -341,6 +344,11 @@ const AdminDashboard = () => {
                   </a>
                 </li>
               </ul>
+              <div className="chat-btn">
+                <Button variant="success" onClick={handleChatClick}>
+                  Chat
+                </Button>{" "}
+              </div>
               <form className="d-flex">
                 <input
                   className="form-control me-2"

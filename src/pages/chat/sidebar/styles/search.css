@@ -1,0 +1,13 @@
+.search-box input {
+  border-radius: 25px;
+  width: 200px;
+  background-color: #ebeef3;
+  text-align: center;
+  border: none;
+}
+.search-box {
+  margin: 15px;
+}
+.search-box input:focus {
+  outline: none;
+}

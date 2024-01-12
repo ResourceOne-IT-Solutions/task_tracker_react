@@ -5,6 +5,7 @@ import { useUserContext } from "../components/Authcontext/AuthContext";
 import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/loginpage/Login";
+import Chat from "../pages/chat";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -42,6 +43,7 @@ const Routespage = () => {
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
       </BrowserRouter>
     </div>

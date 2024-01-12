@@ -76,3 +76,7 @@ input {
   border: 1px solid grey;
   border-radius: 20px;
 }
+/* chat-button */
+.chat-btn {
+  margin-right: 8px;
+}

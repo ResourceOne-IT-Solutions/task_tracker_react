@@ -136,6 +136,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
               <option value="In Progress">In Progress</option>
               <option value="Resolved">Resolved</option>
               <option value="Pending">Pending</option>
+              <option value="Improper requirement">Improper requirement</option>
             </Form.Select>
           </Form.Group>
         </Form>

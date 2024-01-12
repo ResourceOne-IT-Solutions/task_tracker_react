@@ -30,6 +30,7 @@ export interface UserModal {
   pendingTickets: number;
   progressTickets: number;
   _id: string;
+  status: string;
 }
 interface AuthContextProps {
   children: React.ReactNode;

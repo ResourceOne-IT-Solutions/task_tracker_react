@@ -6,9 +6,10 @@ import {
   UserModal,
   useUserContext,
 } from "../../../components/Authcontext/AuthContext";
+
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
 import { Link, useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import AddClient from "../../../utils/modal/AddClient";
@@ -17,7 +18,9 @@ import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
 import { getData, setCookie } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { TicketsModal } from "../userDashboard/UserDashboard";
+import AssignTicket from "../../../utils/modal/AssignTicket";
+import { Dropdown } from "react-bootstrap";
+import { TicketModal } from "../../../modals/TicketModals";
 
 export interface ClientModal {
   firstName: string;
@@ -38,7 +41,7 @@ const AdminDashboard = () => {
     userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
-  const [ticketsData, setTicketsData] = useState<any>([]);
+  const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
   const [tableName, setTableName] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
@@ -59,6 +62,22 @@ const AdminDashboard = () => {
     { name: "Resolved Tickets", value: 0 },
   ]);
 
+  const [statuses, setStatuses] = useState<string[]>([
+    "Offline",
+    "Available",
+    "Busy",
+  ]);
+  const [colors, setColors] = useState<any>({
+    Offline: <RedDot />,
+    Available: <GreenDot />,
+    Busy: <OrangeDot />,
+  });
+
+  const [sendingStatuses, setSendingStatuses] = useState({
+    id: "",
+    data: { status: "" },
+  });
+
   const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
   function updateUserTableData(updatedUser: UserModal) {
     setUsersData((prevTableData) =>
@@ -71,6 +90,13 @@ const AdminDashboard = () => {
     setClientsData((prevTableData) =>
       prevTableData.map((client) =>
         client._id === updatedClient._id ? updatedClient : client,
+      ),
+    );
+  }
+  function UpdateTicketsTableData(updatedTicket: any) {
+    setTicketsData((prevTableData) =>
+      prevTableData.map((ticket) =>
+        ticket.client.id === updatedTicket.client.id ? updatedTicket : ticket,
       ),
     );
   }
@@ -102,6 +128,9 @@ const AdminDashboard = () => {
     getAllData();
   }, []);
 
+  useEffect(() => {
+    setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
+  }, []);
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
       setModalname("update_client");
@@ -122,6 +151,16 @@ const AdminDashboard = () => {
       });
       setShowModal(true);
     }
+  };
+  const handleAddResource = (ticket: any) => {
+    setModalname("Assign Ticket");
+    setUpdateReference(ticket);
+    setModalProps({
+      title: "Assign Ticket",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
   };
   const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
@@ -211,6 +250,34 @@ const AdminDashboard = () => {
       ),
     },
   ];
+  const ticketTableHeaders: TableHeaders<TicketModal>[] = [
+    { title: "Client Name", key: "client.name" },
+    { title: "User Name", key: "user.name" },
+    { title: "Status", key: "status" },
+    { title: "Technology", key: "technology" },
+    { title: "Received Date", key: "receivedDate" },
+    { title: "Description", key: "description" },
+    {
+      title: "Helped By",
+      key: "",
+      tdFormat: (ticket) => (
+        <>{ticket.addOnResource.map((val) => val.name).join(", ")}</>
+      ),
+    },
+    {
+      title: "Assign Ticket",
+      key: "",
+      tdFormat: (ticket: any) => (
+        <button
+          className="btn btn-info"
+          onClick={() => handleAddResource(ticket)}
+          style={{ fontWeight: "700" }}
+        >
+          Add Resource
+        </button>
+      ),
+    },
+  ];
 
   const handleClick = (str: string) => {
     setModalname(str);
@@ -231,7 +298,7 @@ const AdminDashboard = () => {
     navigate("/chat");
   };
   useEffect(() => {
-    httpMethods.get<TicketsModal[]>("/tickets").then((result) => {
+    httpMethods.get<TicketModal[]>("/tickets").then((result) => {
       setTicketsData(result);
       const notAssignedTickets = result.filter(
         (ticket) => ticket.status === "Not Assigned",
@@ -265,13 +332,20 @@ const AdminDashboard = () => {
       }));
     });
   }, []);
+  const handleSelectStatus = (status: any) => {
+    const x = { ...sendingStatuses, data: { status: status } };
+    setSendingStatuses(x);
+    httpMethods.put<any, any>("/users/update", x).then((result) => {
+      setCurrentUser(result);
+    });
+  };
   return (
     <div>
       <div className="header-nav">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-around">
           <div className="container-fluid">
             <a className="navbar-brand" href="#">
-              Navbar
+              <b>DASHBOARD</b>
             </a>
             <button
               className="navbar-toggler"
@@ -288,6 +362,65 @@ const AdminDashboard = () => {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
+              <div>
+                <form className="d-flex">
+                  <div className="admin-logout-button">
+                    <Button
+                      variant="primary"
+                      onClick={() => navigate("/admindashboard/adduser")}
+                    >
+                      Create User
+                    </Button>
+                  </div>
+                  <div className="admin-logout-button">
+                    <Button
+                      variant="success"
+                      onClick={() => handleClick("Client")}
+                    >
+                      Create Client
+                    </Button>
+                  </div>
+                  <div className="admin-logout-button">
+                    <Button
+                      variant="warning"
+                      onClick={() => handleClick("Ticket")}
+                    >
+                      Create Ticket
+                    </Button>
+                  </div>
+                  <div className="admin-logout-button">
+                    <Dropdown onSelect={handleSelectStatus}>
+                      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                        {currentUser.status ? (
+                          <span>
+                            {colors[currentUser.status]} {currentUser.status}
+                          </span>
+                        ) : (
+                          "Select a User"
+                        )}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        style={{ maxHeight: "180px", overflowY: "auto" }}
+                      >
+                        {statuses.map((stat, idx) => {
+                          return (
+                            <Dropdown.Item key={idx} eventKey={stat}>
+                              <b>
+                                {colors[stat]} {stat}
+                              </b>
+                            </Dropdown.Item>
+                          );
+                        })}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </div>
+                  <div className="admin-logout-button">
+                    <Button variant="danger" onClick={handleLogoutClick}>
+                      Logout
+                    </Button>
+                  </div>
+                </form>
+              </div>
               <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <a className="nav-link active" aria-current="page" href="#">
@@ -418,43 +551,35 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="admin-btns">
-        <button
-          className="btn btn-dark"
-          onClick={() => navigate("/admindashboard/adduser")}
-        >
-          Create User
-        </button>
-        <button
-          className="btn btn-success"
-          onClick={() => handleClick("Client")}
-        >
-          Create Client
-        </button>
-        <button
-          className="btn btn-warning"
-          onClick={() => handleClick("Ticket")}
-        >
-          Create Ticket
-        </button>
-      </div>
-      <div className="admin-btns">
-        <button
-          className="btn btn-info"
+        <Button
+          variant="info"
           onClick={() =>
             displayTable(tableName == "users" ? "clients" : "users")
           }
         >
           Show {tableName == "users" ? "clients" : "users"}
-        </button>
+        </Button>
+        <Button variant="secondary" onClick={() => displayTable("tickets")}>
+          Show Tickets
+        </Button>
       </div>
-      {tableName === "clients" ? (
+      {tableName == "tickets" && (
+        <TaskTable<TicketModal>
+          pagination
+          headers={ticketTableHeaders}
+          tableData={ticketsData}
+          loading={loading}
+        />
+      )}
+      {tableName === "clients" && (
         <TaskTable<ClientModal>
           pagination
           headers={clientTableHeaders}
           tableData={clientsData}
           loading={loading}
         />
-      ) : (
+      )}
+      {tableName === "users" && (
         <TaskTable<UserModal>
           pagination
           headers={empTableHeaders}
@@ -485,6 +610,15 @@ const AdminDashboard = () => {
           <UpdateClient
             updateref={updateReference}
             updateClientTableData={updateClientTableData}
+          />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "Assign Ticket" && (
+        <ReusableModal vals={modalProps}>
+          <AssignTicket
+            updateref={updateReference}
+            usersData={usersData}
+            UpdateTicketsTableData={UpdateTicketsTableData}
           />
         </ReusableModal>
       )}

@@ -1,0 +1,41 @@
+.chat-app {
+  width: 100%;
+  display: flex;
+  height: 100vh;
+}
+/* sidebar */
+.sidebar {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+}
+.search {
+  padding: 10px;
+  height: 12%;
+  background-color: #4caf50;
+  border-right: 1px solid grey;
+}
+.users-group {
+  height: 33%;
+  border: 1px solid grey;
+}
+.users-list {
+  height: 55%;
+  border-right: 1px solid grey;
+}
+/* chatbox*/
+.chatbox {
+  width: 70%;
+  height: 100%;
+}
+.chat-header {
+  background-color: #4caf50;
+  height: 12%;
+}
+.chat-body {
+  height: 80%;
+}
+.chat-footer {
+  background-color: #4caf50;
+  height: 8%;
+}

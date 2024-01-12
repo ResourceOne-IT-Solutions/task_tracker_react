@@ -5,6 +5,7 @@ import { useUserContext } from "../components/Authcontext/AuthContext";
 import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/loginpage/Login";
+import Chat from "../pages/chat";
 import Tickets from "../pages/tickets";
 import TicketDescription from "../pages/tickets/TicketDescription";
 
@@ -44,6 +45,7 @@ const Routespage = () => {
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           />
+          <Route path="/chat" element={<Chat />} />
           <Route
             path="/tickets"
             element={isLoggedin && isAdmin ? <Tickets /> : <Navigate to="/" />}

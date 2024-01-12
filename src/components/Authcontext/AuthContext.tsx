@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import httpMethods from "../../api/Service";
 import { UserContext, UserModal } from "../../modals/UserModals";
 
-const UserContext = createContext<UserContext | null>(null);
+const UserContextProvider = createContext<UserContext | null>(null);
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -28,8 +28,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
         setCurrentUser({} as UserModal);
       });
   }, []);
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+  return <UserContextProvider.Provider value={value}>{children}</UserContextProvider.Provider>;
 };
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = () => useContext(UserContextProvider);
 
 export default AuthContext;

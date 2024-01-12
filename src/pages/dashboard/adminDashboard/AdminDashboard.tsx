@@ -9,7 +9,7 @@ import {
 
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
 import { Link, useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import AddClient from "../../../utils/modal/AddClient";
@@ -18,9 +18,9 @@ import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
 import { getData, setCookie } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { TicketsModal } from "../userDashboard/UserDashboard";
 import AssignTicket from "../../../utils/modal/AssignTicket";
 import { Dropdown } from "react-bootstrap";
+import { TicketModal } from "../../../modals/TicketModals";
 
 export interface ClientModal {
   firstName: string;
@@ -41,7 +41,7 @@ const AdminDashboard = () => {
     userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
-  const [ticketsData, setTicketsData] = useState<TicketsModal[]>([]);
+  const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
   const [tableName, setTableName] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
@@ -250,7 +250,7 @@ const AdminDashboard = () => {
       ),
     },
   ];
-  const ticketTableHeaders = [
+  const ticketTableHeaders: TableHeaders<TicketModal>[] = [
     { title: "Client Name", key: "client.name" },
     { title: "User Name", key: "user.name" },
     { title: "Status", key: "status" },
@@ -260,18 +260,7 @@ const AdminDashboard = () => {
     {
       title: "Helped By",
       key: "",
-      tdFormat: (ticket: {
-        addOnResource: {
-          name: string;
-          id: string;
-        }[];
-      }) => {
-        let allhelperusers = "";
-        ticket.addOnResource?.map((emps) => {
-          allhelperusers += emps.name + ", ";
-        });
-        return <div>{allhelperusers}</div>;
-      },
+      tdFormat: (ticket) => <>{ticket.addOnResource.map(val => val.name).join(", ")}</>,
     },
     {
       title: "Assign Ticket",
@@ -304,7 +293,7 @@ const AdminDashboard = () => {
     navigate("/");
   };
   useEffect(() => {
-    httpMethods.get<TicketsModal[]>("/tickets").then((result) => {
+    httpMethods.get<TicketModal[]>("/tickets").then((result) => {
       setTicketsData(result);
       const notAssignedTickets = result.filter(
         (ticket) => ticket.status === "Not Assigned",
@@ -565,14 +554,15 @@ const AdminDashboard = () => {
         </Button>
       </div>
       {
-        tableName == "tickets" && <TaskTable<TicketModal>
+        tableName == "tickets" && 
+        <TaskTable<TicketModal>
           pagination
           headers={ticketTableHeaders}
           tableData={ticketsData}
           loading={loading}
         />
         }
-      {tableName === "clients" && (
+      {tableName === "clients" && 
         <TaskTable<ClientModal>
           pagination
           headers={clientTableHeaders}

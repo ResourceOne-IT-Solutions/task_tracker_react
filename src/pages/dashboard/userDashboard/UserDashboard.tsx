@@ -149,7 +149,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
   };
   useEffect(() => {
-    setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
+    setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
   }, []);
   useEffect(() => {
     getData<UserModal>("users")
@@ -168,9 +168,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           <div>
             <Dropdown onSelect={handleSelectStatus}>
               <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                {currentUser.status ? (
+                {presentUser.status ? (
                   <span>
-                    {currentUser.status} {colors[currentUser.status]}
+                    {presentUser.status} {colors[presentUser.status]}
                   </span>
                 ) : (
                   "Select a User"

@@ -6,12 +6,13 @@ import {
   UserModal,
   useUserContext,
 } from "../../../components/Authcontext/AuthContext";
-import TaskTable from "../../../utils/table/Table";
-import Button from "react-bootstrap/Button";
-import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-import { useNavigate } from "react-router-dom";
+
+import TaskTable, { TableHeaders } from "../../../utils/table/Table";
+import { Button } from "react-bootstrap";
+import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { Link, useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient, { ClientInterface } from "../../../utils/modal/AddClient";
+import AddClient from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
@@ -130,8 +131,8 @@ const AdminDashboard = () => {
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
-  const handleUpdate = (user: UserModal) => {
-    if (!user.empId) {
+  const handleUpdate = <T,>(user: T, type: string) => {
+    if (type === "CLIENT") {
       setModalname("update_client");
       setUpdateReference(user);
       setModalProps({
@@ -161,7 +162,7 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
-  const clientTableHeaders = [
+  const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
     { title: "Email", key: "email" },
@@ -172,11 +173,11 @@ const AdminDashboard = () => {
     {
       title: "Actions",
       key: "",
-      tdFormat: (user: UserModal) => (
+      tdFormat: (user: ClientModal) => (
         <>
           <Button
             variant="info"
-            onClick={() => handleUpdate(user)}
+            onClick={() => handleUpdate(user, "CLIENT")}
             style={{ marginRight: "4px" }}
           >
             Update
@@ -186,7 +187,7 @@ const AdminDashboard = () => {
       ),
     },
   ];
-  const empTableHeaders = [
+  const empTableHeaders: TableHeaders<UserModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
     { title: "Email", key: "email" },
@@ -195,7 +196,7 @@ const AdminDashboard = () => {
     {
       title: "Profile Image",
       key: "",
-      tdFormat: (user: { isActive: boolean; profileImageUrl: string }) => (
+      tdFormat: (user) => (
         <div
           style={{
             width: "100px",
@@ -239,8 +240,8 @@ const AdminDashboard = () => {
         <>
           <Button
             variant="info"
-            onClick={() => handleUpdate(user)}
-            style={{ marginBottom: "4px", marginRight: "4px" }}
+            onClick={() => handleUpdate(user, "USER")}
+            style={{ marginBottom: "4px" }}
           >
             Update
           </Button>
@@ -367,8 +368,6 @@ const AdminDashboard = () => {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <div></div>
-
               <div>
                 <form className="d-flex">
                   <div className="admin-logout-button">
@@ -428,6 +427,83 @@ const AdminDashboard = () => {
                   </div>
                 </form>
               </div>
+              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="#">
+                    Home
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <a className="nav-link" href="#">
+                    Link
+                  </a>
+                </li>
+                <li className="nav-item dropdown">
+                  <a
+                    className="nav-link dropdown-toggle"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    Dropdown
+                  </a>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown"
+                  >
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        Action
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        Another action
+                      </a>
+                    </li>
+                    <li>
+                      <hr className="dropdown-divider" />
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        Something else here
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li className="nav-item">
+                  <a
+                    className="nav-link disabled"
+                    href="#"
+                    aria-disabled="true"
+                  >
+                    Disabled
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/tickets">
+                    Tickets
+                  </Link>
+                </li>
+              </ul>
+              <form className="d-flex">
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                />
+                <button className="btn btn-outline-success" type="submit">
+                  Search
+                </button>
+                <div className="admin-logout-button">
+                  <Button variant="danger" onClick={handleLogoutClick}>
+                    Logout
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>
         </nav>
@@ -488,24 +564,30 @@ const AdminDashboard = () => {
           Show Tickets
         </Button>
       </div>
-      <TaskTable
-        pagination
-        headers={
-          tableName === "clients"
-            ? clientTableHeaders
-            : tableName == "tickets"
-              ? ticketTableHeaders
-              : empTableHeaders
+      {
+        tableName == "tickets" && <TaskTable<TicketModal>
+          pagination
+          headers={ticketTableHeaders}
+          tableData={ticketsData}
+          loading={loading}
+        />
         }
-        tableData={
-          tableName === "clients"
-            ? clientsData
-            : tableName == "tickets"
-              ? ticketsData
-              : usersData
-        }
-        loading={loading}
-      />
+      {tableName === "clients" && (
+        <TaskTable<ClientModal>
+          pagination
+          headers={clientTableHeaders}
+          tableData={clientsData}
+          loading={loading}
+        />
+      }
+         { tableName === "users" &&      
+        <TaskTable<UserModal>
+          pagination
+          headers={empTableHeaders}
+          tableData={usersData}
+          loading={loading}
+        />
+      }
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>
           <AddClient />

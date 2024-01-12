@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Legend, Tooltip, Cell } from "recharts";
+import { PieChart, Pie, Legend, Tooltip, Cell, Label } from "recharts";
 
 interface PieChartProps {
   data: { name: string; value: number }[];
@@ -29,6 +29,13 @@ const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
         >
           {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={allColors[_.name]} />
+          ))}
+          {data.map((entry, index) => (
+            <Label
+              key={`label-${index}`}
+              content={<>{entry.name}</>}
+              position="center"
+            />
           ))}
         </Pie>
         <Tooltip />

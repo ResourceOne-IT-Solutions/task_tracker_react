@@ -6,6 +6,8 @@ import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/loginpage/Login";
 import Chat from "../pages/chat";
+import Tickets from "../pages/tickets";
+import TicketDescription from "../pages/tickets/TicketDescription";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -44,6 +46,20 @@ const Routespage = () => {
             }
           />
           <Route path="/chat" element={<Chat />} />
+          <Route
+            path="/tickets"
+            element={isLoggedin && isAdmin ? <Tickets /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/tickets/:id"
+            element={
+              isLoggedin && isAdmin ? (
+                <TicketDescription />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>

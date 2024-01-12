@@ -260,7 +260,9 @@ const AdminDashboard = () => {
     {
       title: "Helped By",
       key: "",
-      tdFormat: (ticket) => <>{ticket.addOnResource.map(val => val.name).join(", ")}</>,
+      tdFormat: (ticket) => (
+        <>{ticket.addOnResource.map((val) => val.name).join(", ")}</>
+      ),
     },
     {
       title: "Assign Ticket",
@@ -553,31 +555,30 @@ const AdminDashboard = () => {
           Show Tickets
         </Button>
       </div>
-      {
-        tableName == "tickets" && 
+      {tableName == "tickets" && (
         <TaskTable<TicketModal>
           pagination
           headers={ticketTableHeaders}
           tableData={ticketsData}
           loading={loading}
         />
-        }
-      {tableName === "clients" && 
+      )}
+      {tableName === "clients" && (
         <TaskTable<ClientModal>
           pagination
           headers={clientTableHeaders}
           tableData={clientsData}
           loading={loading}
         />
-      }
-         { tableName === "users" &&      
+      )}
+      {tableName === "users" && (
         <TaskTable<UserModal>
           pagination
           headers={empTableHeaders}
           tableData={usersData}
           loading={loading}
         />
-      }
+      )}
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>
           <AddClient />

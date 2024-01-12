@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./styles/userlist.css";
 import httpMethods from "../../../api/Service";
-import { UserModal } from "../../../components/Authcontext/AuthContext";
+import { UserModal } from "../../../modals/UserModals";
+
 const UserList = () => {
   const [users, setUsers] = useState<UserModal[]>([]);
   useEffect(() => {

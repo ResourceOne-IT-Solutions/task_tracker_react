@@ -1,28 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { UserModal } from "../../components/Authcontext/AuthContext";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import httpMethods from "../../api/Service";
 import { Dropdown } from "react-bootstrap";
-import { ClientModal } from "../../pages/dashboard/adminDashboard/AdminDashboard";
+import { ClientModal } from "../../modals/ClientModals";
 
-export interface Dummy {
-  firstName: string;
-  email: string;
-  mobile: string;
-  location: { area: string; zone: string };
-  technology: string;
-  companyName: string;
-  applicationType: string;
-  ticketsCount?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  _id?: string;
-}
 interface Prop {
-  updateref: Dummy;
+  updateref: ClientModal;
   updateClientTableData: (updatedClient: ClientModal) => void;
 }
 function UpdateClient({ updateref, updateClientTableData }: Prop) {

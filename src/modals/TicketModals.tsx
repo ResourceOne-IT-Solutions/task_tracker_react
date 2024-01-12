@@ -28,4 +28,32 @@ export interface TicketModal {
   technology: string;
   updates: Updates[];
   user: TicketUserModal;
+  assignedDate: Date;
+  closedDate: Date;
+}
+
+export interface UpdateTicketProps {
+  show: boolean;
+  onHide: () => void;
+  ticketData: TicketModal;
+  updateTableData: (updatedTicket: TicketModal) => void;
+}
+
+export interface UpdateTicketPayload {
+  description: string;
+  comments: string;
+  status: string;
+}
+
+export interface AddOnResourcePayload {
+  id: string;
+  data: { addOnResource: { name: string; id: string } };
+}
+
+export interface CreateTicketModal {
+  client: { name: string; id: string; mobile: string };
+  user: { name: string; id: string };
+  technology: string;
+  description: string;
+  targetDate: string;
 }

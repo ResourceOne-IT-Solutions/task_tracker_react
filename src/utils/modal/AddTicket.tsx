@@ -1,39 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ClientInterface } from "./AddClient";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
-import { ClientModal } from "../../pages/dashboard/adminDashboard/AdminDashboard";
-import { UserModal } from "../../components/Authcontext/AuthContext";
-import "./AddTicket.css";
+import "./styles/AddTicket.css";
 import httpMethods from "../../api/Service";
+import { ClientModal } from "../../modals/ClientModals";
+import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";
 
-interface TicketInterface {
-  client: { name: string; id: string; mobile: string };
-  user: { name: string; id: string };
-  technology: string;
-  description: string;
-  targetDate: string;
-}
-
-interface ResponseTicketData {
-  client: {
-    name: string;
-    mobile: string;
-    id: string;
-  };
-  conversation: any;
-  createdAt: string;
-  description: string;
-  receivedDate: string;
-  status: string;
-  targetDate: string;
-  technology: string;
-  updatedAt: string;
-  user: { name: string; id: string };
-}
 function AddTicket({ clientsData }: ClientModal | any) {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [ticketData, setTicketData] = useState<TicketInterface>({
+  const [ticketData, setTicketData] = useState<CreateTicketModal>({
     client: { name: "", id: "", mobile: "" },
     user: { name: "", id: "" },
     technology: "",
@@ -66,7 +41,7 @@ function AddTicket({ clientsData }: ClientModal | any) {
     setLoading(true);
 
     httpMethods
-      .post<TicketInterface, ResponseTicketData>("/tickets/create", ticketData)
+      .post<CreateTicketModal, TicketModal>("/tickets/create", ticketData)
       .then((result) => {
         setCreatedTicket(result);
         setTicketError("");

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import httpMethods from "../../api/Service";
-import {
-  UserContext,
-  UserModal,
-  useUserContext,
-} from "../../components/Authcontext/AuthContext";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
 import UserDashboard from "./userDashboard/UserDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
 import { Navigate } from "react-router-dom";
+import { UserContext, UserModal } from "../../modals/UserModals";
 
 const Dashboard = () => {
   const userContext = useUserContext();

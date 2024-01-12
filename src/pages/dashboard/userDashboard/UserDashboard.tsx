@@ -2,42 +2,25 @@ import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
 import httpMethods from "../../../api/Service";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
-  UserContext,
-  UserModal,
-  useUserContext,
-} from "../../../components/Authcontext/AuthContext";
-import { calculateWorkingFrom, getData } from "../../../utils/utils";
+  calculateWorkingFrom,
+  getData,
+  statusIndicator,
+} from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
 import { setCookie } from "../../../utils/utils";
 import { useNavigate } from "react-router";
 import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-
-export interface TicketsModal {
-  user: {
-    id: string;
-    name: string;
-  };
-  client: {
-    id: string;
-    name: string;
-  };
-  description: string;
-  assignedDate: Date;
-  closedDate: Date;
-  receivedDate: Date;
-  status: string;
-  technology: string;
-  comments: string;
-  _id: string;
-}
+import { Status, UserContext, UserModal } from "../../../modals/UserModals";
+import { TicketModal } from "../../../modals/TicketModals";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { setCurrentUser, setIsLoggedIn } = userContext as UserContext;
-  const [tableData, setTableData] = useState<TicketsModal[]>([]);
+  const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
   const joinDate = presentUser.joinedDate;
@@ -50,7 +33,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
   ]);
-  const [statuses, setStatuses] = useState<string[]>([
+  const [statuses, setStatuses] = useState<Status[]>([
     "Offline",
     "Available",
     "Busy",
@@ -71,7 +54,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   useEffect(() => {
     setIsLoading(true);
     httpMethods
-      .get<TicketsModal[]>("/users/tickets/" + presentUser._id)
+      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
 
@@ -114,7 +97,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   useEffect(() => {
     setIsLoading(true);
     httpMethods
-      .get<TicketsModal[]>("/users/tickets/" + presentUser._id)
+      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
         setIsLoading(false);
@@ -123,12 +106,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   }, []);
   const [showUpdateModal, setShowUpdateModal] = useState<{
     show: boolean;
-    ticketData: TicketsModal;
+    ticketData: TicketModal;
   }>({
     show: false,
-    ticketData: {} as TicketsModal,
+    ticketData: {} as TicketModal,
   });
-  const updateTableData = (updatedTicket: TicketsModal) => {
+  const updateTableData = (updatedTicket: TicketModal) => {
     setTableData((prevTableData) =>
       prevTableData.map((ticket) =>
         ticket._id === updatedTicket._id ? updatedTicket : ticket,
@@ -195,7 +178,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             </Button>
           </div>
         </div>
-        <p className="username">Welcome to {presentUser.firstName} Dashboard</p>
+        <p className="username">
+          Welcome to {presentUser.firstName} Dashboard (
+          {statusIndicator(presentUser.status)})
+        </p>
         <div className="usernavbar">
           <div className="nav_img_container">
             <img src={`${presentUser.profileImageUrl}`} />
@@ -356,7 +342,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <>
               {tableData.length ? (
                 <>
-                  {tableData.map((items: TicketsModal, index: any) => {
+                  {tableData.map((items: TicketModal, index: any) => {
                     return (
                       <tr key={index}>
                         <td>{items.client.name}</td>
@@ -406,7 +392,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       <UpdateTicket
         show={showUpdateModal.show}
         onHide={() =>
-          setShowUpdateModal({ show: false, ticketData: {} as TicketsModal })
+          setShowUpdateModal({ show: false, ticketData: {} as TicketModal })
         }
         ticketData={showUpdateModal.ticketData}
         updateTableData={updateTableData}

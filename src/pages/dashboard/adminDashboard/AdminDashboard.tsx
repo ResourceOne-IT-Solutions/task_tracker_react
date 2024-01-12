@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 import httpMethods from "../../../api/Service";
-import {
-  UserContext,
-  UserModal,
-  useUserContext,
-} from "../../../components/Authcontext/AuthContext";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
@@ -21,18 +17,8 @@ import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
 import { Dropdown } from "react-bootstrap";
 import { TicketModal } from "../../../modals/TicketModals";
-
-export interface ClientModal {
-  firstName: string;
-  location: {
-    area: string;
-    zone: string;
-  };
-  mobile: string;
-  technology: string;
-  email: string;
-  _id: string;
-}
+import { UserContext, UserModal } from "../../../modals/UserModals";
+import { ClientModal } from "../../../modals/ClientModals";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();

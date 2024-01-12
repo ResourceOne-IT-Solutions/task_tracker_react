@@ -4,22 +4,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import httpMethods from "../../api/Service";
-export interface ClientInterface {
-  firstName: string;
-  email: string;
-  mobile: string;
-  location: string | { area: string; zone: string };
-  technology: string;
-  companyName: string;
-  applicationType: string;
-  ticketsCount?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  _id?: string;
-}
+import { ClientModal, CreateClientModal } from "../../modals/ClientModals";
 
 function AddClient() {
-  const [clientData, setClientData] = useState<ClientInterface>({
+  const [clientData, setClientData] = useState<CreateClientModal>({
     firstName: "",
     email: "",
     mobile: "",
@@ -31,7 +19,7 @@ function AddClient() {
   const [clientError, setClientError] = useState<string>("");
   const [clientSuccess, setClientSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [createdClient, setCreatedClient] = useState<ClientInterface | null>(
+  const [createdClient, setCreatedClient] = useState<CreateClientModal | null>(
     null,
   );
   const {
@@ -51,7 +39,7 @@ function AddClient() {
   ) => {
     setLoading(true);
     httpMethods
-      .post<ClientInterface, ClientInterface>("/clients/create", clientData)
+      .post<CreateClientModal, ClientModal>("/clients/create", clientData)
       .then((result) => {
         setCreatedClient(result);
         setClientError("");

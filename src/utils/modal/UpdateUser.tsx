@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { UserModal } from "../../components/Authcontext/AuthContext";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import httpMethods from "../../api/Service";
+import { UserModal } from "../../modals/UserModals";
 interface Prop {
   updateref: UserModal;
   updateUserTableData: (updatedUser: UserModal) => void;

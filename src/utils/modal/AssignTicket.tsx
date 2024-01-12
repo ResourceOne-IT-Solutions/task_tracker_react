@@ -4,15 +4,12 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button, Dropdown } from "react-bootstrap";
 import httpMethods from "../../api/Service";
+import { AddOnResourcePayload } from "../../modals/TicketModals";
 
 interface AssignTicketProps {
   updateref: any;
   usersData: any;
   UpdateTicketsTableData: (updatedticket: any) => void;
-}
-interface sendingInterface {
-  id: string;
-  data: { addOnResource: { name: string; id: string } };
 }
 
 function AssignTicket({
@@ -21,7 +18,7 @@ function AssignTicket({
   UpdateTicketsTableData,
 }: AssignTicketProps) {
   const [selectedUser, setSelectedUser] = useState(null);
-  const [sendingData, setSendingData] = useState<sendingInterface>({
+  const [sendingData, setSendingData] = useState<AddOnResourcePayload>({
     id: "",
     data: { addOnResource: { name: "", id: "" } },
   });
@@ -54,7 +51,7 @@ function AssignTicket({
       setLoading(false);
     } else {
       httpMethods
-        .put<sendingInterface, any>("/tickets/assign-resource", sendingData)
+        .put<AddOnResourcePayload, any>("/tickets/assign-resource", sendingData)
         .then((result) => {
           setAfterAssigned(result);
           setAssignError("");

@@ -1,37 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import httpMethods from "../../api/Service";
+import { UserContext, UserModal } from "../../modals/UserModals";
 
 const UserContext = createContext<UserContext | null>(null);
-export interface UserContext {
-  isLoggedin: boolean;
-  currentUser: UserModal;
-  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-}
-export interface UserModal {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  password: string;
-  dob: Date;
-  userId: string;
-  empId: string;
-  joinedDate: Date;
-  isAdmin: boolean;
-  lastActive: string;
-  isActive: boolean;
-  designation: string;
-  address: string;
-  profileImageUrl: string;
-  totalTickets: number;
-  helpedTickets: number;
-  resolvedTickets: number;
-  pendingTickets: number;
-  progressTickets: number;
-  _id: string;
-  status: string;
-}
+
 interface AuthContextProps {
   children: React.ReactNode;
 }

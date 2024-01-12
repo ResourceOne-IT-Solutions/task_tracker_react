@@ -1,3 +1,4 @@
+import React from "react";
 import httpMethods from "../api/Service";
 import { Status } from "../modals/UserModals";
 import { GreenDot, OrangeDot, RedDot } from "./Dots/Dots";

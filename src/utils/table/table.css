@@ -32,15 +32,13 @@
   border-radius: 8px;
   padding: 10px;
 }
-/* .table-thead {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-} */
 .table-thead .sort-fields {
   display: flex;
   flex-direction: column;
 }
 .sort-fields span {
   cursor: pointer;
+}
+th {
+  background-color: rgb(24, 169, 225) !important;
 }

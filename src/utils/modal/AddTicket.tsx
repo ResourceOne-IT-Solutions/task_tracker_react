@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
-import "./AddTicket.css";
+import "./styles/AddTicket.css";
 import httpMethods from "../../api/Service";
 import { ClientModal } from "../../modals/ClientModals";
 import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";

@@ -28,7 +28,11 @@ const AuthContext = ({ children }: AuthContextProps) => {
         setCurrentUser({} as UserModal);
       });
   }, []);
-  return <UserContextProvider.Provider value={value}>{children}</UserContextProvider.Provider>;
+  return (
+    <UserContextProvider.Provider value={value}>
+      {children}
+    </UserContextProvider.Provider>
+  );
 };
 export const useUserContext = () => useContext(UserContextProvider);
 

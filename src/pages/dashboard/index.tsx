@@ -41,7 +41,9 @@ const Dashboard = () => {
       ) : (
         <>
           {isLoggedin && currentUser.isAdmin && <AdminDashboard />}
-          {isLoggedin && currentUser.isAdmin === false && <UserDashboard />}
+          {isLoggedin && currentUser.isAdmin === false && (
+            <UserDashboard user={currentUser} />
+          )}
         </>
       )}
     </div>

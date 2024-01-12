@@ -6,12 +6,12 @@ import {
   UserModal,
   useUserContext,
 } from "../../../components/Authcontext/AuthContext";
-import TaskTable from "../../../utils/table/Table";
+import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient, { ClientInterface } from "../../../utils/modal/AddClient";
+import AddClient from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
@@ -102,8 +102,8 @@ const AdminDashboard = () => {
     getAllData();
   }, []);
 
-  const handleUpdate = (user: UserModal) => {
-    if (!user.empId) {
+  const handleUpdate = <T,>(user: T, type: string) => {
+    if (type === "CLIENT") {
       setModalname("update_client");
       setUpdateReference(user);
       setModalProps({
@@ -123,7 +123,7 @@ const AdminDashboard = () => {
       setShowModal(true);
     }
   };
-  const clientTableHeaders = [
+  const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
     { title: "Email", key: "email" },
@@ -134,11 +134,11 @@ const AdminDashboard = () => {
     {
       title: "Actions",
       key: "",
-      tdFormat: (user: UserModal) => (
+      tdFormat: (user: ClientModal) => (
         <>
           <Button
             variant="info"
-            onClick={() => handleUpdate(user)}
+            onClick={() => handleUpdate(user, "CLIENT")}
             style={{ marginRight: "4px" }}
           >
             Update
@@ -148,7 +148,7 @@ const AdminDashboard = () => {
       ),
     },
   ];
-  const empTableHeaders = [
+  const empTableHeaders: TableHeaders<UserModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "firstName" },
     { title: "Email", key: "email" },
@@ -157,7 +157,7 @@ const AdminDashboard = () => {
     {
       title: "Profile Image",
       key: "",
-      tdFormat: (user: { isActive: boolean; profileImageUrl: string }) => (
+      tdFormat: (user) => (
         <div
           style={{
             width: "100px",
@@ -201,7 +201,7 @@ const AdminDashboard = () => {
         <>
           <Button
             variant="info"
-            onClick={() => handleUpdate(user)}
+            onClick={() => handleUpdate(user, "USER")}
             style={{ marginBottom: "4px" }}
           >
             Update
@@ -340,6 +340,11 @@ const AdminDashboard = () => {
                     Disabled
                   </a>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/tickets">
+                    Tickets
+                  </Link>
+                </li>
               </ul>
               <form className="d-flex">
                 <input
@@ -434,12 +439,21 @@ const AdminDashboard = () => {
           Show {tableName == "users" ? "clients" : "users"}
         </button>
       </div>
-      <TaskTable
-        pagination
-        headers={tableName === "clients" ? clientTableHeaders : empTableHeaders}
-        tableData={tableName === "clients" ? clientsData : usersData}
-        loading={loading}
-      />
+      {tableName === "clients" ? (
+        <TaskTable<ClientModal>
+          pagination
+          headers={clientTableHeaders}
+          tableData={clientsData}
+          loading={loading}
+        />
+      ) : (
+        <TaskTable<UserModal>
+          pagination
+          headers={empTableHeaders}
+          tableData={usersData}
+          loading={loading}
+        />
+      )}
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>
           <AddClient />

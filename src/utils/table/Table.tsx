@@ -2,9 +2,17 @@ import React, { memo, useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
 
-interface TableProps<T, R> {
+export interface TableHeaders<T> {
+  title: string;
+  key: string;
+  tdFormat?: (val: T) => JSX.Element;
+  node?: string;
+  onClick?: (e: any, data: T) => void;
+  values?: string[];
+}
+interface TableProps<R> {
   handleRowClick?: (obj: any) => void;
-  headers: Array<T>;
+  headers: TableHeaders<R>[];
   tableData: Array<R>;
   tHeadClassName?: string;
   tBodyClassName?: string;
@@ -16,7 +24,7 @@ interface TableProps<T, R> {
   loading: boolean;
 }
 
-const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
+function TaskTable<R>(props: TableProps<R>) {
   const {
     handleRowClick = (obj) => obj,
     headers = [],
@@ -89,7 +97,7 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
   };
   const renderBodyRow = (obj: any, idx: number) => {
     return (
-      <tr onClick={() => handleRowClick(obj)} key={idx}>
+      <tr onClick={() => handleRowClick(obj)} key={obj._id}>
         {headers.map((val1: any, index) => {
           if (val1?.key == "serialNo") {
             return <td key={index}>{obj.serialNo}. </td>;
@@ -138,7 +146,6 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
       )}
     </>
   );
-});
+}
 
-TaskTable.displayName = "TaskTable";
 export default TaskTable;

@@ -1,13 +1,16 @@
 import React from "react";
 import "./styles/header.css";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { UserContext } from "../../../modals/UserModals";
+import { UserContext, UserModal } from "../../../modals/UserModals";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
-const ChatHeader = () => {
-  const userContext = useUserContext();
-  const { selectedUser, setSelectedUser } = userContext as UserContext;
+
+interface Chatprops {
+  selectedUser: UserModal;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
+}
+
+const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
   const handleBackHeader = () => {
-    setSelectedUser({ ...selectedUser, _id: "" });
+    setSelectedUser({} as UserModal);
   };
   return (
     <div className="header-container">

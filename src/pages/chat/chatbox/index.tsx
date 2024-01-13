@@ -7,13 +7,16 @@ import { UserContext } from "../../../modals/UserModals";
 
 export const ChatBox = () => {
   const userContext = useUserContext();
-  const { selectedUser } = userContext as UserContext;
+  const { selectedUser, setSelectedUser } = userContext as UserContext;
   return (
     <div className="chatbox">
       {selectedUser._id ? (
         <>
           <div className="chat-header">
-            <ChatHeader />
+            <ChatHeader
+              selectedUser={selectedUser}
+              setSelectedUser={setSelectedUser}
+            />
           </div>
           <div className="chat-body">
             <ChatBody />

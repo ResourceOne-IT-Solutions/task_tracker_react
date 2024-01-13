@@ -1,10 +1,14 @@
 import React from "react";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
-import Login from "../pages/loginpage/Login";
-import AdminDashboard from "../pages/dashboard/AdminDashboard";
 import { useUserContext } from "../components/Authcontext/AuthContext";
-import UserDashboard from "../pages/dashboard/userDashboard/UserDashboard";
+import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
+import Dashboard from "../pages/dashboard";
+import Login from "../pages/loginpage/Login";
+import Chat from "../pages/chat";
+import Tickets from "../pages/tickets";
+import TicketDescription from "../pages/tickets/TicketDescription";
+import ClientDashboard from "../pages/dashboard/clientDashboard";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -29,39 +33,39 @@ const Routespage = () => {
         <Routes>
           <Route
             path="/"
+            element={isLoggedin ? <Navigate to="/dashboard" /> : <Home />}
+          />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/login"
+            element={isLoggedin ? <Dashboard /> : <Login />}
+          />
+          <Route
+            path="/admindashboard/adduser"
             element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <Navigate to="/admindashboard" />
-                ) : (
-                  <Navigate to="/userdashboard" />
-                )
+              isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
+            }
+          />
+          <Route path="/chat" element={<Chat />} />
+          <Route
+            path="/tickets"
+            element={isLoggedin && isAdmin ? <Tickets /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/tickets/:id"
+            element={
+              isLoggedin && isAdmin ? (
+                <TicketDescription />
               ) : (
-                <Home />
+                <Navigate to="/" />
               )
             }
           />
           <Route
-            path="/login/:name"
+            path="/client/:id"
             element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <Navigate to="/admindashboard" />
-                ) : (
-                  <Navigate to="/userdashboard" />
-                )
-              ) : (
-                <Login />
-              )
+              isLoggedin && isAdmin ? <ClientDashboard /> : <Navigate to="/" />
             }
-          />
-          <Route
-            path="/admindashboard"
-            element={<ProtectedRoute element={<AdminDashboard />} />}
-          />
-          <Route
-            path="/userdashboard"
-            element={<ProtectedRoute element={<UserDashboard />} />}
           />
         </Routes>
       </BrowserRouter>

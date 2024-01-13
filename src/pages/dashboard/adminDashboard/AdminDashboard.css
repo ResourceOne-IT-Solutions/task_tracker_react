@@ -38,26 +38,47 @@ ul {
 }
 .admin-btns {
   display: flex;
-  justify-content: left;
+  justify-content: end;
   margin: 5px;
 }
 .admin-btns button {
   color: aliceblue;
-  padding: 5px;
-  width: 10%;
-  border-radius: 20px !important;
   margin: 5px;
+  padding: 10px;
 }
-.admin-user-tabl img{
+.admin-user-tabl img {
   width: 25%;
-
 }
-  .column-to-reduce {
-    width: 15%;
-  }
-  th {
-    padding: 29px !important;
-  }
-  input {
-    width: 80%;
-  }
+.column-to-reduce {
+  width: 15%;
+}
+th {
+  padding: 29px !important;
+}
+input {
+  width: 80%;
+}
+/* logout btn */
+.admin-logout-button {
+  margin: 0px 2px 0px 10px;
+}
+
+.admin-pie-chart {
+  display: flex;
+}
+.admin-pie-chart .admin-details {
+  width: 60%;
+}
+.admin-pie-chart .pie-chart {
+  width: 40%;
+  border: 1px solid grey;
+  border-radius: 10px;
+  margin: 4px;
+}
+.navbar-collapse {
+  justify-content: end;
+}
+/* chat-button */
+.chat-btn {
+  margin-right: 8px;
+}

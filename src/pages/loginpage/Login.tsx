@@ -1,42 +1,35 @@
 import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
-import {
-  UserContext,
-  UserModal,
-  useUserContext,
-} from "../../components/Authcontext/AuthContext";
 import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/Service";
+import { setCookie } from "../../utils/utils";
+import { LoginPayload } from "../../modals/UserModals";
 
-export interface Datainterface {
-  userId: string;
-  password: string;
-  isAdmin: boolean;
-}
 const Login = () => {
   const navigate = useNavigate();
-  const userContext = useUserContext();
-  const { setCurrentUser } = userContext as UserContext;
-  const [data, setData] = useState<Datainterface>({
+  const path = useLocation().state;
+  const [data, setData] = useState<LoginPayload>({
     userId: "",
     password: "",
     isAdmin: false,
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { name } = useParams();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
-      isAdmin: name === "Admin" ? true : false,
+      isAdmin: path === "Admin" ? true : false,
       [event.target.name]: event.target.value,
     });
   };
 
+  const handleClick = () => {
+    navigate("/login", { state: path === "Admin" ? "User" : "Admin" });
+  };
   const handleSubmit = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -44,25 +37,22 @@ const Login = () => {
     setError("");
     setIsLoading(true);
     httpMethods
-      .post<Datainterface, UserModal>("/login", data)
+      .post<LoginPayload, { token: string }>("/verify-login", data)
       .then((result) => {
-        setCurrentUser(result);
-        localStorage.setItem("currentUser", JSON.stringify(result));
-        setData({ ...data, userId: "", password: "", isAdmin: false });
+        setCookie(result.token, 1);
         setIsLoading(false);
-        result.isAdmin
-          ? navigate("/admindashboard")
-          : navigate("/userdashboard");
+        navigate("/dashboard");
       })
       .catch((e: any) => {
         setError(e.message);
         setIsLoading(false);
       });
   };
+
   return (
     <div className="login-main">
-      <h1>{name} Login Page</h1>
-      <Form>
+      <h1>{path} Login Page</h1>
+      <Form className="login-page">
         <Form.Group className="mb-3">
           <Form.Label>Username</Form.Label>
           <Form.Control
@@ -90,9 +80,15 @@ const Login = () => {
           variant="outline-success"
           onClick={(e) => handleSubmit(e)}
         >
-          {isLoading ? "Loading..." : `${name} Login`}
+          {isLoading ? "Loading..." : `${path} Login`}
         </Button>
       </Form>
+      <p className="logintext">
+        <span className="anchorclick" onClick={handleClick}>
+          click here
+        </span>{" "}
+        to navigate to {path == "User" ? "Admin" : "User"} login page
+      </p>
       <Timezones />
     </div>
   );

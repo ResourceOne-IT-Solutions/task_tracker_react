@@ -1,11 +1,11 @@
 import React from "react";
 
 interface Props {
-  title: any;
-  styles: any;
+  title?: string;
+  styles?: any;
 }
 
-export const GreenDot = ({ title, styles }: Props) => {
+export const GreenDot = ({ title = "", styles = {} }: Props) => {
   return (
     <span
       title={title}
@@ -27,6 +27,21 @@ export const RedDot = ({ title, styles }: Props) => {
       title={title}
       style={{
         background: "#f00",
+        height: "15px",
+        width: "15px",
+        display: "inline-block",
+        borderRadius: "50%",
+        ...styles,
+      }}
+    ></span>
+  );
+};
+export const OrangeDot = ({ title, styles }: Props) => {
+  return (
+    <span
+      title={title}
+      style={{
+        background: "orange",
         height: "15px",
         width: "15px",
         display: "inline-block",

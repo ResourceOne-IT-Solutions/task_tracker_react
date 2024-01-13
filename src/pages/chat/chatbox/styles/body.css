@@ -1,0 +1,30 @@
+.chat-body-container {
+  height: 100%;
+  overflow: scroll;
+}
+.chat-body-container::-webkit-scrollbar {
+  width: 0; /* Set the width of the scrollbar to 0 */
+}
+.chat-body-container::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the thumb color to transparent */
+}
+.message-left {
+  border: 1px solid #17e02b;
+  background-color: #9ddbf6;
+  border-radius: 15px 15px 15px 0;
+  padding: 10px;
+  margin: 10px 15px;
+  display: flex;
+  width: 50%;
+}
+
+.message-right {
+  border: 1px solid #17e02b;
+  background-color: #89dbff;
+  border-radius: 15px 15px 0 15px;
+  padding: 10px;
+  margin: 10px 15px;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 400px;
+}

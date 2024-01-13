@@ -1,0 +1,25 @@
+.add-user {
+  max-width: 60%;
+  margin: auto;
+  border: 1px solid black;
+  padding: 10px;
+}
+.add-user h2 {
+  background-color: bisque;
+  border-bottom: 1px dotted black;
+  border-top: 1px dotted black;
+}
+.add-user b {
+  vertical-align: sub;
+}
+.scc-msg {
+  color: green;
+  font-weight: 700;
+}
+.scc-msg span {
+  display: block;
+}
+.err-msg {
+  color: red;
+  font-size: 17px;
+}

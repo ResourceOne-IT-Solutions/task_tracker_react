@@ -2,14 +2,17 @@ import React, { memo, useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
 
-interface Loader {
-  component: JSX.Element;
-  loading: boolean;
+export interface TableHeaders<T> {
+  title: string;
+  key: string;
+  tdFormat?: (val: T) => JSX.Element;
+  node?: string;
+  onClick?: (e: any, data: T) => void;
+  values?: string[];
 }
-
-interface TableProps<T, R> {
+interface TableProps<R> {
   handleRowClick?: (obj: any) => void;
-  headers: Array<T>;
+  headers: TableHeaders<R>[];
   tableData: Array<R>;
   tHeadClassName?: string;
   tBodyClassName?: string;
@@ -17,10 +20,11 @@ interface TableProps<T, R> {
   pagination?: boolean;
   paginationAlign?: string;
   paginationClassName?: string;
-  loader?: Loader;
+  loader?: JSX.Element;
+  loading: boolean;
 }
 
-const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
+function TaskTable<R>(props: TableProps<R>) {
   const {
     handleRowClick = (obj) => obj,
     headers = [],
@@ -31,7 +35,8 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
     pagination = false,
     paginationAlign = "center",
     paginationClassName = "table-pagination",
-    loader = { component: <>Loading..</>, loading: false },
+    loader = <>Loading..</>,
+    loading = false,
     ...args
   } = props;
   const dt = tableData.map((val, idx) => {
@@ -92,7 +97,7 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
   };
   const renderBodyRow = (obj: any, idx: number) => {
     return (
-      <tr onClick={() => handleRowClick(obj)} key={idx}>
+      <tr onClick={() => handleRowClick(obj)} key={obj._id}>
         {headers.map((val1: any, index) => {
           if (val1?.key == "serialNo") {
             return <td key={index}>{obj.serialNo}. </td>;
@@ -118,10 +123,10 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
           <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>
         </thead>
         <tbody className={tBodyClassName}>
-          {loader.loading ? (
+          {loading ? (
             <tr>
               <td colSpan={headers.length}>
-                {loader.component ? loader.component : <div>Loading...</div>}
+                {loader ? loader : <div>Loading...</div>}
               </td>
             </tr>
           ) : (
@@ -141,7 +146,6 @@ const TaskTable = memo(<T, R>(props: TableProps<T, R>) => {
       )}
     </>
   );
-});
+}
 
-TaskTable.displayName = "TaskTable";
 export default TaskTable;

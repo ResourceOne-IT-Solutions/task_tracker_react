@@ -6,16 +6,12 @@ import "./Login.css";
 import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/Service";
 import { setCookie } from "../../utils/utils";
+import { LoginPayload } from "../../modals/UserModals";
 
-export interface Datainterface {
-  userId: string;
-  password: string;
-  isAdmin: boolean;
-}
 const Login = () => {
   const navigate = useNavigate();
   const path = useLocation().state;
-  const [data, setData] = useState<Datainterface>({
+  const [data, setData] = useState<LoginPayload>({
     userId: "",
     password: "",
     isAdmin: false,
@@ -41,7 +37,7 @@ const Login = () => {
     setError("");
     setIsLoading(true);
     httpMethods
-      .post<Datainterface, { token: string }>("/verify-login", data)
+      .post<LoginPayload, { token: string }>("/verify-login", data)
       .then((result) => {
         setCookie(result.token, 1);
         setIsLoading(false);

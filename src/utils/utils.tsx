@@ -1,4 +1,7 @@
+import React from "react";
 import httpMethods from "../api/Service";
+import { Status } from "../modals/UserModals";
+import { GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
 
 export function calculateWorkingFrom(joinDate: any) {
   const currentDate = new Date();
@@ -57,3 +60,13 @@ export const cookieComp = (): string => {
 export function getData<T>(url: string): Promise<T[]> {
   return httpMethods.get(`/${url}`);
 }
+
+export const statusIndicator = (status: Status) => {
+  if (status === "Available") {
+    return <GreenDot />;
+  } else if (status === "Busy") {
+    return <OrangeDot />;
+  } else {
+    return <RedDot />;
+  }
+};

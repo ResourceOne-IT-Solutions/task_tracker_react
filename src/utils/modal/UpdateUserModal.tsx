@@ -2,20 +2,12 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { TicketsModal } from "../../pages/dashboard/userDashboard/UserDashboard";
 import httpMethods from "../../api/Service";
-
-interface UpdateTicketProps {
-  show: boolean;
-  onHide: () => void;
-  ticketData: TicketsModal;
-  updateTableData: (updatedTicket: TicketsModal) => void;
-}
-interface UpdatePayload {
-  description: string;
-  comments: string;
-  status: string;
-}
+import {
+  TicketModal,
+  UpdateTicketProps,
+  UpdateTicketPayload,
+} from "../../modals/TicketModals";
 
 const UpdateTicket: React.FC<UpdateTicketProps> = ({
   show,
@@ -50,7 +42,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
   };
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const updatedTicket: UpdatePayload = {
+  const updatedTicket: UpdateTicketPayload = {
     description: formData.description,
     comments: formData.comments,
     status: formData.status,
@@ -59,7 +51,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
   const handleSaveChanges = () => {
     setIsLoading(true);
     httpMethods
-      .put<{ id: string; data: UpdatePayload }, TicketsModal>(
+      .put<{ id: string; data: UpdateTicketPayload }, TicketModal>(
         `/tickets/update`,
         { id: ticketData._id, data: updatedTicket },
       )

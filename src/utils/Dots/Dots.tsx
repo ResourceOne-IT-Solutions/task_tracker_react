@@ -36,3 +36,18 @@ export const RedDot = ({ title, styles }: Props) => {
     ></span>
   );
 };
+export const OrangeDot = ({ title, styles }: Props) => {
+  return (
+    <span
+      title={title}
+      style={{
+        background: "orange",
+        height: "15px",
+        width: "15px",
+        display: "inline-block",
+        borderRadius: "50%",
+        ...styles,
+      }}
+    ></span>
+  );
+};

@@ -1,6 +1,3 @@
-.userdashboard {
-  min-height: 100vh;
-}
 /* left section design */
 .userdetails {
   border: 1px solid rgb(37, 155, 151);
@@ -17,11 +14,10 @@
 .userdetails {
   display: flex;
 }
-.userleft {
-  /* border: 1px solid red; */
+/* .userleft {
   width: 33%;
   margin: 5px;
-}
+} */
 .userleft p {
   color: rgb(136, 136, 136);
   text-align: left;
@@ -115,11 +111,11 @@
 
 table {
   border: 1px solid black !important;
-  width: 100%;
+  width: 90%;
 }
 th {
   border-bottom: 1px solid rgb(66, 60, 60) !important;
-  background-color: rgb(159, 243, 240) !important;
+  /* background-color: rgb(159, 243, 240) !important; */
 }
 tr {
   border-bottom: 1px solid rgb(37, 155, 151) !important;
@@ -128,9 +124,11 @@ tr:hover {
   background-color: rgb(116, 112, 112);
   cursor: pointer !important;
 }
-/* logout btn */
-.user-logout-button {
+.user-nav-header {
   display: flex;
   justify-content: end;
   margin: 10px 20px 0px 0px;
+}
+.user-nav-header div {
+  margin-right: 4px;
 }

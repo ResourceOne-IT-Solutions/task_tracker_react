@@ -1,42 +1,26 @@
 import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
 import httpMethods from "../../../api/Service";
-import { Button } from "react-bootstrap";
+import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
-  UserContext,
-  UserModal,
-  useUserContext,
-} from "../../../components/Authcontext/AuthContext";
-import { calculateWorkingFrom } from "../../../utils/utils";
+  calculateWorkingFrom,
+  getData,
+  statusIndicator,
+} from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
 import { setCookie } from "../../../utils/utils";
 import { useNavigate } from "react-router";
-
-export interface TicketsModal {
-  user: {
-    id: string;
-    name: string;
-  };
-  client: {
-    id: string;
-    name: string;
-  };
-  description: string;
-  assignedDate: Date;
-  closedDate: Date;
-  receivedDate: Date;
-  status: string;
-  technology: string;
-  comments: string;
-  _id: string;
-}
+import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
+import { Status, UserContext, UserModal } from "../../../modals/UserModals";
+import { TicketModal } from "../../../modals/TicketModals";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { setCurrentUser, setIsLoggedIn } = userContext as UserContext;
-  const [tableData, setTableData] = useState<TicketsModal[]>([]);
+  const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
   const joinDate = presentUser.joinedDate;
@@ -49,10 +33,28 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
   ]);
+  const [statuses, setStatuses] = useState<Status[]>([
+    "Offline",
+    "Available",
+    "Busy",
+  ]);
+  const [colors, setColors] = useState<any>({
+    Offline: <RedDot />,
+    Available: <GreenDot />,
+    Busy: <OrangeDot />,
+  });
+
+  const [sendingStatuses, setSendingStatuses] = useState({
+    id: "",
+    data: { status: "" },
+  });
+  const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
+  const [userData, setUserData] = useState([]);
+  const [selected, setSelected] = useState("");
   useEffect(() => {
     setIsLoading(true);
     httpMethods
-      .get<TicketsModal[]>("/users/tickets/" + presentUser._id)
+      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
 
@@ -95,7 +97,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   useEffect(() => {
     setIsLoading(true);
     httpMethods
-      .get<TicketsModal[]>("/users/tickets/" + presentUser._id)
+      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
         setIsLoading(false);
@@ -104,12 +106,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   }, []);
   const [showUpdateModal, setShowUpdateModal] = useState<{
     show: boolean;
-    ticketData: TicketsModal;
+    ticketData: TicketModal;
   }>({
     show: false,
-    ticketData: {} as TicketsModal,
+    ticketData: {} as TicketModal,
   });
-  const updateTableData = (updatedTicket: TicketsModal) => {
+  const updateTableData = (updatedTicket: TicketModal) => {
     setTableData((prevTableData) =>
       prevTableData.map((ticket) =>
         ticket._id === updatedTicket._id ? updatedTicket : ticket,
@@ -122,15 +124,64 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setIsLoggedIn(false);
     navigate("/");
   };
+  const handleSelectStatus = (status: any) => {
+    const x = { ...sendingStatuses, data: { status: status } };
+    setSendingStatuses(x);
+    httpMethods.put<any, any>("/users/update", x).then((result) => {
+      setCurrentUser(result);
+    });
+  };
+  useEffect(() => {
+    setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
+  }, []);
+  useEffect(() => {
+    getData<UserModal>("users")
+      .then((res: any) => {
+        setUserData(res);
+      })
+      .catch((err) => err);
+  }, []);
+  const handleSelect = (item: any) => {
+    setSelected(item);
+  };
   return (
     <>
       <div className="userdashboard">
-        <div className="user-logout-button">
-          <Button variant="danger" onClick={handleLogoutClick}>
-            Logout
-          </Button>
+        <div className="user-nav-header">
+          <div>
+            <Dropdown onSelect={handleSelectStatus}>
+              <Dropdown.Toggle variant="dark" id="dropdown-basic">
+                {presentUser.status ? (
+                  <span>
+                    {presentUser.status} {colors[presentUser.status]}
+                  </span>
+                ) : (
+                  "Select a User"
+                )}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {statuses.map((stat, idx) => {
+                  return (
+                    <Dropdown.Item key={idx} eventKey={stat}>
+                      <b>
+                        {colors[stat]} {stat}
+                      </b>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div>
+            <Button variant="danger" onClick={handleLogoutClick}>
+              Logout
+            </Button>
+          </div>
         </div>
-        <p className="username">Welcome to {presentUser.firstName} Dashboard</p>
+        <p className="username">
+          Welcome to {presentUser.firstName} Dashboard (
+          {statusIndicator(presentUser.status)})
+        </p>
         <div className="usernavbar">
           <div className="nav_img_container">
             <img src={`${presentUser.profileImageUrl}`} />
@@ -211,6 +262,57 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           </div>
         </div>
       </div>
+      <div className="chat-link">
+        <Button onClick={() => setShowChatRequestPopup(true)}>
+          Request User to Chat
+        </Button>
+        <Modal
+          show={showChatRequestPopup}
+          onHide={() => setShowChatRequestPopup(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Chat Request</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Row className="mb-3">
+                <Form.Group as={Col} md="12">
+                  <Dropdown onSelect={handleSelect}>
+                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                      {selected ? selected : "Select a User"}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu
+                      style={{ maxHeight: "180px", overflowY: "auto" }}
+                    >
+                      {userData !== null
+                        ? userData.map((item: any, index: any) => {
+                            return (
+                              <Dropdown.Item
+                                key={index}
+                                eventKey={item.firstName}
+                              >
+                                {item.firstName}
+                              </Dropdown.Item>
+                            );
+                          })
+                        : null}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Form.Group>
+              </Row>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="success">Submit</Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowChatRequestPopup(false)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
       <table>
         <thead>
           <tr>
@@ -226,6 +328,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <th>
               <Button variant="danger">Ticket Raise</Button>
             </th>
+            <th>Request Tickets</th>
           </tr>
         </thead>
         <tbody>
@@ -239,7 +342,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <>
               {tableData.length ? (
                 <>
-                  {tableData.map((items: TicketsModal, index: any) => {
+                  {tableData.map((items: TicketModal, index: any) => {
                     return (
                       <tr key={index}>
                         <td>{items.client.name}</td>
@@ -268,6 +371,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                             Update Ticket
                           </Button>
                         </td>
+                        <td>
+                          <Button variant={"dark"}>Request Ticket</Button>
+                        </td>
                       </tr>
                     );
                   })}
@@ -286,7 +392,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       <UpdateTicket
         show={showUpdateModal.show}
         onHide={() =>
-          setShowUpdateModal({ show: false, ticketData: {} as TicketsModal })
+          setShowUpdateModal({ show: false, ticketData: {} as TicketModal })
         }
         ticketData={showUpdateModal.ticketData}
         updateTableData={updateTableData}

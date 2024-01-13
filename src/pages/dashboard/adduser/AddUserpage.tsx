@@ -1,29 +1,14 @@
 import React, { useRef, useState } from "react";
-import { UserModal } from "../../../components/Authcontext/AuthContext";
 import httpMethods from "../../../api/Service";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./AddUserpage.css";
-import { Button, InputGroup } from "react-bootstrap";
-
-interface UserDataInterface {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobile: string;
-  password: string;
-  dob: string;
-  joinedDate: string;
-  isAdmin: null;
-  designation: string;
-  profileImageUrl: string | null;
-  userId?: string;
-  address: string;
-}
+import { Button } from "react-bootstrap";
+import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
 
 function AddUserpage() {
-  const [userData, setUserData] = useState<UserDataInterface>({
+  const [userData, setUserData] = useState<CreateUserPayload>({
     firstName: "",
     lastName: "",
     email: "",
@@ -88,7 +73,7 @@ function AddUserpage() {
     event.preventDefault();
     setLoading(true);
     httpMethods
-      .post<UserDataInterface, UserModal>("/users/create", userData)
+      .post<CreateUserPayload, UserModal>("/users/create", userData)
       .then((result) => {
         setCreatedData(result);
         setUserError("");

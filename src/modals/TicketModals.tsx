@@ -49,6 +49,10 @@ export interface AddOnResourcePayload {
   id: string;
   data: { addOnResource: { name: string; id: string } };
 }
+export interface AddOnUserResourcePayload {
+  id: string;
+  data: { user: { name: string; id: string }; status: string };
+}
 
 export interface CreateTicketModal {
   client: { name: string; id: string; mobile: string };

@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { io } from "socket.io-client";
 import httpMethods from "../../api/Service";
 import { UserContext, UserModal } from "../../modals/UserModals";
+import { BE_URL } from "../../utils/Constants";
 
 const UserContextProvider = createContext<UserContext | null>(null);
-
+const socket = io(BE_URL);
 interface AuthContextProps {
   children: React.ReactNode;
 }
@@ -15,6 +17,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
     currentUser,
     setCurrentUser,
     setIsLoggedIn,
+    socket,
   };
   useEffect(() => {
     httpMethods

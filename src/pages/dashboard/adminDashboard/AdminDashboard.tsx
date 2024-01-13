@@ -23,7 +23,7 @@ import { ClientModal } from "../../../modals/ClientModals";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn } =
+  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
     userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
@@ -271,12 +271,11 @@ const AdminDashboard = () => {
           onClick={() => handleAddResource(ticket)}
           style={{ fontWeight: "700" }}
         >
-          Add Resource
+          {ticket.user.name ? "Add Resource" : "Assign User"}
         </button>
       ),
     },
   ];
-
   const handleClick = (str: string) => {
     setModalname(str);
     setModalProps({
@@ -338,6 +337,12 @@ const AdminDashboard = () => {
     setSendingStatuses(x);
     httpMethods.put<any, any>("/users/update", x).then((result) => {
       setCurrentUser(result);
+    });
+  };
+  const handleSocket = () => {
+    socket.emit("testing", {
+      opponentId: currentUser._id,
+      sender: currentUser.firstName,
     });
   };
   return (
@@ -490,6 +495,9 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="admin-btns">
+        <Button variant="danger" onClick={handleSocket}>
+          Socket testing
+        </Button>
         <Button
           variant="info"
           onClick={() =>

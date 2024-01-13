@@ -8,6 +8,7 @@
 }
 .message-input {
   width: 80%;
+  position: relative;
 }
 .message-input input {
   border-radius: 10px;
@@ -21,4 +22,21 @@
 }
 .send-btn {
   width: 10%;
+}
+/* add icon */
+.popup {
+  border: 1px solid #212529;
+  background-color: #eeeeee;
+  position: absolute;
+  width: 130px;
+  bottom: 50px;
+  border-radius: 8px;
+  height: 75px;
+  text-align: center;
+  padding: 5px;
+}
+.popup p:hover {
+  cursor: pointer;
+  background-color: #7d7e80;
+  border-radius: 6px;
 }

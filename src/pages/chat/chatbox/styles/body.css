@@ -9,8 +9,8 @@
   background-color: transparent; /* Set the thumb color to transparent */
 }
 .message-left {
-  border: 1px solid #17e02b;
-  background-color: #9ddbf6;
+  border: 1px solid rgb(88, 88, 88);
+  background-color: #d1cfcf;
   border-radius: 15px 15px 15px 0;
   padding: 10px;
   margin: 10px 15px;
@@ -19,8 +19,8 @@
 }
 
 .message-right {
-  border: 1px solid #17e02b;
-  background-color: #89dbff;
+  border: 1px solid rgb(88, 88, 88);
+  background-color: #c4c4c4;
   border-radius: 15px 15px 0 15px;
   padding: 10px;
   margin: 10px 15px;

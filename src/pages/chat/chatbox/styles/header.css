@@ -10,13 +10,16 @@
   object-fit: cover;
 }
 .header-navbar {
-  width: 50%;
+  width: 70%;
   display: flex;
   align-items: center;
 }
 .header-backbtn-wrapper {
   width: 10%;
   margin-left: 7px;
+}
+.header-backbtn-wrapper svg:hover {
+  cursor: pointer;
 }
 .header-backbtn {
   width: 30px;
@@ -40,7 +43,7 @@
   cursor: pointer;
 }
 .profile-img {
-  width: 20%;
+  width: 10%;
 }
 .header-user-name {
   width: 32%;

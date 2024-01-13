@@ -6,6 +6,8 @@ export interface UserContext {
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   socket: Socket;
+  selectedUser: UserModal;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
 export type Status = "Available" | "Busy" | "Offline";
 export interface UserModal {

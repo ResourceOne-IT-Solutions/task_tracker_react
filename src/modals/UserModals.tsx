@@ -1,8 +1,11 @@
+import { Socket } from "socket.io-client";
+
 export interface UserContext {
   isLoggedin: boolean;
   currentUser: UserModal;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket;
 }
 export type Status = "Available" | "Busy" | "Offline";
 export interface UserModal {

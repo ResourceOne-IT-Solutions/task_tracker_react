@@ -365,128 +365,43 @@ const AdminDashboard = () => {
             >
               <div>
                 <form className="d-flex">
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="primary"
-                      onClick={() => navigate("/admindashboard/adduser")}
-                    >
-                      Create User
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="success"
-                      onClick={() => handleClick("Client")}
-                    >
-                      Create Client
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="warning"
-                      onClick={() => handleClick("Ticket")}
-                    >
-                      Create Ticket
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Dropdown onSelect={handleSelectStatus}>
-                      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                        {currentUser.status ? (
-                          <span>
-                            {colors[currentUser.status]} {currentUser.status}
-                          </span>
-                        ) : (
-                          "Select a User"
-                        )}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        style={{ maxHeight: "180px", overflowY: "auto" }}
+                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/tickets">
+                        Tickets
+                      </Link>
+                    </li>
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        onClick={() => navigate("/admindashboard/adduser")}
                       >
-                        {statuses.map((stat, idx) => {
-                          return (
-                            <Dropdown.Item key={idx} eventKey={stat}>
-                              <b>
-                                {colors[stat]} {stat}
-                              </b>
-                            </Dropdown.Item>
-                          );
-                        })}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button variant="danger" onClick={handleLogoutClick}>
-                      Logout
-                    </Button>
-                  </div>
-                </form>
-              </div>
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="#">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Link
-                  </a>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="navbarDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Dropdown
-                  </a>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="navbarDropdown"
-                  >
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Action
+                        Create User
                       </a>
                     </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Another action
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        onClick={() => handleClick("Client")}
+                      >
+                        Create Client
                       </a>
                     </li>
-                    <li>
-                      <hr className="dropdown-divider" />
+                    <li className="nav-item">
+                      <a
+                        className="nav-link"
+                        onClick={() => handleClick("Ticket")}
+                      >
+                        Create Ticket
+                      </a>
                     </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
+                    <li className="nav-item">
+                      <a className="nav-link" onClick={handleChatClick}>
+                        Chat
                       </a>
                     </li>
                   </ul>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link disabled"
-                    href="#"
-                    aria-disabled="true"
-                  >
-                    Disabled
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/tickets">
-                    Tickets
-                  </Link>
-                </li>
-              </ul>
-              <div className="chat-btn">
-                <Button variant="success" onClick={handleChatClick}>
-                  Chat
-                </Button>{" "}
+                </form>
               </div>
               <form className="d-flex">
                 <input
@@ -498,6 +413,32 @@ const AdminDashboard = () => {
                 <button className="btn btn-outline-success" type="submit">
                   Search
                 </button>
+                <div className="admin-logout-button">
+                  <Dropdown onSelect={handleSelectStatus} className="drop-down">
+                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                      {currentUser.status ? (
+                        <span>
+                          {colors[currentUser.status]} {currentUser.status}
+                        </span>
+                      ) : (
+                        "Select a User"
+                      )}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu
+                      style={{ maxHeight: "180px", overflowY: "auto" }}
+                    >
+                      {statuses.map((stat, idx) => {
+                        return (
+                          <Dropdown.Item key={idx} eventKey={stat}>
+                            <b>
+                              {colors[stat]} {stat}
+                            </b>
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </div>
                 <div className="admin-logout-button">
                   <Button variant="danger" onClick={handleLogoutClick}>
                     Logout
@@ -514,12 +455,9 @@ const AdminDashboard = () => {
             <img src={`${currentUser.profileImageUrl}`} alt="img" />
             <h4>
               {currentUser.firstName} {" " + currentUser.lastName + " "}
-              <span
-                className="active-not"
-                style={{
-                  backgroundColor: currentUser.isActive ? "#15a757" : "red",
-                }}
-              ></span>{" "}
+              <span className="active-not">
+                {colors[currentUser.status]}
+              </span>{" "}
               <span>{`(${currentUser.userId})`}</span>
             </h4>
           </div>

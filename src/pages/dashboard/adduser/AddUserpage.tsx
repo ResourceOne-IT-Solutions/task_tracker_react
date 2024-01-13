@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import "./AddUserpage.css";
 import { Button } from "react-bootstrap";
 import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
+import { useNavigate } from "react-router-dom";
 
 function AddUserpage() {
   const [userData, setUserData] = useState<CreateUserPayload>({
@@ -40,6 +41,7 @@ function AddUserpage() {
   const [userSuccess, setUserSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<any>(null);
+  const navigate = useNavigate();
   const handleChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -279,6 +281,11 @@ function AddUserpage() {
           </div>
         ) : null}
         {userError && <div className="err-msg">{userError}</div>}
+        <div className="navigating">
+          <a className="nav-link" onClick={() => navigate(-1)}>
+            <i>click here to go back</i>
+          </a>
+        </div>
       </Form>
     </div>
   );

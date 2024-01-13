@@ -129,6 +129,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSendingStatuses(x);
     httpMethods.put<any, any>("/users/update", x).then((result) => {
       setCurrentUser(result);
+      setPresentUser(result);
     });
   };
   useEffect(() => {
@@ -144,6 +145,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const handleSelect = (item: any) => {
     setSelected(item);
   };
+  console.log(presentUser, "147");
   return (
     <>
       <div className="userdashboard">
@@ -372,7 +374,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                           </Button>
                         </td>
                         <td>
-                          <Button variant={"dark"}>Request Ticket</Button>
+                          <Button
+                            variant={"dark"}
+                            onClick={() => navigate("/tickets")}
+                          >
+                            Request Ticket
+                          </Button>
                         </td>
                       </tr>
                     );

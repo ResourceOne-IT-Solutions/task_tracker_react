@@ -49,7 +49,7 @@ const Routespage = () => {
           <Route path="/chat" element={<Chat />} />
           <Route
             path="/tickets"
-            element={isLoggedin && isAdmin ? <Tickets /> : <Navigate to="/" />}
+            element={isLoggedin ? <Tickets /> : <Navigate to="/" />}
           />
           <Route
             path="/tickets/:id"

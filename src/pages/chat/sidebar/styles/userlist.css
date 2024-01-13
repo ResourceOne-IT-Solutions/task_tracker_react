@@ -11,6 +11,9 @@
 .user-main {
   background-color: #eeeeee;
 }
+.user-main:hover {
+  cursor: pointer;
+}
 .user {
   display: flex;
   border-bottom: 1px solid #f0e1e1;

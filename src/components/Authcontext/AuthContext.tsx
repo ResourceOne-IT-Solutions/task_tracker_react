@@ -7,7 +7,6 @@ import { UserContext, UserModal } from "../../modals/UserModals";
 const UserContextProvider = createContext<UserContext | null>(null);
 
 const socket = io(BE_URL);
-
 interface AuthContextProps {
   children: React.ReactNode;
 }

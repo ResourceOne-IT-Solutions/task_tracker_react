@@ -46,6 +46,7 @@ const AdminDashboard = () => {
     { name: "In Progress Tickets", value: 0 },
     { name: "Pending Tickets", value: 0 },
     { name: "Resolved Tickets", value: 0 },
+    { name: "Improper Requirment", value: 0 },
   ]);
 
   const [statuses, setStatuses] = useState<string[]>([
@@ -138,6 +139,9 @@ const AdminDashboard = () => {
       setShowModal(true);
     }
   };
+  const goToClientDashboard = (client: ClientModal) => {
+    navigate(`/client/:${client._id}`, { state: client });
+  };
   const handleAddResource = (ticket: any) => {
     setModalname("Assign Ticket");
     setUpdateReference(ticket);
@@ -150,7 +154,15 @@ const AdminDashboard = () => {
   };
   const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "Consultant Name", key: "firstName" },
+    {
+      title: "Client Name",
+      key: "firstName",
+      tdFormat: (client) => (
+        <div onClick={() => goToClientDashboard(client)}>
+          {client.firstName}
+        </div>
+      ),
+    },
     { title: "Email", key: "email" },
     { title: "Phone", key: "mobile" },
     { title: "Technology", key: "technology" },
@@ -175,7 +187,7 @@ const AdminDashboard = () => {
   ];
   const empTableHeaders: TableHeaders<UserModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "Consultant Name", key: "firstName" },
+    { title: "User Name", key: "firstName" },
     { title: "Email", key: "email" },
     { title: "Mobile", key: "mobile" },
     { title: "Role", key: "designation" },
@@ -301,7 +313,9 @@ const AdminDashboard = () => {
       const resolvedTickets = result.filter(
         (ticket) => ticket.status === "Resolved",
       ).length;
-      const totalTickets = result.length;
+      const improperTickets = result.filter(
+        (ticket) => ticket.status === "Improper Requirment",
+      ).length;
 
       setPieChartData([
         { name: "NotAssigned Tickets", value: notAssignedTickets },
@@ -309,6 +323,7 @@ const AdminDashboard = () => {
         { name: "In Progress Tickets", value: progressTickets },
         { name: "Pending Tickets", value: pendingTickets },
         { name: "Resolved Tickets", value: resolvedTickets },
+        { name: "Improper Requirment", value: improperTickets },
       ]);
       setCurrentUser((data) => ({
         ...data,

@@ -29,7 +29,6 @@ const TablePagination = memo(
       else if (dataLength > 5) return [5, dataLength];
       return [5, 10, 15, 20];
     };
-    // console.log('PAGES',{ pagesLength, tableData, currentPageIndex, pageSize, lastPage})
     const handlePageSizeChange = (e: any) => {
       setCurrentPageIndex(0);
       setPageSize(e.target.value);

@@ -10,11 +10,15 @@ interface AuthContextProps {
 const AuthContext = ({ children }: AuthContextProps) => {
   const [currentUser, setCurrentUser] = useState<UserModal>({} as UserModal);
   const [isLoggedin, setIsLoggedIn] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<UserModal>({} as UserModal);
+
   const value: UserContext = {
     isLoggedin,
     currentUser,
     setCurrentUser,
     setIsLoggedIn,
+    selectedUser,
+    setSelectedUser,
   };
   useEffect(() => {
     httpMethods

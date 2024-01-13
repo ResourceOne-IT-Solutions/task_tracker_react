@@ -132,3 +132,7 @@ tr:hover {
 .user-nav-header div {
   margin-right: 4px;
 }
+.chat-link {
+  text-align: left;
+  padding: 10px;
+}

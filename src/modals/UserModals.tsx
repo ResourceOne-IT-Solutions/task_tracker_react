@@ -1,8 +1,11 @@
+import { Socket } from "socket.io-client";
+
 export interface UserContext {
   isLoggedin: boolean;
   currentUser: UserModal;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  socket: Socket;
   selectedUser: UserModal;
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
@@ -30,6 +33,7 @@ export interface UserModal {
   progressTickets: number;
   _id: string;
   status: Status;
+  newMessages: { [key: string]: string[] };
 }
 
 export interface LoginPayload {

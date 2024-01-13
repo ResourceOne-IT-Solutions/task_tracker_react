@@ -19,7 +19,8 @@ import { TicketModal } from "../../../modals/TicketModals";
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { setCurrentUser, setIsLoggedIn } = userContext as UserContext;
+  const { setCurrentUser, setIsLoggedIn, socket, currentUser } =
+    userContext as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
@@ -129,6 +130,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSendingStatuses(x);
     httpMethods.put<any, any>("/users/update", x).then((result) => {
       setCurrentUser(result);
+      setPresentUser(result);
     });
   };
   useEffect(() => {
@@ -143,6 +145,30 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   }, []);
   const handleSelect = (item: any) => {
     setSelected(item);
+  };
+  const handleRequest = (items: TicketModal) => {
+    navigate("/tickets");
+    socket.emit("requestTickets", {
+      client: { id: items.client.id, name: items.client.name },
+      sender: { id: currentUser._id, name: currentUser.firstName },
+    });
+  };
+  const handleChatRequest = () => {
+    setShowChatRequestPopup(true);
+  };
+  const handleSubmitRequest = () => {
+    let exactUserid = "";
+    let exactUsername = "";
+    userData.forEach((item: UserModal) => {
+      if (item.firstName == selected) {
+        exactUserid = item._id;
+        exactUsername = item.firstName;
+      }
+    });
+    socket.emit("requestChat", {
+      user: { name: currentUser.firstName, id: currentUser._id },
+      opponent: { name: exactUsername, id: exactUserid },
+    });
   };
   return (
     <>
@@ -263,7 +289,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         </div>
       </div>
       <div className="chat-link">
-        <Button onClick={() => setShowChatRequestPopup(true)}>
+        <Button onClick={() => handleChatRequest()}>
           Request User to Chat
         </Button>
         <Modal
@@ -303,7 +329,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success">Submit</Button>
+            <Button variant="success" onClick={handleSubmitRequest}>
+              Submit
+            </Button>
             <Button
               variant="secondary"
               onClick={() => setShowChatRequestPopup(false)}
@@ -372,7 +400,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                           </Button>
                         </td>
                         <td>
-                          <Button variant={"dark"}>Request Ticket</Button>
+                          <Button
+                            variant={"dark"}
+                            onClick={() => handleRequest(items)}
+                          >
+                            Request Ticket
+                          </Button>
                         </td>
                       </tr>
                     );

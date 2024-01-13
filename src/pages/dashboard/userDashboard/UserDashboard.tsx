@@ -145,7 +145,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const handleSelect = (item: any) => {
     setSelected(item);
   };
-  console.log(presentUser, "147");
   return (
     <>
       <div className="userdashboard">

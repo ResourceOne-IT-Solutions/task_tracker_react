@@ -23,9 +23,9 @@
   color: red;
   font-size: 17px;
 }
-.navigating{
+.navigating {
   color: blue;
 }
-.navigating .nav-link:hover{
+.navigating .nav-link:hover {
   cursor: pointer;
 }

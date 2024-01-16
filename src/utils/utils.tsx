@@ -70,3 +70,44 @@ export const statusIndicator = (status: Status) => {
     return <RedDot />;
   }
 };
+interface FullNameType {
+  firstName: string;
+  lastName: string;
+}
+
+export const getFullName = (user: FullNameType) => {
+  if (user.firstName && user.lastName) {
+    return `${user.firstName} ${user.lastName}`;
+  }
+  return "Invalid name";
+};
+export type DateType = "date" | "time";
+export const getFormattedTime = (type: DateType) => {
+  const d = new Date().toLocaleString().split(" ");
+  const date = d[0];
+  const t = d[1].slice(0, -3);
+  const time = t + " " + d[2];
+  if (type === "date") {
+    return date;
+  }
+  return time;
+};
+
+export const getFormattedDate = (date: Date, format?: string) => {
+  const year = date.getFullYear();
+  let month = (1 + date.getMonth()).toString();
+  month = month.length > 1 ? month : "0" + month;
+  let day = date.getDate().toString();
+  day = day.length > 1 ? day : "0" + day;
+  switch (format) {
+    case "dd/mm/yyyy": {
+      return `${day}/${month}/${year}`;
+    }
+    case "yyyy/mm/dd": {
+      return `${year}/${month}/${day}`;
+    }
+    default: {
+      return `${month}/${day}/${year}`;
+    }
+  }
+};

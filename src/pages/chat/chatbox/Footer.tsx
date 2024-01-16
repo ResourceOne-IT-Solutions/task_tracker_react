@@ -1,8 +1,40 @@
 import React, { useState } from "react";
 import "./styles/footer.css";
+import { UserModal } from "../../../modals/UserModals";
+import { getFormattedDate, getFormattedTime } from "../../../utils/utils";
+import { Socket } from "socket.io-client";
 
-const ChatFooter = () => {
+interface ChatFooterProps {
+  currentUser: UserModal;
+  currentRoom: string;
+  selectedUser: UserModal;
+  socket: Socket;
+}
+const ChatFooter = ({
+  currentUser,
+  currentRoom,
+  selectedUser,
+  socket,
+}: ChatFooterProps) => {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const sendMessage = (message: string) => {
+    const msgdata = {
+      from: {
+        name: currentUser.firstName,
+        id: currentUser._id,
+      },
+      to: currentRoom,
+      content: message,
+      type: "message",
+      opponentId: selectedUser._id,
+      time: getFormattedTime("time"),
+      date: getFormattedDate(new Date()),
+    };
+    socket.emit("sendMessage", msgdata);
+    setMessage("");
+  };
 
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
@@ -58,9 +90,14 @@ const ChatFooter = () => {
         )}
       </div>
       <div className="message-input">
-        <input type="text" placeholder="message" />
+        <input
+          type="text"
+          placeholder="message"
+          onChange={(e) => setMessage(e.target.value)}
+          value={message}
+        />
       </div>
-      <div className="send-btn">
+      <div className="send-btn" onClick={() => sendMessage(message)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="25"

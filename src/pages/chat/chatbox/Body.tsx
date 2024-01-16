@@ -21,22 +21,22 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
     <div className="chat-body-container">
       {totalMessages.map((daymessages: RoomMessages, index: number) => {
         return (
-          <div key={index}>
+          <div key={daymessages._id}>
             <h3>{daymessages._id}</h3>
-            {daymessages.messageByDate.map((mymessages: MessageInputFormat) => {
+            {daymessages.messageByDate.map((message: MessageInputFormat) => {
               return (
-                <>
+                <div key={message._id}>
                   <div
                     className={
-                      currentUser._id !== mymessages.from.id
+                      currentUser._id !== message.from.id
                         ? "message-left"
                         : "message-right"
                     }
                   >
-                    {mymessages.content}
+                    {message.content}
                   </div>
-                  <p className="time-display">{mymessages.time}</p>
-                </>
+                  <p className="time-display">{message.time}</p>
+                </div>
               );
             })}
           </div>

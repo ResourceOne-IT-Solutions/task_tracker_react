@@ -3,6 +3,7 @@ import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { Socket } from "socket.io-client";
+import { getFullName, statusIndicator } from "../../../utils/utils";
 
 interface UserListProps {
   users: UserModal[];
@@ -12,6 +13,13 @@ interface UserListProps {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
 }
+const getRoomId = (id1: string, id2: string) => {
+  if (id1 > id2) {
+    return id1 + "-" + id2;
+  } else {
+    return id2 + "-" + id1;
+  }
+};
 
 const UserList = ({
   users,
@@ -21,14 +29,6 @@ const UserList = ({
   currentRoom,
   setCurrentRoom,
 }: UserListProps) => {
-  const getRoomId = (id1: string, id2: string) => {
-    if (id1 > id2) {
-      return id1 + "-" + id2;
-    } else {
-      return id2 + "-" + id1;
-    }
-  };
-
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
     const RoomId = getRoomId(currentUser._id, user._id);
@@ -37,7 +37,7 @@ const UserList = ({
   };
   return (
     <div className="user-list-container">
-      {users?.map((user: UserModal) => {
+      {users.map((user: UserModal) => {
         return (
           <div
             key={user._id}
@@ -47,10 +47,10 @@ const UserList = ({
             <div className="user">
               <div className="user-img">
                 <img src={user?.profileImageUrl} alt="alt" />{" "}
-                {user.isActive ? <GreenDot /> : <RedDot />}
+                {statusIndicator(user.status)}
               </div>
               <div className="user-name">
-                <p>{user.firstName}</p>
+                <p>{getFullName(user)}</p>
                 <p>{user.designation}</p>
               </div>
               <div className="user-time-stamp">1</div>

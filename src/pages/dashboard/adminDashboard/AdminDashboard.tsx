@@ -372,11 +372,6 @@ const AdminDashboard = () => {
                 <form className="d-flex">
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     <li className="nav-item">
-                      <Link className="nav-link" to="/tickets">
-                        Tickets
-                      </Link>
-                    </li>
-                    <li className="nav-item">
                       <a
                         className="nav-link"
                         onClick={() => navigate("/admindashboard/adduser")}
@@ -404,6 +399,11 @@ const AdminDashboard = () => {
                       <a className="nav-link" onClick={handleChatClick}>
                         Chat
                       </a>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/tickets">
+                        Tickets
+                      </Link>
                     </li>
                   </ul>
                 </form>

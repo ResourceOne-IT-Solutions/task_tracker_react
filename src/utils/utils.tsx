@@ -70,6 +70,17 @@ export const statusIndicator = (status: Status) => {
     return <RedDot />;
   }
 };
+interface FullNameType {
+  firstName: string;
+  lastName: string;
+}
+
+export const getFullName = (user: FullNameType) => {
+  if (user.firstName && user.lastName) {
+    return `${user.firstName} ${user.lastName}`;
+  }
+  return "Invalid name";
+};
 export type DateType = "date" | "time";
 export const getFormattedTime = (type: DateType) => {
   const d = new Date().toLocaleString().split(" ");

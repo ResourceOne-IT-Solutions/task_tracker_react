@@ -49,6 +49,7 @@ export interface MessageInputFormat {
   opponentId: string;
   time: string;
   date: string;
+  _id: string;
 }
 
 export interface RoomMessages {

@@ -33,7 +33,9 @@ function App() {
     alert(`${all.sender.name} is Requesting for ${all.client.name} Tickets`);
   });
   socket.off("chatRequest").on("chatRequest", (all) => {
-    alert(`${all.user.name} is Requesting to Chat  with ${all.opponent.name}`);
+    alert(
+      `${all.sender.name} is Requesting to Chat  with ${all.opponent.name}`,
+    );
   });
   return (
     <div className="App">

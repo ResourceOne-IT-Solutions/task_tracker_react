@@ -213,10 +213,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <img src={`${presentUser.profileImageUrl}`} />
           </div>
           <p> {`${presentUser.firstName} ${presentUser.lastName}`} </p>
-          <span
-            className="active_inactive_circle"
-            style={{ backgroundColor: presentUser.isActive ? "green" : "red" }}
-          ></span>
+          <span>{colors[presentUser.status]}</span>
           <p>({presentUser.userId})</p>
         </div>
         <div className="userdetails">

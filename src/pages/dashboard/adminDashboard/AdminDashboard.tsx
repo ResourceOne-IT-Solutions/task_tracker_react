@@ -139,8 +139,44 @@ const AdminDashboard = () => {
       setShowModal(true);
     }
   };
-  const goToClientDashboard = (client: ClientModal) => {
-    navigate(`/client/:${client._id}`, { state: client });
+  const handleRemove = (user: UserModal | ClientModal, type: string) => {
+    const delete_or_not = window.confirm("Are you Sure to delete");
+    if (delete_or_not) {
+      if (type == "USER") {
+        httpMethods
+          .deleteCall<UserModal>(`/users/${user._id}`)
+          .then((resp: any) => {
+            const filtered_data = usersData.filter(
+              (item) => item._id !== resp._id,
+            );
+            setUsersData(filtered_data);
+            window.alert(`${resp.firstName} is deleted Successfully`);
+          })
+          .catch((err: any) => {
+            window.alert("An error Occured while deleting");
+          });
+      } else if (type == "CLIENT") {
+        httpMethods
+          .deleteCall<ClientModal>(`/clients/${user._id}`)
+          .then((resp: any) => {
+            const filtered_data = clientsData.filter(
+              (item) => item._id !== resp._id,
+            );
+            setClientsData(filtered_data);
+            window.alert(`${resp.firstName} is deleted Successfully`);
+          })
+          .catch((err: any) => {
+            window.alert("An error Occured while deleting");
+          });
+      }
+    }
+  };
+  const gotoDashboards = (client: ClientModal | UserModal, type: string) => {
+    if (type == "CLIENT") {
+      navigate(`/client/${client._id}`, { state: client });
+    } else {
+      navigate(`/user/${client._id}`, { state: client });
+    }
   };
   const handleAddResource = (ticket: any) => {
     setModalname("Assign Ticket");
@@ -158,7 +194,7 @@ const AdminDashboard = () => {
       title: "Client Name",
       key: "firstName",
       tdFormat: (client) => (
-        <div onClick={() => goToClientDashboard(client)}>
+        <div onClick={() => gotoDashboards(client, "CLIENT")}>
           {client.firstName}
         </div>
       ),
@@ -180,14 +216,22 @@ const AdminDashboard = () => {
           >
             Update
           </Button>
-          <Button variant="danger">Remove</Button>
+          <Button variant="danger" onClick={() => handleRemove(user, "CLIENT")}>
+            Remove
+          </Button>
         </>
       ),
     },
   ];
   const empTableHeaders: TableHeaders<UserModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "User Name", key: "firstName" },
+    {
+      title: "User Name",
+      key: "firstName",
+      tdFormat: (user) => (
+        <div onClick={() => gotoDashboards(user, "USER")}>{user.firstName}</div>
+      ),
+    },
     { title: "Email", key: "email" },
     { title: "Mobile", key: "mobile" },
     { title: "Role", key: "designation" },
@@ -243,7 +287,9 @@ const AdminDashboard = () => {
           >
             Update
           </Button>
-          <Button variant="danger">Remove</Button>
+          <Button variant="danger" onClick={() => handleRemove(user, "USER")}>
+            Remove
+          </Button>
         </>
       ),
     },

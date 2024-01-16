@@ -3,18 +3,27 @@ import httpMethods from "../../api/Service";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
+import { Props } from "./Main";
+import "./index.css";
 
-const Tickets = () => {
+const Tickets = ({ url }: Props) => {
   const navigate = useNavigate();
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    httpMethods.get<TicketModal[]>("/tickets").then((tickets) => {
-      setAllTickets(tickets);
-      setLoading(false);
-    });
+    if (url) {
+      httpMethods.get<TicketModal[]>(url).then((tickets) => {
+        setAllTickets(tickets);
+        setLoading(false);
+      });
+    } else {
+      httpMethods.get<TicketModal[]>("/tickets").then((tickets) => {
+        setAllTickets(tickets);
+        setLoading(false);
+      });
+    }
   }, []);
   const handleDescription = (ticket: TicketModal) => {
     navigate(`/tickets/${ticket._id}`, { state: ticket });
@@ -39,7 +48,7 @@ const Tickets = () => {
       tdFormat: (tkt) => (
         <>
           {tkt.description}
-          <p onClick={() => handleDescription(tkt)}>
+          <p onClick={() => handleDescription(tkt)} className="desc-link">
             Click here to see full description
           </p>
         </>

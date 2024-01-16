@@ -2,6 +2,9 @@
   width: 30%;
   margin: auto;
 }
+.login-page input {
+  padding: 2%;
+}
 .login-main {
   color: aliceblue;
   padding-top: 6%;

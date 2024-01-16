@@ -13,6 +13,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   const [currentUser, setCurrentUser] = useState<UserModal>({} as UserModal);
   const [isLoggedin, setIsLoggedIn] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserModal>({} as UserModal);
+  const [currentRoom, setCurrentRoom] = useState("");
 
   const value: UserContext = {
     isLoggedin,
@@ -22,6 +23,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
     socket,
     selectedUser,
     setSelectedUser,
+    currentRoom,
+    setCurrentRoom,
   };
   useEffect(() => {
     httpMethods

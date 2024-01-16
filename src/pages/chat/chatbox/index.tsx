@@ -7,7 +7,8 @@ import { UserContext } from "../../../modals/UserModals";
 
 export const ChatBox = () => {
   const userContext = useUserContext();
-  const { selectedUser, setSelectedUser } = userContext as UserContext;
+  const { selectedUser, setSelectedUser, socket, currentUser, currentRoom } =
+    userContext as UserContext;
   return (
     <div className="chatbox">
       {selectedUser._id ? (
@@ -19,10 +20,15 @@ export const ChatBox = () => {
             />
           </div>
           <div className="chat-body">
-            <ChatBody />
+            <ChatBody socket={socket} currentUser={currentUser} />
           </div>
           <div className="chat-footer">
-            <ChatFooter />
+            <ChatFooter
+              currentUser={currentUser}
+              currentRoom={currentRoom}
+              selectedUser={selectedUser}
+              socket={socket}
+            />
           </div>
         </>
       ) : (

@@ -32,8 +32,8 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
                 }
               >
                 {message.content}
+                <p className="time-display">{message.time}</p>
               </div>
-              <p className="time-display">{message.time}</p>
             </div>
           ))}
         </div>

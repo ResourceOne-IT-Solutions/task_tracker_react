@@ -79,6 +79,9 @@ export const getFullName = (user: FullNameType) => {
   if (user.firstName && user.lastName) {
     return `${user.firstName} ${user.lastName}`;
   }
+  if (user.firstName) {
+    return user.firstName;
+  }
   return "Invalid name";
 };
 export type DateType = "date" | "time";

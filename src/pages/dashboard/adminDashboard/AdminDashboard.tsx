@@ -12,7 +12,7 @@ import AddClient from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { getData, setCookie } from "../../../utils/utils";
+import { getData, getFullName, setCookie } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
 import { Dropdown } from "react-bootstrap";
@@ -150,7 +150,7 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setUsersData(filtered_data);
-            window.alert(`${resp.firstName} is deleted Successfully`);
+            window.alert(`${getFullName(resp)} is deleted Successfully`);
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setClientsData(filtered_data);
-            window.alert(`${resp.firstName} is deleted Successfully`);
+            window.alert(`${getFullName(resp)} is deleted Successfully`);
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");
@@ -229,7 +229,9 @@ const AdminDashboard = () => {
       title: "User Name",
       key: "firstName",
       tdFormat: (user) => (
-        <div onClick={() => gotoDashboards(user, "USER")}>{user.firstName}</div>
+        <div onClick={() => gotoDashboards(user, "USER")}>
+          {getFullName(user)}
+        </div>
       ),
     },
     { title: "Email", key: "email" },
@@ -388,7 +390,7 @@ const AdminDashboard = () => {
   const handleSocket = () => {
     socket.emit("testing", {
       opponentId: currentUser._id,
-      sender: currentUser.firstName,
+      sender: getFullName(currentUser),
     });
   };
   return (
@@ -505,7 +507,7 @@ const AdminDashboard = () => {
           <div className="heading-pic">
             <img src={`${currentUser.profileImageUrl}`} alt="img" />
             <h4>
-              {currentUser.firstName} {" " + currentUser.lastName + " "}
+              {getFullName(currentUser)}
               <span className="active-not">
                 {colors[currentUser.status]}
               </span>{" "}

@@ -5,17 +5,13 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient from "../../../utils/modal/AddClient";
-import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { getData, setCookie, statusIndicator } from "../../../utils/utils";
+import { getData, getFullName, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
-import { Dropdown } from "react-bootstrap";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
@@ -24,8 +20,7 @@ import TicketsMain from "../../tickets/TicketsMain";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
-    userContext as UserContext;
+  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
@@ -50,17 +45,6 @@ const AdminDashboard = () => {
     { name: "Improper Requirment", value: 0 },
   ]);
 
-  const [statuses, setStatuses] = useState<string[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
-
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
@@ -81,7 +65,7 @@ const AdminDashboard = () => {
       ),
     );
   }
-  function UpdateTicketsTableData(updatedTicket: any) {
+  function UpdateTicketsTableData(updatedTicket: TicketModal) {
     setTicketsData((prevTableData) =>
       prevTableData.map((ticket) =>
         ticket.client.id === updatedTicket.client.id ? updatedTicket : ticket,
@@ -251,11 +235,7 @@ const AdminDashboard = () => {
             position: "relative",
           }}
         >
-          {user.isActive ? (
-            <GreenDot styles={statusIndicatorStyle} />
-          ) : (
-            <RedDot styles={statusIndicatorStyle} />
-          )}
+          {statusIndicator(user.status)}
           <img
             src={user.profileImageUrl}
             alt="image"
@@ -386,7 +366,7 @@ const AdminDashboard = () => {
           <div className="heading-pic">
             <img src={`${currentUser.profileImageUrl}`} alt="img" />
             <h4>
-              {currentUser.firstName} {" " + currentUser.lastName + " "}
+              {getFullName(currentUser)}
               <span className="active-not">
                 {statusIndicator(currentUser.status)}
               </span>{" "}

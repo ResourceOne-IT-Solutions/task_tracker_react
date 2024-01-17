@@ -27,16 +27,29 @@ function App() {
     }
   });
   socket.off("ticketAssigned").on("ticketAssigned", (id, sender) => {
-    alert(`${sender.name} Assigned you A ticket`);
+    if (currentUser._id === id) {
+      alert(`${sender.name} Assigned you A ticket`);
+    }
   });
-  socket.off("ticketsRequest").on("ticketsRequest", (all) => {
-    alert(`${all.sender.name} is Requesting for ${all.client.name} Tickets`);
+  socket.off("ticketsRequest").on("ticketsRequest", ({ sender, client }) => {
+    if (currentUser.isAdmin) {
+      alert(`${sender.name} is Requesting for ${client.name} Tickets`);
+    }
   });
-  socket.off("chatRequest").on("chatRequest", (all) => {
-    alert(
-      `${all.sender.name} is Requesting to Chat  with ${all.opponent.name}`,
-    );
+  socket.off("chatRequest").on("chatRequest", ({ sender, opponent }) => {
+    if (currentUser.isAdmin) {
+      alert(`${sender.name} is Requesting to Chat  with ${opponent.name}`);
+    }
   });
+  socket
+    .off("resourceAssigned")
+    .on("resourceAssigned", ({ ticket, sender, resource, user }) => {
+      if (currentUser._id === user.id) {
+        alert(
+          `${sender.name} assigned ${resource.name} as a resource for your ${ticket.name} ticket`,
+        );
+      }
+    });
   return (
     <div className="App">
       <Routespage />

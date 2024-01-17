@@ -7,14 +7,16 @@ import httpMethods from "../../api/Service";
 import {
   AddOnResourcePayload,
   AddOnUserResourcePayload,
+  TicketModal,
 } from "../../modals/TicketModals";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext } from "../../modals/UserModals";
+import { UserContext, UserModal } from "../../modals/UserModals";
+import { getFullName } from "../utils";
 
 interface AssignTicketProps {
   updateref: any;
-  usersData: any;
-  UpdateTicketsTableData: (updatedticket: any) => void;
+  usersData: UserModal[];
+  UpdateTicketsTableData: (updatedticket: TicketModal) => void;
 }
 
 function AssignTicket({
@@ -22,7 +24,7 @@ function AssignTicket({
   usersData,
   UpdateTicketsTableData,
 }: AssignTicketProps) {
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<string>("");
   const [sendingAddResourceData, setSendingAddResourceData] =
     useState<AddOnResourcePayload>({
       id: "",
@@ -40,20 +42,20 @@ function AssignTicket({
   const userContext = useUserContext();
   const { socket, currentUser } = userContext as UserContext;
 
-  const handleSelect = (item: any) => {
+  const handleSelect = (item: any = "") => {
     setSelectedUser(item);
-    usersData.map((_: { firstName: any; _id: any }, idx: any) => {
-      if (_.firstName == item) {
+    usersData.map((user) => {
+      if (user.firstName == item) {
         if (updateref.user.name) {
           setSendingAddResourceData({
             ...sendingAddResourceData,
-            data: { addOnResource: { name: _.firstName, id: _._id } },
+            data: { addOnResource: { name: user.firstName, id: user._id } },
           });
         } else {
           setSendingAddUserData({
             ...sendingAddUserData,
             data: {
-              user: { name: _.firstName, id: _._id },
+              user: { name: user.firstName, id: user._id },
               status: "Assigned",
             },
           });
@@ -77,20 +79,29 @@ function AssignTicket({
     } else {
       if (updateref.user.name) {
         httpMethods
-          .put<AddOnResourcePayload, any>(
+          .put<AddOnResourcePayload, TicketModal>(
             "/tickets/assign-resource",
             sendingAddResourceData,
           )
           .then((result) => {
             setAfterAssigned(result);
             setAssignError("");
+            const {
+              data: { addOnResource },
+            } = sendingAddResourceData;
+            socket.emit("addResource", {
+              ticket: { name: result.client.name, id: result._id },
+              user: { name: result.user.name, id: result.user.id },
+              resource: { name: addOnResource.name, id: addOnResource.id },
+              sender: { name: getFullName(currentUser), id: currentUser._id },
+            });
             setTimeout(() => {
               setLoading(false);
               setSendingAddResourceData({
                 id: "",
                 data: { addOnResource: { name: "", id: "" } },
               });
-              setSelectedUser(null);
+              setSelectedUser("");
               UpdateTicketsTableData(result);
               setAssignSuccess(true);
             }, 2000);
@@ -102,7 +113,7 @@ function AssignTicket({
           });
       } else {
         httpMethods
-          .put<AddOnUserResourcePayload, any>(
+          .put<AddOnUserResourcePayload, TicketModal>(
             "/tickets/update",
             sendingAddUserData,
           )
@@ -119,7 +130,7 @@ function AssignTicket({
                 id: "",
                 data: { user: { name: "", id: "" }, status: "" },
               });
-              setSelectedUser(null);
+              setSelectedUser("");
               UpdateTicketsTableData(result);
               setAssignSuccess(true);
             }, 2000);
@@ -148,10 +159,13 @@ function AssignTicket({
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {usersData !== null
-                  ? usersData.map((item: any, index: any) => {
+                  ? usersData.map((item: UserModal) => {
                       return (
-                        <Dropdown.Item key={index} eventKey={item.firstName}>
-                          {item.firstName}
+                        <Dropdown.Item
+                          key={item._id}
+                          eventKey={getFullName(item)}
+                        >
+                          {getFullName(item)}
                         </Dropdown.Item>
                       );
                     })

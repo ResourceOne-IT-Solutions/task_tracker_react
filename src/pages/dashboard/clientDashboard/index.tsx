@@ -6,7 +6,6 @@ import { TicketModal } from "../../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import TicketsMain from "../../tickets/TicketsMain";
 
-
 const ClientDashboard = () => {
   const { state } = useLocation();
   return (

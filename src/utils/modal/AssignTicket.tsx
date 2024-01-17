@@ -45,17 +45,18 @@ function AssignTicket({
   const handleSelect = (item: any = "") => {
     setSelectedUser(item);
     usersData.map((user) => {
-      if (user.firstName == item) {
+
+      if (getFullName(user) == item) {
         if (updateref.user.name) {
           setSendingAddResourceData({
             ...sendingAddResourceData,
-            data: { addOnResource: { name: user.firstName, id: user._id } },
+            data: { addOnResource: { name: getFullName(user), id: user._id } },
           });
         } else {
           setSendingAddUserData({
             ...sendingAddUserData,
             data: {
-              user: { name: user.firstName, id: user._id },
+              user: { name: getFullName(user), id: user._id },
               status: "Assigned",
             },
           });
@@ -124,7 +125,7 @@ function AssignTicket({
               setLoading(false);
               socket.emit("assignTicket", {
                 id: result._id,
-                sender: { id: currentUser._id, name: currentUser.firstName },
+                sender: { id: currentUser._id, name: getFullName(currentUser) },
               });
               setSendingAddUserData({
                 id: "",

@@ -139,7 +139,9 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setUsersData(filtered_data);
-            window.alert(`${resp.firstName} is deleted Successfully`);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");
@@ -152,7 +154,9 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setClientsData(filtered_data);
-            window.alert(`${resp.firstName} is deleted Successfully`);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");
@@ -221,7 +225,9 @@ const AdminDashboard = () => {
       title: "User Name",
       key: "firstName",
       tdFormat: (user) => (
-        <div onClick={() => gotoDashboards(user, "USER")}>{user.firstName}</div>
+        <div onClick={() => gotoDashboards(user, "USER")}>
+          {getFullName(user)}
+        </div>
       ),
     },
     { title: "Email", key: "email" },
@@ -362,7 +368,7 @@ const AdminDashboard = () => {
   const handleSocket = () => {
     socket.emit("testing", {
       opponentId: currentUser._id,
-      sender: currentUser.firstName,
+      sender: getFullName(currentUser),
     });
   };
   return (

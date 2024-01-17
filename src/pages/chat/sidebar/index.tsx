@@ -11,16 +11,12 @@ const ChatSideBar = () => {
     userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
 
+  socket.off("newUser").on("newUser", (userlist) => {
+    setUsers(userlist);
+  });
   useEffect(() => {
-    socket.on("newUser", (userlist) => {
-      setUsers(userlist);
-    });
-
     socket.emit("newUser");
-    return () => {
-      socket.off("newUser");
-    };
-  }, [socket]);
+  }, []);
   return (
     <div className="sidebar">
       <div className="search">

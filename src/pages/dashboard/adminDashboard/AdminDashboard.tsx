@@ -50,7 +50,11 @@ const AdminDashboard = () => {
     data: { status: "" },
   });
 
-  const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
+  const statusIndicatorStyle: React.CSSProperties = {
+    position: "absolute",
+    top: "0",
+    right: "0",
+  };
   function updateUserTableData(updatedUser: UserModal) {
     setUsersData((prevTableData) =>
       prevTableData.map((user) =>
@@ -235,7 +239,9 @@ const AdminDashboard = () => {
             position: "relative",
           }}
         >
-          {statusIndicator(user.status)}
+          <span style={statusIndicatorStyle}>
+            {statusIndicator(user.status)}
+          </span>
           <img
             src={user.profileImageUrl}
             alt="image"

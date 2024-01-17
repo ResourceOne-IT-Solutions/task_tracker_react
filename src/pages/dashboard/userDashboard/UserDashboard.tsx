@@ -33,6 +33,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "ResolvedTickets", value: 0 },
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
+    { name: "Improper Requirment", value: 0 },
   ]);
 
   const [sendingStatuses, setSendingStatuses] = useState({

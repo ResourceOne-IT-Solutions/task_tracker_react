@@ -9,11 +9,7 @@ import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import {
-  getData,
-  getFullName,
-  statusIndicator,
-} from "../../../utils/utils";
+import { getData, getFullName, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
 import { TicketModal } from "../../../modals/TicketModals";
@@ -23,8 +19,7 @@ import { ClientModal } from "../../../modals/ClientModals";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
-    userContext as UserContext;
+  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);

@@ -5,6 +5,7 @@ import UserDashboard from "./userDashboard/UserDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
 import { Navigate } from "react-router-dom";
 import { UserContext, UserModal } from "../../modals/UserModals";
+import Navbar from "./navbar/Navbar";
 
 const Dashboard = () => {
   const userContext = useUserContext();
@@ -30,7 +31,6 @@ const Dashboard = () => {
   if (!isLoading && !isLoggedin) {
     return <Navigate to="/" />;
   }
-
   return (
     <div>
       {isLoading ? (

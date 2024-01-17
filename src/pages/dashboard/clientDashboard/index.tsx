@@ -4,7 +4,7 @@ import "./index.css";
 import httpMethods from "../../../api/Service";
 import { TicketModal } from "../../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
-import Main from "../../tickets/Main";
+import TicketsMain from "../../tickets/TicketsMain";
 
 const ClientDashboard = () => {
   const { id } = useParams();
@@ -28,7 +28,7 @@ const ClientDashboard = () => {
         <p>CreatedAt : {state.createdAt}</p>
         <p>UpdatedAt : {state.updatedAt}</p>
       </div>
-      <Main url={`/clients/tickets/${state._id}`} />
+      <TicketsMain url={`/clients/tickets/${state._id}`} />
     </>
   );
 };

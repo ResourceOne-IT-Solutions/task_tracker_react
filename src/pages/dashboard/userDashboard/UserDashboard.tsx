@@ -34,16 +34,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
   ]);
-  const [statuses, setStatuses] = useState<Status[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
 
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
@@ -119,20 +109,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       ),
     );
   };
-  const handleLogoutClick = () => {
-    setCookie("", 0);
-    setCurrentUser({} as UserModal);
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-  const handleSelectStatus = (status: any) => {
-    const x = { ...sendingStatuses, data: { status: status } };
-    setSendingStatuses(x);
-    httpMethods.put<any, any>("/users/update", x).then((result) => {
-      setCurrentUser(result);
-      setPresentUser(result);
-    });
-  };
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
   }, []);
@@ -143,6 +119,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       })
       .catch((err) => err);
   }, []);
+  useEffect(() => {
+    setPresentUser(user);
+  }, [user]);
   const handleSelect = (item: any) => {
     setSelected(item);
   };
@@ -173,7 +152,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   return (
     <>
       <div className="userdashboard">
-        <div className="user-nav-header">
+        {/* <div className="user-nav-header">
           <div>
             <Dropdown onSelect={handleSelectStatus}>
               <Dropdown.Toggle variant="dark" id="dropdown-basic">
@@ -203,7 +182,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               Logout
             </Button>
           </div>
-        </div>
+        </div> */}
         <p className="username">
           Welcome to {presentUser.firstName} Dashboard (
           {statusIndicator(presentUser.status)})
@@ -213,7 +192,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <img src={`${presentUser.profileImageUrl}`} />
           </div>
           <p> {`${presentUser.firstName} ${presentUser.lastName}`} </p>
-          <span>{colors[presentUser.status]}</span>
+          <span>{statusIndicator(presentUser.status)}</span>
           <p>({presentUser.userId})</p>
         </div>
         <div className="userdetails">

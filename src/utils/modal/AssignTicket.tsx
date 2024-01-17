@@ -9,11 +9,12 @@ import {
   AddOnUserResourcePayload,
 } from "../../modals/TicketModals";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext } from "../../modals/UserModals";
+import { UserContext, UserModal } from "../../modals/UserModals";
+import { getFullName } from "../utils";
 
 interface AssignTicketProps {
   updateref: any;
-  usersData: any;
+  usersData: UserModal[];
   UpdateTicketsTableData: (updatedticket: any) => void;
 }
 
@@ -42,18 +43,18 @@ function AssignTicket({
 
   const handleSelect = (item: any) => {
     setSelectedUser(item);
-    usersData.map((_: { firstName: any; _id: any }, idx: any) => {
-      if (_.firstName == item) {
+    usersData.map((user) => {
+      if (getFullName(user) == item) {
         if (updateref.user.name) {
           setSendingAddResourceData({
             ...sendingAddResourceData,
-            data: { addOnResource: { name: _.firstName, id: _._id } },
+            data: { addOnResource: { name: getFullName(user), id: user._id } },
           });
         } else {
           setSendingAddUserData({
             ...sendingAddUserData,
             data: {
-              user: { name: _.firstName, id: _._id },
+              user: { name: getFullName(user), id: user._id },
               status: "Assigned",
             },
           });
@@ -113,7 +114,7 @@ function AssignTicket({
               setLoading(false);
               socket.emit("assignTicket", {
                 id: result._id,
-                sender: { id: currentUser._id, name: currentUser.firstName },
+                sender: { id: currentUser._id, name: getFullName(currentUser) },
               });
               setSendingAddUserData({
                 id: "",
@@ -150,8 +151,8 @@ function AssignTicket({
                 {usersData !== null
                   ? usersData.map((item: any, index: any) => {
                       return (
-                        <Dropdown.Item key={index} eventKey={item.firstName}>
-                          {item.firstName}
+                        <Dropdown.Item key={index} eventKey={getFullName(item)}>
+                          {getFullName(item)}
                         </Dropdown.Item>
                       );
                     })

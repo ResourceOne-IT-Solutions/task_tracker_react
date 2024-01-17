@@ -6,6 +6,7 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   calculateWorkingFrom,
   getData,
+  getFullName,
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
@@ -150,7 +151,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     navigate("/tickets");
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },
-      sender: { id: currentUser._id, name: currentUser.firstName },
+      sender: { id: currentUser._id, name: getFullName(currentUser) },
     });
   };
   const handleChatRequest = () => {
@@ -166,7 +167,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       }
     });
     socket.emit("requestChat", {
-      user: { name: currentUser.firstName, id: currentUser._id },
+      user: { name: getFullName(currentUser), id: currentUser._id },
       opponent: { name: exactUsername, id: exactUserid },
     });
   };
@@ -205,14 +206,14 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           </div>
         </div>
         <p className="username">
-          Welcome to {presentUser.firstName} Dashboard (
+          Welcome to {getFullName(presentUser)} Dashboard (
           {statusIndicator(presentUser.status)})
         </p>
         <div className="usernavbar">
           <div className="nav_img_container">
             <img src={`${presentUser.profileImageUrl}`} />
           </div>
-          <p> {`${presentUser.firstName} ${presentUser.lastName}`} </p>
+          <p> {getFullName(presentUser)} </p>
           <span>{colors[presentUser.status]}</span>
           <p>({presentUser.userId})</p>
         </div>
@@ -312,9 +313,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                             return (
                               <Dropdown.Item
                                 key={index}
-                                eventKey={item.firstName}
+                                eventKey={getFullName(item)}
                               >
-                                {item.firstName}
+                                {getFullName(item)}
                               </Dropdown.Item>
                             );
                           })

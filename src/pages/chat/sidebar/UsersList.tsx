@@ -1,7 +1,6 @@
 import React from "react";
 import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
-import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { Socket } from "socket.io-client";
 import { getFullName, statusIndicator } from "../../../utils/utils";
 
@@ -37,8 +36,8 @@ const UserList = ({
   };
   return (
     <div className="user-list-container">
-      {users.map((user: UserModal) => {
-        return (
+      {users.length ? (
+        users.map((user: UserModal) => (
           <div
             key={user._id}
             className="user-main"
@@ -46,18 +45,30 @@ const UserList = ({
           >
             <div className="user">
               <div className="user-img">
-                <img src={user?.profileImageUrl} alt="alt" />{" "}
+                <img src={user.profileImageUrl} alt="alt" />{" "}
                 {statusIndicator(user.status)}
               </div>
               <div className="user-name">
                 <p>{getFullName(user)}</p>
                 <p>{user.designation}</p>
               </div>
-              <div className="user-time-stamp">1</div>
+              <div className="user-time-stamp">
+                <div className="user-newmsg-count">13</div>
+              </div>
             </div>
           </div>
-        );
-      })}
+        ))
+      ) : (
+        <>
+          <div>
+            {" "}
+            <span>Loading</span>
+          </div>
+          <div className="spinner-border text-success" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

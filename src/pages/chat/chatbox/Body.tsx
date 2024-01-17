@@ -19,29 +19,25 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
 
   return (
     <div className="chat-body-container">
-      {totalMessages.map((daymessages: RoomMessages, index: number) => {
-        return (
-          <div key={daymessages._id}>
-            <h3>{daymessages._id}</h3>
-            {daymessages.messageByDate.map((message: MessageInputFormat) => {
-              return (
-                <div key={message._id}>
-                  <div
-                    className={
-                      currentUser._id !== message.from.id
-                        ? "message-left"
-                        : "message-right"
-                    }
-                  >
-                    {message.content}
-                  </div>
-                  <p className="time-display">{message.time}</p>
-                </div>
-              );
-            })}
-          </div>
-        );
-      })}
+      {totalMessages.map((daymessages: RoomMessages) => (
+        <div key={daymessages._id}>
+          <h3>{daymessages._id}</h3>
+          {daymessages.messageByDate.map((message: MessageInputFormat) => (
+            <div key={message._id}>
+              <div
+                className={
+                  currentUser._id !== message.from.id
+                    ? "message-left"
+                    : "message-right"
+                }
+              >
+                {message.content}
+                <p className="time-display">{message.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

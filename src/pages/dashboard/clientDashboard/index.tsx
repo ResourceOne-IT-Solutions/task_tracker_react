@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import "./index.css";
-import httpMethods from "../../../api/Service";
-import { TicketModal } from "../../../modals/TicketModals";
-import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import Main from "../../tickets/Main";
 
 const ClientDashboard = () => {
-  const { id } = useParams();
-
   const { state } = useLocation();
   return (
     <>

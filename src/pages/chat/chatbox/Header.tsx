@@ -1,7 +1,8 @@
 import React from "react";
 import "./styles/header.css";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import { UserModal } from "../../../modals/UserModals";
 import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { getFullName, statusIndicator } from "../../../utils/utils";
 
 interface Chatprops {
   selectedUser: UserModal;
@@ -37,11 +38,8 @@ const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
               <img src={selectedUser.profileImageUrl} alt="img" />
             </div>
             <div className="header-user-name">
-              {selectedUser.firstName} {selectedUser.lastName}
-            </div>
-            <div className="user-status">
-              {" "}
-              {selectedUser.status == "Offline" ? <RedDot /> : <GreenDot />}
+              {getFullName(selectedUser)} &nbsp;{" "}
+              {statusIndicator(selectedUser.status)}
             </div>
           </>
         )}

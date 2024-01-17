@@ -37,29 +37,27 @@ const UserList = ({
   return (
     <div className="user-list-container">
       {users.length ? (
-        users.map((user: UserModal) => {
-          return (
-            <div
-              key={user._id}
-              className="user-main"
-              onClick={() => handleProfileClick(user)}
-            >
-              <div className="user">
-                <div className="user-img">
-                  <img src={user.profileImageUrl} alt="alt" />{" "}
-                  {statusIndicator(user.status)}
-                </div>
-                <div className="user-name">
-                  <p>{getFullName(user)}</p>
-                  <p>{user.designation}</p>
-                </div>
-                <div className="user-time-stamp">
-                  <div className="user-newmsg-count">13</div>
-                </div>
+        users.map((user: UserModal) => (
+          <div
+            key={user._id}
+            className="user-main"
+            onClick={() => handleProfileClick(user)}
+          >
+            <div className="user">
+              <div className="user-img">
+                <img src={user.profileImageUrl} alt="alt" />{" "}
+                {statusIndicator(user.status)}
+              </div>
+              <div className="user-name">
+                <p>{getFullName(user)}</p>
+                <p>{user.designation}</p>
+              </div>
+              <div className="user-time-stamp">
+                <div className="user-newmsg-count">13</div>
               </div>
             </div>
-          );
-        })
+          </div>
+        ))
       ) : (
         <>
           <div>

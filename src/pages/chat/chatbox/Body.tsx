@@ -19,7 +19,7 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
 
   return (
     <div className="chat-body-container">
-      {totalMessages.map((daymessages: RoomMessages, index: number) => (
+      {totalMessages.map((daymessages: RoomMessages) => (
         <div key={daymessages._id}>
           <h3>{daymessages._id}</h3>
           {daymessages.messageByDate.map((message: MessageInputFormat) => (

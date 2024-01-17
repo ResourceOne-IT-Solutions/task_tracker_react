@@ -150,7 +150,9 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setUsersData(filtered_data);
-            window.alert(`${getFullName(resp)} is deleted Successfully`);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");
@@ -163,7 +165,9 @@ const AdminDashboard = () => {
               (item) => item._id !== resp._id,
             );
             setClientsData(filtered_data);
-            window.alert(`${getFullName(resp)} is deleted Successfully`);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
           })
           .catch((err: any) => {
             window.alert("An error Occured while deleting");

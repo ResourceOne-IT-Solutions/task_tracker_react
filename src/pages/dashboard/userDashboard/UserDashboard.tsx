@@ -62,6 +62,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         const assigned = result.filter(
           (ticket) => ticket.status === "Assigned",
         ).length;
+        const improperTickets = result.filter(
+          (ticket) => ticket.status === "Improper Requirment",
+        ).length;
 
         setPieChartData([
           { name: "Pending Tickets", value: pendingTickets },
@@ -69,6 +72,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: presentUser.helpedTickets },
           { name: "Assigned Tickets", value: assigned },
+          { name: "Improper Requirment", value: improperTickets },
         ]);
         setCurrentUser((data) => ({
           ...data,

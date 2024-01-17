@@ -12,6 +12,7 @@ import ClientDashboard from "../pages/dashboard/clientDashboard";
 import UserStatsPage from "../pages/dashboard/UserStatsPage";
 import AdminRequestMessages from "../pages/dashboard/AdminRequestMessages";
 import Navbar from "../pages/dashboard/navbar/Navbar";
+import UserTickets from "../pages/tickets/UserTickets";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -86,6 +87,10 @@ const Routespage = () => {
                 <Navigate to="/" />
               )
             }
+          />
+          <Route
+            path="/userTickets/:id"
+            element={isLoggedin && <UserTickets />}
           />
         </Routes>
       </BrowserRouter>

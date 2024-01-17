@@ -38,7 +38,7 @@ const TicketDescription = () => {
         </p>
         <p>
           <b>ReceivedDate :</b>{" "}
-          {selectedTicket.receivedDate as unknown as string}
+          {new Date(selectedTicket.receivedDate).toLocaleString()}
         </p>
         {resource && (
           <p>
@@ -47,7 +47,7 @@ const TicketDescription = () => {
         )}
 
         <ul className="all-desc">
-          {selectedTicket.updates?.map((item: any, index: number) => {
+          {selectedTicket.updates.map((item: any, index: number) => {
             return (
               <li key={index}>
                 <p>Date: {item.date}</p>

@@ -157,37 +157,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   return (
     <>
       <div className="userdashboard">
-        {/* <div className="user-nav-header">
-          <div>
-            <Dropdown onSelect={handleSelectStatus}>
-              <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                {presentUser.status ? (
-                  <span>
-                    {presentUser.status} {colors[presentUser.status]}
-                  </span>
-                ) : (
-                  "Select a User"
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {statuses.map((stat, idx) => {
-                  return (
-                    <Dropdown.Item key={idx} eventKey={stat}>
-                      <b>
-                        {colors[stat]} {stat}
-                      </b>
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button variant="danger" onClick={handleLogoutClick}>
-              Logout
-            </Button>
-          </div>
-        </div> */}
         <p className="username">
           Welcome to {presentUser.firstName} Dashboard (
           {statusIndicator(presentUser.status)})

@@ -2,24 +2,10 @@ import React, { useEffect, useState } from "react";
 import httpMethods from "../../api/Service";
 import "./AdminRequestMessages.css";
 import { Button } from "react-bootstrap";
-interface ChatRequestInterface {
-  date: string;
-  isPending: boolean;
-  opponent: { name: string; id: string };
-  sender: { name: string; id: string };
-  time: string;
-  __v: number;
-  _id: string;
-}
-interface TicketRequestInterface {
-  date: string;
-  isPending: boolean;
-  client: { name: string; id: string };
-  sender: { name: string; id: string };
-  time: string;
-  __v: number;
-  _id: string;
-}
+import {
+  ChatRequestInterface,
+  TicketRequestInterface,
+} from "../../modals/MessageModals";
 
 function AdminRequestMessages() {
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
@@ -32,8 +18,8 @@ function AdminRequestMessages() {
       .then((res: ChatRequestInterface[]) => {
         setChatRequests(res);
       })
-      .catch((errr) => {
-        throw new errr();
+      .catch((errr: string) => {
+        alert(errr);
       });
     httpMethods
       .get<any>("/message/user-ticket-request")

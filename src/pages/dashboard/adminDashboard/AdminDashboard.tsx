@@ -12,13 +12,14 @@ import AddClient from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { getData, setCookie } from "../../../utils/utils";
+import { getData, setCookie, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
 import { Dropdown } from "react-bootstrap";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
+import TicketsMain from "../../tickets/TicketsMain";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -188,6 +189,9 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
+  const handleUserTickets = (user: any) => {
+    navigate(`/userTickets/${user._id}`);
+  };
   const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     {
@@ -273,7 +277,9 @@ const AdminDashboard = () => {
     {
       title: "Uploaded Issues",
       key: "",
-      tdFormat: (user: { _id: string }) => <Button>Click Here</Button>,
+      tdFormat: (user: { _id: string }) => (
+        <Button onClick={() => handleUserTickets(user)}>Click Here</Button>
+      ),
     },
     {
       title: "Actions",
@@ -382,7 +388,7 @@ const AdminDashboard = () => {
             <h4>
               {currentUser.firstName} {" " + currentUser.lastName + " "}
               <span className="active-not">
-                {colors[currentUser.status]}
+                {statusIndicator(currentUser.status)}
               </span>{" "}
               <span>{`(${currentUser.userId})`}</span>
             </h4>

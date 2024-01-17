@@ -84,12 +84,8 @@ export const getFullName = (user: FullNameType) => {
 export type DateType = "date" | "time";
 export const getFormattedTime = (type: DateType) => {
   const d = new Date().toLocaleString().split(" ");
-  const date = d[0];
   const t = d[1].slice(0, -3);
   const time = t + " " + d[2];
-  if (type === "date") {
-    return date;
-  }
   return time;
 };
 

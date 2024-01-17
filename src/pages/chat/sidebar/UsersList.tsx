@@ -1,7 +1,6 @@
 import React from "react";
 import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
-import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { Socket } from "socket.io-client";
 import { getFullName, statusIndicator } from "../../../utils/utils";
 
@@ -46,7 +45,7 @@ const UserList = ({
           >
             <div className="user">
               <div className="user-img">
-                <img src={user?.profileImageUrl} alt="alt" />{" "}
+                <img src={user.profileImageUrl} alt="alt" />{" "}
                 {statusIndicator(user.status)}
               </div>
               <div className="user-name">

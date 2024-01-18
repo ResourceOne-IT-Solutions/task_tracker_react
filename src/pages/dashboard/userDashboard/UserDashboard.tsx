@@ -223,6 +223,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                   totalTickets={tableData.length}
                 />
               </div>
+              <div>
+                <Button variant="warning">Edit User</Button>
+              </div>
             </div>
             <div className="lastlogindata">
               <ul>

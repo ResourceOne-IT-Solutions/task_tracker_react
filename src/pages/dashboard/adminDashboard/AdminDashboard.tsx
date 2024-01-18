@@ -16,6 +16,7 @@ import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
 import TicketsMain from "../../tickets/TicketsMain";
+import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -365,11 +366,14 @@ const AdminDashboard = () => {
       setCurrentUser(result);
     });
   };
-  const handleSocket = () => {
-    socket.emit("testing", {
-      opponentId: currentUser._id,
-      sender: getFullName(currentUser),
+  const handleAdminBroadCastMessage = () => {
+    setModalname("messageModal");
+    setModalProps({
+      title: "Send Message To All Users",
+      setShowModal: setShowModal,
+      show: !showModal,
     });
+    setShowModal(true);
   };
   return (
     <div>
@@ -414,8 +418,8 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="admin-btns">
-        <Button variant="danger" onClick={handleSocket}>
-          Socket testing
+        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
+          Send Message to All
         </Button>
         <Button
           variant="info"
@@ -477,6 +481,11 @@ const AdminDashboard = () => {
             usersData={usersData}
             UpdateTicketsTableData={UpdateTicketsTableData}
           />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "messageModal" && (
+        <ReusableModal vals={modalProps}>
+          <MessageAllUsersModal />
         </ReusableModal>
       )}
     </div>

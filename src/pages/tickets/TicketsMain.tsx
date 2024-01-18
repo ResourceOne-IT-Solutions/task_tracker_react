@@ -5,7 +5,7 @@ import { url } from "inspector";
 export interface Props {
   url?: string;
 }
-function Main({ url }: Props) {
+function TicketsMain({ url }: Props) {
   return (
     <div>
       <Tickets url={url} />
@@ -13,4 +13,4 @@ function Main({ url }: Props) {
   );
 }
 
-export default Main;
+export default TicketsMain;

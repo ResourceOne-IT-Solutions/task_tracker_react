@@ -3,7 +3,7 @@ import httpMethods from "../../api/Service";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
-import { Props } from "./Main";
+import { Props } from "./TicketsMain";
 import "./index.css";
 
 const Tickets = ({ url }: Props) => {

@@ -1,7 +1,10 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import "./index.css";
-import Main from "../../tickets/Main";
+import httpMethods from "../../../api/Service";
+import { TicketModal } from "../../../modals/TicketModals";
+import TaskTable, { TableHeaders } from "../../../utils/table/Table";
+import TicketsMain from "../../tickets/TicketsMain";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
@@ -23,7 +26,7 @@ const ClientDashboard = () => {
         <p>CreatedAt : {state.createdAt}</p>
         <p>UpdatedAt : {state.updatedAt}</p>
       </div>
-      <Main url={`/clients/tickets/${state._id}`} />
+      <TicketsMain url={`/clients/tickets/${state._id}`} />
     </>
   );
 };

@@ -18,6 +18,7 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
@@ -48,6 +49,9 @@ const Login = () => {
         setIsLoading(false);
       });
   };
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <div className="login-main">
@@ -64,15 +68,24 @@ const Login = () => {
           />
         </Form.Group>
         <Form.Label htmlFor="inputPassword5">Password</Form.Label>
-        <Form.Control
-          type="password"
-          id="inputPassword5"
-          aria-describedby="passwordHelpBlock"
-          placeholder="Enter Password"
-          name="password"
-          onChange={handleChange}
-          value={data.password}
-        />
+        <div className="password-icon">
+          <Form.Control
+            type={showPassword ? "text" : "password"}
+            id="inputPassword5"
+            aria-describedby="passwordHelpBlock"
+            placeholder="Enter Password"
+            name="password"
+            onChange={handleChange}
+            value={data.password}
+          />
+          <span onClick={handleShowPassword}>
+            {showPassword ? (
+              <i className="bi bi-eye-slash-fill"></i>
+            ) : (
+              <i className="bi bi-eye-fill"></i>
+            )}
+          </span>
+        </div>
         <br />
         <div className="error">{error}</div>
         <Button

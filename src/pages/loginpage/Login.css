@@ -24,3 +24,14 @@
 .logintext {
   font-family: monospace;
 }
+.password-icon {
+  position: relative;
+}
+.password-icon span {
+  cursor: pointer;
+  position: absolute;
+  top: 6px;
+  right: 5px;
+  font-size: larger;
+  color: green;
+}

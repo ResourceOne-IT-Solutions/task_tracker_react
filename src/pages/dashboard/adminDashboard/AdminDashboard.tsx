@@ -5,26 +5,22 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient from "../../../utils/modal/AddClient";
-import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { getData, getFullName, setCookie } from "../../../utils/utils";
+import { getData, getFullName, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
-import { Dropdown } from "react-bootstrap";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
+import TicketsMain from "../../tickets/TicketsMain";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
-    userContext as UserContext;
+  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
@@ -49,23 +45,16 @@ const AdminDashboard = () => {
     { name: "Improper Requirment", value: 0 },
   ]);
 
-  const [statuses, setStatuses] = useState<string[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
-
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
   });
 
-  const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
+  const statusIndicatorStyle: React.CSSProperties = {
+    position: "absolute",
+    top: "0",
+    right: "0",
+  };
   function updateUserTableData(updatedUser: UserModal) {
     setUsersData((prevTableData) =>
       prevTableData.map((user) =>
@@ -80,7 +69,7 @@ const AdminDashboard = () => {
       ),
     );
   }
-  function UpdateTicketsTableData(updatedTicket: any) {
+  function UpdateTicketsTableData(updatedTicket: TicketModal) {
     setTicketsData((prevTableData) =>
       prevTableData.map((ticket) =>
         ticket.client.id === updatedTicket.client.id ? updatedTicket : ticket,
@@ -192,6 +181,9 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
+  const handleUserTickets = (user: any) => {
+    navigate(`/userTickets/${user._id}`);
+  };
   const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     {
@@ -253,11 +245,9 @@ const AdminDashboard = () => {
             position: "relative",
           }}
         >
-          {user.isActive ? (
-            <GreenDot styles={statusIndicatorStyle} />
-          ) : (
-            <RedDot styles={statusIndicatorStyle} />
-          )}
+          <span style={statusIndicatorStyle}>
+            {statusIndicator(user.status)}
+          </span>
           <img
             src={user.profileImageUrl}
             alt="image"
@@ -279,7 +269,9 @@ const AdminDashboard = () => {
     {
       title: "Uploaded Issues",
       key: "",
-      tdFormat: (user: { _id: string }) => <Button>Click Here</Button>,
+      tdFormat: (user: { _id: string }) => (
+        <Button onClick={() => handleUserTickets(user)}>Click Here</Button>
+      ),
     },
     {
       title: "Actions",
@@ -328,24 +320,6 @@ const AdminDashboard = () => {
       ),
     },
   ];
-  const handleClick = (str: string) => {
-    setModalname(str);
-    setModalProps({
-      title: str == "Client" ? "Create Client" : "Create Ticket",
-      setShowModal: setShowModal,
-      show: !showModal,
-    });
-    setShowModal(true);
-  };
-  const handleLogoutClick = () => {
-    setCookie("", 0);
-    setCurrentUser({} as UserModal);
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-  const handleChatClick = () => {
-    navigate("/chat");
-  };
   useEffect(() => {
     httpMethods.get<TicketModal[]>("/tickets").then((result) => {
       setTicketsData(result);
@@ -399,113 +373,6 @@ const AdminDashboard = () => {
   };
   return (
     <div>
-      <div className="header-nav">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-around">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              <b>DASHBOARD</b>
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <div>
-                <form className="d-flex">
-                  <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        onClick={() => navigate("/admindashboard/adduser")}
-                      >
-                        Create User
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        onClick={() => handleClick("Client")}
-                      >
-                        Create Client
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a
-                        className="nav-link"
-                        onClick={() => handleClick("Ticket")}
-                      >
-                        Create Ticket
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <a className="nav-link" onClick={handleChatClick}>
-                        Chat
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/tickets">
-                        Tickets
-                      </Link>
-                    </li>
-                  </ul>
-                </form>
-              </div>
-              <form className="d-flex">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-                <div className="admin-logout-button">
-                  <Dropdown onSelect={handleSelectStatus} className="drop-down">
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                      {currentUser.status ? (
-                        <span>
-                          {colors[currentUser.status]} {currentUser.status}
-                        </span>
-                      ) : (
-                        "Select a User"
-                      )}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                      style={{ maxHeight: "180px", overflowY: "auto" }}
-                    >
-                      {statuses.map((stat, idx) => {
-                        return (
-                          <Dropdown.Item key={idx} eventKey={stat}>
-                            <b>
-                              {colors[stat]} {stat}
-                            </b>
-                          </Dropdown.Item>
-                        );
-                      })}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </div>
-                <div className="admin-logout-button">
-                  <Button variant="danger" onClick={handleLogoutClick}>
-                    Logout
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-      </div>
       <div className="admin-pie-chart">
         <div className="admin-details">
           <div className="heading-pic">
@@ -513,7 +380,7 @@ const AdminDashboard = () => {
             <h4>
               {getFullName(currentUser)}
               <span className="active-not">
-                {colors[currentUser.status]}
+                {statusIndicator(currentUser.status)}
               </span>{" "}
               <span>{`(${currentUser.userId})`}</span>
             </h4>
@@ -586,16 +453,7 @@ const AdminDashboard = () => {
           loading={loading}
         />
       )}
-      {showModal && modalName == "Client" && (
-        <ReusableModal vals={modalProps}>
-          <AddClient />
-        </ReusableModal>
-      )}
-      {showModal && modalName == "Ticket" && (
-        <ReusableModal vals={modalProps}>
-          <AddTicket clientsData={clientsData} />
-        </ReusableModal>
-      )}
+
       {showModal && modalName == "update_user" && (
         <ReusableModal vals={modalProps}>
           <UpdateUser

@@ -34,17 +34,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "ResolvedTickets", value: 0 },
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
+    { name: "Improper Requirment", value: 0 },
   ]);
-  const [statuses, setStatuses] = useState<Status[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
 
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
@@ -72,6 +63,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         const assigned = result.filter(
           (ticket) => ticket.status === "Assigned",
         ).length;
+        const improperTickets = result.filter(
+          (ticket) => ticket.status === "Improper Requirment",
+        ).length;
 
         setPieChartData([
           { name: "Pending Tickets", value: pendingTickets },
@@ -79,6 +73,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: presentUser.helpedTickets },
           { name: "Assigned Tickets", value: assigned },
+          { name: "Improper Requirment", value: improperTickets },
         ]);
         setCurrentUser((data) => ({
           ...data,
@@ -120,20 +115,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       ),
     );
   };
-  const handleLogoutClick = () => {
-    setCookie("", 0);
-    setCurrentUser({} as UserModal);
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-  const handleSelectStatus = (status: any) => {
-    const x = { ...sendingStatuses, data: { status: status } };
-    setSendingStatuses(x);
-    httpMethods.put<any, any>("/users/update", x).then((result) => {
-      setCurrentUser(result);
-      setPresentUser(result);
-    });
-  };
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
   }, []);
@@ -144,6 +125,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       })
       .catch((err) => err);
   }, []);
+  useEffect(() => {
+    setPresentUser(user);
+  }, [user]);
   const handleSelect = (item: any) => {
     setSelected(item);
   };
@@ -174,37 +158,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   return (
     <>
       <div className="userdashboard">
-        <div className="user-nav-header">
-          <div>
-            <Dropdown onSelect={handleSelectStatus}>
-              <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                {presentUser.status ? (
-                  <span>
-                    {presentUser.status} {colors[presentUser.status]}
-                  </span>
-                ) : (
-                  "Select a User"
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {statuses.map((stat, idx) => {
-                  return (
-                    <Dropdown.Item key={idx} eventKey={stat}>
-                      <b>
-                        {colors[stat]} {stat}
-                      </b>
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button variant="danger" onClick={handleLogoutClick}>
-              Logout
-            </Button>
-          </div>
-        </div>
         <p className="username">
           Welcome to {getFullName(presentUser)} Dashboard (
           {statusIndicator(presentUser.status)})
@@ -214,7 +167,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <img src={`${presentUser.profileImageUrl}`} />
           </div>
           <p> {getFullName(presentUser)} </p>
-          <span>{colors[presentUser.status]}</span>
+          <span>{statusIndicator(presentUser.status)}</span>
           <p>({presentUser.userId})</p>
         </div>
         <div className="userdetails">

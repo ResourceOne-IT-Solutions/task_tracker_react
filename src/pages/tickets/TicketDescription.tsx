@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import "./TicketDescription.css";
+import { TicketModal } from "../../modals/TicketModals";
 const TicketDescription = () => {
   const { state } = useLocation();
+  const [selectedTicket, setSelectedTicket] = useState<TicketModal>(state);
   const [resource, setResource] = useState("");
 
   useEffect(() => {
     let x = "";
-    state.addOnResource?.forEach((item: any) => {
+    selectedTicket.addOnResource?.forEach((item: any) => {
       x += item.name + ", ";
     });
     setResource(x);
@@ -17,25 +19,26 @@ const TicketDescription = () => {
       <h3>TICKETS BY ID</h3>
       <div className="ticket-details">
         <p>
-          <b>Client Name : </b> {state.client.name}
+          <b>Client Name : </b> {selectedTicket.client.name}
         </p>
         <p>
-          <b>User Name :</b> {state.user.name}
+          <b>User Name :</b> {selectedTicket.user.name}
         </p>
         <p>
-          <b>Technology :</b> {state.technology}
+          <b>Technology :</b> {selectedTicket.technology}
         </p>
         <p>
-          <b>Status :</b> {state.status}
+          <b>Status :</b> {selectedTicket.status}
         </p>
         <p>
-          <b>Description :</b> {state.description}
+          <b>Description :</b> {selectedTicket.description}
         </p>
         <p>
-          <b>Comments :</b> {state.comments}
+          <b>Comments :</b> {selectedTicket.comments}
         </p>
         <p>
-          <b>ReceivedDate :</b> {state.receivedDate}
+          <b>ReceivedDate :</b>{" "}
+          {new Date(selectedTicket.receivedDate).toLocaleString()}
         </p>
         {resource && (
           <p>
@@ -44,7 +47,7 @@ const TicketDescription = () => {
         )}
 
         <ul className="all-desc">
-          {state.updates?.map((item: any, index: number) => {
+          {selectedTicket.updates.map((item: any, index: number) => {
             return (
               <li key={index}>
                 <p>Date: {item.date}</p>

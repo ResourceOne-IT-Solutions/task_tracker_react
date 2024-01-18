@@ -10,17 +10,26 @@ const ChatSideBar = () => {
   const { socket, currentUser, setSelectedUser, currentRoom, setCurrentRoom } =
     userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
-
-  socket.off("newUser").on("newUser", (userlist) => {
-    setUsers(userlist);
-  });
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
+  socket
+    .off("newUser")
+    .on("newUser", (userPayload, userId, opponentPayload, opponentId) => {
+      if (userId == currentUser._id) {
+        setUsers(userPayload);
+      } else if (opponentId == currentUser._id) {
+        setUsers(opponentPayload);
+      }
+    });
   useEffect(() => {
-    socket.emit("newUser");
+    socket.emit("newUser", currentUser._id);
   }, []);
   return (
     <div className="sidebar">
       <div className="search">
-        <Search />
+        <Search onSearch={handleSearch} />
       </div>
       <div className="users-group">
         <Groups />
@@ -33,6 +42,7 @@ const ChatSideBar = () => {
           currentRoom={currentRoom}
           setCurrentRoom={setCurrentRoom}
           socket={socket}
+          searchQuery={searchQuery}
         />
       </div>
     </div>

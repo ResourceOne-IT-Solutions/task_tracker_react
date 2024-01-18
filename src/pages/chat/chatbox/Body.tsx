@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/body.css";
 import {
   MessageInputFormat,
@@ -12,13 +12,20 @@ interface ChatBodyProps {
 }
 const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
   const [totalMessages, setTotalMessages] = useState<RoomMessages[]>([]);
+  const ScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (ScrollRef.current) {
+      ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
+    }
+  }, [totalMessages]);
 
   socket.off("roomMessages").on("roomMessages", (messages: RoomMessages[]) => {
     setTotalMessages(messages);
   });
 
   return (
-    <div className="chat-body-container">
+    <div className="chat-body-container" ref={ScrollRef}>
       {totalMessages.map((daymessages: RoomMessages) => (
         <div key={daymessages._id}>
           <h3>{daymessages._id}</h3>

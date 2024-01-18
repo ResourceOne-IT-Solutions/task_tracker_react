@@ -1,12 +1,18 @@
 .group-list-container {
   height: 100%;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .group-list-container::-webkit-scrollbar {
-  width: 0; /* Set the width of the scrollbar to 0 */
+  height: 12px;
 }
 .group-list-container::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Set the thumb color to transparent */
+  background-color: rgb(180, 174, 174);
+  border-radius: 6px;
+}
+
+.group-list-container::-webkit-scrollbar-track {
+  background-color: #eeeeee;
 }
 .group-main {
   padding: 0px 10px;

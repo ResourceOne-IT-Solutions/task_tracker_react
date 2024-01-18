@@ -1,10 +1,17 @@
 import React from "react";
 import "./styles/search.css";
 import { useNavigate } from "react-router-dom";
-const Search = () => {
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+}
+const Search = ({ onSearch }: SearchBarProps) => {
   const navigate = useNavigate();
   const handleChatBack = () => {
     navigate(-1);
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    onSearch(query);
   };
   return (
     <div className="search-box">
@@ -15,7 +22,7 @@ const Search = () => {
         ></i>
       </div>
       <div>
-        <input type="text" placeholder="Search" />
+        <input type="text" placeholder="Search" onChange={handleInputChange} />
       </div>
     </div>
   );

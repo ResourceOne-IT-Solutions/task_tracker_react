@@ -38,6 +38,12 @@ const ChatFooter = ({
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");
+    socket.emit("newUser", currentUser._id, selectedUser._id);
+  };
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      sendMessage(message);
+    }
   };
 
   const togglePopup = () => {
@@ -98,6 +104,7 @@ const ChatFooter = ({
           type="text"
           placeholder="message"
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyPress}
           value={message}
         />
       </div>

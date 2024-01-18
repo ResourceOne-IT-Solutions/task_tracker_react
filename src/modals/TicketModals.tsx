@@ -30,6 +30,7 @@ export interface TicketModal {
   user: TicketUserModal;
   assignedDate: Date;
   closedDate: Date;
+  targetDate?: string;
 }
 
 export interface UpdateTicketProps {

@@ -33,12 +33,27 @@ const Tickets = ({ url }: Props) => {
     { title: "Status", key: "status" },
     { title: "User", key: "user.name" },
     { title: "Technology", key: "technology" },
-    { title: "Receive Date", key: "receivedDate" },
+    { title: "Received Date", key: "receivedDate" },
+    { title: "Closed Date", key: "closedDate" },
+    { title: "Comments", key: "comments" },
     {
-      title: "Helped",
+      title: "TargetDate",
+      key: "targetDate",
+      tdFormat: (ticket) => <p>{ticket?.targetDate}</p>,
+    },
+    {
+      title: "Helped By",
       key: "addOnResource",
       tdFormat: (ticket) => (
-        <>{ticket.addOnResource.map((val) => val.name).join(", ")}</>
+        <p
+          style={{
+            textOverflow: "ellipsis",
+            height: "20px",
+            overflow: "hidden",
+          }}
+        >
+          {ticket.addOnResource.map((val) => val.name).join(", ")}
+        </p>
       ),
     },
     {
@@ -54,7 +69,6 @@ const Tickets = ({ url }: Props) => {
       ),
     },
   ];
-
   return (
     <>
       <h4>

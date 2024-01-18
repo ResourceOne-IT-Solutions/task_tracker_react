@@ -9,6 +9,7 @@ import PieChartComponent from "../../../components/pieChart/PieChart";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
+  const [clientState, setClientState] = useState(state);
   const [selectedTickets, setSelectedTickets] = useState<TicketModal[]>([]);
   const [pieChartData, setPieChartData] = useState([
     { name: "NotAssigned Tickets", value: 0 },
@@ -20,7 +21,7 @@ const ClientDashboard = () => {
   ]);
   useEffect(() => {
     httpMethods
-      .get<TicketModal[]>(`/clients/tickets/${state._id}`)
+      .get<TicketModal[]>(`/clients/tickets/${clientState._id}`)
       .then((tickets) => {
         setSelectedTickets(tickets);
         const notAssignedTickets = tickets.filter(
@@ -52,25 +53,28 @@ const ClientDashboard = () => {
         ]);
       });
   }, []);
+  useEffect(() => {
+    setClientState(state);
+  }, [state]);
   return (
     <>
       <h3>CLIENT DASHBOARD</h3>
 
       <div className="client-details">
         <div className="sub-details">
-          <p>FirstName : {state.firstName}</p>
-          <p>Mobile : {state.mobile}</p>
-          <p>Email : {state.email}</p>
+          <p>FirstName : {clientState.firstName}</p>
+          <p>Mobile : {clientState.mobile}</p>
+          <p>Email : {clientState.email}</p>
           <p>
-            Location : {state.location.area}
+            Location : {clientState.location.area}
             {", "}
-            {state.location.zone}
+            {clientState.location.zone}
           </p>
-          <p>Technology : {state.technology}</p>
-          <p>TicketsCount : {state.ticketsCount}</p>
-          <p>CompanyName : {state.companyName}</p>
-          <p>CreatedAt : {state.createdAt}</p>
-          <p>UpdatedAt : {state.updatedAt}</p>
+          <p>Technology : {clientState.technology}</p>
+          <p>TicketsCount : {clientState.ticketsCount}</p>
+          <p>CompanyName : {clientState.companyName}</p>
+          <p>CreatedAt : {clientState.createdAt}</p>
+          <p>UpdatedAt : {clientState.updatedAt}</p>
         </div>
         <div className="pie-chart-main">
           <PieChartComponent
@@ -80,7 +84,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      <TicketsMain url={`/clients/tickets/${state._id}`} />
+      <TicketsMain url={`/clients/tickets/${clientState._id}`} />
     </>
   );
 };

@@ -10,7 +10,6 @@ const Tickets = ({ url }: Props) => {
   const navigate = useNavigate();
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
     if (url) {

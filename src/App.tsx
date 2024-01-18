@@ -50,6 +50,14 @@ function App() {
         );
       }
     });
+  socket
+    .off("adminMessageToAll")
+    .on("adminMessageToAll", ({ sender, content }) => {
+      if (!currentUser.isAdmin) {
+        const message = `${content}   \n --- from ${sender.name}`;
+        alert(message);
+      }
+    });
   return (
     <div className="App">
       <Routespage />

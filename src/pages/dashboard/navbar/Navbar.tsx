@@ -10,6 +10,7 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../../modals/UserModals";
 import { getData, setCookie, statusIndicator } from "../../../utils/utils";
 import { ClientModal } from "../../../modals/ClientModals";
+import "./Navbar.css";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ function Navbar() {
     });
   }, []);
   return (
-    <div>
+    <div className="main-nav">
       <div className="header-nav">
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-around">
           <div className="container-fluid">

@@ -51,7 +51,10 @@ const Routespage = () => {
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           />
-          <Route path="/chat" element={<Chat />} />
+          <Route
+            path="/chat"
+            element={isLoggedin ? <Chat /> : <Navigate to="/" />}
+          />
           <Route
             path="/tickets"
             element={isLoggedin ? <Tickets /> : <Navigate to="/" />}

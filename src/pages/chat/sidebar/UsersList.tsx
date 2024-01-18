@@ -11,6 +11,7 @@ interface UserListProps {
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  searchQuery: string;
 }
 const getRoomId = (id1: string, id2: string) => {
   if (id1 > id2) {
@@ -27,6 +28,7 @@ const UserList = ({
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
+  searchQuery,
 }: UserListProps) => {
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
@@ -34,10 +36,18 @@ const UserList = ({
     setCurrentRoom(RoomId);
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
   };
+  const filteredUsers = users.filter((user) => {
+    const fullName = getFullName(user).toLowerCase();
+    const designation = user.designation.toLowerCase();
+    return (
+      fullName.includes(searchQuery.toLowerCase()) ||
+      designation.includes(searchQuery.toLowerCase())
+    );
+  });
   return (
     <div className="user-list-container">
-      {users.length ? (
-        users.map((user: UserModal) => (
+      {filteredUsers.length ? (
+        filteredUsers.map((user: UserModal) => (
           <div
             key={user._id}
             className="user-main"

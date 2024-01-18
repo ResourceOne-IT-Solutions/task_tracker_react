@@ -367,10 +367,6 @@ const AdminDashboard = () => {
     });
   };
   const handleSocket = () => {
-    // socket.emit("testing", {
-    //   opponentId: currentUser._id,
-    //   sender: getFullName(currentUser),
-    // });
     setModalname("messageModal");
     setModalProps({
       title: "Send Message To All Users",

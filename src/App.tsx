@@ -58,6 +58,9 @@ function App() {
         alert(message);
       }
     });
+  socket.off("error").on("error", (error) => {
+    alert(JSON.stringify(error));
+  });
   return (
     <div className="App">
       <Routespage />

@@ -9,6 +9,10 @@ import Chat from "../pages/chat";
 import Tickets from "../pages/tickets";
 import TicketDescription from "../pages/tickets/TicketDescription";
 import ClientDashboard from "../pages/dashboard/clientDashboard";
+import UserStatsPage from "../pages/dashboard/UserStatsPage";
+import AdminRequestMessages from "../pages/dashboard/AdminRequestMessages";
+import Navbar from "../pages/dashboard/navbar/Navbar";
+import UserTickets from "../pages/tickets/UserTickets";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -30,6 +34,7 @@ const Routespage = () => {
   return (
     <div>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
+        {isLoggedin && <Navbar />}
         <Routes>
           <Route
             path="/"
@@ -46,10 +51,13 @@ const Routespage = () => {
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           />
-          <Route path="/chat" element={<Chat />} />
+          <Route
+            path="/chat"
+            element={isLoggedin ? <Chat /> : <Navigate to="/" />}
+          />
           <Route
             path="/tickets"
-            element={isLoggedin && isAdmin ? <Tickets /> : <Navigate to="/" />}
+            element={isLoggedin ? <Tickets /> : <Navigate to="/" />}
           />
           <Route
             path="/tickets/:id"
@@ -66,6 +74,26 @@ const Routespage = () => {
             element={
               isLoggedin && isAdmin ? <ClientDashboard /> : <Navigate to="/" />
             }
+          />
+          <Route
+            path="/user/:id"
+            element={
+              isLoggedin && isAdmin ? <UserStatsPage /> : <Navigate to="/" />
+            }
+          />
+          <Route
+            path="/dashboard/adminRequestmessages"
+            element={
+              isLoggedin && isAdmin ? (
+                <AdminRequestMessages />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="/userTickets/:id"
+            element={isLoggedin && <UserTickets />}
           />
         </Routes>
       </BrowserRouter>

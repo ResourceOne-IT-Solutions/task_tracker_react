@@ -6,6 +6,7 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   calculateWorkingFrom,
   getData,
+  getFullName,
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
@@ -19,7 +20,8 @@ import { TicketModal } from "../../../modals/TicketModals";
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { setCurrentUser, setIsLoggedIn } = userContext as UserContext;
+  const { setCurrentUser, setIsLoggedIn, socket, currentUser } =
+    userContext as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
@@ -32,17 +34,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "ResolvedTickets", value: 0 },
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
+    { name: "Improper Requirment", value: 0 },
   ]);
-  const [statuses, setStatuses] = useState<Status[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
 
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
@@ -70,6 +63,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         const assigned = result.filter(
           (ticket) => ticket.status === "Assigned",
         ).length;
+        const improperTickets = result.filter(
+          (ticket) => ticket.status === "Improper Requirment",
+        ).length;
 
         setPieChartData([
           { name: "Pending Tickets", value: pendingTickets },
@@ -77,6 +73,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: presentUser.helpedTickets },
           { name: "Assigned Tickets", value: assigned },
+          { name: "Improper Requirment", value: improperTickets },
         ]);
         setCurrentUser((data) => ({
           ...data,
@@ -118,19 +115,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       ),
     );
   };
-  const handleLogoutClick = () => {
-    setCookie("", 0);
-    setCurrentUser({} as UserModal);
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-  const handleSelectStatus = (status: any) => {
-    const x = { ...sendingStatuses, data: { status: status } };
-    setSendingStatuses(x);
-    httpMethods.put<any, any>("/users/update", x).then((result) => {
-      setCurrentUser(result);
-    });
-  };
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
   }, []);
@@ -141,56 +125,49 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       })
       .catch((err) => err);
   }, []);
+  useEffect(() => {
+    setPresentUser(user);
+  }, [user]);
   const handleSelect = (item: any) => {
     setSelected(item);
+  };
+  const handleRequest = (items: TicketModal) => {
+    navigate("/tickets");
+    socket.emit("requestTickets", {
+      client: { id: items.client.id, name: items.client.name },
+      sender: { id: currentUser._id, name: getFullName(currentUser) },
+    });
+  };
+  const handleChatRequest = () => {
+    setShowChatRequestPopup(true);
+  };
+  const handleSubmitRequest = () => {
+    let exactUserid = "";
+    let exactUsername = "";
+    userData.forEach((item: UserModal) => {
+      if (item.firstName == selected) {
+        exactUserid = item._id;
+        exactUsername = item.firstName;
+      }
+    });
+    socket.emit("requestChat", {
+      user: { name: getFullName(currentUser), id: currentUser._id },
+      opponent: { name: exactUsername, id: exactUserid },
+    });
   };
   return (
     <>
       <div className="userdashboard">
-        <div className="user-nav-header">
-          <div>
-            <Dropdown onSelect={handleSelectStatus}>
-              <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                {presentUser.status ? (
-                  <span>
-                    {presentUser.status} {colors[presentUser.status]}
-                  </span>
-                ) : (
-                  "Select a User"
-                )}
-              </Dropdown.Toggle>
-              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {statuses.map((stat, idx) => {
-                  return (
-                    <Dropdown.Item key={idx} eventKey={stat}>
-                      <b>
-                        {colors[stat]} {stat}
-                      </b>
-                    </Dropdown.Item>
-                  );
-                })}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-          <div>
-            <Button variant="danger" onClick={handleLogoutClick}>
-              Logout
-            </Button>
-          </div>
-        </div>
         <p className="username">
-          Welcome to {presentUser.firstName} Dashboard (
+          Welcome to {getFullName(presentUser)} Dashboard (
           {statusIndicator(presentUser.status)})
         </p>
         <div className="usernavbar">
           <div className="nav_img_container">
             <img src={`${presentUser.profileImageUrl}`} />
           </div>
-          <p> {`${presentUser.firstName} ${presentUser.lastName}`} </p>
-          <span
-            className="active_inactive_circle"
-            style={{ backgroundColor: presentUser.isActive ? "green" : "red" }}
-          ></span>
+          <p> {getFullName(presentUser)} </p>
+          <span>{statusIndicator(presentUser.status)}</span>
           <p>({presentUser.userId})</p>
         </div>
         <div className="userdetails">
@@ -246,6 +223,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                   totalTickets={tableData.length}
                 />
               </div>
+              <div>
+                <Button variant="warning">Edit User</Button>
+              </div>
             </div>
             <div className="lastlogindata">
               <ul>
@@ -263,7 +243,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         </div>
       </div>
       <div className="chat-link">
-        <Button onClick={() => setShowChatRequestPopup(true)}>
+        <Button onClick={() => handleChatRequest()}>
           Request User to Chat
         </Button>
         <Modal
@@ -289,9 +269,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                             return (
                               <Dropdown.Item
                                 key={index}
-                                eventKey={item.firstName}
+                                eventKey={getFullName(item)}
                               >
-                                {item.firstName}
+                                {getFullName(item)}
                               </Dropdown.Item>
                             );
                           })
@@ -303,7 +283,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="success">Submit</Button>
+            <Button variant="success" onClick={handleSubmitRequest}>
+              Submit
+            </Button>
             <Button
               variant="secondary"
               onClick={() => setShowChatRequestPopup(false)}
@@ -372,7 +354,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                           </Button>
                         </td>
                         <td>
-                          <Button variant={"dark"}>Request Ticket</Button>
+                          <Button
+                            variant={"dark"}
+                            onClick={() => handleRequest(items)}
+                          >
+                            Request Ticket
+                          </Button>
                         </td>
                       </tr>
                     );

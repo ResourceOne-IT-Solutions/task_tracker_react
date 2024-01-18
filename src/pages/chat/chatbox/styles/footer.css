@@ -8,6 +8,7 @@
 }
 .message-input {
   width: 80%;
+  position: relative;
 }
 .message-input input {
   border-radius: 10px;
@@ -21,4 +22,39 @@
 }
 .send-btn {
   width: 10%;
+  display: flex;
+}
+/* add icon */
+.popup {
+  border: 1px solid #212529;
+  background-color: #eeeeee;
+  position: absolute;
+  width: 130px;
+  bottom: 50px;
+  border-radius: 8px;
+  height: 75px;
+  text-align: center;
+  padding: 5px;
+}
+.popup p:hover {
+  cursor: pointer;
+  background-color: #7d7e80;
+  border-radius: 6px;
+}
+.circle-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #14a95f;
+}
+
+.circle-icon i {
+  transform: rotate(45deg);
+  color: rgb(243, 243, 243);
+}
+.circle-icon i:hover {
+  cursor: pointer;
 }

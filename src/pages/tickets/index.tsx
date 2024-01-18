@@ -3,18 +3,26 @@ import httpMethods from "../../api/Service";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
+import { Props } from "./TicketsMain";
+import "./index.css";
 
-const Tickets = () => {
+const Tickets = ({ url }: Props) => {
   const navigate = useNavigate();
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setLoading(true);
-    httpMethods.get<TicketModal[]>("/tickets").then((tickets) => {
-      setAllTickets(tickets);
-      setLoading(false);
-    });
+    if (url) {
+      httpMethods.get<TicketModal[]>(url).then((tickets) => {
+        setAllTickets(tickets);
+        setLoading(false);
+      });
+    } else {
+      httpMethods.get<TicketModal[]>("/tickets").then((tickets) => {
+        setAllTickets(tickets);
+        setLoading(false);
+      });
+    }
   }, []);
   const handleDescription = (ticket: TicketModal) => {
     navigate(`/tickets/${ticket._id}`, { state: ticket });
@@ -25,12 +33,27 @@ const Tickets = () => {
     { title: "Status", key: "status" },
     { title: "User", key: "user.name" },
     { title: "Technology", key: "technology" },
-    { title: "Receive Date", key: "receivedDate" },
+    { title: "Received Date", key: "receivedDate" },
+    { title: "Closed Date", key: "closedDate" },
+    { title: "Comments", key: "comments" },
     {
-      title: "Helped",
+      title: "TargetDate",
+      key: "targetDate",
+      tdFormat: (ticket) => <p>{ticket?.targetDate}</p>,
+    },
+    {
+      title: "Helped By",
       key: "addOnResource",
       tdFormat: (ticket) => (
-        <>{ticket.addOnResource.map((val) => val.name).join(", ")}</>
+        <p
+          style={{
+            textOverflow: "ellipsis",
+            height: "20px",
+            overflow: "hidden",
+          }}
+        >
+          {ticket.addOnResource.map((val) => val.name).join(", ")}
+        </p>
       ),
     },
     {
@@ -39,14 +62,13 @@ const Tickets = () => {
       tdFormat: (tkt) => (
         <>
           {tkt.description}
-          <p onClick={() => handleDescription(tkt)}>
+          <p onClick={() => handleDescription(tkt)} className="desc-link">
             Click here to see full description
           </p>
         </>
       ),
     },
   ];
-
   return (
     <>
       <h4>

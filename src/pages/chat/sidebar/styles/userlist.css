@@ -1,15 +1,24 @@
 .user-list-container {
   height: 100%;
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 .user-list-container::-webkit-scrollbar {
-  width: 0; /* Set the width of the scrollbar to 0 */
+  height: 12px;
 }
 .user-list-container::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Set the thumb color to transparent */
+  background-color: rgb(180, 174, 174);
+  border-radius: 6px;
+}
+
+.user-list-container::-webkit-scrollbar-track {
+  background-color: #eeeeee;
 }
 .user-main {
   background-color: #eeeeee;
+}
+.user-main:hover {
+  cursor: pointer;
 }
 .user {
   display: flex;
@@ -46,4 +55,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.user-newmsg-count {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color: hsl(139.04deg 100% 40.78%);
 }

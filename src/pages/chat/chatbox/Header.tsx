@@ -1,6 +1,18 @@
 import React from "react";
 import "./styles/header.css";
-const ChatHeader = () => {
+import { UserModal } from "../../../modals/UserModals";
+import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
+import { getFullName, statusIndicator } from "../../../utils/utils";
+
+interface Chatprops {
+  selectedUser: UserModal;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
+}
+
+const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
+  const handleBackHeader = () => {
+    setSelectedUser({} as UserModal);
+  };
   return (
     <div className="header-container">
       <div className="header-navbar">
@@ -12,6 +24,7 @@ const ChatHeader = () => {
             fill="currentColor"
             className="bi bi-arrow-left-circle"
             viewBox="0 0 16 16"
+            onClick={handleBackHeader}
           >
             <path
               fillRule="evenodd"
@@ -19,14 +32,17 @@ const ChatHeader = () => {
             />
           </svg>
         </div>
-        <div className="profile-img">
-          <img
-            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="img"
-          />
-        </div>
-        <div className="header-user-name">Firstname lastname</div>
-        <div className="user-status">status</div>
+        {selectedUser._id && (
+          <>
+            <div className="profile-img">
+              <img src={selectedUser.profileImageUrl} alt="img" />
+            </div>
+            <div className="header-user-name">
+              {getFullName(selectedUser)} &nbsp;{" "}
+              {statusIndicator(selectedUser.status)}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

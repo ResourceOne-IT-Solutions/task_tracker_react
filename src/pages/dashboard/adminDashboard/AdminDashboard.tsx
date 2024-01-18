@@ -5,26 +5,23 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import { Button } from "react-bootstrap";
-import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient from "../../../utils/modal/AddClient";
-import AddTicket from "../../../utils/modal/AddTicket";
 import UpdateUser from "../../../utils/modal/UpdateUser";
 import UpdateClient from "../../../utils/modal/UpdateClient";
-import { getData, setCookie } from "../../../utils/utils";
+import { getData, getFullName, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import AssignTicket from "../../../utils/modal/AssignTicket";
-import { Dropdown } from "react-bootstrap";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
+import TicketsMain from "../../tickets/TicketsMain";
+import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn } =
-    userContext as UserContext;
+  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
@@ -49,23 +46,16 @@ const AdminDashboard = () => {
     { name: "Improper Requirment", value: 0 },
   ]);
 
-  const [statuses, setStatuses] = useState<string[]>([
-    "Offline",
-    "Available",
-    "Busy",
-  ]);
-  const [colors, setColors] = useState<any>({
-    Offline: <RedDot />,
-    Available: <GreenDot />,
-    Busy: <OrangeDot />,
-  });
-
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
   });
 
-  const statusIndicatorStyle = { position: "absolute", top: "0", right: "0" };
+  const statusIndicatorStyle: React.CSSProperties = {
+    position: "absolute",
+    top: "0",
+    right: "0",
+  };
   function updateUserTableData(updatedUser: UserModal) {
     setUsersData((prevTableData) =>
       prevTableData.map((user) =>
@@ -80,7 +70,7 @@ const AdminDashboard = () => {
       ),
     );
   }
-  function UpdateTicketsTableData(updatedTicket: any) {
+  function UpdateTicketsTableData(updatedTicket: TicketModal) {
     setTicketsData((prevTableData) =>
       prevTableData.map((ticket) =>
         ticket.client.id === updatedTicket.client.id ? updatedTicket : ticket,
@@ -139,8 +129,48 @@ const AdminDashboard = () => {
       setShowModal(true);
     }
   };
-  const goToClientDashboard = (client: ClientModal) => {
-    navigate(`/client/:${client._id}`, { state: client });
+  const handleRemove = (user: UserModal | ClientModal, type: string) => {
+    const delete_or_not = window.confirm("Are you Sure to delete");
+    if (delete_or_not) {
+      if (type == "USER") {
+        httpMethods
+          .deleteCall<UserModal>(`/users/${user._id}`)
+          .then((resp: any) => {
+            const filtered_data = usersData.filter(
+              (item) => item._id !== resp._id,
+            );
+            setUsersData(filtered_data);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
+          })
+          .catch((err: any) => {
+            window.alert("An error Occured while deleting");
+          });
+      } else if (type == "CLIENT") {
+        httpMethods
+          .deleteCall<ClientModal>(`/clients/${user._id}`)
+          .then((resp: any) => {
+            const filtered_data = clientsData.filter(
+              (item) => item._id !== resp._id,
+            );
+            setClientsData(filtered_data);
+            window.alert(
+              `${getFullName(resp)} account is deleted Successfully`,
+            );
+          })
+          .catch((err: any) => {
+            window.alert("An error Occured while deleting");
+          });
+      }
+    }
+  };
+  const gotoDashboards = (client: ClientModal | UserModal, type: string) => {
+    if (type == "CLIENT") {
+      navigate(`/client/${client._id}`, { state: client });
+    } else {
+      navigate(`/user/${client._id}`, { state: client });
+    }
   };
   const handleAddResource = (ticket: any) => {
     setModalname("Assign Ticket");
@@ -152,13 +182,16 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
+  const handleUserTickets = (user: any) => {
+    navigate(`/userTickets/${user._id}`);
+  };
   const clientTableHeaders: TableHeaders<ClientModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     {
       title: "Client Name",
       key: "firstName",
       tdFormat: (client) => (
-        <div onClick={() => goToClientDashboard(client)}>
+        <div onClick={() => gotoDashboards(client, "CLIENT")}>
           {client.firstName}
         </div>
       ),
@@ -180,14 +213,24 @@ const AdminDashboard = () => {
           >
             Update
           </Button>
-          <Button variant="danger">Remove</Button>
+          <Button variant="danger" onClick={() => handleRemove(user, "CLIENT")}>
+            Remove
+          </Button>
         </>
       ),
     },
   ];
   const empTableHeaders: TableHeaders<UserModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "User Name", key: "firstName" },
+    {
+      title: "User Name",
+      key: "firstName",
+      tdFormat: (user) => (
+        <div onClick={() => gotoDashboards(user, "USER")}>
+          {getFullName(user)}
+        </div>
+      ),
+    },
     { title: "Email", key: "email" },
     { title: "Mobile", key: "mobile" },
     { title: "Role", key: "designation" },
@@ -203,11 +246,9 @@ const AdminDashboard = () => {
             position: "relative",
           }}
         >
-          {user.isActive ? (
-            <GreenDot styles={statusIndicatorStyle} />
-          ) : (
-            <RedDot styles={statusIndicatorStyle} />
-          )}
+          <span style={statusIndicatorStyle}>
+            {statusIndicator(user.status)}
+          </span>
           <img
             src={user.profileImageUrl}
             alt="image"
@@ -229,7 +270,9 @@ const AdminDashboard = () => {
     {
       title: "Uploaded Issues",
       key: "",
-      tdFormat: (user: { _id: string }) => <Button>Click Here</Button>,
+      tdFormat: (user: { _id: string }) => (
+        <Button onClick={() => handleUserTickets(user)}>Click Here</Button>
+      ),
     },
     {
       title: "Actions",
@@ -243,7 +286,9 @@ const AdminDashboard = () => {
           >
             Update
           </Button>
-          <Button variant="danger">Remove</Button>
+          <Button variant="danger" onClick={() => handleRemove(user, "USER")}>
+            Remove
+          </Button>
         </>
       ),
     },
@@ -271,30 +316,11 @@ const AdminDashboard = () => {
           onClick={() => handleAddResource(ticket)}
           style={{ fontWeight: "700" }}
         >
-          Add Resource
+          {ticket.user.name ? "Add Resource" : "Assign User"}
         </button>
       ),
     },
   ];
-
-  const handleClick = (str: string) => {
-    setModalname(str);
-    setModalProps({
-      title: str == "Client" ? "Create Client" : "Create Ticket",
-      setShowModal: setShowModal,
-      show: !showModal,
-    });
-    setShowModal(true);
-  };
-  const handleLogoutClick = () => {
-    setCookie("", 0);
-    setCurrentUser({} as UserModal);
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-  const handleChatClick = () => {
-    navigate("/chat");
-  };
   useEffect(() => {
     httpMethods.get<TicketModal[]>("/tickets").then((result) => {
       setTicketsData(result);
@@ -340,186 +366,26 @@ const AdminDashboard = () => {
       setCurrentUser(result);
     });
   };
+  const handleAdminBroadCastMessage = () => {
+    setModalname("messageModal");
+    setModalProps({
+      title: "Send Message To All Users",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
   return (
     <div>
-      <div className="header-nav">
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-around">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="#">
-              <b>DASHBOARD</b>
-            </a>
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarSupportedContent"
-              aria-controls="navbarSupportedContent"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div
-              className="collapse navbar-collapse"
-              id="navbarSupportedContent"
-            >
-              <div>
-                <form className="d-flex">
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="primary"
-                      onClick={() => navigate("/admindashboard/adduser")}
-                    >
-                      Create User
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="success"
-                      onClick={() => handleClick("Client")}
-                    >
-                      Create Client
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button
-                      variant="warning"
-                      onClick={() => handleClick("Ticket")}
-                    >
-                      Create Ticket
-                    </Button>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Dropdown onSelect={handleSelectStatus}>
-                      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                        {currentUser.status ? (
-                          <span>
-                            {colors[currentUser.status]} {currentUser.status}
-                          </span>
-                        ) : (
-                          "Select a User"
-                        )}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        style={{ maxHeight: "180px", overflowY: "auto" }}
-                      >
-                        {statuses.map((stat, idx) => {
-                          return (
-                            <Dropdown.Item key={idx} eventKey={stat}>
-                              <b>
-                                {colors[stat]} {stat}
-                              </b>
-                            </Dropdown.Item>
-                          );
-                        })}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </div>
-                  <div className="admin-logout-button">
-                    <Button variant="danger" onClick={handleLogoutClick}>
-                      Logout
-                    </Button>
-                  </div>
-                </form>
-              </div>
-              <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="#">
-                    Home
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Link
-                  </a>
-                </li>
-                <li className="nav-item dropdown">
-                  <a
-                    className="nav-link dropdown-toggle"
-                    href="#"
-                    id="navbarDropdown"
-                    role="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    Dropdown
-                  </a>
-                  <ul
-                    className="dropdown-menu"
-                    aria-labelledby="navbarDropdown"
-                  >
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Another action
-                      </a>
-                    </li>
-                    <li>
-                      <hr className="dropdown-divider" />
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li className="nav-item">
-                  <a
-                    className="nav-link disabled"
-                    href="#"
-                    aria-disabled="true"
-                  >
-                    Disabled
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/tickets">
-                    Tickets
-                  </Link>
-                </li>
-              </ul>
-              <div className="chat-btn">
-                <Button variant="success" onClick={handleChatClick}>
-                  Chat
-                </Button>{" "}
-              </div>
-              <form className="d-flex">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success" type="submit">
-                  Search
-                </button>
-                <div className="admin-logout-button">
-                  <Button variant="danger" onClick={handleLogoutClick}>
-                    Logout
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </nav>
-      </div>
       <div className="admin-pie-chart">
         <div className="admin-details">
           <div className="heading-pic">
             <img src={`${currentUser.profileImageUrl}`} alt="img" />
             <h4>
-              {currentUser.firstName} {" " + currentUser.lastName + " "}
-              <span
-                className="active-not"
-                style={{
-                  backgroundColor: currentUser.isActive ? "#15a757" : "red",
-                }}
-              ></span>{" "}
+              {getFullName(currentUser)}
+              <span className="active-not">
+                {statusIndicator(currentUser.status)}
+              </span>{" "}
               <span>{`(${currentUser.userId})`}</span>
             </h4>
           </div>
@@ -552,6 +418,9 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="admin-btns">
+        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
+          Send Message to All
+        </Button>
         <Button
           variant="info"
           onClick={() =>
@@ -588,16 +457,7 @@ const AdminDashboard = () => {
           loading={loading}
         />
       )}
-      {showModal && modalName == "Client" && (
-        <ReusableModal vals={modalProps}>
-          <AddClient />
-        </ReusableModal>
-      )}
-      {showModal && modalName == "Ticket" && (
-        <ReusableModal vals={modalProps}>
-          <AddTicket clientsData={clientsData} />
-        </ReusableModal>
-      )}
+
       {showModal && modalName == "update_user" && (
         <ReusableModal vals={modalProps}>
           <UpdateUser
@@ -621,6 +481,11 @@ const AdminDashboard = () => {
             usersData={usersData}
             UpdateTicketsTableData={UpdateTicketsTableData}
           />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "messageModal" && (
+        <ReusableModal vals={modalProps}>
+          <MessageAllUsersModal />
         </ReusableModal>
       )}
     </div>

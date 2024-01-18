@@ -30,12 +30,12 @@ ul {
   list-style-type: none;
   text-align: left;
 }
-.active-not {
+/* .active-not {
   display: inline-block;
   border: 1px solid white;
   padding: 8px;
   border-radius: 100%;
-}
+} */
 .admin-btns {
   display: flex;
   justify-content: end;
@@ -58,11 +58,6 @@ th {
 input {
   width: 80%;
 }
-/* logout btn */
-.admin-logout-button {
-  margin: 0px 2px 0px 10px;
-}
-
 .admin-pie-chart {
   display: flex;
 }
@@ -79,6 +74,11 @@ input {
   justify-content: end;
 }
 /* chat-button */
-.chat-btn {
-  margin-right: 8px;
+.nav-item .nav-link:hover {
+  cursor: pointer;
+  color: aliceblue;
+}
+/* nav dropdown */
+.admin-logout-button .drop-down {
+  margin: 0px 4px 0px 4px;
 }

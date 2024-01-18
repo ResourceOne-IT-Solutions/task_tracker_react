@@ -1,0 +1,6 @@
+.desc-link {
+  text-decoration: underline blue;
+}
+.desc-link:hover {
+  color: rgb(7, 252, 7);
+}

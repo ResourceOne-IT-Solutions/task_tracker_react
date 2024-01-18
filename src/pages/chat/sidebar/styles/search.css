@@ -6,8 +6,24 @@
   border: none;
 }
 .search-box {
-  margin: 15px;
+  display: flex;
+  justify-content: space-evenly;
 }
 .search-box input:focus {
   outline: none;
+}
+.font-size-icon {
+  font-size: 24px;
+}
+.chat-back-btn:hover {
+  cursor: pointer;
+}
+@media only screen and (min-width: 2560px) {
+  .font-size-icon {
+    font-size: 39px;
+  }
+  .search-box input {
+    width: 330px;
+    height: 56px;
+  }
 }

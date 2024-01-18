@@ -11,7 +11,6 @@ const Wrapper = () => (
 
 test("renders learn react link", () => {
   render(<Wrapper />);
-  screen.debug();
   const linkElement = screen.getByText(/RESOURCE ONE IT SOLUTIONS/i);
   expect(linkElement).toBeInTheDocument();
 });

@@ -45,7 +45,6 @@ function AssignTicket({
   const handleSelect = (item: any = "") => {
     setSelectedUser(item);
     usersData.map((user) => {
-
       if (getFullName(user) == item) {
         if (updateref.user.name) {
           setSendingAddResourceData({

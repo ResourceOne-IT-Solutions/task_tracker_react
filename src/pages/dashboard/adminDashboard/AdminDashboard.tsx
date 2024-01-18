@@ -366,7 +366,7 @@ const AdminDashboard = () => {
       setCurrentUser(result);
     });
   };
-  const handleSocket = () => {
+  const handleAdminBroadCastMessage = () => {
     setModalname("messageModal");
     setModalProps({
       title: "Send Message To All Users",
@@ -418,7 +418,7 @@ const AdminDashboard = () => {
         </div>
       </div>
       <div className="admin-btns">
-        <Button variant="danger" onClick={handleSocket}>
+        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
           Send Message to All
         </Button>
         <Button

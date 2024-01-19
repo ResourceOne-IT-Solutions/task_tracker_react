@@ -1,10 +1,6 @@
 import { BE_URL, TOKEN } from "../utils/Constants";
 
-async function post<T, R>(
-  path: string,
-  data: T,
-  isFile: boolean = false,
-): Promise<R> {
+async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
   try {
     const headers = {
       Authorization: TOKEN(),

@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 import AuthContext from "./components/Authcontext/AuthContext";
+jest.spyOn(window, "alert").mockImplementation(() => {});
 
 const Wrapper = () => (
   <AuthContext>
@@ -9,7 +10,7 @@ const Wrapper = () => (
   </AuthContext>
 );
 
-test("renders learn react link", () => {
+test("should render welcome page", () => {
   render(<Wrapper />);
   const linkElement = screen.getByText(/RESOURCE ONE IT SOLUTIONS/i);
   expect(linkElement).toBeInTheDocument();

@@ -49,6 +49,11 @@ function App() {
           `${sender.name} assigned ${resource.name} as a resource for your ${ticket.name} ticket`,
         );
       }
+      if (currentUser._id === resource.id) {
+        alert(
+          `${user.name} is needs ur help for the ${ticket.name} ticket, ${sender.name} assigned you as a resource`,
+        );
+      }
     });
   socket
     .off("adminMessageToAll")

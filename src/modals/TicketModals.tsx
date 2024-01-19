@@ -44,6 +44,7 @@ export interface UpdateTicketPayload {
   description: string;
   comments: string;
   status: string;
+  updatedBy: { id: string; name: string };
 }
 
 export interface AddOnResourcePayload {

@@ -76,6 +76,7 @@ function AssignTicket({
     if (!selectedUser) {
       setAssignError("Please Select the User");
       setLoading(false);
+      setAssignSuccess(false);
     } else {
       if (updateref.user.name) {
         httpMethods
@@ -181,14 +182,23 @@ function AssignTicket({
               type="submit"
               onClick={(e) => handleAssignResourse(e)}
             >
-              {loading ? "Assigning" : "Assign Resource"}
+              {loading
+                ? "Assigning"
+                : updateref.user.name
+                  ? "Assign Resource"
+                  : "Assign User"}
             </Button>{" "}
           </Form.Group>
         </Row>
         {assignSuccess ? (
-          <div className="scc-msg">Resource Assigned Successfully</div>
-        ) : null}
-        {assignError && <div className="err-msg">{assignError}</div>}
+          <div className="scc-msg">
+            {updateref.user.name
+              ? "Resource Assigned Successfully"
+              : "User Assigned Successfully"}
+          </div>
+        ) : (
+          <div className="err-msg">{assignError}</div>
+        )}
       </Form>
     </div>
   );

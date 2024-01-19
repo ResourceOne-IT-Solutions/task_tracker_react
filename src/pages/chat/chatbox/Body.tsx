@@ -16,7 +16,6 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
     if (ScrollRef.current) {
       ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
     }
-    console.log("total msg updated", ScrollRef);
   }, [totalMessages]);
 
   socket.off("roomMessages").on("roomMessages", (messages: RoomMessages[]) => {

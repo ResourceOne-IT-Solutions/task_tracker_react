@@ -1,4 +1,5 @@
 import { Socket } from "socket.io-client";
+import { MessageModel } from "./MessageModals";
 
 export interface UserContext {
   isLoggedin: boolean;
@@ -37,23 +38,10 @@ export interface UserModal {
   status: Status;
   newMessages: { [key: string]: string[] };
 }
-export type type = "message" | "application/pdf" | "application/jpeg";
-export interface MessageInputFormat {
-  from: {
-    name: string;
-    id: string;
-  };
-  to: string;
-  content: string;
-  type: type;
-  opponentId: string;
-  time: string;
-  date: string;
-  _id: string;
-}
+export type Type = "message" | "application/pdf" | "image/jpeg";
 
 export interface RoomMessages {
-  messageByDate: MessageInputFormat[];
+  messageByDate: MessageModel[];
   _id: string;
 }
 

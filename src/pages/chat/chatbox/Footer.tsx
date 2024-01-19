@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import "./styles/footer.css";
 import { UserModal } from "../../../modals/UserModals";
 import {
@@ -7,6 +7,8 @@ import {
   getFullName,
 } from "../../../utils/utils";
 import { Socket } from "socket.io-client";
+import httpMethods from "../../../api/Service";
+import { FileModel } from "../../../modals/MessageModals";
 
 interface ChatFooterProps {
   currentUser: UserModal;
@@ -22,8 +24,13 @@ const ChatFooter = ({
 }: ChatFooterProps) => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const sendMessage = (message: string) => {
+  const sendMessage = (
+    message: string,
+    type: string = "message",
+    fileLink = "",
+  ) => {
     const msgdata = {
       from: {
         name: getFullName(currentUser),
@@ -31,15 +38,17 @@ const ChatFooter = ({
       },
       to: currentRoom,
       content: message,
-      type: "message",
+      type,
       opponentId: selectedUser._id,
       time: getFormattedTime("time"),
       date: getFormattedDate(new Date()),
+      fileLink,
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");
     socket.emit("newUser", currentUser._id, selectedUser._id);
   };
+
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       sendMessage(message);
@@ -49,6 +58,29 @@ const ChatFooter = ({
   const togglePopup = () => {
     setPopupOpen(!isPopupOpen);
   };
+  const handleFileClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files && e.target.files[0];
+
+    if (selectedFile) {
+      setMessage(selectedFile.name);
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      httpMethods
+        .post<FormData, FileModel>("/file", formData, true)
+        .then((res) => {
+          setMessage(res.fileName);
+          sendMessage(res.fileName, res.type, res._id);
+        })
+        .catch((err) => err);
+    }
+  };
+
   return (
     <div className="chat-footer-conatiner">
       <div className="add-content">
@@ -66,9 +98,16 @@ const ChatFooter = ({
         </svg>
         {isPopupOpen && (
           <div className="popup">
-            <p>
+            <p onClick={handleFileClick}>
               Files{" "}
               <span>
+                <input
+                  type="file"
+                  accept=".pdf, .jpg"
+                  ref={fileInputRef}
+                  style={{ display: "none" }}
+                  onChange={handleFileSelect}
+                />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"

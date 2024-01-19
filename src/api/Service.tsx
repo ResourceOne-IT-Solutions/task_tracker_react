@@ -1,14 +1,21 @@
 import { BE_URL, TOKEN } from "../utils/Constants";
 
-async function post<T, R>(path: string, data: T): Promise<R> {
+async function post<T, R>(
+  path: string,
+  data: T,
+  isFile: boolean = false,
+): Promise<R> {
   try {
+    const headers = {
+      Authorization: TOKEN(),
+    } as any;
+    if (!isFile) {
+      headers["Content-Type"] = "application/json";
+    }
     const response = await fetch(BE_URL + path, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN(),
-      },
-      body: JSON.stringify(data),
+      headers: headers,
+      body: isFile ? (data as FormData) : JSON.stringify(data),
     });
     const result = await response.json();
     if (response.status > 399) {

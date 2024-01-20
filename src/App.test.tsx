@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 import AuthContext from "./components/Authcontext/AuthContext";
-jest.spyOn(window, "alert").mockImplementation(() => {});
 
 const Wrapper = () => (
   <AuthContext>

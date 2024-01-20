@@ -32,7 +32,7 @@ export const FileComponent = ({
 }) => {
   const [fileUrl, setFileUrl] = useState("");
   useEffect(() => {
-    const getFileFromDb = async (id: string = "") => {
+    const getFileFromDb = async (id = "") => {
       const file = await fileDownload(id);
       const base64 = new Uint8Array(file.data.data);
       const url = URL.createObjectURL(new Blob([base64], { type: file.type }));
@@ -60,7 +60,7 @@ export const FileComponent = ({
 
 const downloadFile = async (
   e: React.MouseEvent,
-  url: string = "",
+  url = "",
   fileName: string,
 ) => {
   e.stopPropagation();

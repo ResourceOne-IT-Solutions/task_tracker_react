@@ -40,6 +40,11 @@ ul {
   display: flex;
   justify-content: end;
   margin: 5px;
+  border: 1px solid grey;
+  width: 39.5%;
+  border-radius: 10px;
+  align-items: center;
+  gap: 7%;
 }
 .admin-btns button {
   color: aliceblue;
@@ -81,4 +86,53 @@ input {
 /* nav dropdown */
 .admin-logout-button .drop-down {
   margin: 0px 4px 0px 4px;
+}
+/* ranges */
+.ranges {
+  display: flex;
+  justify-content: space-between;
+}
+.ranges .sub-ranges {
+  border: 1px solid rgb(185 11 185);
+  width: 59.4%;
+  border-radius: 10px;
+  margin: 4px;
+  /* display: flex;
+  justify-content: space-between; */
+}
+.sub-ranges .main-container {
+  width: 70%;
+  border: 1px solid red;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 6px;
+  border-radius: 10px;
+}
+.ranges .sub-ranges .main-container div p {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid grey;
+  text-align: center;
+  line-height: 100px;
+  margin: 10px;
+}
+.circle {
+  width: 20%;
+}
+.circle b {
+  font-size: x-large;
+  color: green;
+}
+.show-range {
+  width: 60%;
+}
+.show-range label {
+  display: block;
+  font-size: 20px;
+}
+.show-range span {
+  font-size: 25px;
+  color: orange;
 }

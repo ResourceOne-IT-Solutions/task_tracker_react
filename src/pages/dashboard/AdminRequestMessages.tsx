@@ -6,6 +6,7 @@ import {
   ChatRequestInterface,
   TicketRequestInterface,
 } from "../../modals/MessageModals";
+import { getData } from "../../utils/utils";
 
 function AdminRequestMessages() {
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
@@ -17,24 +18,17 @@ function AdminRequestMessages() {
   useEffect(() => {
     setChatLoading(true);
     setTicketLoading(true);
-    httpMethods
-      .get<any>("/message/user-chat-request")
-      .then((res: ChatRequestInterface[]) => {
-        setChatRequests(res);
-        setChatLoading(false);
+    Promise.all([
+      getData<any>("message/user-chat-request"),
+      getData<any>("message/user-ticket-request"),
+    ])
+      .then((results) => {
+        setChatRequests(results[0]);
+        setTicketRequests(results[1]);
       })
-      .catch((errr: string) => {
-        alert(errr);
+      .catch((err) => alert(err))
+      .finally(() => {
         setChatLoading(false);
-      });
-    httpMethods
-      .get<any>("/message/user-ticket-request")
-      .then((res: any) => {
-        setTicketRequests(res);
-        setTicketLoading(false);
-      })
-      .catch((errr) => {
-        alert(errr);
         setTicketLoading(false);
       });
   }, []);

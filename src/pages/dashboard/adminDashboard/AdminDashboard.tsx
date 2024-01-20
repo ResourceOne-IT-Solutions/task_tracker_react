@@ -51,6 +51,13 @@ const AdminDashboard = () => {
     data: { status: "" },
   });
 
+  const [usersStatuses, setUsersStatuses] = useState({
+    totalUsers: 0,
+    availableUsers: 0,
+    busyUsers: 0,
+    offlineUsers: 0,
+  });
+
   const statusIndicatorStyle: React.CSSProperties = {
     position: "absolute",
     top: "0",
@@ -107,6 +114,21 @@ const AdminDashboard = () => {
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
+  useEffect(() => {
+    const total = usersData.length;
+    const available = usersData.filter(
+      (user) => user.status == "Available",
+    ).length;
+    const offline = usersData.filter((user) => user.status == "Offline").length;
+    const busy = usersData.filter((user) => user.status == "Busy").length;
+    setUsersStatuses({
+      totalUsers: total,
+      availableUsers: available,
+      busyUsers: busy,
+      offlineUsers: offline,
+    });
+  }, [usersData]);
+  // console.log(usersData);
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
       setModalname("update_client");
@@ -358,13 +380,6 @@ const AdminDashboard = () => {
       }));
     });
   }, []);
-  const handleSelectStatus = (status: any) => {
-    const x = { ...sendingStatuses, data: { status: status } };
-    setSendingStatuses(x);
-    httpMethods.put<any, any>("/users/update", x).then((result) => {
-      setCurrentUser(result);
-    });
-  };
   const handleAdminBroadCastMessage = () => {
     setModalname("messageModal");
     setModalProps({
@@ -416,21 +431,79 @@ const AdminDashboard = () => {
           />
         </div>
       </div>
-      <div className="admin-btns">
-        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
-          Send Message to All
-        </Button>
-        <Button
-          variant="info"
-          onClick={() =>
-            displayTable(tableName == "users" ? "clients" : "users")
-          }
-        >
-          Show {tableName == "users" ? "clients" : "users"}
-        </Button>
-        <Button variant="secondary" onClick={() => displayTable("tickets")}>
-          Show Tickets
-        </Button>
+      <div className="ranges">
+        <div className="sub-ranges">
+          <div className="main-container">
+            <div className="circle">
+              <p>
+                <b>{usersStatuses.totalUsers}</b> Users
+              </p>
+            </div>
+            <div className="show-range">
+              <div>
+                <label htmlFor="available">
+                  Available{"----"}
+                  <span>
+                    {`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="available"
+                  id="available"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.availableUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="offline">
+                  Offline{"----"}
+                  <span>
+                    {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="offline"
+                  id="offline"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.offlineUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="busy">
+                  Busy{"----"}
+                  <span>
+                    {`${usersStatuses.busyUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="busy"
+                  id="busy"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.busyUsers}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="admin-btns">
+          <Button variant="danger" onClick={handleAdminBroadCastMessage}>
+            Send Message to All
+          </Button>
+          <Button
+            variant="info"
+            onClick={() =>
+              displayTable(tableName == "users" ? "clients" : "users")
+            }
+          >
+            Show {tableName == "users" ? "clients" : "users"}
+          </Button>
+          <Button variant="secondary" onClick={() => displayTable("tickets")}>
+            Show Tickets
+          </Button>
+        </div>
       </div>
       {tableName == "tickets" && (
         <TaskTable<TicketModal>

@@ -97,7 +97,6 @@ const AdminDashboard = () => {
   const displayTable = (name: string) => {
     setTableName(name);
   };
-
   useEffect(() => {
     setTableName("users");
     // getData("users");

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import httpMethods from "../../../api/Service";
 import { FileModel, MessageModel } from "../../../modals/MessageModals";
+import "./styles/utils.css";
 
 const FileRenderer = ({ type, fileUrl }: { type: string; fileUrl: string }) => {
   switch (type) {
@@ -8,7 +9,7 @@ const FileRenderer = ({ type, fileUrl }: { type: string; fileUrl: string }) => {
       return <iframe src={fileUrl} width="100%" title="PDF Viewer"></iframe>;
     }
     case "image/jpeg": {
-      return <img src={fileUrl} width="100%" alt={type} />;
+      return <img src={fileUrl} alt={type} className="img-content" />;
     }
     case "video": {
       return (
@@ -43,16 +44,21 @@ export const FileComponent = ({
   }, []);
   return (
     <div
-      style={{ width: "200px", border: "1px solid #ddd" }}
+      style={{ width: "200px", border: "1px solid #ddd", display: "block" }}
       className={className}
       onClick={(e) => downloadFile(e, fileUrl, file.content)}
     >
-      <div>
+      <div className="img-wrapper">
         {fileUrl && (
-          <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
+          <div>
+            <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
+          </div>
         )}
+        <span className="download-icon">
+          <i className="bi bi-download"></i>
+        </span>
       </div>
-      <span className="content">{file.content}</span>
+      <div className="content">{file.content}</div>
       <p className="time-display">{file.time}</p>
     </div>
   );

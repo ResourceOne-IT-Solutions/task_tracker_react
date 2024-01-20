@@ -26,11 +26,7 @@ const ChatFooter = ({
   const [message, setMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const sendMessage = (
-    message: string,
-    type: string = "message",
-    fileLink = "",
-  ) => {
+  const sendMessage = (message: string, type = "message", fileLink = "") => {
     const msgdata = {
       from: {
         name: getFullName(currentUser),

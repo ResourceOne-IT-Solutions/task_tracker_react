@@ -9,7 +9,7 @@ const Wrapper = () => (
   </AuthContext>
 );
 
-test("renders learn react link", () => {
+test("should render welcome page", () => {
   render(<Wrapper />);
   const linkElement = screen.getByText(/RESOURCE ONE IT SOLUTIONS/i);
   expect(linkElement).toBeInTheDocument();

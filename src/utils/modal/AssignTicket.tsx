@@ -124,7 +124,7 @@ function AssignTicket({
             setTimeout(() => {
               setLoading(false);
               socket.emit("assignTicket", {
-                id: result._id,
+                id: result.user.id,
                 sender: { id: currentUser._id, name: getFullName(currentUser) },
               });
               setSendingAddUserData({

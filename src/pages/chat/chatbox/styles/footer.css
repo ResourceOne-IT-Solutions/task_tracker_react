@@ -14,7 +14,7 @@
   border-radius: 10px;
   background-color: #ebeef3;
   border: 1px solid grey;
-  text-align: center;
+  text-align: left;
 }
 .message-input input:focus {
   border: 1px solid #d0d2d4;

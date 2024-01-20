@@ -49,11 +49,7 @@ function Navbar() {
     navigate("/chat");
   };
   const handleSelectStatus = (status: any) => {
-    const x = { ...sendingStatuses, data: { status: status } };
-    setSendingStatuses(x);
-    httpMethods.put<any, any>("/users/update", x).then((result) => {
-      setCurrentUser(result);
-    });
+    socket.emit("changeStatus", { id: currentUser._id, status });
   };
   const handleLogoutClick = () => {
     setCookie("", 0);

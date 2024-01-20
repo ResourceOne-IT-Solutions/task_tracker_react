@@ -8,6 +8,9 @@ import {
   UpdateTicketProps,
   UpdateTicketPayload,
 } from "../../modals/TicketModals";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
+import { getFullName } from "../utils";
 
 const UpdateTicket: React.FC<UpdateTicketProps> = ({
   show,
@@ -21,6 +24,8 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     comments: "",
     status: "In Progress",
   });
+  const userContext = useUserContext();
+  const { socket, currentUser } = userContext as UserContext;
 
   // Update the form data when the ticketData prop changes
   React.useEffect(() => {
@@ -46,6 +51,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     description: formData.description,
     comments: formData.comments,
     status: formData.status,
+    updatedBy: { id: currentUser._id, name: getFullName(currentUser) },
   };
 
   const handleSaveChanges = () => {

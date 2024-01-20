@@ -11,11 +11,11 @@ import {
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
-import { setCookie } from "../../../utils/utils";
 import { useNavigate } from "react-router";
-import { GreenDot, OrangeDot, RedDot } from "../../../utils/Dots/Dots";
-import { Status, UserContext, UserModal } from "../../../modals/UserModals";
+import { UserContext, UserModal } from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
+import ReusableModal from "../../../utils/modal/ReusableModal";
+import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
@@ -44,6 +44,15 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
   const [userData, setUserData] = useState([]);
   const [selected, setSelected] = useState("");
+  const [admins, setAdmins] = useState<UserModal[]>([]);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalName, setModalname] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [modalProps, setModalProps] = useState({
+    title: "",
+    setShowModal,
+    show: showModal,
+  });
   useEffect(() => {
     setIsLoading(true);
     httpMethods
@@ -154,6 +163,19 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       user: { name: getFullName(currentUser), id: currentUser._id },
       opponent: { name: exactUsername, id: exactUserid },
     });
+  };
+  const handleTicketRaise = () => {
+    if (!currentUser.isAdmin) {
+      const onlyAdmins = userData.filter((user: UserModal) => user.isAdmin);
+      setAdmins(onlyAdmins);
+      setModalname("Ticket Raise");
+      setModalProps({
+        title: "Ticket Raise",
+        setShowModal,
+        show: !showModal,
+      });
+      setShowModal(true);
+    }
   };
   return (
     <>
@@ -308,7 +330,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <th>Closed Date</th>
             <th>Status</th>
             <th>
-              <Button variant="danger">Ticket Raise</Button>
+              <Button variant="danger" onClick={handleTicketRaise}>
+                Ticket Raise
+              </Button>
             </th>
             <th>Request Tickets</th>
           </tr>
@@ -384,6 +408,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         ticketData={showUpdateModal.ticketData}
         updateTableData={updateTableData}
       />
+      {showModal && modalName == "Ticket Raise" && (
+        <ReusableModal vals={modalProps}>
+          <TicketRaiseModal adminsData={admins} />
+        </ReusableModal>
+      )}
     </>
   );
 };

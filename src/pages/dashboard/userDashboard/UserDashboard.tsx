@@ -154,9 +154,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     let exactUserid = "";
     let exactUsername = "";
     userData.forEach((item: UserModal) => {
-      if (item.firstName == selected) {
+      if (getFullName(item) == selected) {
         exactUserid = item._id;
-        exactUsername = item.firstName;
+        exactUsername = getFullName(item);
       }
     });
     socket.emit("requestChat", {

@@ -1,7 +1,6 @@
 import React from "react";
 import "./styles/header.css";
 import { UserModal } from "../../../modals/UserModals";
-import { GreenDot, RedDot } from "../../../utils/Dots/Dots";
 import { getFullName, statusIndicator } from "../../../utils/utils";
 
 interface Chatprops {

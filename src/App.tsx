@@ -26,6 +26,9 @@ function App() {
       alert(`You got a message from ${sender}`);
     }
   });
+  socket.off("statusUpdate").on("statusUpdate", (user) => {
+    setCurrentUser(user);
+  });
   socket.off("ticketAssigned").on("ticketAssigned", (id, sender) => {
     if (currentUser._id === id) {
       alert(`${sender.name} Assigned you A ticket`);

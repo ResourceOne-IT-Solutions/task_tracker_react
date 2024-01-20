@@ -1,0 +1,15 @@
+.img-wrapper {
+  width: 176px;
+  border: 1px solid #000;
+}
+.img-wrapper:hover {
+  cursor: pointer;
+}
+.content {
+  margin-bottom: 10px;
+}
+.img-content {
+  width: 174px;
+  height: 100px;
+  position: relative;
+}

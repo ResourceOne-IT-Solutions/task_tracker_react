@@ -22,11 +22,13 @@ const ChatSideBar = () => {
       } else if (opponentId == currentUser._id) {
         setUsers(opponentPayload);
       } else {
-        const latestData = users.map(user => {
-          user.status = userPayload.find((val: UserModal) => val._id === user._id).status
-          return user
-        })
-        setUsers(latestData)
+        const latestData = users.map((user) => {
+          user.status = userPayload.find(
+            (val: UserModal) => val._id === user._id,
+          ).status;
+          return user;
+        });
+        setUsers(latestData);
       }
     });
   useEffect(() => {

@@ -1,6 +1,7 @@
 interface TicketUserModal {
   name: string;
   id: string;
+  email?: string;
 }
 type Status =
   | "Not Assigned"
@@ -14,6 +15,7 @@ interface Updates {
   comments: string;
   date: string;
   status: Status;
+  updatedBy?: { name: string; id: string };
 }
 
 export interface TicketModal {

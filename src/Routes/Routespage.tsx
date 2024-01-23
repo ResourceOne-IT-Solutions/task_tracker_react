@@ -13,6 +13,7 @@ import UserStatsPage from "../pages/dashboard/UserStatsPage";
 import AdminRequestMessages from "../pages/dashboard/AdminRequestMessages";
 import Navbar from "../pages/dashboard/navbar/Navbar";
 import UserTickets from "../pages/tickets/UserTickets";
+import AdminMessages from "../pages/dashboard/AdminMessages";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -94,6 +95,12 @@ const Routespage = () => {
           <Route
             path="/userTickets/:id"
             element={isLoggedin && <UserTickets />}
+          />
+          <Route
+            path="/dashboard/adminmessages"
+            element={
+              isLoggedin && !isAdmin ? <AdminMessages /> : <Navigate to="/" />
+            }
           />
         </Routes>
       </BrowserRouter>

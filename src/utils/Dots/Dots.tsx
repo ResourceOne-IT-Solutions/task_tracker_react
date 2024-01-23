@@ -51,3 +51,18 @@ export const OrangeDot = ({ title, styles }: Props) => {
     ></span>
   );
 };
+export const BlueDot = ({ title, styles }: Props) => {
+  return (
+    <span
+      title={title}
+      style={{
+        background: "blue",
+        height: "15px",
+        width: "15px",
+        display: "inline-block",
+        borderRadius: "50%",
+        ...styles,
+      }}
+    ></span>
+  );
+};

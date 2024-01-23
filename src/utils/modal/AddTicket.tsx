@@ -9,7 +9,7 @@ import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";
 function AddTicket({ clientsData }: ClientModal | any) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [ticketData, setTicketData] = useState<CreateTicketModal>({
-    client: { name: "", id: "", mobile: "" },
+    client: { name: "", id: "", mobile: "", email: "" },
     user: { name: "", id: "" },
     technology: "",
     description: "",
@@ -26,7 +26,12 @@ function AddTicket({ clientsData }: ClientModal | any) {
       if (val.firstName == item) {
         setTicketData({
           ...ticketData,
-          client: { name: item, id: val._id, mobile: val.mobile },
+          client: {
+            name: item,
+            id: val._id,
+            mobile: val.mobile,
+            email: val.email,
+          },
           technology: val.technology,
         });
       }
@@ -48,7 +53,7 @@ function AddTicket({ clientsData }: ClientModal | any) {
         setTimeout(() => {
           setLoading(false);
           setTicketData({
-            client: { name: "", id: "", mobile: "" },
+            client: { name: "", id: "", mobile: "", email: "" },
             user: { name: "", id: "" },
             technology: "",
             description: "",

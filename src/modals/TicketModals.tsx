@@ -57,7 +57,7 @@ export interface AddOnUserResourcePayload {
 }
 
 export interface CreateTicketModal {
-  client: { name: string; id: string; mobile: string };
+  client: { name: string; id: string; mobile: string; email: string };
   user: { name: string; id: string };
   technology: string;
   description: string;

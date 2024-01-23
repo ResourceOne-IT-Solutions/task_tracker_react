@@ -39,6 +39,16 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
           <p className="time-display">{msz.time}</p>
         </div>
       );
+    } else if (msz.type === "contact") {
+      const contactrender = JSON.parse(msz.fileLink);
+      return (
+        <div className={className}>
+          <div className="contact-render-info">
+            <p>{contactrender.name}</p>
+            <p>{contactrender.mobile}</p>
+          </div>
+        </div>
+      );
     } else {
       return (
         <div onDoubleClick={() => handleDeleteMessage(msz)}>

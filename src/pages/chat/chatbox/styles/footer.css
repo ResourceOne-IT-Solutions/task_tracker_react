@@ -58,3 +58,38 @@
 .circle-icon i:hover {
   cursor: pointer;
 }
+
+.sidebar-contacts {
+  position: absolute;
+  right: 0;
+  top: -468px;
+  width: 250px;
+  height: 469px;
+  background-color: #fff;
+  border: 1px solid #888;
+  overflow-y: auto;
+}
+
+.sidebar-content {
+  padding: 10px;
+}
+
+.close-icon {
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: 10px;
+  display: flex;
+}
+
+.contact-list {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid #888;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: #eeeeee;
+}
+.contact-list:hover {
+  cursor: pointer;
+  background-color: #7d7e80;
+}

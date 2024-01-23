@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/footer.css";
 import { UserModal } from "../../../modals/UserModals";
 import {
@@ -9,6 +9,7 @@ import {
 import { Socket } from "socket.io-client";
 import httpMethods from "../../../api/Service";
 import { FileModel } from "../../../modals/MessageModals";
+import { ClientModal } from "../../../modals/ClientModals";
 
 interface ChatFooterProps {
   currentUser: UserModal;
@@ -25,6 +26,11 @@ const ChatFooter = ({
   const [isPopupOpen, setPopupOpen] = useState(false);
   const [message, setMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [clients, setClients] = useState([]);
+  const toggleSidebar = () => {
+    setSidebarOpen(!isSidebarOpen);
+  };
 
   const sendMessage = (message: string, type = "message", fileLink = "") => {
     const msgdata = {
@@ -77,6 +83,22 @@ const ChatFooter = ({
     }
   };
 
+  const handleContactClick = () => {
+    toggleSidebar();
+  };
+
+  const handleContactListClick = (client: ClientModal) => {
+    sendMessage(
+      client.firstName,
+      "contact",
+      JSON.stringify({ name: client.firstName, mobile: client.mobile }),
+    );
+  };
+  useEffect(() => {
+    httpMethods.get<ClientModal[]>("/clients").then((response: any) => {
+      setClients(response);
+    });
+  }, []);
   return (
     <div className="chat-footer-conatiner">
       <div className="add-content">
@@ -92,6 +114,25 @@ const ChatFooter = ({
           <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
         </svg>
+        {isSidebarOpen && (
+          <div className="sidebar-contacts">
+            <span className="close-icon" onClick={toggleSidebar}>
+              &times;
+            </span>
+            {clients.map((client: ClientModal, index) => {
+              return (
+                <div
+                  key={index}
+                  className="contact-list"
+                  onClick={() => handleContactListClick(client)}
+                >
+                  <p>{client.firstName}</p>
+                  <p>{client.mobile}</p>
+                </div>
+              );
+            })}
+          </div>
+        )}
         {isPopupOpen && (
           <div className="popup">
             <p onClick={handleFileClick}>
@@ -116,7 +157,7 @@ const ChatFooter = ({
                 </svg>
               </span>
             </p>
-            <p>
+            <p onClick={handleContactClick}>
               Contacts{" "}
               <span>
                 <svg

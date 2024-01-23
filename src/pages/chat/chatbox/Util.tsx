@@ -35,12 +35,19 @@ export const FileComponent = ({
   useEffect(() => {
     const getFileFromDb = async (id = "") => {
       const file = await fileDownload(id);
-      const base64 = new Uint8Array(file.data.data);
-      const url = URL.createObjectURL(new Blob([base64], { type: file.type }));
-      setFileUrl(url);
-      return url;
+      if (file) {
+        const base64 = new Uint8Array(file.data.data);
+        const url = URL.createObjectURL(
+          new Blob([base64], { type: file.type }),
+        );
+        setFileUrl(url);
+        return url;
+      }
+      return "";
     };
-    getFileFromDb(file.fileLink);
+    if (file.fileLink) {
+      getFileFromDb(file.fileLink);
+    }
   }, []);
   return (
     <div

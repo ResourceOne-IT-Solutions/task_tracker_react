@@ -137,7 +137,7 @@ const ChatFooter = ({
       <div className="message-input">
         <input
           type="text"
-          placeholder="message"
+          placeholder="Enter your message here"
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyPress}
           value={message}

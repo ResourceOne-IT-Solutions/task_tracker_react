@@ -12,7 +12,7 @@ export interface UserContext {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
 }
-export type Status = "Available" | "Busy" | "Offline";
+export type Status = "Available" | "Break" | "Offline" | "On Ticket";
 export interface UserModal {
   firstName: string;
   lastName: string;

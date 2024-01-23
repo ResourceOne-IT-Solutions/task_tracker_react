@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Routespage from "./Routes/Routespage";
 import { useUserContext } from "./components/Authcontext/AuthContext";
@@ -69,6 +69,27 @@ function App() {
   socket.off("error").on("error", (error) => {
     alert(JSON.stringify(error));
   });
+
+  //  when there is no clicks for 15 minutes status will be changed to Break
+  let inactivityTimer: NodeJS.Timeout | undefined;
+  function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(changeStatus, 15 * 60 * 1000);
+  }
+  function changeStatus() {
+    if (!currentUser.isAdmin && currentUser._id) {
+      socket.emit("changeStatus", { id: currentUser._id, status: "Break" });
+    }
+  }
+  document.addEventListener("click", resetInactivityTimer);
+
+  useEffect(() => {
+    resetInactivityTimer();
+
+    return () => {
+      document.removeEventListener("click", resetInactivityTimer);
+    };
+  }, []);
   return (
     <div className="App">
       <Routespage />

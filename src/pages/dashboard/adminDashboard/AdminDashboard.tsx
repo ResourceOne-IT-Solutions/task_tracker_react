@@ -17,6 +17,7 @@ import { UserContext, UserModal } from "../../../modals/UserModals";
 import { ClientModal } from "../../../modals/ClientModals";
 import TicketsMain from "../../tickets/TicketsMain";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
+import MailSender from "../../../utils/modal/MailSender";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
     show: showModal,
   });
   const [updateReference, setUpdateReference] = useState<
-    UserModal | any | ClientModal
+    UserModal | any | ClientModal | TicketModal
   >({});
   const [pieChartData, setPieChartData] = useState([
     { name: "NotAssigned Tickets", value: 0 },
@@ -54,7 +55,7 @@ const AdminDashboard = () => {
   const [usersStatuses, setUsersStatuses] = useState({
     totalUsers: 0,
     availableUsers: 0,
-    busyUsers: 0,
+    breakUsers: 0,
     offlineUsers: 0,
   });
 
@@ -120,11 +121,13 @@ const AdminDashboard = () => {
       (user) => user.status == "Available",
     ).length;
     const offline = usersData.filter((user) => user.status == "Offline").length;
-    const busy = usersData.filter((user) => user.status == "Busy").length;
+    const breakusers = usersData.filter(
+      (user) => user.status == "Break",
+    ).length;
     setUsersStatuses({
       totalUsers: total,
       availableUsers: available,
-      busyUsers: busy,
+      breakUsers: breakusers,
       offlineUsers: offline,
     });
   }, [usersData]);
@@ -198,6 +201,16 @@ const AdminDashboard = () => {
     setUpdateReference(ticket);
     setModalProps({
       title: "Assign Ticket",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
+  const handleSendEmail = (ticket: any) => {
+    setModalname("Send Mail");
+    setUpdateReference(ticket);
+    setModalProps({
+      title: "Send Mail",
       setShowModal: setShowModal,
       show: !showModal,
     });
@@ -332,13 +345,22 @@ const AdminDashboard = () => {
       title: "Assign Ticket",
       key: "",
       tdFormat: (ticket: any) => (
-        <button
-          className="btn btn-info"
-          onClick={() => handleAddResource(ticket)}
-          style={{ fontWeight: "700" }}
-        >
-          {ticket.user.name ? "Add Resource" : "Assign User"}
-        </button>
+        <div>
+          <button
+            className="btn btn-info"
+            onClick={() => handleAddResource(ticket)}
+            style={{ fontWeight: "700" }}
+          >
+            {ticket.user.name ? "Add Resource" : "Assign User"}
+          </button>
+          <button
+            className="btn btn-warning"
+            style={{ fontWeight: "700" }}
+            onClick={() => handleSendEmail(ticket)}
+          >
+            Send Email
+          </button>
+        </div>
       ),
     },
   ];
@@ -471,18 +493,18 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="busy">
-                  Busy{"----"}
+                <label htmlFor="break">
+                  Break{"----"}
                   <span>
-                    {`${usersStatuses.busyUsers}/${usersStatuses.totalUsers}`}
+                    {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
                   </span>
                 </label>
                 <input
                   type="range"
-                  name="busy"
-                  id="busy"
+                  name="break"
+                  id="break"
                   max={usersStatuses.totalUsers}
-                  value={usersStatuses.busyUsers}
+                  value={usersStatuses.breakUsers}
                 />
               </div>
             </div>
@@ -558,6 +580,11 @@ const AdminDashboard = () => {
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
           <MessageAllUsersModal />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "Send Mail" && (
+        <ReusableModal vals={modalProps}>
+          <MailSender updateReference={updateReference} />
         </ReusableModal>
       )}
     </div>

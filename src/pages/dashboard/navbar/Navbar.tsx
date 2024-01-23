@@ -34,7 +34,8 @@ function Navbar() {
   const [statuses, setStatuses] = useState<string[]>([
     "Offline",
     "Available",
-    "Busy",
+    "Break",
+    "On Ticket",
   ]);
   const handleClick = (str: string) => {
     setModalname(str);
@@ -138,6 +139,16 @@ function Navbar() {
                         Tickets
                       </Link>
                     </li>
+                    {isLoggedin && !currentUser.isAdmin && (
+                      <li className="nav-item">
+                        <Link
+                          className="nav-link"
+                          to="/dashboard/adminmessages"
+                        >
+                          Admin Messages
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </form>
               </div>
@@ -151,7 +162,13 @@ function Navbar() {
                 <button className="btn btn-outline-success" type="submit">
                   Search
                 </button>
-                <div className="admin-logout-button">
+                <div
+                  className={
+                    currentUser.isAdmin
+                      ? "admin-logout-button disabledDiv"
+                      : "admin-logout-button"
+                  }
+                >
                   <Dropdown onSelect={handleSelectStatus} className="drop-down">
                     <Dropdown.Toggle variant="secondary" id="dropdown-basic">
                       {currentUser.status ? (

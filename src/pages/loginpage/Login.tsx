@@ -90,7 +90,7 @@ const Login = () => {
         <div className="error">{error}</div>
         <Button
           type="submit"
-          variant="outline-success"
+          variant="success"
           onClick={(e) => handleSubmit(e)}
         >
           {isLoading ? "Loading..." : `${path} Login`}

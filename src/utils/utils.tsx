@@ -1,7 +1,7 @@
 import React from "react";
 import httpMethods from "../api/Service";
 import { Status } from "../modals/UserModals";
-import { GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
+import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
 
 export function calculateWorkingFrom(joinDate: any) {
   const currentDate = new Date();
@@ -27,9 +27,9 @@ export function calculateWorkingFrom(joinDate: any) {
     days: remainingDaysAfterMonths,
   };
 }
-export const setCookie = (cvalue: string, exdays: number) => {
+export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  d.setTime(d.getTime() + hours * 60 * 60 * 1000);
   const expires = "expires=" + d.toUTCString();
   document.cookie =
     "presentTaskUser" + "=" + cvalue + ";" + expires + ";path=/";
@@ -50,7 +50,7 @@ export const cookieComp = (): string => {
     if (user) {
       return user;
     } else {
-      setCookie("", 2);
+      setCookie("", 8);
       return "";
     }
   };
@@ -64,8 +64,10 @@ export function getData<T>(url: string): Promise<T[]> {
 export const statusIndicator = (status: Status) => {
   if (status === "Available") {
     return <GreenDot />;
-  } else if (status === "Busy") {
+  } else if (status === "Break") {
     return <OrangeDot />;
+  } else if (status === "On Ticket") {
+    return <BlueDot />;
   } else {
     return <RedDot />;
   }

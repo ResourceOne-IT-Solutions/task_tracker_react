@@ -18,6 +18,16 @@ export interface TicketRequestInterface {
   __v: number;
   _id: string;
 }
+export interface MessageRequestInterface {
+  content: string;
+  date: string;
+  deliveredTo: [];
+  sender: { name: string; id: string };
+  time: string;
+  viewedBy: [];
+  __v: number;
+  _id: string;
+}
 
 export interface FileModel {
   fileName: string;

@@ -36,3 +36,7 @@
   font-size: 12px;
   color: #888;
 }
+.contact-render-info {
+  display: flex;
+  justify-content: space-around;
+}

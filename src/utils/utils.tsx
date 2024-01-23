@@ -87,7 +87,7 @@ export const getFullName = (user: FullNameType) => {
   return "Invalid name";
 };
 export type DateType = "date" | "time";
-export const getFormattedTime = (type: DateType) => {
+export const getFormattedTime = (type?: DateType) => {
   const d = new Date().toLocaleString().split(" ");
   const t = d[1].slice(0, -3);
   const time = t + " " + d[2];

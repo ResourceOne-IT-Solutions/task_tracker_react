@@ -6,9 +6,18 @@ import {
   ChatRequestInterface,
   TicketRequestInterface,
 } from "../../modals/MessageModals";
-import { getData } from "../../utils/utils";
+import {
+  getData,
+  getFormattedDate,
+  getFormattedTime,
+  getFullName,
+} from "../../utils/utils";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
 
 function AdminRequestMessages() {
+  const userContext = useUserContext();
+  const { socket, currentUser } = userContext as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
@@ -32,6 +41,42 @@ function AdminRequestMessages() {
         setTicketLoading(false);
       });
   }, []);
+  socket
+    .off("userRequestApproved")
+    .on("userRequestApproved", ({ result, type }) => {
+      if (type === "CHAT") {
+        const latestData = chatRequests.map((msz) => {
+          if (msz._id === result._id) {
+            return result;
+          }
+          return msz;
+        });
+        setChatRequests(latestData);
+      }
+      if (type === "TICKET") {
+        const LatestTicketData = ticketRequests.map((msz) => {
+          if (msz._id === result._id) {
+            return result;
+          }
+          return msz;
+        });
+        setTicketRequests(LatestTicketData);
+      }
+    });
+  const handleRequestClick = (data: any, type: any) => {
+    const payload = {
+      user: {
+        name: getFullName(currentUser),
+        id: currentUser._id,
+        time: getFormattedTime(),
+        date: getFormattedDate(new Date()),
+      },
+      requestId: data._id,
+      type,
+      status: false,
+    };
+    socket.emit("approveUserRequest", payload);
+  };
   return (
     <div>
       <h1>Admin Request Messages</h1>
@@ -50,7 +95,12 @@ function AdminRequestMessages() {
                   </p>
                   <p>
                     {chat.isPending ? (
-                      <Button variant="success">Give Access</Button>
+                      <Button
+                        variant="success"
+                        onClick={() => handleRequestClick(chat, "CHAT")}
+                      >
+                        Give Access
+                      </Button>
                     ) : (
                       "Resolved"
                     )}
@@ -74,7 +124,12 @@ function AdminRequestMessages() {
                   </p>
                   <p>
                     {ticket.isPending ? (
-                      <Button variant="success">Give Access</Button>
+                      <Button
+                        variant="success"
+                        onClick={() => handleRequestClick(ticket, "TICKET")}
+                      >
+                        Give Access
+                      </Button>
                     ) : (
                       "Resolved"
                     )}

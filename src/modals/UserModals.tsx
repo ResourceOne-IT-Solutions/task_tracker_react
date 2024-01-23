@@ -38,7 +38,7 @@ export interface UserModal {
   status: Status;
   newMessages: { [key: string]: string[] };
 }
-export type Type = "message" | "application/pdf" | "image/jpeg";
+export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 
 export interface RoomMessages {
   messageByDate: MessageModel[];

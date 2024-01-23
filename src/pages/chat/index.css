@@ -41,6 +41,7 @@
 .chat-footer {
   background-color: #027c68;
   height: 8%;
+  position: relative;
 }
 
 @media only screen and (min-width: 2560px) {

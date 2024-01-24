@@ -52,7 +52,7 @@ const Tickets = ({ url }: Props) => {
     {
       title: "TargetDate",
       key: "targetDate",
-      tdFormat: (ticket) => <p>{ticket?.targetDate}</p>,
+      tdFormat: (ticket) => <p>{ticket?.targetDate?.toLocaleString()}</p>,
     },
     {
       title: "Helped By",

@@ -351,7 +351,7 @@ const AdminDashboard = () => {
             onClick={() => handleAddResource(ticket)}
             style={{ fontWeight: "700" }}
           >
-            {ticket.user.name ? "Add Resource" : "Assign User"}
+            {ticket.user.name ? "urce" : "Assign User"}
           </button>
           <button
             className="btn btn-warning"

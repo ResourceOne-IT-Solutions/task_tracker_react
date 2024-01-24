@@ -60,33 +60,6 @@ const Groups = () => {
           />
         </ReusableModal>
       )}
-      {/* {isDropdownOpen && (
-        <div className="custom-dropdown">
-          <Button type="button" className="btn btn-success"onClick={handleCreateGroup}>create group</Button>
-          {users.map((user) => {
-            return (
-              <label key={user._id} className="user-render">
-               <div> {getFullName(user)}</div>
-                <input
-                  type="checkbox"
-                  value={user._id}
-                  checked={selectedOptions.includes(user._id)}
-                  onChange={(e) => {
-                    const selectedId = e.target.value;
-                    setSelectedOptions((prevOptions) => {
-                      if (prevOptions.includes(selectedId)) {
-                        return prevOptions.filter((id) => id !== selectedId);
-                      } else {
-                        return [...prevOptions, selectedId];
-                      }
-                    });
-                  }}
-                />
-              </label>
-            );
-          })}
-        </div>
-      )} */}
       <div className="group-main">
         {totalGroups.length ? (
           <>

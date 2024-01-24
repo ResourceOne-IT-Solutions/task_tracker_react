@@ -4,14 +4,14 @@ import { TicketModal } from "../../modals/TicketModals";
 import httpMethods from "../../api/Service";
 
 interface EmailInterface {
-  to: string;
+  to: string | undefined;
   content: string;
 }
 function MailSender({ updateReference }: any) {
   const [selectedTicket, setSelectedTicket] =
     useState<TicketModal>(updateReference);
   const [emailData, setEmailData] = useState<EmailInterface>({
-    to: "it@it-sys.co",
+    to: selectedTicket.client.email,
     content: `Task Update:\n${selectedTicket.client.name},\n\n${selectedTicket.description}\n\nRegards,\nSupport Team.`,
   });
   const [sending, setSending] = useState<boolean>(false);
@@ -45,6 +45,7 @@ function MailSender({ updateReference }: any) {
               placeholder="Enter Email"
               name="to"
               value={emailData.to}
+              disabled
             />
           </Form.Group>
         </Row>

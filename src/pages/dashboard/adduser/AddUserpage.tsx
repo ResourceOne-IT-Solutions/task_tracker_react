@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./AddUserpage.css";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +21,7 @@ function AddUserpage() {
     designation: "",
     profileImageUrl: null,
     address: "",
+    gender: "",
   });
   const {
     firstName,
@@ -34,6 +35,7 @@ function AddUserpage() {
     designation,
     profileImageUrl,
     address,
+    gender,
   } = userData;
 
   const [createdData, setCreatedData] = useState<UserModal | null>(null);
@@ -42,6 +44,7 @@ function AddUserpage() {
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
+  const [genders, setGenders] = useState(["MALE", "FEMALE", "NOT SPECIFIED"]);
   const handleChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -93,6 +96,7 @@ function AddUserpage() {
             designation: "",
             profileImageUrl: null,
             address: "",
+            gender: "",
           });
           //image field is not getting empty we are reseting the form
           formRef.current.reset();
@@ -104,6 +108,9 @@ function AddUserpage() {
         setLoading(false);
         setUserError(e.message);
       });
+  };
+  const handleSelect = (item: any) => {
+    setUserData({ ...userData, gender: item });
   };
   return (
     <div>
@@ -210,6 +217,22 @@ function AddUserpage() {
               checked={isAdmin == false}
               onChange={handleChange}
             />
+          </Form.Group>
+          <Form.Group as={Col} md="3">
+            <Dropdown onSelect={handleSelect}>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                {gender ? gender : "Select Gender"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {genders.map((item: string, index: any) => {
+                  return (
+                    <Dropdown.Item key={index} eventKey={item}>
+                      {item}
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
           </Form.Group>
         </Row>
         <Row className="mb-3">

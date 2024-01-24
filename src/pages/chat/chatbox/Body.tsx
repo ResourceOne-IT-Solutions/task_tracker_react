@@ -64,7 +64,14 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
         <div key={daymessages._id}>
           <h3>{daymessages._id}</h3>
           {daymessages.messageByDate.map((message: MessageModel) => (
-            <div key={message._id}>
+            <div
+              key={message._id}
+              className={
+                currentUser._id !== message.from.id
+                  ? "main-left-container"
+                  : "main-right-container"
+              }
+            >
               {message.type === "message" ? (
                 <div
                   className={
@@ -73,7 +80,7 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
                       : "message-right"
                   }
                 >
-                  {message.content}
+                  <div className="message-display">{message.content}</div>
                   <p className="time-display">{message.time}</p>
                 </div>
               ) : (

@@ -53,3 +53,35 @@
   justify-content: center;
   align-items: center;
 }
+
+.create-group {
+  position: sticky;
+  background-color: #f0e1e1;
+  top: 0;
+}
+.create-group:hover {
+  cursor: pointer;
+}
+.custom-dropdown {
+  position: absolute;
+  left: 30%;
+  top: 20%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 100;
+  width: 200px;
+  max-height: 70%;
+  overflow: scroll;
+}
+
+.user-render {
+  border: 1px solid #000;
+  background-color: #eeeeee;
+  border-radius: 10px;
+  width: 100%;
+  margin: 2px;
+}
+.user-render:hover {
+  cursor: pointer;
+}

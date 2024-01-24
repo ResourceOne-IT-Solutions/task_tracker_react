@@ -97,7 +97,9 @@ const AdminDashboard = () => {
         setClientsData(results[1]);
         setTicketsData(results[2]);
       })
-      .catch((err) => err)
+      .catch((err) => {
+        alert(err);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -440,8 +442,8 @@ const AdminDashboard = () => {
                 <li>Mobile : {currentUser.mobile}</li>
                 <li>Email : {currentUser.email}</li>
                 <li>Designation : {currentUser.designation}</li>
-                <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
-                <li>Address : {currentUser.address}</li>
+                {/* <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
+                <li>Address : {currentUser.address}</li> */}
               </ul>
             </div>
           </div>

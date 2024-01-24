@@ -64,4 +64,5 @@ export interface CreateUserPayload {
   profileImageUrl: string | null;
   userId?: string;
   address: string;
+  gender:string;
 }

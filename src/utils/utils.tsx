@@ -27,9 +27,9 @@ export function calculateWorkingFrom(joinDate: any) {
     days: remainingDaysAfterMonths,
   };
 }
-export const setCookie = (cvalue: string, hours: number) => {
+export const setCookie = (cvalue: string) => {
   const d = new Date();
-  d.setTime(d.getTime() + hours * 60 * 60000);
+  d.setTime(d.getTime() + 8 * 60 * 60000);
   const expires = "expires=" + d.toUTCString();
   document.cookie =
     "presentTaskUser" + "=" + cvalue + ";" + expires + ";path=/";
@@ -50,7 +50,7 @@ export const cookieComp = (): string => {
     if (user) {
       return user;
     } else {
-      setCookie("", 8);
+      setCookie("");
       return "";
     }
   };

@@ -1,10 +1,10 @@
-import { Type } from "./UserModals";
+import { NameIdInterface, Type } from "./UserModals";
 
 export interface ChatRequestInterface {
   date: string;
   isPending: boolean;
-  opponent: { name: string; id: string };
-  sender: { name: string; id: string };
+  opponent: NameIdInterface;
+  sender: NameIdInterface;
   time: string;
   __v: number;
   _id: string;
@@ -12,8 +12,8 @@ export interface ChatRequestInterface {
 export interface TicketRequestInterface {
   date: string;
   isPending: boolean;
-  client: { name: string; id: string };
-  sender: { name: string; id: string };
+  client: NameIdInterface;
+  sender: NameIdInterface;
   time: string;
   __v: number;
   _id: string;
@@ -22,7 +22,7 @@ export interface MessageRequestInterface {
   content: string;
   date: string;
   deliveredTo: [];
-  sender: { name: string; id: string };
+  sender: NameIdInterface;
   time: string;
   viewedBy: [];
   __v: number;

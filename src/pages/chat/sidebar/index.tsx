@@ -40,7 +40,13 @@ const ChatSideBar = () => {
         <Search onSearch={handleSearch} />
       </div>
       <div className="users-group">
-        <Groups />
+        <Groups
+          socket={socket}
+          currentUser={currentUser}
+          setSelectedUser={setSelectedUser}
+          currentRoom={currentRoom}
+          setCurrentRoom={setCurrentRoom}
+        />
       </div>
       <div className="users-list">
         <UserList

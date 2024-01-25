@@ -33,6 +33,11 @@ const ChatFooter = ({
   };
 
   const sendMessage = (message: string, type = "message", fileLink = "") => {
+    let isGroup = false;
+    if (!selectedUser.firstName) {
+      isGroup = true;
+    }
+
     const msgdata = {
       from: {
         name: getFullName(currentUser),
@@ -45,6 +50,7 @@ const ChatFooter = ({
       time: getFormattedTime("time"),
       date: getFormattedDate(new Date()),
       fileLink,
+      isGroup,
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");

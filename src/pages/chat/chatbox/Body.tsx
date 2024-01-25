@@ -18,6 +18,13 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
     }
   }, [totalMessages]);
 
+  const mszAuthor = (msz: MessageModel) => {
+    if (currentUser._id === msz.from.id) {
+      return "You";
+    }
+    return msz.from.name;
+  };
+
   socket.off("roomMessages").on("roomMessages", (messages: RoomMessages[]) => {
     setTotalMessages(messages);
   });
@@ -43,6 +50,7 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
       const contactrender = JSON.parse(msz.fileLink);
       return (
         <div className={className}>
+          <div className="message-sender fw-semibold">{mszAuthor(msz)} : </div>
           <div className="contact-render-info">
             <p>{contactrender.name}</p>
             <p>{contactrender.mobile}</p>
@@ -52,7 +60,11 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
     } else {
       return (
         <div onDoubleClick={() => handleDeleteMessage(msz)}>
-          <FileComponent file={msz} className={className} />
+          <FileComponent
+            file={msz}
+            className={className}
+            author={mszAuthor(msz)}
+          />
         </div>
       );
     }
@@ -80,6 +92,9 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
                       : "message-right"
                   }
                 >
+                  <div className="message-sender fw-semibold">
+                    {mszAuthor(message)} :{" "}
+                  </div>
                   <div className="message-display">{message.content}</div>
                   <p className="time-display">{message.time}</p>
                 </div>

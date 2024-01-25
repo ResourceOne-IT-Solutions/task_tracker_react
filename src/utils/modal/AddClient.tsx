@@ -5,8 +5,11 @@ import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
 import httpMethods from "../../api/Service";
 import { ClientModal, CreateClientModal } from "../../modals/ClientModals";
+interface prop {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-function AddClient() {
+function AddClient({ setShowModal }: prop) {
   const [clientData, setClientData] = useState<CreateClientModal>({
     firstName: "",
     email: "",
@@ -55,6 +58,9 @@ function AddClient() {
             companyName: "",
             applicationType: "",
           });
+          setTimeout(() => {
+            setShowModal(false);
+          }, 1000);
         }, 2000);
       })
       .catch((e: any) => {

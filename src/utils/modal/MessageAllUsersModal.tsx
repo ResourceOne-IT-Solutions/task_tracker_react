@@ -3,7 +3,10 @@ import { Form, Col, Row, Button } from "react-bootstrap";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
 import { getFormattedDate, getFormattedTime } from "../utils";
-function MessageAllUsersModal() {
+interface ShowModalpopup {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+function MessageAllUsersModal({ setShowModal }: ShowModalpopup) {
   const userContext = useUserContext();
   const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [message, setMessage] = useState<string>("");
@@ -24,6 +27,9 @@ function MessageAllUsersModal() {
         date: getFormattedDate(new Date()),
       });
       setmsgSuccess(true);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 1000);
       setMessage("");
     } else {
       setmsgSuccess(false);

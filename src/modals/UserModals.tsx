@@ -13,6 +13,8 @@ export interface UserContext {
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
 }
 export type Status = "Available" | "Break" | "Offline" | "On Ticket";
+
+export type Members = [{ name: string; id: string }];
 export interface UserModal {
   firstName: string;
   lastName: string;
@@ -37,7 +39,7 @@ export interface UserModal {
   _id: string;
   status: Status;
   newMessages: { [key: string]: string[] };
-  members: [{ name: string; id: string }];
+  members: Members;
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 

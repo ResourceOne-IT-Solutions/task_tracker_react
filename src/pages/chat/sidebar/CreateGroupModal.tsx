@@ -10,11 +10,15 @@ import { GroupInterface } from "./Groups";
 interface CreateGroupProps {
   onCreateGroup: (group: GroupInterface) => void;
 }
+interface NameIdInterface {
+  name: string;
+  id: string;
+}
 interface CreateGroupModel {
   name: string;
-  members: { name: string; id: string }[];
+  members:  NameIdInterface[];
   description: string;
-  admin: { name: string; id: string };
+  admin: NameIdInterface;
 }
 
 const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
@@ -54,7 +58,7 @@ const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
     });
   }, []);
   const handleCreateClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
     const groupMembers: { name: string; id: string }[] = [];

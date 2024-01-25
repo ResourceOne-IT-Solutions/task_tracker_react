@@ -9,8 +9,7 @@ import {
 import { Socket } from "socket.io-client";
 import httpMethods from "../../../api/Service";
 import { FileModel } from "../../../modals/MessageModals";
-import { ClientModal } from "../../../modals/ClientModals";
-import { GroupInterface } from "../sidebar/Groups";
+import { ClientModal } from "../../../modals/ClientModals"; 
 
 interface ChatFooterProps {
   currentUser: UserModal;

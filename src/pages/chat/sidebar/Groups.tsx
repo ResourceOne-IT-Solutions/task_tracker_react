@@ -6,8 +6,7 @@ import { getFullName } from "../../../utils/utils";
 import { Button } from "react-bootstrap";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
-import { Socket } from "socket.io-client";
-import { error } from "console";
+import { Socket } from "socket.io-client"; 
 
 export interface GroupInterface {
   name: string;

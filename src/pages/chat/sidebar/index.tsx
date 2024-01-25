@@ -16,7 +16,7 @@ const ChatSideBar = () => {
   };
   socket
     .off("newUser")
-    .on("newUser", (userPayload, userId, opponentPayload, opponentId) => {
+    .on("newUser", ({ userPayload, userId, opponentPayload, opponentId}) => {
       if (userId == currentUser._id) {
         setUsers(userPayload);
       } else if (opponentId == currentUser._id) {

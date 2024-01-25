@@ -32,7 +32,7 @@ const ChatSideBar = () => {
       }
     });
   useEffect(() => {
-    socket.emit("newUser", currentUser._id);
+    socket.emit("newUser", {userId: currentUser._id});
   }, []);
   return (
     <div className="sidebar">

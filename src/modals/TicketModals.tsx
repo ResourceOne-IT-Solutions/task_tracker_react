@@ -1,3 +1,5 @@
+import { NameIdInterface } from "./UserModals";
+
 interface TicketUserModal {
   name: string;
   id: string;
@@ -15,7 +17,7 @@ interface Updates {
   comments: string;
   date: string;
   status: Status;
-  updatedBy?: { name: string; id: string };
+  updatedBy?: NameIdInterface;
 }
 
 export interface TicketModal {
@@ -51,16 +53,16 @@ export interface UpdateTicketPayload {
 
 export interface AddOnResourcePayload {
   id: string;
-  data: { addOnResource: { name: string; id: string } };
+  data: { addOnResource: NameIdInterface };
 }
 export interface AddOnUserResourcePayload {
   id: string;
-  data: { user: { name: string; id: string }; status: string };
+  data: { user: NameIdInterface; status: string };
 }
 
 export interface CreateTicketModal {
   client: { name: string; id: string; mobile: string; email: string };
-  user: { name: string; id: string };
+  user: NameIdInterface;
   technology: string;
   description: string;
   targetDate: string;

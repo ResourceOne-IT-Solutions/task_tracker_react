@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import "./styles/group.css";
 import httpMethods from "../../../api/Service";
-import { UserModal } from "../../../modals/UserModals";
+import { NameIdInterface, UserModal } from "../../../modals/UserModals";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
 import { Socket } from "socket.io-client";
 
 export interface GroupInterface {
   name: string;
-  members: { name: string; id: string }[];
+  members: NameIdInterface[];
   description: string;
   time: string;
   date: string;
   _id: string;
-  admin: { name: string; id: string };
+  admin: NameIdInterface;
 }
 
 interface GroupChatProps {

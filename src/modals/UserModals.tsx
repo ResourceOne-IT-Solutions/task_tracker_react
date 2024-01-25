@@ -14,7 +14,10 @@ export interface UserContext {
 }
 export type Status = "Available" | "Break" | "Offline" | "On Ticket";
 
-export type Members = [{ name: string; id: string }];
+export interface NameIdInterface {
+  name: string;
+  id: string;
+}
 export interface UserModal {
   firstName: string;
   lastName: string;
@@ -39,7 +42,7 @@ export interface UserModal {
   _id: string;
   status: Status;
   newMessages: { [key: string]: string[] };
-  members: Members;
+  members: NameIdInterface;
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 

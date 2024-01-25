@@ -133,7 +133,7 @@ const AdminDashboard = () => {
       offlineUsers: offline,
     });
   }, [usersData]);
-  // console.log(usersData);
+
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
       setModalname("update_client");
@@ -353,7 +353,7 @@ const AdminDashboard = () => {
             onClick={() => handleAddResource(ticket)}
             style={{ fontWeight: "700" }}
           >
-            {ticket.user.name ? "urce" : "Assign User"}
+            {ticket.user.name ? "Assign Resource" : "Assign User"}
           </button>
           <button
             className="btn btn-warning"
@@ -559,6 +559,7 @@ const AdminDashboard = () => {
           <UpdateUser
             updateref={updateReference}
             updateUserTableData={updateUserTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
@@ -567,6 +568,7 @@ const AdminDashboard = () => {
           <UpdateClient
             updateref={updateReference}
             updateClientTableData={updateClientTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
@@ -576,17 +578,21 @@ const AdminDashboard = () => {
             updateref={updateReference}
             usersData={usersData}
             UpdateTicketsTableData={UpdateTicketsTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
-          <MessageAllUsersModal />
+          <MessageAllUsersModal setShowModal={setShowModal} />
         </ReusableModal>
       )}
       {showModal && modalName == "Send Mail" && (
         <ReusableModal vals={modalProps}>
-          <MailSender updateReference={updateReference} />
+          <MailSender
+            updateReference={updateReference}
+            setShowModal={setShowModal}
+          />
         </ReusableModal>
       )}
     </div>

@@ -159,7 +159,7 @@ function Navbar() {
                   placeholder="Search"
                   aria-label="Search"
                 />
-                <button className="btn btn-outline-success" type="submit">
+                <button className="btn btn-success" disabled={true}>
                   Search
                 </button>
                 <div
@@ -207,12 +207,12 @@ function Navbar() {
       </div>
       {showModal && modalName == "Client" && (
         <ReusableModal vals={modalProps}>
-          <AddClient />
+          <AddClient setShowModal={setShowModal} />
         </ReusableModal>
       )}
       {showModal && modalName == "Ticket" && (
         <ReusableModal vals={modalProps}>
-          <AddTicket clientsData={clientsData} />
+          <AddTicket clientsData={clientsData} setShowModal={setShowModal} />
         </ReusableModal>
       )}
     </div>

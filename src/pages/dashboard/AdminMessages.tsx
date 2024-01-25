@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { getData } from "../../utils/utils";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext } from "../../modals/UserModals";
+import { UserContext, UserModal } from "../../modals/UserModals";
 import {
   ChatRequestInterface,
   MessageRequestInterface,
   TicketRequestInterface,
 } from "../../modals/MessageModals";
 import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 function AdminMessages() {
   const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, setSelectedUser } = userContext as UserContext;
+  const navigate = useNavigate();
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
@@ -23,6 +25,13 @@ function AdminMessages() {
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
+
+  const handleApproved = (chat: ChatRequestInterface) => {
+    getData<UserModal>(`users/${chat.opponent.id}`).then((res: any) => {
+      setSelectedUser(res);
+      navigate("/chat");
+    });
+  };
   useEffect(() => {
     setChatLoading(true);
     setTicketLoading(true);
@@ -62,9 +71,16 @@ function AdminMessages() {
                   </p>
                   <p>
                     {chat.isPending ? (
-                      <Button variant="danger">Not Approved</Button>
+                      <Button variant="danger" disabled>
+                        Not Approved
+                      </Button>
                     ) : (
-                      <Button variant="success">Approved</Button>
+                      <Button
+                        variant="success"
+                        onClick={() => handleApproved(chat)}
+                      >
+                        Approved
+                      </Button>
                     )}
                   </p>
                 </div>
@@ -86,7 +102,9 @@ function AdminMessages() {
                   </p>
                   <p>
                     {ticket.isPending ? (
-                      <Button variant="danger">Not Approved</Button>
+                      <Button variant="danger" disabled>
+                        Not Approved
+                      </Button>
                     ) : (
                       <Button variant="success">Approved</Button>
                     )}

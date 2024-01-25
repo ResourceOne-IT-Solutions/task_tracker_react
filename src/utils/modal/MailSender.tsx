@@ -7,7 +7,7 @@ interface EmailInterface {
   to: string | undefined;
   content: string;
 }
-function MailSender({ updateReference }: any) {
+function MailSender({ updateReference, setShowModal }: any) {
   const [selectedTicket, setSelectedTicket] =
     useState<TicketModal>(updateReference);
   const [emailData, setEmailData] = useState<EmailInterface>({
@@ -30,6 +30,9 @@ function MailSender({ updateReference }: any) {
       .then((dt: any) => {
         setSccMsg(dt.message);
         setSending(false);
+        setTimeout(() => {
+          setShowModal(false);
+        }, 1000);
       })
       .catch((err) => {
         setSending(false);

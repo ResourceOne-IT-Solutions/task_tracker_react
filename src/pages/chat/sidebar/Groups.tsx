@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./styles/group.css";
 import httpMethods from "../../../api/Service";
-import { UserModal } from "../../../modals/UserModals"; 
+import { UserModal } from "../../../modals/UserModals";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
-import { Socket } from "socket.io-client"; 
+import { Socket } from "socket.io-client";
 
 export interface GroupInterface {
   name: string;

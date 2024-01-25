@@ -16,7 +16,7 @@ interface NameIdInterface {
 }
 interface CreateGroupModel {
   name: string;
-  members:  NameIdInterface[];
+  members: NameIdInterface[];
   description: string;
   admin: NameIdInterface;
 }
@@ -58,7 +58,7 @@ const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
     });
   }, []);
   const handleCreateClick = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
     const groupMembers: { name: string; id: string }[] = [];

@@ -42,7 +42,7 @@ export interface UserModal {
   _id: string;
   status: Status;
   newMessages: { [key: string]: string[] };
-  members: NameIdInterface;
+  members: NameIdInterface[];
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 

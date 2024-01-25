@@ -29,7 +29,7 @@ export function calculateWorkingFrom(joinDate: any) {
 }
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
-  d.setTime(d.getTime() +  hours * 60 * 60000);
+  d.setTime(d.getTime() + hours * 60 * 60000);
   const expires = "expires=" + d.toUTCString();
   document.cookie =
     "presentTaskUser" + "=" + cvalue + ";" + expires + ";path=/";

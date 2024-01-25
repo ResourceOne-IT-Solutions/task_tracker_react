@@ -10,7 +10,6 @@ interface Chatprops {
 }
 
 const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
-  console.log(selectedUser, "1212::");
   const handleBackHeader = () => {
     setSelectedUser({} as UserModal);
   };

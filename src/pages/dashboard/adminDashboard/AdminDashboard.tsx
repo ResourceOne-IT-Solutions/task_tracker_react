@@ -133,7 +133,6 @@ const AdminDashboard = () => {
       offlineUsers: offline,
     });
   }, [usersData]);
-  // console.log(usersData);
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
       setModalname("update_client");

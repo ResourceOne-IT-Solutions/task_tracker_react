@@ -22,7 +22,6 @@ const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
   const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  console.log(selectedUsers, "selected users");
   const [groupDetails, setGroupDetails] = useState<CreateGroupModel>({
     name: "",
     members: [],

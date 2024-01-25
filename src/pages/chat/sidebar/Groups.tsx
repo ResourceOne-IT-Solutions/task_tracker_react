@@ -51,7 +51,6 @@ const Groups = ({
     httpMethods.get<UserModal[]>("/users").then((res: any) => {
       setUsers(res);
     });
-    console.log(currentUser.isAdmin, "isadmin:::");
     httpMethods
       .get<GroupInterface[]>(
         `/message/groups/${!currentUser.isAdmin ? currentUser._id : ""}`,

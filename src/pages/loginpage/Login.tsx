@@ -40,7 +40,7 @@ const Login = () => {
     httpMethods
       .post<LoginPayload, { token: string }>("/verify-login", data)
       .then((result) => {
-        setCookie(result.token, 1);
+        setCookie(result.token, 8);
         setIsLoading(false);
         navigate("/dashboard");
       })

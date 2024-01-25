@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
 import { Socket } from "socket.io-client";
@@ -36,7 +36,7 @@ const UserList = ({
     setCurrentRoom(RoomId);
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
   };
-  const filteredUsers = users.filter((user) => {
+  let filteredUsers = users.filter((user) => {
     const fullName = getFullName(user).toLowerCase();
     const designation = user.designation.toLowerCase();
     return (
@@ -44,6 +44,9 @@ const UserList = ({
       designation.includes(searchQuery.toLowerCase())
     );
   });
+  filteredUsers = currentUser.isAdmin
+    ? filteredUsers
+    : filteredUsers.filter((user) => user.isAdmin);
   return (
     <div className="user-list-container">
       {filteredUsers.length ? (

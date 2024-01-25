@@ -27,9 +27,11 @@ const FileRenderer = ({ type, fileUrl }: { type: string; fileUrl: string }) => {
 export const FileComponent = ({
   file,
   className = "",
+  author,
 }: {
   file: MessageModel;
   className: string;
+  author: string;
 }) => {
   const [fileUrl, setFileUrl] = useState("");
   useEffect(() => {
@@ -55,6 +57,7 @@ export const FileComponent = ({
       className={className}
       onClick={(e) => downloadFile(e, fileUrl, file.content)}
     >
+      <div className="message-sender fw-semibold">{author} : </div>
       <div className="img-wrapper">
         {fileUrl && (
           <div>

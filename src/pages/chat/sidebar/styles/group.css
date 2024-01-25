@@ -23,6 +23,9 @@
   margin-bottom: 6px;
   padding: 5px 0px 5px 0px;
 }
+.group:hover {
+  cursor: pointer;
+}
 .group-img {
   width: 30%;
   display: flex;
@@ -58,6 +61,8 @@
   position: sticky;
   background-color: #f0e1e1;
   top: 0;
+  display: flex;
+  justify-content: space-around;
 }
 .create-group:hover {
   cursor: pointer;

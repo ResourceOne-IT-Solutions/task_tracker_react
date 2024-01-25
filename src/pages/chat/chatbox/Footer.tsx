@@ -10,6 +10,7 @@ import { Socket } from "socket.io-client";
 import httpMethods from "../../../api/Service";
 import { FileModel } from "../../../modals/MessageModals";
 import { ClientModal } from "../../../modals/ClientModals";
+import { GroupInterface } from "../sidebar/Groups";
 
 interface ChatFooterProps {
   currentUser: UserModal;
@@ -33,6 +34,11 @@ const ChatFooter = ({
   };
 
   const sendMessage = (message: string, type = "message", fileLink = "") => {
+    let isGroup = false;
+    if (!selectedUser.firstName) {
+      isGroup = true;
+    }
+
     const msgdata = {
       from: {
         name: getFullName(currentUser),
@@ -45,10 +51,14 @@ const ChatFooter = ({
       time: getFormattedTime("time"),
       date: getFormattedDate(new Date()),
       fileLink,
+      isGroup,
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");
-    socket.emit("newUser", {userId: currentUser._id, opponentId: selectedUser._id});
+    socket.emit("newUser", {
+      userId: currentUser._id,
+      opponentId: selectedUser._id,
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -2,6 +2,7 @@ import React from "react";
 import "./styles/header.css";
 import { UserModal } from "../../../modals/UserModals";
 import { getFullName, statusIndicator } from "../../../utils/utils";
+import { GROUP_IMG_URL } from "../../../utils/Constants";
 
 interface Chatprops {
   selectedUser: UserModal;
@@ -9,6 +10,7 @@ interface Chatprops {
 }
 
 const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
+  console.log(selectedUser, "1212::");
   const handleBackHeader = () => {
     setSelectedUser({} as UserModal);
   };
@@ -24,6 +26,7 @@ const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
             className="bi bi-arrow-left-circle"
             viewBox="0 0 16 16"
             onClick={handleBackHeader}
+            color="white"
           >
             <path
               fillRule="evenodd"
@@ -31,17 +34,37 @@ const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
             />
           </svg>
         </div>
+
         {selectedUser._id && (
           <>
             <div className="profile-img">
-              <img src={selectedUser.profileImageUrl} alt="img" />
+              <img
+                src={selectedUser.profileImageUrl || GROUP_IMG_URL}
+                alt="img"
+              />
             </div>
             <div className="header-user-name">
               {getFullName(selectedUser)} &nbsp;{" "}
-              {statusIndicator(selectedUser.status)}
+              {statusIndicator(selectedUser?.status)}
+              {selectedUser.members && `(${selectedUser?.members?.length})`}
             </div>
+
+            {selectedUser.members && (
+              <span style={{ color: "white" }}>
+                {" "}
+                {selectedUser.members.map((items) =>
+                  items.name.concat(","),
+                )}{" "}
+              </span>
+            )}
           </>
         )}
+        <div>
+          <i
+            className="bi bi-three-dots-vertical"
+            style={{ fontSize: "20px", color: "white" }}
+          ></i>
+        </div>
       </div>
     </div>
   );

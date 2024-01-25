@@ -14,6 +14,7 @@ interface CreateGroupModel {
   name: string;
   members: { name: string; id: string }[];
   description: string;
+  admin: { name: string; id: string };
 }
 
 const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
@@ -21,10 +22,15 @@ const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
   const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  console.log(selectedUsers, "selected users");
   const [groupDetails, setGroupDetails] = useState<CreateGroupModel>({
     name: "",
     members: [],
     description: "",
+    admin: {
+      name: getFullName(currentUser),
+      id: currentUser._id,
+    },
   });
   socket.off("groupCreated").on("groupCreated", (group) => {
     onCreateGroup(group);

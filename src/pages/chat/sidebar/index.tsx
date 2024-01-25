@@ -16,7 +16,7 @@ const ChatSideBar = () => {
   };
   socket
     .off("newUser")
-    .on("newUser", ({ userPayload, userId, opponentPayload, opponentId}) => {
+    .on("newUser", ({ userPayload, userId, opponentPayload, opponentId }) => {
       if (userId == currentUser._id) {
         setUsers(userPayload);
       } else if (opponentId == currentUser._id) {
@@ -32,7 +32,7 @@ const ChatSideBar = () => {
       }
     });
   useEffect(() => {
-    socket.emit("newUser", currentUser._id);
+    socket.emit("newUser", { userId: currentUser._id });
   }, []);
   return (
     <div className="sidebar">
@@ -40,7 +40,13 @@ const ChatSideBar = () => {
         <Search onSearch={handleSearch} />
       </div>
       <div className="users-group">
-        <Groups />
+        <Groups
+          socket={socket}
+          currentUser={currentUser}
+          setSelectedUser={setSelectedUser}
+          currentRoom={currentRoom}
+          setCurrentRoom={setCurrentRoom}
+        />
       </div>
       <div className="users-list">
         <UserList

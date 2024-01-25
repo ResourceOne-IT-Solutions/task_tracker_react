@@ -68,13 +68,14 @@ export const statusIndicator = (status: Status) => {
     return <OrangeDot />;
   } else if (status === "On Ticket") {
     return <BlueDot />;
-  } else {
+  } else if (status === "Offline") {
     return <RedDot />;
   }
 };
 interface FullNameType {
   firstName: string;
   lastName: string;
+  name?: string;
 }
 
 export const getFullName = (user: FullNameType) => {
@@ -83,6 +84,9 @@ export const getFullName = (user: FullNameType) => {
   }
   if (user.firstName) {
     return user.firstName;
+  }
+  if (user.name) {
+    return user.name;
   }
   return "Invalid name";
 };

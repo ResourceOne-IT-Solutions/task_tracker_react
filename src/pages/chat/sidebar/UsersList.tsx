@@ -30,7 +30,6 @@ const UserList = ({
   setCurrentRoom,
   searchQuery,
 }: UserListProps) => {
-  const [showingUsers, setShowingUsers] = useState<UserModal[]>([]);
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
     const RoomId = getRoomId(currentUser._id, user._id);

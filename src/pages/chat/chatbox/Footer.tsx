@@ -48,7 +48,10 @@ const ChatFooter = ({
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");
-    socket.emit("newUser", {userId: currentUser._id, opponentId: selectedUser._id});
+    socket.emit("newUser", {
+      userId: currentUser._id,
+      opponentId: selectedUser._id,
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

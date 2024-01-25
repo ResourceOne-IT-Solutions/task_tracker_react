@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./styles/group.css";
 import httpMethods from "../../../api/Service";
-import { UserModal } from "../../../modals/UserModals";
-import { getFullName } from "../../../utils/utils";
-import { Button } from "react-bootstrap";
+import { UserModal } from "../../../modals/UserModals"; 
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
 import { Socket } from "socket.io-client"; 

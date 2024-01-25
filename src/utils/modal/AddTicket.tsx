@@ -5,8 +5,12 @@ import "./styles/AddTicket.css";
 import httpMethods from "../../api/Service";
 import { ClientModal } from "../../modals/ClientModals";
 import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";
-
-function AddTicket({ clientsData }: ClientModal | any) {
+import { getCurrentDate } from "../utils";
+interface TicketmodalInterface {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  clientsData: ClientModal | any;
+}
+function AddTicket(props: TicketmodalInterface) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [ticketData, setTicketData] = useState<CreateTicketModal>({
     client: { name: "", id: "", mobile: "", email: "" },
@@ -22,7 +26,7 @@ function AddTicket({ clientsData }: ClientModal | any) {
 
   const handleSelect = (item: any) => {
     setSelectedItem(item);
-    clientsData.forEach((val: ClientModal) => {
+    props.clientsData.forEach((val: ClientModal) => {
       if (val.firstName == item) {
         setTicketData({
           ...ticketData,
@@ -61,6 +65,9 @@ function AddTicket({ clientsData }: ClientModal | any) {
           });
           setSelectedItem(null);
           setTicketSuccess(true);
+          setTimeout(() => {
+            props.setShowModal(false);
+          }, 1000);
         }, 2000);
       })
       .catch((e: any) => {
@@ -79,8 +86,8 @@ function AddTicket({ clientsData }: ClientModal | any) {
                 {selectedItem ? selectedItem : "Select an Client"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {clientsData !== null
-                  ? clientsData.map((item: ClientModal, index: any) => {
+                {props.clientsData !== null
+                  ? props.clientsData.map((item: ClientModal, index: any) => {
                       return (
                         <Dropdown.Item key={index} eventKey={item.firstName}>
                           {item.firstName}
@@ -127,6 +134,8 @@ function AddTicket({ clientsData }: ClientModal | any) {
               name="targetDate"
               onChange={handleChange}
               value={ticketData.targetDate}
+              min={getCurrentDate()}
+              max={getCurrentDate(1)}
             />
           </Form.Group>
         </Row>

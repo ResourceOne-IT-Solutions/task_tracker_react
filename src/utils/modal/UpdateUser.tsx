@@ -8,8 +8,9 @@ import { UserModal } from "../../modals/UserModals";
 interface Prop {
   updateref: UserModal;
   updateUserTableData: (updatedUser: UserModal) => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-function UpdateUser({ updateref, updateUserTableData }: Prop) {
+function UpdateUser({ updateref, updateUserTableData, setShowModal }: Prop) {
   const [updatedData, setUpdatedData] = useState({
     id: updateref._id,
     data: {
@@ -46,6 +47,9 @@ function UpdateUser({ updateref, updateUserTableData }: Prop) {
           setLoading(false);
           setUpdateSuccess(true);
           updateUserTableData(result);
+          setTimeout(() => {
+            setShowModal(false);
+          }, 1000);
         }, 2000);
       })
       .catch((e: any) => {

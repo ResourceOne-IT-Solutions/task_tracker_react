@@ -7,6 +7,7 @@ import "./AddUserpage.css";
 import { Button, Dropdown } from "react-bootstrap";
 import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
+import { getCurrentDate } from "../../../utils/utils";
 
 function AddUserpage() {
   const [userData, setUserData] = useState<CreateUserPayload>({
@@ -247,6 +248,8 @@ function AddUserpage() {
               placeholder="Enter Dob"
               onChange={handleChange}
               value={dob}
+              min={"1900-01-01"}
+              max={getCurrentDate()}
             />
           </Form.Group>
           <Form.Group as={Col} md="2">
@@ -260,6 +263,8 @@ function AddUserpage() {
               placeholder="Enter JoinedDate"
               onChange={handleChange}
               value={joinedDate}
+              min={"1900-01-01"}
+              max={getCurrentDate()}
             />
           </Form.Group>
         </Row>

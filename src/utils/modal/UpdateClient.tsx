@@ -10,8 +10,13 @@ import { ClientModal } from "../../modals/ClientModals";
 interface Prop {
   updateref: ClientModal;
   updateClientTableData: (updatedClient: ClientModal) => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
-function UpdateClient({ updateref, updateClientTableData }: Prop) {
+function UpdateClient({
+  updateref,
+  updateClientTableData,
+  setShowModal,
+}: Prop) {
   const [updatedData, setUpdatedData] = useState({
     id: updateref._id,
     data: {
@@ -64,6 +69,9 @@ function UpdateClient({ updateref, updateClientTableData }: Prop) {
           setLoading(false);
           setUpdateSuccess(true);
           updateClientTableData(result);
+          setTimeout(() => {
+            setShowModal(false);
+          }, 1000);
         }, 2000);
       })
       .catch((e: any) => {

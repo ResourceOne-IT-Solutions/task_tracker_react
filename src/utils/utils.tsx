@@ -116,3 +116,13 @@ export const getFormattedDate = (date: Date, format?: string) => {
     }
   }
 };
+export const getCurrentDate = (num?: number) => {
+  const currentDate = new Date();
+  if (num) {
+    currentDate.setFullYear(currentDate.getFullYear() + 1);
+  }
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};

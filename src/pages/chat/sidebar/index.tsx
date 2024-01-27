@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./styles/index.css";
 import Groups from "./Groups";
 import Search from "./Search";
 import UserList from "./UsersList";

@@ -126,3 +126,11 @@ export const getCurrentDate = (num?: number) => {
   const day = currentDate.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
+
+export const getRoomId = (id1: string, id2: string) => {
+  if (id1 > id2) {
+    return id1 + "-" + id2;
+  } else {
+    return id2 + "-" + id1;
+  }
+};

@@ -7,3 +7,4 @@ export const BE_URL = BE_SERVER;
 export const TOKEN = () => cookieComp();
 export const GROUP_IMG_URL =
   "https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp";
+export const STATUS_TYPES = ["Offline", "Available", "Break", "On Ticket"];

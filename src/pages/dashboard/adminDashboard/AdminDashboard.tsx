@@ -464,7 +464,7 @@ const AdminDashboard = () => {
             </div>
             <div className="show-range">
               <div>
-                <label htmlFor="available">
+                <label htmlFor="available" className="fw-bold">
                   Available{"----"}
                   <span>
                     {`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}
@@ -475,11 +475,11 @@ const AdminDashboard = () => {
                   name="available"
                   id="available"
                   max={usersStatuses.totalUsers}
-                  value={usersStatuses.availableUsers}
+                  defaultValue={usersStatuses.availableUsers}
                 />
               </div>
               <div>
-                <label htmlFor="offline">
+                <label htmlFor="offline" className="fw-bold">
                   Offline{"----"}
                   <span>
                     {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
@@ -490,11 +490,11 @@ const AdminDashboard = () => {
                   name="offline"
                   id="offline"
                   max={usersStatuses.totalUsers}
-                  value={usersStatuses.offlineUsers}
+                  defaultValue={usersStatuses.offlineUsers}
                 />
               </div>
               <div>
-                <label htmlFor="break">
+                <label htmlFor="break" className="fw-bold">
                   Break{"----"}
                   <span>
                     {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
@@ -505,7 +505,7 @@ const AdminDashboard = () => {
                   name="break"
                   id="break"
                   max={usersStatuses.totalUsers}
-                  value={usersStatuses.breakUsers}
+                  defaultValue={usersStatuses.breakUsers}
                 />
               </div>
             </div>

@@ -22,6 +22,7 @@ interface GroupChatProps {
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
 
 const Groups = ({
@@ -30,6 +31,7 @@ const Groups = ({
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
+  setCurrentUser,
 }: GroupChatProps) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [users, setUsers] = useState<UserModal[]>([]);
@@ -72,6 +74,8 @@ const Groups = ({
     setCurrentRoom(group._id);
     delete currentUser.newMessages[group._id];
     socket.emit("joinRoom", { room: group._id, previousRoom: currentRoom });
+    socket.emit('updateUser', currentUser)
+    setCurrentUser(currentUser)
   };
   return (
     <div className="group-list-container">

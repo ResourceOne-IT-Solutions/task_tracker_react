@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import AddClient from "../../../utils/modal/AddClient";
 import AddTicket from "../../../utils/modal/AddTicket";
-import httpMethods from "../../../api/Service";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../../modals/UserModals";
 import { getData, setCookie, statusIndicator } from "../../../utils/utils";
 import { ClientModal } from "../../../modals/ClientModals";
 import "./Navbar.css";
+import { STATUS_TYPES } from "../../../utils/Constants";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -24,19 +24,19 @@ function Navbar() {
     show: showModal,
   });
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket, isLoggedin } =
-    userContext as UserContext;
+  const {
+    currentUser,
+    setCurrentUser,
+    setIsLoggedIn,
+    socket,
+    isLoggedin,
+    notificationRooms,
+  } = userContext as UserContext;
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
   });
 
-  const [statuses, setStatuses] = useState<string[]>([
-    "Offline",
-    "Available",
-    "Break",
-    "On Ticket",
-  ]);
   const handleClick = (str: string) => {
     setModalname(str);
     setModalProps({
@@ -131,7 +131,10 @@ function Navbar() {
                     )}
                     <li className="nav-item">
                       <a className="nav-link" onClick={handleChatClick}>
-                        Chat
+                        Chat{" "}
+                        <span className="user-newmsg-count">
+                          {notificationRooms}
+                        </span>
                       </a>
                     </li>
                     <li className="nav-item">
@@ -183,7 +186,7 @@ function Navbar() {
                     <Dropdown.Menu
                       style={{ maxHeight: "180px", overflowY: "auto" }}
                     >
-                      {statuses.map((stat, idx) => {
+                      {STATUS_TYPES.map((stat, idx) => {
                         return (
                           <Dropdown.Item key={idx} eventKey={stat}>
                             <b>

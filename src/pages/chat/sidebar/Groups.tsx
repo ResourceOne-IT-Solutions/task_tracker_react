@@ -70,6 +70,7 @@ const Groups = ({
   const handleGroupClick = (group: any) => {
     setSelectedUser(group);
     setCurrentRoom(group._id);
+    delete currentUser.newMessages[group._id];
     socket.emit("joinRoom", { room: group._id, previousRoom: currentRoom });
   };
   return (
@@ -112,7 +113,14 @@ const Groups = ({
                   <p>{group.name}</p>
                   <p>{group.description}</p>
                 </div>
-                <div className="time-stamp">{group.time}</div>
+                <div className="time-stamp">
+                  {group.time}-{" "}
+                  {currentUser.newMessages[group._id] && (
+                    <span className="newmsg-count">
+                      {currentUser.newMessages[group._id]}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </>

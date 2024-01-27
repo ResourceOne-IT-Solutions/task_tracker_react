@@ -141,7 +141,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSelected(item);
   };
   const handleRequest = (items: TicketModal) => {
-    navigate("/tickets");
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },
       sender: { id: currentUser._id, name: getFullName(currentUser) },
@@ -203,6 +202,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                 <li>First Name : {presentUser.firstName}</li>
                 <li>Last Name : {presentUser.lastName}</li>
                 <li>Email : {presentUser.email}</li>
+                <li>Gender: {presentUser.gender}</li>
                 <li>Dob : {dateConversion(presentUser.dob)}</li>
                 <li>Phone : {presentUser.mobile}</li>
                 <li>Role : {presentUser.designation}</li>

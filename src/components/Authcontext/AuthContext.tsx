@@ -14,6 +14,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
   const [isLoggedin, setIsLoggedIn] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<UserModal>({} as UserModal);
   const [currentRoom, setCurrentRoom] = useState("");
+  const [totalMessages, setTotalMessages] = useState<number>(0);
+  const [notificationRooms, setNotificationRooms] = useState<number>(0);
 
   const value: UserContext = {
     isLoggedin,
@@ -25,6 +27,10 @@ const AuthContext = ({ children }: AuthContextProps) => {
     setSelectedUser,
     currentRoom,
     setCurrentRoom,
+    totalMessages,
+    setTotalMessages,
+    notificationRooms,
+    setNotificationRooms,
   };
   useEffect(() => {
     httpMethods
@@ -32,6 +38,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
       .then((data) => {
         setCurrentUser(data);
         setIsLoggedIn(true);
+        socket.emit("newUser", { userId: data._id });
       })
       .catch(() => {
         setIsLoggedIn(false);

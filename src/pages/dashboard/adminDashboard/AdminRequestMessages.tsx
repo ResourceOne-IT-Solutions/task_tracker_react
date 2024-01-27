@@ -1,64 +1,88 @@
 import React, { useEffect, useState } from "react";
-import { getData } from "../../utils/utils";
-import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext, UserModal } from "../../modals/UserModals";
+import httpMethods from "../../../api/Service";
+import "./AdminRequestMessages.css";
+import { Button } from "react-bootstrap";
 import {
   ChatRequestInterface,
-  MessageRequestInterface,
   TicketRequestInterface,
-} from "../../modals/MessageModals";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+} from "../../../modals/MessageModals";
+import {
+  getData,
+  getFormattedDate,
+  getFormattedTime,
+  getFullName,
+} from "../../../utils/utils";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
+import { UserContext } from "../../../modals/UserModals";
 
-function AdminMessages() {
+function AdminRequestMessages() {
   const userContext = useUserContext();
-  const { currentUser, setSelectedUser } = userContext as UserContext;
-  const navigate = useNavigate();
+  const { socket, currentUser } = userContext as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
-  const [messageRequests, setMessageRequests] = useState<
-    MessageRequestInterface[]
-  >([]);
-
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
-  const [messageLoading, setMessageLoading] = useState<boolean>(false);
-
-  const handleApproved = (chat: ChatRequestInterface) => {
-    getData<UserModal>(`users/${chat.opponent.id}`).then((res: any) => {
-      setSelectedUser(res);
-      navigate("/chat");
-    });
-  };
   useEffect(() => {
     setChatLoading(true);
     setTicketLoading(true);
-    setMessageLoading(true);
     Promise.all([
-      getData<any>(`message/user-chat-request/${currentUser._id}`),
-      getData<any>(`message/user-ticket-request/${currentUser._id}`),
-      getData<any>(`message/admin-messages`),
+      getData<any>("message/user-chat-request"),
+      getData<any>("message/user-ticket-request"),
     ])
       .then((results) => {
         setChatRequests(results[0]);
         setTicketRequests(results[1]);
-        setMessageRequests(results[2]);
       })
       .catch((err) => alert(err))
       .finally(() => {
         setChatLoading(false);
         setTicketLoading(false);
-        setMessageLoading(false);
       });
   }, []);
+  socket
+    .off("userRequestApproved")
+    .on("userRequestApproved", ({ result, type }) => {
+      if (type === "CHAT") {
+        const latestData = chatRequests.map((msz) => {
+          if (msz._id === result._id) {
+            return result;
+          }
+          return msz;
+        });
+        setChatRequests(latestData);
+      }
+      if (type === "TICKET") {
+        const LatestTicketData = ticketRequests.map((msz) => {
+          if (msz._id === result._id) {
+            return result;
+          }
+          return msz;
+        });
+        setTicketRequests(LatestTicketData);
+      }
+    });
+  const handleRequestClick = (data: any, type: any) => {
+    const payload = {
+      user: {
+        name: getFullName(currentUser),
+        id: currentUser._id,
+        time: getFormattedTime(),
+        date: getFormattedDate(new Date()),
+      },
+      requestId: data._id,
+      type,
+      status: false,
+    };
+    socket.emit("approveUserRequest", payload);
+  };
   return (
     <div>
-      <h1>Admin Messages</h1>
+      <h1>Admin Request Messages</h1>
       <div className="request-msgs">
         <div className="request-sub-msg">
-          <h3>User Requested Chat</h3>
+          <h3>Chat Requests</h3>
           {chatLoading ? (
             <p>Loading............</p>
           ) : (
@@ -71,16 +95,14 @@ function AdminMessages() {
                   </p>
                   <p>
                     {chat.isPending ? (
-                      <Button variant="danger" disabled>
-                        Not Approved
-                      </Button>
-                    ) : (
                       <Button
                         variant="success"
-                        onClick={() => handleApproved(chat)}
+                        onClick={() => handleRequestClick(chat, "CHAT")}
                       >
-                        Approved
+                        Give Access
                       </Button>
+                    ) : (
+                      "Resolved"
                     )}
                   </p>
                 </div>
@@ -89,7 +111,7 @@ function AdminMessages() {
           )}
         </div>
         <div className="request-sub-msg">
-          <h3>User Requested Tickets</h3>
+          <h3>Ticket Requests</h3>
           {ticketLoading ? (
             <p>Loading............</p>
           ) : (
@@ -102,29 +124,15 @@ function AdminMessages() {
                   </p>
                   <p>
                     {ticket.isPending ? (
-                      <Button variant="danger" disabled>
-                        Not Approved
+                      <Button
+                        variant="success"
+                        onClick={() => handleRequestClick(ticket, "TICKET")}
+                      >
+                        Give Access
                       </Button>
                     ) : (
-                      <Button variant="success">Approved</Button>
+                      "Resolved"
                     )}
-                  </p>
-                </div>
-              );
-            })
-          )}
-        </div>
-        <div className="request-sub-msg">
-          <h3>All Admin Messages</h3>
-          {messageLoading ? (
-            <p>Loading............</p>
-          ) : (
-            messageRequests?.map((ticket) => {
-              return (
-                <div className="request-content" key={ticket.time}>
-                  <p>
-                    {ticket.content} is seen by {ticket.sender.name} at{" "}
-                    {ticket.time}{" "}
                   </p>
                 </div>
               );
@@ -136,4 +144,4 @@ function AdminMessages() {
   );
 }
 
-export default AdminMessages;
+export default AdminRequestMessages;

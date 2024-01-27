@@ -26,7 +26,6 @@ const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
           cx="50%"
           cy="50%"
           outerRadius={80}
-          label
         >
           {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={allColors[_.name]} />

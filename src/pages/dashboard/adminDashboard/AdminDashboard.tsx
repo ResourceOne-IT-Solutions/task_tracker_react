@@ -46,6 +46,12 @@ const AdminDashboard = () => {
     { name: "Resolved Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
+  const [pieChartStatuses, setPieChartStatuses] = useState([
+    { name: "Available", value: 0 },
+    { name: "Offline", value: 0 },
+    { name: "Break", value: 0 },
+    { name: "On Ticket", value: 0 },
+  ]);
 
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
@@ -57,6 +63,7 @@ const AdminDashboard = () => {
     availableUsers: 0,
     breakUsers: 0,
     offlineUsers: 0,
+    onTicketUsers: 0,
   });
 
   const statusIndicatorStyle: React.CSSProperties = {
@@ -119,19 +126,32 @@ const AdminDashboard = () => {
   }, []);
   useEffect(() => {
     const total = usersData.length;
-    const available = usersData.filter(
+    const availableUsers = usersData.filter(
       (user) => user.status == "Available",
     ).length;
-    const offline = usersData.filter((user) => user.status == "Offline").length;
-    const breakusers = usersData.filter(
+    const offlineeUsers = usersData.filter(
+      (user) => user.status == "Offline",
+    ).length;
+    const breakUsers = usersData.filter(
       (user) => user.status == "Break",
     ).length;
+    const onTicketUsers = usersData.filter(
+      (user) => user.status == "On Ticket",
+    ).length;
+
     setUsersStatuses({
       totalUsers: total,
-      availableUsers: available,
-      breakUsers: breakusers,
-      offlineUsers: offline,
+      availableUsers: availableUsers,
+      breakUsers: breakUsers,
+      offlineUsers: offlineeUsers,
+      onTicketUsers: onTicketUsers,
     });
+    setPieChartStatuses([
+      { name: "Available", value: availableUsers },
+      { name: "Offline", value: offlineeUsers },
+      { name: "Break", value: breakUsers },
+      { name: "On Ticket", value: onTicketUsers },
+    ]);
   }, [usersData]);
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
@@ -441,8 +461,6 @@ const AdminDashboard = () => {
                 <li>Mobile : {currentUser.mobile}</li>
                 <li>Email : {currentUser.email}</li>
                 <li>Designation : {currentUser.designation}</li>
-                {/* <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
-                <li>Address : {currentUser.address}</li> */}
               </ul>
             </div>
           </div>
@@ -457,11 +475,11 @@ const AdminDashboard = () => {
       <div className="ranges">
         <div className="sub-ranges">
           <div className="main-container">
-            <div className="circle">
-              <p>
-                <b>{usersStatuses.totalUsers}</b> Users
-              </p>
-            </div>
+            <PieChartComponent
+              data={pieChartStatuses}
+              totalTickets={usersData.length}
+              name="users_statuses"
+            />
             <div className="show-range">
               <div>
                 <label htmlFor="available" className="fw-bold">
@@ -475,7 +493,7 @@ const AdminDashboard = () => {
                   name="available"
                   id="available"
                   max={usersStatuses.totalUsers}
-                  defaultValue={usersStatuses.availableUsers}
+                  value={usersStatuses.availableUsers}
                 />
               </div>
               <div>
@@ -490,7 +508,7 @@ const AdminDashboard = () => {
                   name="offline"
                   id="offline"
                   max={usersStatuses.totalUsers}
-                  defaultValue={usersStatuses.offlineUsers}
+                  value={usersStatuses.offlineUsers}
                 />
               </div>
               <div>
@@ -505,7 +523,22 @@ const AdminDashboard = () => {
                   name="break"
                   id="break"
                   max={usersStatuses.totalUsers}
-                  defaultValue={usersStatuses.breakUsers}
+                  value={usersStatuses.breakUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="break" className="fw-bold">
+                  On Ticket{"----"}
+                  <span>
+                    {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="onticket"
+                  id="onticket"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.onTicketUsers}
                 />
               </div>
             </div>

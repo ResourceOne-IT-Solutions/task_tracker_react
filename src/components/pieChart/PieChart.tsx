@@ -4,6 +4,7 @@ import { PieChart, Pie, Legend, Tooltip, Cell, Label } from "recharts";
 interface PieChartProps {
   data: { name: string; value: number }[];
   totalTickets: number;
+  name?: string;
 }
 
 const allColors: any = {
@@ -13,12 +14,24 @@ const allColors: any = {
   "Pending Tickets": "#b80301",
   "Resolved Tickets": "#168f01",
   "Helped Tickets": "#FF6384",
+  Available: "#00f02c",
+  Offline: "#dc3545",
+  Break: "#170ce8",
+  "On Ticket": "#0eed9b",
 };
 
-const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
+const PieChartComponent: React.FC<PieChartProps> = ({
+  data,
+  totalTickets,
+  name,
+}) => {
   return (
     <div>
-      <PieChart width={400} height={400} style={{ margin: "auto" }}>
+      <PieChart
+        width={name == "users_statuses" ? 200 : 400}
+        height={name == "users_statuses" ? 200 : 400}
+        style={{ margin: "auto" }}
+      >
         <Pie
           data={data}
           dataKey="value"
@@ -38,10 +51,16 @@ const PieChartComponent: React.FC<PieChartProps> = ({ data, totalTickets }) => {
             />
           ))}
         </Pie>
-        <Tooltip />
-        <Legend />
+        {name !== "users_statuses" && (
+          <>
+            <Tooltip />
+            <Legend />
+          </>
+        )}
       </PieChart>
-      <h4 style={{ color: "#000000" }}>Total Tickets: {totalTickets}</h4>
+      <h4 style={{ color: "#000000" }}>
+        Total {name == "users_statuses" ? "Users" : "Tickets"}: {totalTickets}
+      </h4>
     </div>
   );
 };

@@ -12,6 +12,7 @@ interface UserListProps {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
 
 const UserList = ({
@@ -22,6 +23,7 @@ const UserList = ({
   currentRoom,
   setCurrentRoom,
   searchQuery,
+  setCurrentUser,
 }: UserListProps) => {
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);

@@ -97,12 +97,9 @@ input {
   width: 59.4%;
   border-radius: 10px;
   margin: 4px;
-  /* display: flex;
-  justify-content: space-between; */
 }
 .sub-ranges .main-container {
-  width: 70%;
-  border: 1px solid red;
+  width: 85%;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -20,7 +20,7 @@ function AdminMessages() {
   >([]);
   const [messageRequests, setMessageRequests] = useState<
     MessageRequestInterface[]
-  >([]); 
+  >([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);

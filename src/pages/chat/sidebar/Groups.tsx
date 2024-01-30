@@ -74,8 +74,8 @@ const Groups = ({
     setCurrentRoom(group._id);
     delete currentUser.newMessages[group._id];
     socket.emit("joinRoom", { room: group._id, previousRoom: currentRoom });
-    socket.emit('updateUser', currentUser)
-    setCurrentUser(currentUser)
+    socket.emit("updateUser", currentUser);
+    setCurrentUser(currentUser);
   };
   return (
     <div className="group-list-container">

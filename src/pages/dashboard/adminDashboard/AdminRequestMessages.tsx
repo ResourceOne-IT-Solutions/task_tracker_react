@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import httpMethods from "../../../api/Service";
 import "./AdminRequestMessages.css";
 import { Button } from "react-bootstrap";
 import {
   ChatRequestInterface,
+  MessageRequestInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
 import {
@@ -22,23 +22,31 @@ function AdminRequestMessages() {
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
+  const [messageRequests, setMessageRequests] = useState<
+    MessageRequestInterface[]
+  >([]);
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
+  const [messageLoading, setMessageLoading] = useState<boolean>(false);
   useEffect(() => {
     setChatLoading(true);
     setTicketLoading(true);
+    setMessageLoading(true);
     Promise.all([
       getData<any>("message/user-chat-request"),
       getData<any>("message/user-ticket-request"),
+      getData<MessageRequestInterface>(`message/admin-messages`),
     ])
       .then((results) => {
         setChatRequests(results[0]);
         setTicketRequests(results[1]);
+        setMessageRequests(results[2]);
       })
       .catch((err) => alert(err))
       .finally(() => {
         setChatLoading(false);
         setTicketLoading(false);
+        setMessageLoading(false);
       });
   }, []);
   socket
@@ -88,7 +96,7 @@ function AdminRequestMessages() {
           ) : (
             chatRequests?.map((chat) => {
               return (
-                <div className="request-content" key={chat.time}>
+                <div className="request-content" key={chat._id}>
                   <p>
                     {chat.sender.name} is Requesting to Chat with{" "}
                     {chat.opponent.name}.{" "}
@@ -117,7 +125,7 @@ function AdminRequestMessages() {
           ) : (
             ticketRequests?.map((ticket) => {
               return (
-                <div className="request-content" key={ticket.time}>
+                <div className="request-content" key={ticket._id}>
                   <p>
                     {ticket.sender.name} is Requesting for {ticket.client.name}{" "}
                     tickets.
@@ -134,6 +142,40 @@ function AdminRequestMessages() {
                       "Resolved"
                     )}
                   </p>
+                </div>
+              );
+            })
+          )}
+        </div>
+        <div className="request-sub-msg">
+          <h3>All Admin Messages</h3>
+          {messageLoading ? (
+            <p>Loading............</p>
+          ) : (
+            messageRequests?.map((message) => {
+              return (
+                <div className="request-content" key={message._id}>
+                  <div>
+                    <span>Message: {message.content}</span>
+                    <span>
+                      Time: {message.date} - {message.time}
+                    </span>
+                    <span>Sent by: {message.sender.name}</span>
+                  </div>
+                  <div className="d-flex flex-column">
+                    <span>
+                      Delivered to{" "}
+                      <span className="fw-bold">
+                        {message.deliveredTo.length}
+                      </span>
+                    </span>
+                    <span>
+                      Seen :{" "}
+                      <span className="fw-bold">
+                        {message.viewedBy.length}{" "}
+                      </span>
+                    </span>
+                  </div>
                 </div>
               );
             })

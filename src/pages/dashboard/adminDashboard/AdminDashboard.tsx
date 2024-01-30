@@ -57,6 +57,10 @@ const AdminDashboard = () => {
     availableUsers: 0,
     breakUsers: 0,
     offlineUsers: 0,
+    onTicketUsers: 0,
+  });
+  socket.off("newUser").on("newUser", ({ userPayload }) => {
+    setUsersData(userPayload);
   });
 
   const statusIndicatorStyle: React.CSSProperties = {
@@ -126,11 +130,15 @@ const AdminDashboard = () => {
     const breakusers = usersData.filter(
       (user) => user.status == "Break",
     ).length;
+    const onTicket = usersData.filter(
+      (user) => user.status == "On Ticket",
+    ).length;
     setUsersStatuses({
       totalUsers: total,
       availableUsers: available,
       breakUsers: breakusers,
       offlineUsers: offline,
+      onTicketUsers: onTicket,
     });
   }, [usersData]);
   const handleUpdate = <T,>(user: T, type: string) => {
@@ -504,6 +512,21 @@ const AdminDashboard = () => {
                   type="range"
                   name="break"
                   id="break"
+                  max={usersStatuses.totalUsers}
+                  defaultValue={usersStatuses.breakUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="onTicket" className="fw-bold">
+                  On Ticket{"----"}
+                  <span>
+                    {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="onTicket"
+                  id="onTicket"
                   max={usersStatuses.totalUsers}
                   defaultValue={usersStatuses.breakUsers}
                 />

@@ -23,7 +23,7 @@ const UserList = ({
   currentRoom,
   setCurrentRoom,
   searchQuery,
-  setCurrentUser
+  setCurrentUser,
 }: UserListProps) => {
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
@@ -31,8 +31,8 @@ const UserList = ({
     const RoomId = getRoomId(currentUser._id, user._id);
     setCurrentRoom(RoomId);
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
-    socket.emit('updateUser', currentUser)
-    setCurrentUser(currentUser)
+    socket.emit("updateUser", currentUser);
+    setCurrentUser(currentUser);
   };
   let filteredUsers = users.filter((user) => {
     const fullName = getFullName(user).toLowerCase();

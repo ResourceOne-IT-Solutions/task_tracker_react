@@ -65,6 +65,9 @@ const AdminDashboard = () => {
     offlineUsers: 0,
     onTicketUsers: 0,
   });
+  socket.off("newUser").on("newUser", ({ userPayload }) => {
+    setUsersData(userPayload);
+  });
 
   const statusIndicatorStyle: React.CSSProperties = {
     position: "absolute",
@@ -135,22 +138,21 @@ const AdminDashboard = () => {
     const breakUsers = usersData.filter(
       (user) => user.status == "Break",
     ).length;
-    const onTicketUsers = usersData.filter(
+    const onTicket = usersData.filter(
       (user) => user.status == "On Ticket",
     ).length;
-
     setUsersStatuses({
       totalUsers: total,
-      availableUsers: availableUsers,
-      breakUsers: breakUsers,
-      offlineUsers: offlineeUsers,
-      onTicketUsers: onTicketUsers,
+      availableUsers: available,
+      breakUsers: breakusers,
+      offlineUsers: offline,
+      onTicketUsers: onTicket,
     });
     setPieChartStatuses([
       { name: "Available", value: availableUsers },
       { name: "Offline", value: offlineeUsers },
       { name: "Break", value: breakUsers },
-      { name: "On Ticket", value: onTicketUsers },
+      { name: "On Ticket", value: onTicket },
     ]);
   }, [usersData]);
   const handleUpdate = <T,>(user: T, type: string) => {
@@ -539,6 +541,21 @@ const AdminDashboard = () => {
                   id="onticket"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.onTicketUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="onTicket" className="fw-bold">
+                  On Ticket{"----"}
+                  <span>
+                    {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="onTicket"
+                  id="onTicket"
+                  max={usersStatuses.totalUsers}
+                  defaultValue={usersStatuses.breakUsers}
                 />
               </div>
             </div>

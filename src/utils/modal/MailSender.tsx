@@ -4,15 +4,17 @@ import { TicketModal } from "../../modals/TicketModals";
 import httpMethods from "../../api/Service";
 
 interface EmailInterface {
-  to: string | undefined;
+  to: string;
   content: string;
+  client: string;
 }
 function MailSender({ updateReference, setShowModal }: any) {
   const [selectedTicket, setSelectedTicket] =
     useState<TicketModal>(updateReference);
   const [emailData, setEmailData] = useState<EmailInterface>({
     to: selectedTicket.client.email,
-    content: `Task Update:\n${selectedTicket.client.name},\n\n${selectedTicket.description}\n\nRegards,\nSupport Team.`,
+    client: selectedTicket.client.name,
+    content: selectedTicket.description,
   });
   const [sending, setSending] = useState<boolean>(false);
   const [sccMsg, setSccMsg] = useState<string>("");
@@ -23,7 +25,7 @@ function MailSender({ updateReference, setShowModal }: any) {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
-    const data = { ...emailData, content: `<pre>${emailData.content}</pre>` };
+    const data = { ...emailData, content: emailData.content };
     setSending(true);
     httpMethods
       .post<any, any>("/mail/client-update", data)
@@ -43,6 +45,12 @@ function MailSender({ updateReference, setShowModal }: any) {
       <Form>
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
+            <Form.Control
+              type="text"
+              value={emailData.client}
+              disabled
+              className="my-2"
+            />
             <Form.Control
               type="email"
               placeholder="Enter Email"

@@ -64,7 +64,7 @@ function AdminMessages() {
           ) : (
             chatRequests?.map((chat) => {
               return (
-                <div className="request-content" key={chat.time}>
+                <div className="request-content" key={chat._id}>
                   <p>
                     {chat.sender.name} is Requesting to Chat with{" "}
                     {chat.opponent.name}.{" "}
@@ -95,7 +95,7 @@ function AdminMessages() {
           ) : (
             ticketRequests?.map((ticket) => {
               return (
-                <div className="request-content" key={ticket.time}>
+                <div className="request-content" key={ticket._id}>
                   <p>
                     {ticket.sender.name} is Requesting for {ticket.client.name}{" "}
                     tickets.
@@ -119,12 +119,12 @@ function AdminMessages() {
           {messageLoading ? (
             <p>Loading............</p>
           ) : (
-            messageRequests?.map((ticket) => {
+            messageRequests?.map((message) => {
               return (
-                <div className="request-content" key={ticket.time}>
+                <div className="request-content" key={message._id}>
                   <p>
-                    {ticket.content} is seen by {ticket.sender.name} at{" "}
-                    {ticket.time}{" "}
+                    {message.content} is seen by {message.sender.name} at{" "}
+                    {message.time}{" "}
                   </p>
                 </div>
               );

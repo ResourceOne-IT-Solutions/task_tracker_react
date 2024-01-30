@@ -8,8 +8,14 @@ import { UserContext, UserModal } from "../../../modals/UserModals";
 
 const ChatSideBar = () => {
   const userContext = useUserContext();
-  const { socket, currentUser, setSelectedUser, currentRoom, setCurrentRoom } =
-    userContext as UserContext;
+  const {
+    socket,
+    currentUser,
+    setSelectedUser,
+    currentRoom,
+    setCurrentRoom,
+    setCurrentUser,
+  } = userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const handleSearch = (query: string) => {
@@ -47,6 +53,7 @@ const ChatSideBar = () => {
           setSelectedUser={setSelectedUser}
           currentRoom={currentRoom}
           setCurrentRoom={setCurrentRoom}
+          setCurrentUser={setCurrentUser}
         />
       </div>
       <div className="users-list">
@@ -58,6 +65,7 @@ const ChatSideBar = () => {
           setCurrentRoom={setCurrentRoom}
           socket={socket}
           searchQuery={searchQuery}
+          setCurrentUser={setCurrentUser}
         />
       </div>
     </div>

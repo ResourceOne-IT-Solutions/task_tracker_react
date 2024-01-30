@@ -10,10 +10,10 @@ import Tickets from "../pages/tickets";
 import TicketDescription from "../pages/tickets/TicketDescription";
 import ClientDashboard from "../pages/dashboard/clientDashboard";
 import UserStatsPage from "../pages/dashboard/UserStatsPage";
-import AdminRequestMessages from "../pages/dashboard/AdminRequestMessages";
+import AdminRequestMessages from "../pages/dashboard/adminDashboard/AdminRequestMessages";
 import Navbar from "../pages/dashboard/navbar/Navbar";
 import UserTickets from "../pages/tickets/UserTickets";
-import AdminMessages from "../pages/dashboard/AdminMessages";
+import AdminMessages from "../pages/dashboard/adminDashboard/AdminMessages";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,

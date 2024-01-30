@@ -29,7 +29,7 @@ export function calculateWorkingFrom(joinDate: any) {
 }
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
-  d.setTime(d.getTime() + hours * 60 * 60 * 1000);
+  d.setTime(d.getTime() + hours * 60 * 60000);
   const expires = "expires=" + d.toUTCString();
   document.cookie =
     "presentTaskUser" + "=" + cvalue + ";" + expires + ";path=/";
@@ -68,13 +68,14 @@ export const statusIndicator = (status: Status) => {
     return <OrangeDot />;
   } else if (status === "On Ticket") {
     return <BlueDot />;
-  } else {
+  } else if (status === "Offline") {
     return <RedDot />;
   }
 };
 interface FullNameType {
   firstName: string;
   lastName: string;
+  name?: string;
 }
 
 export const getFullName = (user: FullNameType) => {
@@ -83,6 +84,9 @@ export const getFullName = (user: FullNameType) => {
   }
   if (user.firstName) {
     return user.firstName;
+  }
+  if (user.name) {
+    return user.name;
   }
   return "Invalid name";
 };
@@ -110,5 +114,23 @@ export const getFormattedDate = (date: Date, format?: string) => {
     default: {
       return `${month}/${day}/${year}`;
     }
+  }
+};
+export const getCurrentDate = (num?: number) => {
+  const currentDate = new Date();
+  if (num) {
+    currentDate.setFullYear(currentDate.getFullYear() + 1);
+  }
+  const year = currentDate.getFullYear();
+  const month = (currentDate.getMonth() + 1).toString().padStart(2, "0");
+  const day = currentDate.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+export const getRoomId = (id1: string, id2: string) => {
+  if (id1 > id2) {
+    return id1 + "-" + id2;
+  } else {
+    return id2 + "-" + id1;
   }
 };

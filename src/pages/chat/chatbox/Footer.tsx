@@ -33,6 +33,11 @@ const ChatFooter = ({
   };
 
   const sendMessage = (message: string, type = "message", fileLink = "") => {
+    let isGroup = false;
+    if (!selectedUser.firstName) {
+      isGroup = true;
+    }
+
     const msgdata = {
       from: {
         name: getFullName(currentUser),
@@ -45,10 +50,14 @@ const ChatFooter = ({
       time: getFormattedTime("time"),
       date: getFormattedDate(new Date()),
       fileLink,
+      isGroup,
     };
     socket.emit("sendMessage", msgdata);
     setMessage("");
-    socket.emit("newUser", {userId: currentUser._id, opponentId: selectedUser._id});
+    socket.emit("newUser", {
+      userId: currentUser._id,
+      opponentId: selectedUser._id,
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,12 +102,31 @@ const ChatFooter = ({
       "contact",
       JSON.stringify({ name: client.firstName, mobile: client.mobile }),
     );
+    setSidebarOpen(false);
   };
   useEffect(() => {
     httpMethods.get<ClientModal[]>("/clients").then((response: any) => {
       setClients(response);
     });
   }, []);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        isPopupOpen &&
+        fileInputRef.current &&
+        !fileInputRef.current.contains(event.target as Node) &&
+        !document.querySelector(".popup")?.contains(event.target as Node)
+      ) {
+        setPopupOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isPopupOpen]);
   return (
     <div className="chat-footer-conatiner">
       <div className="add-content">

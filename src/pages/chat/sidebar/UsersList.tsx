@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
 import { Socket } from "socket.io-client";
-import { getFullName, statusIndicator } from "../../../utils/utils";
+import { getFullName, getRoomId, statusIndicator } from "../../../utils/utils";
 
 interface UserListProps {
   users: UserModal[];
@@ -12,14 +12,8 @@ interface UserListProps {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
-const getRoomId = (id1: string, id2: string) => {
-  if (id1 > id2) {
-    return id1 + "-" + id2;
-  } else {
-    return id2 + "-" + id1;
-  }
-};
 
 const UserList = ({
   users,
@@ -29,14 +23,17 @@ const UserList = ({
   currentRoom,
   setCurrentRoom,
   searchQuery,
+  setCurrentUser,
 }: UserListProps) => {
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
+    delete currentUser.newMessages[getRoomId(currentUser._id, user._id)];
     const RoomId = getRoomId(currentUser._id, user._id);
     setCurrentRoom(RoomId);
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
+    socket.emit("updateUser", currentUser);
   };
-  const filteredUsers = users.filter((user) => {
+  let filteredUsers = users.filter((user) => {
     const fullName = getFullName(user).toLowerCase();
     const designation = user.designation.toLowerCase();
     return (
@@ -44,6 +41,9 @@ const UserList = ({
       designation.includes(searchQuery.toLowerCase())
     );
   });
+  filteredUsers = currentUser.isAdmin
+    ? filteredUsers
+    : filteredUsers.filter((user) => user.isAdmin);
   return (
     <div className="user-list-container">
       {filteredUsers.length ? (
@@ -63,7 +63,17 @@ const UserList = ({
                 <p>{user.designation}</p>
               </div>
               <div className="user-time-stamp">
-                <div className="user-newmsg-count">13</div>
+                {currentUser.newMessages[
+                  getRoomId(currentUser._id, user._id)
+                ] && (
+                  <div className="newmsg-count">
+                    {
+                      currentUser.newMessages[
+                        getRoomId(currentUser._id, user._id)
+                      ]
+                    }
+                  </div>
+                )}
               </div>
             </div>
           </div>

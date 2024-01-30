@@ -46,6 +46,12 @@ const AdminDashboard = () => {
     { name: "Resolved Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
+  const [pieChartStatuses, setPieChartStatuses] = useState([
+    { name: "Available", value: 0 },
+    { name: "Offline", value: 0 },
+    { name: "Break", value: 0 },
+    { name: "On Ticket", value: 0 },
+  ]);
 
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
@@ -57,6 +63,10 @@ const AdminDashboard = () => {
     availableUsers: 0,
     breakUsers: 0,
     offlineUsers: 0,
+    onTicketUsers: 0,
+  });
+  socket.off("newUser").on("newUser", ({ userPayload }) => {
+    setUsersData(userPayload);
   });
 
   const statusIndicatorStyle: React.CSSProperties = {
@@ -97,7 +107,9 @@ const AdminDashboard = () => {
         setClientsData(results[1]);
         setTicketsData(results[2]);
       })
-      .catch((err) => err)
+      .catch((err) => {
+        alert(err);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -117,21 +129,32 @@ const AdminDashboard = () => {
   }, []);
   useEffect(() => {
     const total = usersData.length;
-    const available = usersData.filter(
+    const availableUsers = usersData.filter(
       (user) => user.status == "Available",
     ).length;
-    const offline = usersData.filter((user) => user.status == "Offline").length;
-    const breakusers = usersData.filter(
+    const offlineeUsers = usersData.filter(
+      (user) => user.status == "Offline",
+    ).length;
+    const breakUsers = usersData.filter(
       (user) => user.status == "Break",
+    ).length;
+    const onTicket = usersData.filter(
+      (user) => user.status == "On Ticket",
     ).length;
     setUsersStatuses({
       totalUsers: total,
       availableUsers: available,
       breakUsers: breakusers,
       offlineUsers: offline,
+      onTicketUsers: onTicket,
     });
+    setPieChartStatuses([
+      { name: "Available", value: availableUsers },
+      { name: "Offline", value: offlineeUsers },
+      { name: "Break", value: breakUsers },
+      { name: "On Ticket", value: onTicket },
+    ]);
   }, [usersData]);
-  // console.log(usersData);
   const handleUpdate = <T,>(user: T, type: string) => {
     if (type === "CLIENT") {
       setModalname("update_client");
@@ -351,7 +374,7 @@ const AdminDashboard = () => {
             onClick={() => handleAddResource(ticket)}
             style={{ fontWeight: "700" }}
           >
-            {ticket.user.name ? "urce" : "Assign User"}
+            {ticket.user.name ? "Assign Resource" : "Assign User"}
           </button>
           <button
             className="btn btn-warning"
@@ -440,8 +463,6 @@ const AdminDashboard = () => {
                 <li>Mobile : {currentUser.mobile}</li>
                 <li>Email : {currentUser.email}</li>
                 <li>Designation : {currentUser.designation}</li>
-                <li>DOB : {new Date(currentUser.dob).toLocaleString()}</li>
-                <li>Address : {currentUser.address}</li>
               </ul>
             </div>
           </div>
@@ -456,14 +477,14 @@ const AdminDashboard = () => {
       <div className="ranges">
         <div className="sub-ranges">
           <div className="main-container">
-            <div className="circle">
-              <p>
-                <b>{usersStatuses.totalUsers}</b> Users
-              </p>
-            </div>
+            <PieChartComponent
+              data={pieChartStatuses}
+              totalTickets={usersData.length}
+              name="users_statuses"
+            />
             <div className="show-range">
               <div>
-                <label htmlFor="available">
+                <label htmlFor="available" className="fw-bold">
                   Available{"----"}
                   <span>
                     {`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}
@@ -478,7 +499,7 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="offline">
+                <label htmlFor="offline" className="fw-bold">
                   Offline{"----"}
                   <span>
                     {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
@@ -493,7 +514,7 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="break">
+                <label htmlFor="break" className="fw-bold">
                   Break{"----"}
                   <span>
                     {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
@@ -505,6 +526,36 @@ const AdminDashboard = () => {
                   id="break"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.breakUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="break" className="fw-bold">
+                  On Ticket{"----"}
+                  <span>
+                    {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="onticket"
+                  id="onticket"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.onTicketUsers}
+                />
+              </div>
+              <div>
+                <label htmlFor="onTicket" className="fw-bold">
+                  On Ticket{"----"}
+                  <span>
+                    {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="onTicket"
+                  id="onTicket"
+                  max={usersStatuses.totalUsers}
+                  defaultValue={usersStatuses.breakUsers}
                 />
               </div>
             </div>
@@ -557,6 +608,7 @@ const AdminDashboard = () => {
           <UpdateUser
             updateref={updateReference}
             updateUserTableData={updateUserTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
@@ -565,6 +617,7 @@ const AdminDashboard = () => {
           <UpdateClient
             updateref={updateReference}
             updateClientTableData={updateClientTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
@@ -574,17 +627,21 @@ const AdminDashboard = () => {
             updateref={updateReference}
             usersData={usersData}
             UpdateTicketsTableData={UpdateTicketsTableData}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
-          <MessageAllUsersModal />
+          <MessageAllUsersModal setShowModal={setShowModal} />
         </ReusableModal>
       )}
       {showModal && modalName == "Send Mail" && (
         <ReusableModal vals={modalProps}>
-          <MailSender updateReference={updateReference} />
+          <MailSender
+            updateReference={updateReference}
+            setShowModal={setShowModal}
+          />
         </ReusableModal>
       )}
     </div>

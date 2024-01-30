@@ -52,7 +52,7 @@ const Tickets = ({ url }: Props) => {
     {
       title: "TargetDate",
       key: "targetDate",
-      tdFormat: (ticket) => <p>{ticket?.targetDate}</p>,
+      tdFormat: (ticket) => <p>{ticket?.targetDate?.toLocaleString()}</p>,
     },
     {
       title: "Helped By",
@@ -113,6 +113,7 @@ const Tickets = ({ url }: Props) => {
       );
     });
     setShowingTickets(filtered_data);
+    setSelected("");
   };
   return (
     <>
@@ -155,6 +156,7 @@ const Tickets = ({ url }: Props) => {
           <button
             className="btn btn-info"
             onClick={() => handleDateRangeSubmit()}
+            disabled={!dateRange.from || !dateRange.to ? true : false}
           >
             GetTickets
           </button>

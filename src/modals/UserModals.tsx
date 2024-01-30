@@ -11,8 +11,17 @@ export interface UserContext {
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  totalMessages: number;
+  setTotalMessages: React.Dispatch<React.SetStateAction<number>>;
+  notificationRooms: number;
+  setNotificationRooms: React.Dispatch<React.SetStateAction<number>>;
 }
 export type Status = "Available" | "Break" | "Offline" | "On Ticket";
+
+export interface NameIdInterface {
+  name: string;
+  id: string;
+}
 export interface UserModal {
   firstName: string;
   lastName: string;
@@ -36,7 +45,9 @@ export interface UserModal {
   progressTickets: number;
   _id: string;
   status: Status;
-  newMessages: { [key: string]: string[] };
+  newMessages: { [key: string]: number };
+  members: NameIdInterface[];
+  gender: string;
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 
@@ -64,4 +75,5 @@ export interface CreateUserPayload {
   profileImageUrl: string | null;
   userId?: string;
   address: string;
+  gender: string;
 }

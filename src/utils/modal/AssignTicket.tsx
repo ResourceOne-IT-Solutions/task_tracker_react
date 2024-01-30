@@ -17,12 +17,14 @@ interface AssignTicketProps {
   updateref: any;
   usersData: UserModal[];
   UpdateTicketsTableData: (updatedticket: TicketModal) => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AssignTicket({
   updateref,
   usersData,
   UpdateTicketsTableData,
+  setShowModal,
 }: AssignTicketProps) {
   const [selectedUser, setSelectedUser] = useState<string>("");
   const [sendingAddResourceData, setSendingAddResourceData] =
@@ -105,6 +107,9 @@ function AssignTicket({
               setSelectedUser("");
               UpdateTicketsTableData(result);
               setAssignSuccess(true);
+              setTimeout(() => {
+                setShowModal(false);
+              }, 1000);
             }, 2000);
           })
           .catch((e: any) => {

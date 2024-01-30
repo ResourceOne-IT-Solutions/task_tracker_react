@@ -1,7 +1,9 @@
+import { NameIdInterface } from "./UserModals";
+
 interface TicketUserModal {
   name: string;
   id: string;
-  email?: string;
+  email: string;
 }
 type Status =
   | "Not Assigned"
@@ -15,7 +17,7 @@ interface Updates {
   comments: string;
   date: string;
   status: Status;
-  updatedBy?: { name: string; id: string };
+  updatedBy?: NameIdInterface;
 }
 
 export interface TicketModal {
@@ -32,7 +34,7 @@ export interface TicketModal {
   user: TicketUserModal;
   assignedDate: Date;
   closedDate: Date;
-  targetDate?: string;
+  targetDate: Date;
 }
 
 export interface UpdateTicketProps {
@@ -51,16 +53,16 @@ export interface UpdateTicketPayload {
 
 export interface AddOnResourcePayload {
   id: string;
-  data: { addOnResource: { name: string; id: string } };
+  data: { addOnResource: NameIdInterface };
 }
 export interface AddOnUserResourcePayload {
   id: string;
-  data: { user: { name: string; id: string }; status: string };
+  data: { user: NameIdInterface; status: string };
 }
 
 export interface CreateTicketModal {
   client: { name: string; id: string; mobile: string; email: string };
-  user: { name: string; id: string };
+  user: NameIdInterface;
   technology: string;
   description: string;
   targetDate: string;

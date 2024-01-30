@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "./styles/index.css";
 import Groups from "./Groups";
 import Search from "./Search";
 import UserList from "./UsersList";
@@ -7,8 +8,14 @@ import { UserContext, UserModal } from "../../../modals/UserModals";
 
 const ChatSideBar = () => {
   const userContext = useUserContext();
-  const { socket, currentUser, setSelectedUser, currentRoom, setCurrentRoom } =
-    userContext as UserContext;
+  const {
+    socket,
+    currentUser,
+    setSelectedUser,
+    currentRoom,
+    setCurrentRoom,
+    setCurrentUser,
+  } = userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const handleSearch = (query: string) => {
@@ -16,7 +23,7 @@ const ChatSideBar = () => {
   };
   socket
     .off("newUser")
-    .on("newUser", ({ userPayload, userId, opponentPayload, opponentId}) => {
+    .on("newUser", ({ userPayload, userId, opponentPayload, opponentId }) => {
       if (userId == currentUser._id) {
         setUsers(userPayload);
       } else if (opponentId == currentUser._id) {
@@ -32,7 +39,7 @@ const ChatSideBar = () => {
       }
     });
   useEffect(() => {
-    socket.emit("newUser", {userId: currentUser._id});
+    socket.emit("newUser", { userId: currentUser._id });
   }, []);
   return (
     <div className="sidebar">
@@ -40,7 +47,14 @@ const ChatSideBar = () => {
         <Search onSearch={handleSearch} />
       </div>
       <div className="users-group">
-        <Groups />
+        <Groups
+          socket={socket}
+          currentUser={currentUser}
+          setSelectedUser={setSelectedUser}
+          currentRoom={currentRoom}
+          setCurrentRoom={setCurrentRoom}
+          setCurrentUser={setCurrentUser}
+        />
       </div>
       <div className="users-list">
         <UserList
@@ -51,6 +65,7 @@ const ChatSideBar = () => {
           setCurrentRoom={setCurrentRoom}
           socket={socket}
           searchQuery={searchQuery}
+          setCurrentUser={setCurrentUser}
         />
       </div>
     </div>

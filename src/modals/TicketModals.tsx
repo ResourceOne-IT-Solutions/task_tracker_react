@@ -3,7 +3,7 @@ import { NameIdInterface } from "./UserModals";
 interface TicketUserModal {
   name: string;
   id: string;
-  email?: string;
+  email: string;
 }
 type Status =
   | "Not Assigned"

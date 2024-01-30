@@ -9,6 +9,7 @@ import { GroupInterface } from "./Groups";
 
 interface CreateGroupProps {
   onCreateGroup: (group: GroupInterface) => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 interface NameIdInterface {
   name: string;
@@ -21,7 +22,7 @@ interface CreateGroupModel {
   admin: NameIdInterface;
 }
 
-const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
+const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
   const userContext = useUserContext();
   const { currentUser, setCurrentUser, socket } = userContext as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
@@ -68,12 +69,16 @@ const CreateGroup = ({ onCreateGroup }: CreateGroupProps) => {
         groupMembers.push({ name: getFullName(user), id: user._id });
       }
     });
-    const groupss = {
+    const groups = {
       ...groupDetails,
       members: groupMembers,
     };
-    setGroupDetails(groupss);
-    socket.emit("createGroup", groupss);
+    setGroupDetails(groups);
+    socket.emit("createGroup", groups);
+    setTimeout(() => {
+      setShowModal(false);
+      alert("group created");
+    }, 1000);
   };
 
   return (

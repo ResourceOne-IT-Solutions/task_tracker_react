@@ -45,6 +45,8 @@ function App() {
     });
   socket.off("statusUpdate").on("statusUpdate", (user) => {
     setCurrentUser(user);
+    const roomsCount = Object.keys(currentUser.newMessages).length;
+    setNotificationRooms(roomsCount);
   });
   socket.off("ticketAssigned").on("ticketAssigned", (id, sender) => {
     if (currentUser._id === id) {

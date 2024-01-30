@@ -58,12 +58,12 @@ const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
             )}
           </>
         )}
-        <div>
-          <i
-            className="bi bi-three-dots-vertical"
-            style={{ fontSize: "20px", color: "white" }}
-          ></i>
-        </div>
+      </div>
+      <div className="vertical-dots-header">
+        <i
+          className="bi bi-three-dots-vertical"
+          style={{ fontSize: "20px", color: "white" }}
+        ></i>
       </div>
     </div>
   );

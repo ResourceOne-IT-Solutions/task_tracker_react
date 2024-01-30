@@ -2,6 +2,7 @@
   display: flex;
   height: 100%;
   width: 100%;
+  justify-content: space-between;
 }
 .profile-img img {
   width: 50px;
@@ -48,4 +49,7 @@
 .header-user-name {
   width: 30%;
   color: white;
+}
+.vertical-dots-header:hover {
+  cursor: pointer;
 }

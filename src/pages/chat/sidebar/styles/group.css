@@ -63,6 +63,7 @@
   top: 0;
   display: flex;
   justify-content: space-around;
+  max-height: 17%;
 }
 .create-group:hover {
   cursor: pointer;

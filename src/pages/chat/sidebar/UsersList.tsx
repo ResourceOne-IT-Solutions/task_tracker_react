@@ -29,6 +29,7 @@ const UserList = ({
     const RoomId = getRoomId(currentUser._id, user._id);
     setCurrentRoom(RoomId);
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
+    socket.emit("updateUser", currentUser);
   };
   let filteredUsers = users.filter((user) => {
     const fullName = getFullName(user).toLowerCase();

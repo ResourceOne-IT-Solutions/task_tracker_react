@@ -34,8 +34,8 @@
 .message-right {
   display: flex;
   justify-content: end;
-  background: lightblue;
-  border: 1px solid lightblue;
+  background: #a7a7a7;
+  border: 1px solid #a7a7a7;
   width: fit-content;
   max-width: 80%;
   overflow-wrap: break-word;

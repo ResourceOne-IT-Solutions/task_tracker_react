@@ -72,6 +72,7 @@ const Groups = ({
     setCurrentRoom(group._id);
     delete currentUser.newMessages[group._id];
     socket.emit("joinRoom", { room: group._id, previousRoom: currentRoom });
+    socket.emit("updateUser", currentUser);
   };
   return (
     <div className="group-list-container">
@@ -90,6 +91,7 @@ const Groups = ({
         <ReusableModal vals={modalProps}>
           <CreateGroup
             onCreateGroup={(group) => setTotalGroups([...totalGroups, group])}
+            setShowModal={setShowModal}
           />
         </ReusableModal>
       )}

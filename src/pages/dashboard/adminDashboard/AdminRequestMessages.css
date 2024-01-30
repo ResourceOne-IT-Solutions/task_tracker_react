@@ -14,3 +14,20 @@
   margin-right: 4px;
   justify-content: space-between;
 }
+.request-content-wrapper {
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid grey;
+  align-items: center;
+  margin: 2px;
+  padding: 6px;
+}
+.message-request-content {
+  text-align: left;
+}
+.message-seen-btn {
+  padding: 2px;
+}
+.chatrequest-message {
+  text-align: left;
+}

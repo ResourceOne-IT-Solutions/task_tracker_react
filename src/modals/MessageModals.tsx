@@ -21,12 +21,13 @@ export interface TicketRequestInterface {
 export interface MessageRequestInterface {
   content: string;
   date: string;
-  deliveredTo: [];
+  deliveredTo: string[];
   sender: NameIdInterface;
   time: string;
-  viewedBy: [];
+  viewedBy: string[];
   __v: number;
   _id: string;
+  isSeen: boolean;
 }
 
 export interface FileModel {

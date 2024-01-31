@@ -144,7 +144,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },
       sender: { id: currentUser._id, name: getFullName(currentUser) },
-    });
+    }); 
+    alert("Ticket request sent")
   };
   const handleChatRequest = () => {
     setShowChatRequestPopup(true);

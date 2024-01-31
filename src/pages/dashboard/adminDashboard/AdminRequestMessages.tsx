@@ -96,12 +96,13 @@ function AdminRequestMessages() {
           ) : (
             chatRequests?.map((chat) => {
               return (
-                <div className="request-content" key={chat._id}>
-                  <p>
+                <div className="request-content-wrapper" key={chat._id}>
+                  
+                  <div>
                     {chat.sender.name} is Requesting to Chat with{" "}
                     {chat.opponent.name}.{" "}
-                  </p>
-                  <p>
+                  </div>
+                  <div>
                     {chat.isPending ? (
                       <Button
                         variant="success"
@@ -110,9 +111,9 @@ function AdminRequestMessages() {
                         Give Access
                       </Button>
                     ) : (
-                      "Resolved"
+                      <Button variant="success" disabled>Resolved</Button>
                     )}
-                  </p>
+                  </div>
                 </div>
               );
             })
@@ -125,7 +126,7 @@ function AdminRequestMessages() {
           ) : (
             ticketRequests?.map((ticket) => {
               return (
-                <div className="request-content" key={ticket._id}>
+                <div className="request-content-wrapper" key={ticket._id}>
                   <p>
                     {ticket.sender.name} is Requesting for {ticket.client.name}{" "}
                     tickets.
@@ -139,7 +140,7 @@ function AdminRequestMessages() {
                         Give Access
                       </Button>
                     ) : (
-                      "Resolved"
+                      <Button variant="success" disabled>Resolved</Button>
                     )}
                   </p>
                 </div>
@@ -154,15 +155,22 @@ function AdminRequestMessages() {
           ) : (
             messageRequests?.map((message) => {
               return (
-                <div className="request-content" key={message._id}>
-                  <div>
+                <div className="request-content-wrapper" key={message._id}>
+                  {/* <div>
                     <span>Message: {message.content}</span>
                     <span>
                       Time: {message.date} - {message.time}
                     </span>
                     <span>Sent by: {message.sender.name}</span>
+                  </div> */}
+                   <div className="message-request-content">
+                    <div className="my-2">Message: {message.content}</div>
+                    <div className="my-2">
+                      Time: {message.date} {message.time}
+                    </div>
+                    <div className="my-2">Sent by: {message.sender.name}</div>
                   </div>
-                  <div className="d-flex flex-column">
+                  <div className="d-flex flex-column delivery-status">
                     <span>
                       Delivered to{" "}
                       <span className="fw-bold">

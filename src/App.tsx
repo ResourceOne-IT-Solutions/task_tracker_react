@@ -28,7 +28,9 @@ function App() {
         const totalMessage =
           Object.values(currentUser?.newMessages).length &&
           Object.values(currentUser?.newMessages)?.reduce((a, b) => a + b);
-        const roomsCount = Object.keys(currentUser.newMessages).length;
+        const roomsCount = Object.keys(currentUser?.newMessages)?.length
+          ? Object.keys(currentUser?.newMessages).length
+          : 0;
         setNotificationRooms(roomsCount);
         setTotalMessages(totalMessage);
         setCurrentUser(currentUser);
@@ -45,6 +47,10 @@ function App() {
     });
   socket.off("statusUpdate").on("statusUpdate", (user) => {
     setCurrentUser(user);
+    const roomsCount = Object.keys(user?.newMessages)?.length
+      ? Object.keys(user?.newMessages).length
+      : 0;
+    setNotificationRooms(roomsCount);
   });
   socket.off("ticketAssigned").on("ticketAssigned", (id, sender) => {
     if (currentUser._id === id) {

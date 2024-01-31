@@ -311,7 +311,7 @@ function AddUserpage() {
         {userError && <div className="err-msg">{userError}</div>}
         <div className="navigating">
           <a className="nav-link" onClick={() => navigate(-1)}>
-            <i>click here to go back</i>
+            <Button variant="danger">Go Back</Button>
           </a>
         </div>
       </Form>

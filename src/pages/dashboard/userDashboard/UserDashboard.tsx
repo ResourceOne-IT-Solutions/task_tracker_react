@@ -179,12 +179,19 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       setShowModal(true);
     }
   };
+  const groupedByStartDate = presentUser.breakTime.reduce((acc: any, obj) => {
+    const startDate = obj.startDate;
+    if (!acc[startDate]) {
+      acc[startDate] = [];
+    }
+    acc[startDate].push(obj);
+    return acc;
+  }, {});
   return (
     <>
       <div className="userdashboard">
         <p className="username">
-          Welcome to {getFullName(presentUser)} Dashboard (
-          {statusIndicator(presentUser.status)})
+          Welcome to <b>{getFullName(presentUser)}</b> Dashboard
         </p>
         <div className="usernavbar">
           <div className="nav_img_container">
@@ -196,74 +203,53 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         </div>
         <div className="userdetails">
           <div className="userleft">
-            <p>Profile Image</p>
-            <img src={`${presentUser.profileImageUrl}`} />
-            <div className="employee-details">
-              <ul>
-                <li>Employee Details</li>
-                <li>Emp ID: {presentUser.empId}</li>
-                <li>First Name : {presentUser.firstName}</li>
-                <li>Last Name : {presentUser.lastName}</li>
-                <li>Email : {presentUser.email}</li>
-                <li>Gender: {presentUser.gender}</li>
-                <li>Dob : {dateConversion(presentUser.dob)}</li>
-                <li>Phone : {presentUser.mobile}</li>
-                <li>Role : {presentUser.designation}</li>
-              </ul>
-            </div>
-          </div>
-          <div className="usercenter">
-            <div className="emprole">
-              <p>Role</p>
-              <p>{presentUser.designation}</p>
-              <p>TEAM</p>
-              <p>React Community</p>
-            </div>
-            <div className="stats">
-              <ul>
-                <li>Stats</li>
-                <li>Today Tickets: {presentUser.totalTickets}</li>
-                <li>Progress Tickets: {presentUser.progressTickets}</li>
-                <li>Pending: {presentUser.pendingTickets}</li>
-                <li>Resolved: {presentUser.helpedTickets}</li>
-                <li>Helped Tickets: {presentUser.helpedTickets}</li>
-                <li>Total Tickets : {presentUser.totalTickets}</li>
-              </ul>
-            </div>
+            <ul>
+              <b>Employee Details</b>
+              <li>Employee ID: {presentUser.empId}</li>
+              <li>Employee Name: {getFullName(presentUser)}</li>
+              <li>Email : {presentUser.email}</li>
+              <li>Gender: {presentUser.gender}</li>
+              <li>Dob : {dateConversion(presentUser.dob)}</li>
+              <li>Phone : {presentUser.mobile}</li>
+              <li>Role : {presentUser.designation}</li>
+              <b>Login Timings</b>
+              {presentUser.loginTimings.map((logtime: any) => {
+                return (
+                  <li key={new Date(logtime.inTime).toLocaleTimeString()}>
+                    <span className="fw-semibold">
+                      {new Date(logtime.date).toLocaleDateString()}
+                    </span>{" "}
+                    Login - {new Date(logtime.inTime).toLocaleTimeString()}{" "}
+                    Logout - {new Date(logtime.outTime).toLocaleTimeString()}{" "}
+                  </li>
+                );
+              })}
+              <b>Break Timings</b>
+              {Object.entries(groupedByStartDate).map((key) => {
+                const arr: any = key[1];
+                return (
+                  <li key={key[0]}>
+                    <li className="fw-semibold">{key[0]}</li>
+                    <li>
+                      {arr.map((brtime: any) => {
+                        return (
+                          <li key={brtime.startTime}>
+                            startTime {brtime.startTime} endTime{" "}
+                            {brtime.endTime}
+                          </li>
+                        );
+                      })}
+                    </li>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
           <div className="userright">
-            <div className="joiningdate">
-              <div>
-                <p>Joined On</p>
-                <p>{dateConversion(presentUser.joinedDate)}</p>
-                <p>Working from</p>
-                <p>
-                  {workingDuration.years} years {workingDuration.months} Months{" "}
-                </p>
-                <p>{workingDuration.days} Days</p>
-              </div>
-              <div>
-                <PieChartComponent
-                  data={pieChartData}
-                  totalTickets={tableData.length}
-                />
-              </div>
-              <div>
-                <Button variant="warning">Edit User</Button>
-              </div>
-            </div>
-            <div className="lastlogindata">
-              <ul>
-                <li>Last LoggedIn Data</li>
-                <li>Browser : Google Chrome</li>
-                <li>IP Address: 192.168.10.29</li>
-                <li>Login Time: 1/5/2024, 10:08:50 AM</li>
-                <li>Location: {presentUser.address}</li>
-                <li>
-                  Map: <a href="_blank">Click here </a>(Approximate location)
-                </li>
-              </ul>
-            </div>
+            <PieChartComponent
+              data={pieChartData}
+              totalTickets={tableData.length}
+            />
           </div>
         </div>
       </div>

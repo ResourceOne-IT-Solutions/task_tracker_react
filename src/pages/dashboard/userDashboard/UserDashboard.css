@@ -1,44 +1,15 @@
-/* left section design */
 .userdetails {
   border: 1px solid rgb(37, 155, 151);
   margin: 10px 5px 5px 5px;
   padding: 5px;
   border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 .username {
   font-size: 40px;
   font-family: sans-serif;
   color: dimgrey;
-}
-
-.userdetails {
-  display: flex;
-}
-/* .userleft {
-  width: 33%;
-  margin: 5px;
-} */
-.userleft p {
-  color: rgb(136, 136, 136);
-  text-align: left;
-  margin-left: 33px;
-}
-/* center section design */
-.usercenter {
-  /* border: 1px solid red; */
-  width: 33%;
-  margin: 5px;
-}
-.usercenter p {
-  text-align: left;
-  margin-left: 33px;
-}
-.stats ul {
-  list-style: none;
-  text-align: left;
-}
-.stats ul :first-child {
-  color: rgb(136, 136, 136);
 }
 .emprole {
   margin-bottom: 175px;
@@ -47,42 +18,6 @@
   color: rgb(136, 136, 136);
 }
 .emprole p:first-child {
-  color: rgb(136, 136, 136);
-}
-/* last section design */
-.userright {
-  /* border: 1px solid red; */
-  width: 50%;
-  margin: 5px;
-}
-.employee-details p {
-  text-align: left;
-}
-.employee-details ul {
-  list-style: none;
-  text-align: left;
-}
-.employee-details ul :first-child {
-  color: rgb(136, 136, 136);
-}
-.joiningdate p {
-  text-align: left;
-  margin-left: 33px;
-}
-.joiningdate p:first-child {
-  color: rgb(136, 136, 136);
-}
-.joiningdate p:nth-child(3) {
-  color: rgb(136, 136, 136);
-}
-.joiningdate {
-  display: flex;
-}
-.lastlogindata ul {
-  list-style: none;
-  text-align: left;
-}
-.lastlogindata ul li:first-child {
   color: rgb(136, 136, 136);
 }
 /* user navbar */

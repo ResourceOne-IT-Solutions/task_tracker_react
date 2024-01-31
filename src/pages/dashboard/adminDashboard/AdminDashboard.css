@@ -38,7 +38,7 @@ ul {
 } */
 .admin-btns {
   display: flex;
-  justify-content: end;
+  justify-content: center;
   margin: 5px;
   border: 1px solid grey;
   width: 39.5%;
@@ -101,7 +101,7 @@ input {
 .sub-ranges .main-container {
   width: 85%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: center;
   margin: 6px;
   border-radius: 10px;

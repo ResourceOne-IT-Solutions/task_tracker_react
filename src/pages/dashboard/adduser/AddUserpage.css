@@ -25,6 +25,7 @@
 }
 .navigating {
   color: blue;
+  margin: 4px;
 }
 .navigating .nav-link:hover {
   cursor: pointer;

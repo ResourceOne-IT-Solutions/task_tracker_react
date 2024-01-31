@@ -22,6 +22,19 @@ export interface NameIdInterface {
   name: string;
   id: string;
 }
+export interface loginInterface {
+  inTime: string;
+  outTime: string;
+  date: string;
+  _id: string;
+}
+export interface BreakInterface {
+  startDate: string;
+  startTime: string;
+  endDate: string;
+  endTime: string;
+  type: string;
+}
 export interface UserModal {
   firstName: string;
   lastName: string;
@@ -48,6 +61,8 @@ export interface UserModal {
   newMessages: { [key: string]: number };
   members: NameIdInterface[];
   gender: string;
+  loginTimings: loginInterface[];
+  breakTime: BreakInterface[];
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";
 

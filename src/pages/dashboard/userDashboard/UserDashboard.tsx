@@ -223,22 +223,21 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               })}
               <b>Break Timings</b>
               {Object.entries(groupedByStartDate).map((key) => {
-                console.log(key);
                 const arr: any = key[1];
                 return (
-                  <>
+                  <li key={key[0]}>
                     <li className="fw-semibold">{key[0]}</li>
                     <li>
                       {arr.map((brtime: any) => {
                         return (
-                          <li>
+                          <li key={brtime.startTime}>
                             startTime {brtime.startTime} endTime{" "}
                             {brtime.endTime}
                           </li>
                         );
                       })}
                     </li>
-                  </>
+                  </li>
                 );
               })}
             </ul>

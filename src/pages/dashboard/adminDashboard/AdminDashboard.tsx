@@ -18,7 +18,7 @@ import { ClientModal } from "../../../modals/ClientModals";
 import TicketsMain from "../../tickets/TicketsMain";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 import MailSender from "../../../utils/modal/MailSender";
-import { PIE_CHART_NAME } from "../../../utils/Constants";
+import { USER_STATUSES } from "../../../utils/Constants";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -481,7 +481,7 @@ const AdminDashboard = () => {
             <PieChartComponent
               data={pieChartStatuses}
               totalTickets={usersData.length}
-              name={PIE_CHART_NAME}
+              name={USER_STATUSES}
             />
             <div className="show-range">
               <div>

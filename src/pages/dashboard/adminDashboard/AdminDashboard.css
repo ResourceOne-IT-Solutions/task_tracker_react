@@ -106,15 +106,6 @@ input {
   margin: 6px;
   border-radius: 10px;
 }
-.ranges .sub-ranges .main-container div p {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid grey;
-  text-align: center;
-  line-height: 100px;
-  margin: 10px;
-}
 .circle {
   width: 20%;
 }

@@ -83,10 +83,15 @@ function App() {
     });
   socket
     .off("adminMessageToAll")
-    .on("adminMessageToAll", ({ sender, content }) => {
+    .on("adminMessageToAll", ({ sender, content, _id }) => {
       if (!currentUser.isAdmin) {
         const message = `${content}   \n --- from ${sender.name}`;
         alert(message);
+        socket.emit("updateAdminMessageStatus", {
+          userId: currentUser._id,
+          messageId: _id,
+          status: "DELIVERY",
+        });
       }
     });
   socket.off("error").on("error", (error) => {

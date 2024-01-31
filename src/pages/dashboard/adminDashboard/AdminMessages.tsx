@@ -93,7 +93,6 @@ function AdminMessages() {
                       Time: {chat.date} {chat.time}
                     </div>
                   </div>
-
                   <p>
                     {chat.isPending ? (
                       <Button variant="danger" disabled>

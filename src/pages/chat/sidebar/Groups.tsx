@@ -22,6 +22,7 @@ interface GroupChatProps {
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
 }
 
 const Groups = ({
@@ -30,6 +31,7 @@ const Groups = ({
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
+  setCurrentUser,
 }: GroupChatProps) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [users, setUsers] = useState<UserModal[]>([]);

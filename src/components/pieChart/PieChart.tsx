@@ -1,5 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Legend, Tooltip, Cell, Label } from "recharts";
+import { PIE_CHART_NAME } from "../../utils/Constants";
 
 interface PieChartProps {
   data: { name: string; value: number }[];
@@ -28,8 +29,8 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   return (
     <div>
       <PieChart
-        width={name == "users_statuses" ? 200 : 400}
-        height={name == "users_statuses" ? 200 : 400}
+        width={name == PIE_CHART_NAME ? 200 : 400}
+        height={name == PIE_CHART_NAME ? 200 : 400}
         style={{ margin: "auto" }}
       >
         <Pie
@@ -51,15 +52,15 @@ const PieChartComponent: React.FC<PieChartProps> = ({
             />
           ))}
         </Pie>
-        {name !== "users_statuses" && (
+        <Tooltip />
+        {name !== PIE_CHART_NAME && (
           <>
-            <Tooltip />
             <Legend />
           </>
         )}
       </PieChart>
       <h4 style={{ color: "#000000" }}>
-        Total {name == "users_statuses" ? "Users" : "Tickets"}: {totalTickets}
+        Total {name == PIE_CHART_NAME ? "Users" : "Tickets"}: {totalTickets}
       </h4>
     </div>
   );

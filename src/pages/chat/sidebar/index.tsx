@@ -11,6 +11,7 @@ const ChatSideBar = () => {
   const {
     socket,
     currentUser,
+    selectedUser,
     setSelectedUser,
     currentRoom,
     setCurrentRoom,
@@ -61,6 +62,7 @@ const ChatSideBar = () => {
           users={users}
           currentUser={currentUser}
           setSelectedUser={setSelectedUser}
+          selectedUser={selectedUser}
           currentRoom={currentRoom}
           setCurrentRoom={setCurrentRoom}
           socket={socket}

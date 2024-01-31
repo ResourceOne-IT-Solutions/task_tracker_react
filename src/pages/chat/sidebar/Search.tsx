@@ -15,11 +15,9 @@ const Search = ({ onSearch }: SearchBarProps) => {
   };
   return (
     <div className="search-box">
-      <div className="chat-back-btn">
-        <i
-          className="bi bi-arrow-left-circle-fill font-size-icon"
-          onClick={handleChatBack}
-        ></i>
+      <div className="chat-back-btn" onClick={handleChatBack}>
+        <i className="bi bi-arrow-left-circle-fill font-size-icon"></i>
+        <span>Go Back</span>
       </div>
       <div>
         <input type="text" placeholder="Search" onChange={handleInputChange} />

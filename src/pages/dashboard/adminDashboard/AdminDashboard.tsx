@@ -128,11 +128,11 @@ const AdminDashboard = () => {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
   useEffect(() => {
-    const total = usersData.length;
+    const totalUsers = usersData.length;
     const availableUsers = usersData.filter(
       (user) => user.status == "Available",
     ).length;
-    const offlineeUsers = usersData.filter(
+    const offlineUsers = usersData.filter(
       (user) => user.status == "Offline",
     ).length;
     const breakUsers = usersData.filter(
@@ -142,15 +142,15 @@ const AdminDashboard = () => {
       (user) => user.status == "On Ticket",
     ).length;
     setUsersStatuses({
-      totalUsers: total,
-      availableUsers: available,
-      breakUsers: breakusers,
-      offlineUsers: offline,
+      totalUsers,
+      availableUsers,
+      breakUsers,
+      offlineUsers,
       onTicketUsers: onTicket,
     });
     setPieChartStatuses([
       { name: "Available", value: availableUsers },
-      { name: "Offline", value: offlineeUsers },
+      { name: "Offline", value: offlineUsers },
       { name: "Break", value: breakUsers },
       { name: "On Ticket", value: onTicket },
     ]);

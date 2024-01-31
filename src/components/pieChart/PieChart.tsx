@@ -17,7 +17,7 @@ const allColors: any = {
   Available: "#00f02c",
   Offline: "#dc3545",
   Break: "#170ce8",
-  "On Ticket": "#0eed9b",
+  "On Ticket": "#000",
 };
 
 const PieChartComponent: React.FC<PieChartProps> = ({
@@ -38,7 +38,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
           nameKey="name"
           cx="50%"
           cy="50%"
-          outerRadius={80}
+          outerRadius={100}
         >
           {data.map((_, index) => (
             <Cell key={`cell-${index}`} fill={allColors[_.name]} />

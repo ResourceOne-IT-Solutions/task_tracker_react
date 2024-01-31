@@ -543,21 +543,6 @@ const AdminDashboard = () => {
                   value={usersStatuses.onTicketUsers}
                 />
               </div>
-              <div>
-                <label htmlFor="onTicket" className="fw-bold">
-                  On Ticket{"----"}
-                  <span>
-                    {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
-                  </span>
-                </label>
-                <input
-                  type="range"
-                  name="onTicket"
-                  id="onTicket"
-                  max={usersStatuses.totalUsers}
-                  defaultValue={usersStatuses.breakUsers}
-                />
-              </div>
             </div>
           </div>
         </div>

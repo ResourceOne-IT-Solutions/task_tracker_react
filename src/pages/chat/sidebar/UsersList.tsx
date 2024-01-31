@@ -13,12 +13,14 @@ interface UserListProps {
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
+  selectedUser: UserModal;
 }
 
 const UserList = ({
   users,
   socket,
   currentUser,
+  selectedUser,
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
@@ -50,7 +52,9 @@ const UserList = ({
         filteredUsers.map((user: UserModal) => (
           <div
             key={user._id}
-            className="user-main"
+            className={`user-main ${
+              selectedUser._id === user._id ? "selected-user" : ""
+            }`}
             onClick={() => handleProfileClick(user)}
           >
             <div className="user">

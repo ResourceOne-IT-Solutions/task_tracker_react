@@ -97,7 +97,6 @@ function AdminRequestMessages() {
             chatRequests?.map((chat) => {
               return (
                 <div className="request-content-wrapper" key={chat._id}>
-                  
                   <div>
                     {chat.sender.name} is Requesting to Chat with{" "}
                     {chat.opponent.name}.{" "}
@@ -111,7 +110,9 @@ function AdminRequestMessages() {
                         Give Access
                       </Button>
                     ) : (
-                      <Button variant="success" disabled>Resolved</Button>
+                      <Button variant="success" disabled>
+                        Resolved
+                      </Button>
                     )}
                   </div>
                 </div>
@@ -140,7 +141,9 @@ function AdminRequestMessages() {
                         Give Access
                       </Button>
                     ) : (
-                      <Button variant="success" disabled>Resolved</Button>
+                      <Button variant="success" disabled>
+                        Resolved
+                      </Button>
                     )}
                   </p>
                 </div>
@@ -163,7 +166,7 @@ function AdminRequestMessages() {
                     </span>
                     <span>Sent by: {message.sender.name}</span>
                   </div> */}
-                   <div className="message-request-content">
+                  <div className="message-request-content">
                     <div className="my-2">Message: {message.content}</div>
                     <div className="my-2">
                       Time: {message.date} {message.time}

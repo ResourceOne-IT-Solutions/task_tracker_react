@@ -144,8 +144,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },
       sender: { id: currentUser._id, name: getFullName(currentUser) },
-    }); 
-    alert("Ticket request sent")
+    });
+    alert("Ticket request sent");
   };
   const handleChatRequest = () => {
     setShowChatRequestPopup(true);
@@ -163,6 +163,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       user: { name: getFullName(currentUser), id: currentUser._id },
       opponent: { name: exactUsername, id: exactUserid },
     });
+    alert("Chat Request sent");
+    setShowChatRequestPopup(false);
   };
   const handleTicketRaise = () => {
     if (!currentUser.isAdmin) {

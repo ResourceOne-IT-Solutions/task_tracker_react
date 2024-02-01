@@ -98,7 +98,10 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Dropdown onSelect={handleDropdownSelect}>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic-create-group"
+              >
                 Select Users
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>

@@ -123,7 +123,10 @@ const Tickets = ({ url }: Props) => {
       </h4>
       <div className="filters">
         <Dropdown onSelect={handleSelectStatus} className="drop-down">
-          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+          <Dropdown.Toggle
+            variant="secondary"
+            id="dropdown-basic-ticket-filter"
+          >
             {selected ? selected : "Select a filter"}
           </Dropdown.Toggle>
           <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>

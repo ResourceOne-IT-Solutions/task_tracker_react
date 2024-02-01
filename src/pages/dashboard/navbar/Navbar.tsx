@@ -164,7 +164,10 @@ function Navbar() {
                   }
                 >
                   <Dropdown onSelect={handleSelectStatus} className="drop-down">
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                    <Dropdown.Toggle
+                      variant="secondary"
+                      id="dropdown-basic-user-status"
+                    >
                       {currentUser.status ? (
                         <span>
                           {statusIndicator(currentUser.status)}{" "}

@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./styles/footer.css";
 import { UserModal } from "../../../modals/UserModals";
-import {
-  getFormattedDate,
-  getFormattedTime,
-  getFullName,
-} from "../../../utils/utils";
+import { getDate, getFullName } from "../../../utils/utils";
 import { Socket } from "socket.io-client";
 import httpMethods from "../../../api/Service";
 import { FileModel } from "../../../modals/MessageModals";
@@ -47,8 +43,8 @@ const ChatFooter = ({
       content: message,
       type,
       opponentId: selectedUser._id,
-      time: getFormattedTime("time"),
-      date: getFormattedDate(new Date()),
+      time: getDate(),
+      date: getDate(),
       fileLink,
       isGroup,
     };

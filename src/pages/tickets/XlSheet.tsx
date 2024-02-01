@@ -38,7 +38,12 @@ function XlSheet({ tableData }: Prop) {
   };
   return (
     <>
-      <Button onClick={handleExportClick}>Xl Sheet</Button>
+      <Button
+        onClick={handleExportClick}
+        disabled={tableData.length ? false : true}
+      >
+        Excel Sheet
+      </Button>
     </>
   );
 }

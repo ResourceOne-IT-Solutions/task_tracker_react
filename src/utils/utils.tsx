@@ -97,6 +97,12 @@ export const getFormattedTime = (type?: DateType) => {
   const time = t + " " + d[2];
   return time;
 };
+export const getDate = (date: Date = new Date()): Date => {
+  if (date) {
+    return new Date(date);
+  }
+  return new Date();
+};
 
 export const getFormattedDate = (date: Date, format?: string) => {
   const year = date.getFullYear();

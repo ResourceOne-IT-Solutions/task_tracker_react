@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Timezones.css";
+import { getDate } from "../../../utils/utils";
 
 const time = (timeZone: string, date: Date = new Date()) => {
   return date.toLocaleString("en-US", {
@@ -20,7 +21,7 @@ const Timezones = () => {
   });
   useEffect(() => {
     const interval = setInterval(() => {
-      const d = new Date();
+      const d = getDate();
       const EST = time("America/New_York", d);
       const CST = time("America/Chicago", d);
       const PST = time("America/Los_Angeles", d);

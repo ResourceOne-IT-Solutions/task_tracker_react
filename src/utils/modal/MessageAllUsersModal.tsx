@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
-import { getFormattedDate, getFormattedTime } from "../utils";
+import { getDate } from "../utils";
 interface ShowModalpopup {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,8 +23,8 @@ function MessageAllUsersModal({ setShowModal }: ShowModalpopup) {
       socket.emit("adminMessage", {
         sender: { id: currentUser._id, name: currentUser.firstName },
         content: message,
-        time: getFormattedTime("time"),
-        date: getFormattedDate(new Date()),
+        time: getDate(),
+        date: getDate(),
       });
       setmsgSuccess(true);
       setTimeout(() => {

@@ -6,17 +6,14 @@ import {
   MessageRequestInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
-import {
-  getData,
-  getFormattedDate,
-  getFormattedTime,
-  getFullName,
-} from "../../../utils/utils";
+import { getData, getDate, getFullName } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext } from "../../../modals/UserModals";
+import { useNavigate } from "react-router-dom";
 
 function AdminRequestMessages() {
   const userContext = useUserContext();
+  const navigate = useNavigate();
   const { socket, currentUser } = userContext as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
@@ -76,8 +73,8 @@ function AdminRequestMessages() {
       user: {
         name: getFullName(currentUser),
         id: currentUser._id,
-        time: getFormattedTime(),
-        date: getFormattedDate(new Date()),
+        time: getDate(),
+        date: getDate(),
       },
       requestId: data._id,
       type,
@@ -88,6 +85,9 @@ function AdminRequestMessages() {
   return (
     <div>
       <h1>Admin Request Messages</h1>
+      <Button variant="danger" onClick={() => navigate(-1)}>
+        Go Back
+      </Button>
       <div className="request-msgs">
         <div className="request-sub-msg">
           <h3>Chat Requests</h3>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import httpMethods from "../../../api/Service";
 import { FileModel, MessageModel } from "../../../modals/MessageModals";
 import "./styles/utils.css";
+import { getFormattedTime } from "../../../utils/utils";
 
 const FileRenderer = ({ type, fileUrl }: { type: string; fileUrl: string }) => {
   switch (type) {
@@ -69,7 +70,7 @@ export const FileComponent = ({
         </span>
       </div>
       <div className="content">{file.content}</div>
-      <p className="time-display">{file.time}</p>
+      <p className="time-display">{getFormattedTime(file.time)}</p>
     </div>
   );
 };

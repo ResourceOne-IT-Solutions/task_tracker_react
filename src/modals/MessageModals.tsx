@@ -50,7 +50,7 @@ export interface MessageModel {
   content: string;
   type: Type;
   opponentId: string;
-  time: string;
+  time: Date;
   date: string;
   fileLink: string;
   _id: string;

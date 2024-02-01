@@ -1,12 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import ChatBody from "./Body";
 import ChatFooter from "./Footer";
 import ChatHeader from "./Header";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import {
+  RoomMessages,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 
 export const ChatBox = () => {
   const userContext = useUserContext();
+  const [totalMessages, setTotalMessages] = useState<RoomMessages[]>([]);
   const { selectedUser, setSelectedUser, socket, currentUser, currentRoom } =
     userContext as UserContext;
   useEffect(() => {
@@ -22,10 +27,19 @@ export const ChatBox = () => {
             <ChatHeader
               selectedUser={selectedUser}
               setSelectedUser={setSelectedUser}
+              totalMessages={totalMessages}
+              currentUser={currentUser}
             />
           </div>
           <div className="chat-body">
-            <ChatBody socket={socket} currentUser={currentUser} />
+            <ChatBody
+              socket={socket}
+              currentUser={currentUser}
+              setTotalMessages={(messages: RoomMessages[]) =>
+                setTotalMessages(messages)
+              }
+              totalMessages={totalMessages}
+            />
           </div>
           <div className="chat-footer">
             <ChatFooter

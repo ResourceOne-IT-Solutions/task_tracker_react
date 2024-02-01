@@ -13,7 +13,7 @@ import UserStatsPage from "../pages/dashboard/UserStatsPage";
 import AdminRequestMessages from "../pages/dashboard/adminDashboard/AdminRequestMessages";
 import Navbar from "../pages/dashboard/navbar/Navbar";
 import UserTickets from "../pages/tickets/UserTickets";
-import AdminMessages from "../pages/dashboard/adminDashboard/AdminMessages";
+import AdminMessages from "../pages/dashboard/userDashboard/AdminMessages";
 import ApprovedTickets from "../pages/tickets/ApprovedTickets";
 import UsersTable from "../components/Admintables/UsersTable";
 import ClientsTable from "../components/Admintables/ClientsTable";

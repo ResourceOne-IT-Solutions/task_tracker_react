@@ -84,7 +84,7 @@ function AdminRequestMessages() {
   };
   return (
     <div>
-      <h1>Admin Request Messages</h1>
+      <h1>Request Messages</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back
       </Button>

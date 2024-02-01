@@ -140,7 +140,7 @@ function AddUserpage() {
           <Form.Group
             as={Col}
             md="6"
-            controlId="validationFormik102"
+            controlId="validationFormik102-user-lastname"
             className="position-relative"
           >
             <Form.Control
@@ -156,7 +156,7 @@ function AddUserpage() {
           <Form.Group
             as={Col}
             md="6"
-            controlId="validationFormik102"
+            controlId="validationFormik102-user-email"
             className="position-relative"
           >
             <Form.Control
@@ -171,16 +171,16 @@ function AddUserpage() {
           <Form.Group
             as={Col}
             md="6"
-            controlId="validationFormik102"
+            controlId="validationFormik102-user-mobile"
             className="position-relative"
           >
             <Form.Control
-              id="mobile"
               type="tel"
               name="mobile"
               placeholder="Enter Mobile Number"
               onChange={handleChange}
               value={mobile}
+              autoComplete="current-mobile"
             />
           </Form.Group>
         </Row>
@@ -190,9 +190,9 @@ function AddUserpage() {
               type="password"
               placeholder="Enter Password"
               name="password"
-              id="password"
               onChange={handleChange}
               value={password}
+              autoComplete="current-password"
             />
           </Form.Group>
           <Form.Group as={Col} md="1">
@@ -221,7 +221,7 @@ function AddUserpage() {
           </Form.Group>
           <Form.Group as={Col} md="3">
             <Dropdown onSelect={handleSelect}>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
+              <Dropdown.Toggle variant="success" id="dropdown-basic-gender">
                 {gender ? gender : "Select Gender"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
@@ -244,7 +244,6 @@ function AddUserpage() {
             <Form.Control
               type="date"
               name="dob"
-              id="dob"
               placeholder="Enter Dob"
               onChange={handleChange}
               value={dob}
@@ -259,7 +258,6 @@ function AddUserpage() {
             <Form.Control
               type="date"
               name="joinedDate"
-              id="joinedDate"
               placeholder="Enter JoinedDate"
               onChange={handleChange}
               value={joinedDate}
@@ -273,7 +271,6 @@ function AddUserpage() {
             <Form.Control
               type="file"
               name="profileImageUrl"
-              id="profileImageUrl"
               onChange={handleChange}
             />
           </Form.Group>
@@ -281,7 +278,6 @@ function AddUserpage() {
             <Form.Control
               type="text"
               name="designation"
-              id="designation"
               placeholder="Enter Designation"
               onChange={handleChange}
               value={designation}

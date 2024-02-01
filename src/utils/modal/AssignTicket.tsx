@@ -160,7 +160,10 @@ function AssignTicket({
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Dropdown onSelect={handleSelect}>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
+              <Dropdown.Toggle
+                variant="success"
+                id="dropdown-basic-assign-ticket-user"
+              >
                 {selectedUser ? selectedUser : "Select a User"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>

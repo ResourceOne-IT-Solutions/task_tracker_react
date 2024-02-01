@@ -109,15 +109,19 @@ function App() {
       socket.emit("changeStatus", { id: currentUser._id, status: "Break" });
     }
   }
-  document.addEventListener("click", resetInactivityTimer);
 
   useEffect(() => {
-    resetInactivityTimer();
+    if (!currentUser.isAdmin) {
+      document.addEventListener("click", resetInactivityTimer);
+      resetInactivityTimer();
+    }
 
     return () => {
-      document.removeEventListener("click", resetInactivityTimer);
+      if (!currentUser.isAdmin) {
+        document.removeEventListener("click", resetInactivityTimer);
+      }
     };
-  }, []);
+  }, [currentUser._id]);
   return (
     <div className="App">
       <Routespage />

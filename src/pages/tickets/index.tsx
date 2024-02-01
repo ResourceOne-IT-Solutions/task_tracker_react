@@ -119,7 +119,7 @@ const Tickets = ({ url }: Props) => {
     <>
       <h4>
         Total Tickets : <Button onClick={() => navigate(-1)}>Back</Button>{" "}
-        <XlSheet tableData={allTickets} />
+        <XlSheet tableData={showingTickets} />
       </h4>
       <div className="filters">
         <Dropdown onSelect={handleSelectStatus} className="drop-down">

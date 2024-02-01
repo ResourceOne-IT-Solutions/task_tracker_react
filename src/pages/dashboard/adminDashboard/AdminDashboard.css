@@ -38,13 +38,11 @@ ul {
 } */
 .admin-btns {
   display: flex;
-  justify-content: center;
   margin: 5px;
   border: 1px solid grey;
   width: 39.5%;
   border-radius: 10px;
   align-items: center;
-  gap: 7%;
 }
 .admin-btns button {
   color: aliceblue;

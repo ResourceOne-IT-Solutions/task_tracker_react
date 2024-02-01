@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
-import { getFormattedDate, getFormattedTime } from "../utils";
+import { getDate } from "../utils";
 interface ShowModalpopup {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

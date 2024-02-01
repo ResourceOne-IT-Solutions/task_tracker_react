@@ -26,7 +26,7 @@ function AdminMessages() {
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
-  const handleApproved = (chat: ChatRequestInterface) => {
+  const handleApprovedChat = (chat: ChatRequestInterface) => {
     getData<UserModal>(`users/${chat.opponent.id}`).then((res: any) => {
       setSelectedUser(res);
       navigate("/chat");
@@ -72,9 +72,15 @@ function AdminMessages() {
         setMessageLoading(false);
       });
   }, []);
+  const handleApprovedTicket = (ticket: any) => {
+    navigate("/approved/tickets", { state: ticket });
+  };
   return (
     <div>
       <h1>Admin Messages</h1>
+      <Button variant="danger" onClick={() => navigate(-1)}>
+        Go Back
+      </Button>
       <div className="request-msgs">
         <div className="request-sub-msg">
           <h3>User Requested Chat</h3>
@@ -101,7 +107,7 @@ function AdminMessages() {
                     ) : (
                       <Button
                         variant="success"
-                        onClick={() => handleApproved(chat)}
+                        onClick={() => handleApprovedChat(chat)}
                       >
                         Approved
                       </Button>
@@ -135,7 +141,12 @@ function AdminMessages() {
                         Not Approved
                       </Button>
                     ) : (
-                      <Button variant="success">Approved</Button>
+                      <Button
+                        variant="success"
+                        onClick={() => handleApprovedTicket(ticket)}
+                      >
+                        Approved
+                      </Button>
                     )}
                   </div>
                 </div>

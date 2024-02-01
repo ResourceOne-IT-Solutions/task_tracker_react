@@ -54,7 +54,14 @@ const AdminDashboard = () => {
     onTicketUsers: 0,
   });
   socket.off("newUser").on("newUser", ({ userPayload }) => {
-    setUsersData(userPayload);
+    const filtered = usersData.map((val) => {
+      const status = userPayload.find(
+        (user: UserModal) => user._id === val._id,
+      ).status;
+      val.status = status;
+      return val;
+    });
+    setUsersData(filtered);
   });
   const displayTable = (name: string) => {
     if (name == "users") {
@@ -215,6 +222,7 @@ const AdminDashboard = () => {
                   id="available"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.availableUsers}
+                  readOnly
                 />
               </div>
               <div>
@@ -230,6 +238,7 @@ const AdminDashboard = () => {
                   id="offline"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.offlineUsers}
+                  readOnly
                 />
               </div>
               <div>
@@ -245,6 +254,7 @@ const AdminDashboard = () => {
                   id="break"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.breakUsers}
+                  readOnly
                 />
               </div>
               <div>
@@ -260,6 +270,7 @@ const AdminDashboard = () => {
                   id="onticket"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.onTicketUsers}
+                  readOnly
                 />
               </div>
             </div>

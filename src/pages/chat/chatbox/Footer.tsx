@@ -43,8 +43,8 @@ const ChatFooter = ({
       content: message,
       type,
       opponentId: selectedUser._id,
-      time: getDate(),
-      date: getDate(),
+      time: getFormattedTime(),
+      date: getFormattedDate(new Date()),
       fileLink,
       isGroup,
     };

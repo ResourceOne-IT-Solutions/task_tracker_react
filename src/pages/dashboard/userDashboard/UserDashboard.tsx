@@ -212,10 +212,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               <li>Dob : {dateConversion(presentUser.dob)}</li>
               <li>Phone : {presentUser.mobile}</li>
               <li>Role : {presentUser.designation}</li>
-              <b>Login Timings</b>
-              {presentUser.loginTimings.map((logtime: any) => {
+              <span className="fw-bold d-block">Login Timings</span>
+              {presentUser.loginTimings.map((logtime) => {
                 return (
-                  <li key={new Date(logtime.inTime).toLocaleTimeString()}>
+                  <li key={logtime._id}>
                     <span className="fw-semibold">
                       {new Date(logtime.date).toLocaleDateString()}
                     </span>{" "}
@@ -224,28 +224,28 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                   </li>
                 );
               })}
-              <b>Break Timings</b>
-              {Object.entries(groupedByStartDate).map((key) => {
+              <span className="fw-bold d-block">Break Timings</span>
+              {Object.entries(groupedByStartDate).map((key, i) => {
                 const arr: any = key[1];
                 return (
-                  <li key={key[0]}>
+                  <React.Fragment key={i}>
                     <li className="fw-semibold">{key[0]}</li>
                     <li>
-                      {arr.map((brtime: any) => {
+                      {arr.map((brtime: any, i: number) => {
                         return (
-                          <li key={brtime.startTime}>
+                          <span className="d-block" key={i}>
                             startTime {brtime.startTime} endTime{" "}
                             {brtime.endTime}
-                          </li>
+                          </span>
                         );
                       })}
                     </li>
-                  </li>
+                  </React.Fragment>
                 );
               })}
             </ul>
           </div>
-          <div className="userright">
+          <div className="userright w-50">
             <PieChartComponent
               data={pieChartData}
               totalTickets={tableData.length}
@@ -253,59 +253,65 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           </div>
         </div>
       </div>
-      <div className="chat-link">
-        <Button onClick={() => handleChatRequest()}>
-          Request User to Chat
-        </Button>
-        <Modal
-          show={showChatRequestPopup}
-          onHide={() => setShowChatRequestPopup(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Chat Request</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Row className="mb-3">
-                <Form.Group as={Col} md="12">
-                  <Dropdown onSelect={handleSelect}>
-                    <Dropdown.Toggle variant="success" id="dropdown-basic">
-                      {selected ? selected : "Select a User"}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                      style={{ maxHeight: "180px", overflowY: "auto" }}
-                    >
-                      {userData !== null
-                        ? userData.map((item: any, index: any) => {
-                            return (
-                              <Dropdown.Item
-                                key={index}
-                                eventKey={getFullName(item)}
-                              >
-                                {getFullName(item)}
-                              </Dropdown.Item>
-                            );
-                          })
-                        : null}
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Form.Group>
-              </Row>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="success" onClick={handleSubmitRequest}>
-              Submit
-            </Button>
-            <Button
-              variant="secondary"
-              onClick={() => setShowChatRequestPopup(false)}
-            >
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </div>
+      {currentUser._id === presentUser._id && (
+        <div className="chat-link">
+          <Button onClick={() => handleChatRequest()}>
+            Request User to Chat
+          </Button>
+          <Modal
+            show={showChatRequestPopup}
+            onHide={() => setShowChatRequestPopup(false)}
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>Chat Request</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Row className="mb-3">
+                  <Form.Group as={Col} md="12">
+                    <Dropdown onSelect={handleSelect}>
+                      <Dropdown.Toggle
+                        variant="success"
+                        id="dropdown-basic-chat-request"
+                      >
+                        {selected ? selected : "Select a User"}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        style={{ maxHeight: "180px", overflowY: "auto" }}
+                      >
+                        {userData !== null
+                          ? userData.map((item: any, index: any) => {
+                              return (
+                                <Dropdown.Item
+                                  key={index}
+                                  eventKey={getFullName(item)}
+                                >
+                                  {getFullName(item)}
+                                </Dropdown.Item>
+                              );
+                            })
+                          : null}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Form.Group>
+                </Row>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="success" onClick={handleSubmitRequest}>
+                Submit
+              </Button>
+              <Button
+                variant="secondary"
+                onClick={() => setShowChatRequestPopup(false)}
+              >
+                Close
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      )}
+
       <table>
         <thead>
           <tr>
@@ -316,6 +322,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <th>Assigned Date</th>
             <th>Description</th>
             <th>Comments</th>
+            <th>Target Date</th>
             <th>Closed Date</th>
             <th>Status</th>
             <th>
@@ -323,7 +330,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                 Ticket Raise
               </Button>
             </th>
-            <th>Request Tickets</th>
+            {currentUser._id === presentUser._id && <th>Request Tickets</th>}
           </tr>
         </thead>
         <tbody>
@@ -351,6 +358,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         </td>
                         <td>{items.description}</td>
                         <td>{items.comments}</td>
+                        <td>{dateConversion(items.targetDate)}</td>
                         <td>{dateConversion(items.closedDate)}</td>
                         <td>{items.status}</td>
                         <td>
@@ -366,14 +374,16 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                             Update Ticket
                           </Button>
                         </td>
-                        <td>
-                          <Button
-                            variant={"dark"}
-                            onClick={() => handleRequest(items)}
-                          >
-                            Request Ticket
-                          </Button>
-                        </td>
+                        {currentUser._id === presentUser._id && (
+                          <td>
+                            <Button
+                              variant={"dark"}
+                              onClick={() => handleRequest(items)}
+                            >
+                              Request Ticket
+                            </Button>
+                          </td>
+                        )}
                       </tr>
                     );
                   })}

@@ -47,7 +47,7 @@ function MailSender({ updateReference, setShowModal }: any) {
           <Form.Group as={Col} md="12">
             <Form.Control
               type="text"
-              value={emailData.client}
+              defaultValue={emailData.client}
               disabled
               className="my-2"
             />
@@ -55,7 +55,7 @@ function MailSender({ updateReference, setShowModal }: any) {
               type="email"
               placeholder="Enter Email"
               name="to"
-              value={emailData.to}
+              defaultValue={emailData.to}
               disabled
             />
           </Form.Group>

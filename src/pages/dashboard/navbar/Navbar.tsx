@@ -132,9 +132,13 @@ function Navbar() {
                     <li className="nav-item">
                       <a className="nav-link" onClick={handleChatClick}>
                         Chat{" "}
-                        <span className="user-newmsg-count">
-                          {notificationRooms}
-                        </span>
+                        {notificationRooms ? (
+                          <span className="user-newmsg-count">
+                            {notificationRooms}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </a>
                     </li>
                     <li className="nav-item">
@@ -164,7 +168,10 @@ function Navbar() {
                   }
                 >
                   <Dropdown onSelect={handleSelectStatus} className="drop-down">
-                    <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                    <Dropdown.Toggle
+                      variant="secondary"
+                      id="dropdown-basic-user-status"
+                    >
                       {currentUser.status ? (
                         <span>
                           {statusIndicator(currentUser.status)}{" "}

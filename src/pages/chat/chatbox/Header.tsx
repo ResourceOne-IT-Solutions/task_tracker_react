@@ -1,17 +1,75 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./styles/header.css";
-import { UserModal } from "../../../modals/UserModals";
+import { RoomMessages, UserModal } from "../../../modals/UserModals";
 import { getFullName, statusIndicator } from "../../../utils/utils";
 import { GROUP_IMG_URL } from "../../../utils/Constants";
+import { Button } from "react-bootstrap";
+import jsPDF from "jspdf";
 
 interface Chatprops {
   selectedUser: UserModal;
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
+  totalMessages: RoomMessages[];
+  currentUser: UserModal;
 }
 
-const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
+const ChatHeader = ({
+  selectedUser,
+  setSelectedUser,
+  totalMessages,
+  currentUser,
+}: Chatprops) => {
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const popupRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        popupRef.current &&
+        !popupRef.current.contains(event.target as Node)
+      ) {
+        setPopupOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [popupRef]);
   const handleBackHeader = () => {
     setSelectedUser({} as UserModal);
+  };
+  const handleOpenBtn = () => {
+    setPopupOpen(!isPopupOpen);
+  };
+  const handleExportBtn = () => {
+    const chatHistory = totalMessages.flatMap((messages) =>
+      messages.messageByDate.map((message) => {
+        return `${message.from.name}: ${message.content} - ${new Date(
+          message.date,
+        ).toLocaleDateString()} ${new Date(message.time).toLocaleTimeString()}`;
+      }),
+    );
+
+    const pdf = new jsPDF();
+
+    chatHistory.forEach((message, index) => {
+      const lineHeight = 15; // Increased line height
+      const marginLeft = 10; // Adjust the left margin as needed
+      const marginTop = 10 + index * lineHeight; // Adjust the top margin as needed
+
+      // Split the message into lines if it's too long
+      const lines = pdf.splitTextToSize(
+        message,
+        pdf.internal.pageSize.getWidth() - 2 * marginLeft,
+      );
+
+      // Output each line
+      lines.forEach((line: string, lineIndex: number) => {
+        pdf.text(line, marginLeft, marginTop + lineIndex * lineHeight);
+      });
+    });
+
+    pdf.save("chat_export.pdf");
   };
   return (
     <div className="header-container">
@@ -59,12 +117,19 @@ const ChatHeader = ({ selectedUser, setSelectedUser }: Chatprops) => {
           </>
         )}
       </div>
-      <div className="vertical-dots-header">
+      <div className="vertical-dots-header" onClick={handleOpenBtn}>
         <i
           className="bi bi-three-dots-vertical"
           style={{ fontSize: "20px", color: "white" }}
         ></i>
       </div>
+      {currentUser.isAdmin && isPopupOpen && (
+        <div className="popup-nav" ref={popupRef}>
+          <Button variant="success" onClick={handleExportBtn}>
+            export chat
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -67,11 +67,11 @@ const Login = () => {
             value={data.userId}
           />
         </Form.Group>
-        <Form.Label htmlFor="inputPassword5">Password</Form.Label>
+        <Form.Label htmlFor="loginInputPassword5">Password</Form.Label>
         <div className="password-icon">
           <Form.Control
             type={showPassword ? "text" : "password"}
-            id="inputPassword5"
+            id="loginInputPassword5"
             aria-describedby="passwordHelpBlock"
             placeholder="Enter Password"
             name="password"

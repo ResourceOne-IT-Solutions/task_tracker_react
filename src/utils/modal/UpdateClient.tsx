@@ -120,7 +120,7 @@ function UpdateClient({
           </Form.Group>
           <Form.Group as={Col} md="3">
             <Dropdown onSelect={handleSelect}>
-              <Dropdown.Toggle variant="success" id="dropdown-basic">
+              <Dropdown.Toggle variant="success" id="dropdown-basic-time-zone">
                 {selectedItem ? selectedItem : "Select Zone"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>

@@ -3,11 +3,9 @@ import { Button } from "react-bootstrap";
 import { ClientModal } from "../../modals/ClientModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { useNavigate } from "react-router-dom";
-import { UserModal } from "../../modals/UserModals";
 import httpMethods from "../../api/Service";
 import { getData, getFullName } from "../../utils/utils";
 import ReusableModal from "../../utils/modal/ReusableModal";
-import UpdateUser from "../../utils/modal/UpdateUser";
 import UpdateClient from "../../utils/modal/UpdateClient";
 
 function ClientsTable() {

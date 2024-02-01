@@ -23,8 +23,8 @@ function MessageAllUsersModal({ setShowModal }: ShowModalpopup) {
       socket.emit("adminMessage", {
         sender: { id: currentUser._id, name: currentUser.firstName },
         content: message,
-        time: getFormattedTime(),
-        date: getFormattedDate(new Date()),
+        time: getDate(),
+        date: getDate(),
       });
       setmsgSuccess(true);
       setTimeout(() => {

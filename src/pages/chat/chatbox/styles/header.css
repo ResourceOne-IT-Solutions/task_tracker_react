@@ -51,5 +51,11 @@
   color: white;
 }
 .vertical-dots-header:hover {
+  position: relative;
   cursor: pointer;
+}
+.popup-nav {
+  position: absolute;
+  right: 20px;
+  top: 84px;
 }

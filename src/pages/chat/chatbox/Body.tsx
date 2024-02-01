@@ -4,12 +4,19 @@ import { RoomMessages, UserModal } from "../../../modals/UserModals";
 import { Socket } from "socket.io-client";
 import { MessageModel } from "../../../modals/MessageModals";
 import { FileComponent } from "./Util";
+import { getFormattedTime } from "../../../utils/utils";
 interface ChatBodyProps {
   currentUser: UserModal;
   socket: Socket;
+  setTotalMessages: (val: RoomMessages[]) => void;
+  totalMessages: RoomMessages[];
 }
-const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
-  const [totalMessages, setTotalMessages] = useState<RoomMessages[]>([]);
+const ChatBody = ({
+  socket,
+  currentUser,
+  setTotalMessages,
+  totalMessages,
+}: ChatBodyProps) => {
   const ScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,7 +50,7 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
           onDoubleClick={() => handleDeleteMessage(msz)}
         >
           <span className="content">{msz.content}</span>
-          <p className="time-display">{msz.time}</p>
+          <p className="time-display">{getFormattedTime(msz.time)}</p>
         </div>
       );
     } else if (msz.type === "contact") {
@@ -96,7 +103,9 @@ const ChatBody = ({ socket, currentUser }: ChatBodyProps) => {
                     {mszAuthor(message)} :{" "}
                   </div>
                   <div className="message-display">{message.content}</div>
-                  <p className="time-display">{message.time}</p>
+                  <p className="time-display">
+                    {getFormattedTime(message.time)}
+                  </p>
                 </div>
               ) : (
                 <div> {messageRender(message)}</div>

@@ -283,8 +283,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                           ? userData
                               .filter(
                                 (item: UserModal) =>
-                                  !item.isAdmin &&
-                                  item._id !== presentUser._id,
+                                  !item.isAdmin && item._id !== presentUser._id,
                               )
                               .map((item: any, index: any) => {
                                 return (

@@ -5,11 +5,18 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./AddUserpage.css";
 import { Button, Dropdown } from "react-bootstrap";
-import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
+import {
+  CreateUserPayload,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
-import { getCurrentDate } from "../../../utils/utils";
+import { getCurrentDate, getFullName, getNameId } from "../../../utils/utils";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 function AddUserpage() {
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [userData, setUserData] = useState<CreateUserPayload>({
     firstName: "",
     lastName: "",
@@ -79,7 +86,10 @@ function AddUserpage() {
     event.preventDefault();
     setLoading(true);
     httpMethods
-      .post<CreateUserPayload, UserModal>("/users/create", userData)
+      .post<CreateUserPayload, UserModal>("/users/create", {
+        ...userData,
+        createdBy: getNameId(currentUser),
+      })
       .then((result) => {
         setCreatedData(result);
         setUserError("");

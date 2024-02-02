@@ -63,10 +63,12 @@ function Navbar() {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
   useEffect(() => {
-    getData("clients").then((res: any) => {
-      setClientsData(res);
-    });
-  }, []);
+    if (modalName == "Ticket") {
+      getData("clients").then((res: any) => {
+        setClientsData(res);
+      });
+    }
+  }, [modalName]);
   return (
     <div className="main-nav">
       <div className="header-nav">

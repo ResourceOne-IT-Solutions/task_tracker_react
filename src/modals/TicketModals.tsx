@@ -66,4 +66,5 @@ export interface CreateTicketModal {
   technology: string;
   description: string;
   targetDate: string;
+  createdBy?: NameIdInterface;
 }

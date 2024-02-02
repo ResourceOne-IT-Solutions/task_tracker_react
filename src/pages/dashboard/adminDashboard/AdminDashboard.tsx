@@ -12,6 +12,7 @@ import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 import { USER_STATUSES } from "../../../utils/Constants";
+import Timezones from "../../../components/features/timezone/Timezones";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -168,6 +169,7 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
+          <Timezones />
         </div>
         <div className="pie-chart">
           <h3 className="text-primary">Tickets Data: </h3>

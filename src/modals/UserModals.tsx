@@ -91,5 +91,5 @@ export interface CreateUserPayload {
   userId?: string;
   address: string;
   gender: string;
-  createdBy?: { name: string; id: string };
+  createdBy?: NameIdInterface;
 }

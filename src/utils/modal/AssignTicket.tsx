@@ -43,7 +43,6 @@ function AssignTicket({
   const [afterAssigned, setAfterAssigned] = useState({});
   const userContext = useUserContext();
   const { socket, currentUser } = userContext as UserContext;
-
   const handleSelect = (item: any = "") => {
     setSelectedUser(item);
     usersData.map((user) => {
@@ -168,16 +167,25 @@ function AssignTicket({
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {usersData !== null
-                  ? usersData.map((item: UserModal) => {
-                      return (
-                        <Dropdown.Item
-                          key={item._id}
-                          eventKey={getFullName(item)}
-                        >
-                          {getFullName(item)}
-                        </Dropdown.Item>
-                      );
-                    })
+                  ? usersData
+                      .filter(
+                        (item: UserModal) =>
+                          !item.isAdmin &&
+                          !updateref.user.name.includes(getFullName(item)) &&
+                          !updateref.addOnResource.some((resource: any) =>
+                            resource.name.includes(getFullName(item)),
+                          ),
+                      )
+                      .map((item: UserModal) => {
+                        return (
+                          <Dropdown.Item
+                            key={item._id}
+                            eventKey={getFullName(item)}
+                          >
+                            {getFullName(item)}
+                          </Dropdown.Item>
+                        );
+                      })
                   : null}
               </Dropdown.Menu>
             </Dropdown>

@@ -6,10 +6,21 @@ import {
   MessageRequestInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
-import { getData, getDate, getFullName } from "../../../utils/utils";
+import {
+  getData,
+  getDate,
+  getFormattedDate,
+  getFormattedTime,
+  getFullName,
+} from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
+import {
+  NO_CHAT_REQUEST,
+  NO_MESSAGES_TO_DISPLAY,
+  NO_TICKET_REQUEST,
+} from "../../../utils/Constants";
 
 function AdminRequestMessages() {
   const userContext = useUserContext();
@@ -84,7 +95,7 @@ function AdminRequestMessages() {
   };
   return (
     <div>
-      <h1>Request Messages</h1>
+      <h1>Message Request From Users</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back
       </Button>
@@ -93,7 +104,7 @@ function AdminRequestMessages() {
           <h3>Chat Requests</h3>
           {chatLoading ? (
             <p>Loading............</p>
-          ) : (
+          ) : messageRequests && messageRequests.length > 0 ? (
             chatRequests?.map((chat) => {
               return (
                 <div className="request-content-wrapper" key={chat._id}>
@@ -118,13 +129,15 @@ function AdminRequestMessages() {
                 </div>
               );
             })
+          ) : (
+            <p className="fw-bold">{NO_CHAT_REQUEST}</p>
           )}
         </div>
         <div className="request-sub-msg">
           <h3>Ticket Requests</h3>
           {ticketLoading ? (
             <p>Loading............</p>
-          ) : (
+          ) : ticketRequests && ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
                 <div className="request-content-wrapper" key={ticket._id}>
@@ -149,27 +162,23 @@ function AdminRequestMessages() {
                 </div>
               );
             })
+          ) : (
+            <p className="fw-bold">{NO_TICKET_REQUEST}</p>
           )}
         </div>
         <div className="request-sub-msg">
           <h3>All Admin Messages</h3>
           {messageLoading ? (
             <p>Loading............</p>
-          ) : (
+          ) : messageRequests && messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
                 <div className="request-content-wrapper" key={message._id}>
-                  {/* <div>
-                    <span>Message: {message.content}</span>
-                    <span>
-                      Time: {message.date} - {message.time}
-                    </span>
-                    <span>Sent by: {message.sender.name}</span>
-                  </div> */}
                   <div className="message-request-content">
                     <div className="my-2">Message: {message.content}</div>
                     <div className="my-2">
-                      Time: {message.date} {message.time}
+                      Time: {getFormattedDate(message.date)}{" "}
+                      {getFormattedTime(message.time)}
                     </div>
                     <div className="my-2">Sent by: {message.sender.name}</div>
                   </div>
@@ -190,6 +199,8 @@ function AdminRequestMessages() {
                 </div>
               );
             })
+          ) : (
+            <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
           )}
         </div>
       </div>

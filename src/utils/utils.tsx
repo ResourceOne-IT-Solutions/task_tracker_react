@@ -104,7 +104,8 @@ export const getDate = (date: Date = new Date()): Date => {
   return new Date();
 };
 
-export const getFormattedDate = (date: Date, format?: string) => {
+export const getFormattedDate = (dt: Date, format?: string) => {
+  const date = new Date(dt);
   const year = date.getFullYear();
   let month = (1 + date.getMonth()).toString();
   month = month.length > 1 ? month : "0" + month;

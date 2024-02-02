@@ -187,6 +187,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     acc[startDate].push(obj);
     return acc;
   }, {});
+  const currentUserUserId = presentUser._id;
   return (
     <>
       <div className="userdashboard">
@@ -280,16 +281,22 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         style={{ maxHeight: "180px", overflowY: "auto" }}
                       >
                         {userData !== null
-                          ? userData.map((item: any, index: any) => {
-                              return (
-                                <Dropdown.Item
-                                  key={index}
-                                  eventKey={getFullName(item)}
-                                >
-                                  {getFullName(item)}
-                                </Dropdown.Item>
-                              );
-                            })
+                          ? userData
+                              .filter(
+                                (item: UserModal) =>
+                                  !item.isAdmin &&
+                                  item._id !== currentUserUserId,
+                              )
+                              .map((item: any, index: any) => {
+                                return (
+                                  <Dropdown.Item
+                                    key={index}
+                                    eventKey={getFullName(item)}
+                                  >
+                                    {getFullName(item)}
+                                  </Dropdown.Item>
+                                );
+                              })
                           : null}
                       </Dropdown.Menu>
                     </Dropdown>

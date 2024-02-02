@@ -187,7 +187,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     acc[startDate].push(obj);
     return acc;
   }, {});
-  const currentUserUserId = presentUser._id;
   return (
     <>
       <div className="userdashboard">
@@ -285,7 +284,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                               .filter(
                                 (item: UserModal) =>
                                   !item.isAdmin &&
-                                  item._id !== currentUserUserId,
+                                  item._id !== presentUser._id,
                               )
                               .map((item: any, index: any) => {
                                 return (

@@ -16,6 +16,7 @@ import { UserContext, UserModal } from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
+import Timezones from "../../../components/features/timezone/Timezones";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
@@ -250,6 +251,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               data={pieChartData}
               totalTickets={tableData.length}
             />
+            <Timezones />
           </div>
         </div>
       </div>

@@ -270,7 +270,7 @@ const AdminDashboard = () => {
               Show Clients
             </Button>
             <Button variant="secondary" onClick={() => displayTable("tickets")}>
-              Show Tickets
+              Today Tickets
             </Button>
           </div>
         </div>

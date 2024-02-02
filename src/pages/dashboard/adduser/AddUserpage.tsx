@@ -5,11 +5,19 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import "./AddUserpage.css";
 import { Button, Dropdown } from "react-bootstrap";
-import { CreateUserPayload, UserModal } from "../../../modals/UserModals";
+import {
+  CreateUserPayload,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
-import { getCurrentDate } from "../../../utils/utils";
+import { getCurrentDate, getFullName } from "../../../utils/utils";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
+import { FileModel } from "../../../modals/MessageModals";
 
 function AddUserpage() {
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [userData, setUserData] = useState<CreateUserPayload>({
     firstName: "",
     lastName: "",
@@ -46,11 +54,43 @@ function AddUserpage() {
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
   const [genders, setGenders] = useState(["MALE", "FEMALE", "NOT SPECIFIED"]);
+  const [isValid, setIsValid] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    mobile: false,
+    password: false,
+    designation: false,
+  });
+  const validData_or_not =
+    !isValid.firstName &&
+    !isValid.lastName &&
+    !isValid.email &&
+    !isValid.mobile &&
+    !isValid.password &&
+    !isValid.designation;
   const handleChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
+    const { name, value } = event.target;
+    let isValidField = true;
+    if (name === "firstName" || name === "lastName" || name === "designation") {
+      isValidField =
+        /^[A-Za-z]+\s{0,1}[A-Za-z]*$/.test(value) && value.length >= 3;
+    } else if (name === "email") {
+      isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    } else if (name === "mobile") {
+      isValidField = /^\+[0-9]{1,2}\s\d{10}$/.test(value);
+    } else if (name === "password") {
+      isValidField = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/.test(value);
+    }
+    setIsValid((prevState) => ({
+      ...prevState,
+      [name]: !isValidField,
+    }));
+
     if (event.target.type == "radio") {
       const val = event.target.value === "true" ? true : false;
       setUserData((prevData) => {
@@ -61,54 +101,73 @@ function AddUserpage() {
 
       const file = fileInput.files?.[0];
       if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setUserData((prevData) => {
-            return { ...prevData, profileImageUrl: reader.result as string };
-          });
-        };
-        reader.readAsDataURL(file);
+        setUserData({
+          ...userData,
+          profileImageUrl: file as unknown as string,
+        });
       }
     } else {
       setUserData((prevData) => {
-        return { ...prevData, [event.target.name]: event.target.value };
+        return { ...prevData, [name]: value };
       });
     }
   };
-  const submitUserData = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitUserData = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
-    httpMethods
-      .post<CreateUserPayload, UserModal>("/users/create", userData)
-      .then((result) => {
-        setCreatedData(result);
-        setUserError("");
-        setTimeout(() => {
+    if (profileImageUrl) {
+      const formData = new FormData();
+      formData.append("file", profileImageUrl);
+      const inres = await httpMethods
+        .post<FormData, FileModel>("/file", formData, true)
+        .then((res) => res)
+        .catch((err: any) => {
+          setUserSuccess(false);
           setLoading(false);
-          setUserData({
-            firstName: "",
-            lastName: "",
-            email: "",
-            mobile: "",
-            password: "",
-            dob: "",
-            joinedDate: "",
-            isAdmin: null,
-            designation: "",
-            profileImageUrl: null,
-            address: "",
-            gender: "",
+          setUserError(err.message);
+          return null;
+        });
+      if (!inres) {
+        return;
+      } else {
+        const payloadData = {
+          ...userData,
+          profileImageUrl: inres._id,
+          createdBy: { name: getFullName(currentUser), id: currentUser._id },
+        };
+        httpMethods
+          .post<CreateUserPayload, UserModal>("/users/create", payloadData)
+          .then((result) => {
+            setCreatedData(result);
+            setUserError("");
+            setTimeout(() => {
+              setLoading(false);
+              setUserData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                mobile: "",
+                password: "",
+                dob: "",
+                joinedDate: "",
+                isAdmin: null,
+                designation: "",
+                profileImageUrl: null,
+                address: "",
+                gender: "",
+              });
+              //image field is not getting empty we are reseting the form
+              formRef.current.reset();
+              setUserSuccess(true);
+            }, 2000);
+          })
+          .catch((e: any) => {
+            setUserSuccess(false);
+            setLoading(false);
+            setUserError(e.message);
           });
-          //image field is not getting empty we are reseting the form
-          formRef.current.reset();
-          setUserSuccess(true);
-        }, 2000);
-      })
-      .catch((e: any) => {
-        setUserSuccess(false);
-        setLoading(false);
-        setUserError(e.message);
-      });
+      }
+    }
   };
   const handleSelect = (item: any) => {
     setUserData({ ...userData, gender: item });
@@ -134,8 +193,11 @@ function AddUserpage() {
               value={firstName}
               onChange={handleChange}
               placeholder="Enter FirstName"
+              isInvalid={isValid.firstName}
             />
-            <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Alphabets Only, Minimum 3 Characters
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group
             as={Col}
@@ -149,7 +211,11 @@ function AddUserpage() {
               value={lastName}
               onChange={handleChange}
               placeholder="Enter LastName"
+              isInvalid={isValid.lastName}
             />
+            <Form.Control.Feedback type="invalid">
+              Alphabets Only, Minimum 3 Characters
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
@@ -166,7 +232,11 @@ function AddUserpage() {
               name="email"
               onChange={handleChange}
               value={email}
+              isInvalid={isValid.email}
             />
+            <Form.Control.Feedback type="invalid">
+              Please Enter A Valid Email
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group
             as={Col}
@@ -181,7 +251,11 @@ function AddUserpage() {
               onChange={handleChange}
               value={mobile}
               autoComplete="current-mobile"
+              isInvalid={isValid.mobile}
             />
+            <Form.Control.Feedback type="invalid">
+              Enter Country Code and Numbers only
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
@@ -193,7 +267,11 @@ function AddUserpage() {
               onChange={handleChange}
               value={password}
               autoComplete="current-password"
+              isInvalid={isValid.password}
             />
+            <Form.Control.Feedback type="invalid">
+              An Uppercase,Special symbol,Number,8 Characters Required
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="1">
             IsAdmin
@@ -281,7 +359,11 @@ function AddUserpage() {
               placeholder="Enter Designation"
               onChange={handleChange}
               value={designation}
+              isInvalid={isValid.designation}
             />
+            <Form.Control.Feedback type="invalid">
+              Alphabets Only, Minimum 3 Characters
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
@@ -297,7 +379,9 @@ function AddUserpage() {
           </Form.Group>
         </Row>
 
-        <Button type="submit">{loading ? "Creating" : "Add User"}</Button>
+        <Button type="submit" disabled={validData_or_not ? false : true}>
+          {loading ? "Creating" : "Add User"}
+        </Button>
         {userSuccess ? (
           <div className="scc-msg">
             User is Created<span>EmpId : {createdData?.empId}</span>

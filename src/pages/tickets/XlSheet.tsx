@@ -31,10 +31,13 @@ function XlSheet({ tableData }: Prop) {
     };
   });
   const handleExportClick = () => {
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(formatedData);
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "AllTickets.xlsx");
+    const download_or_not = window.confirm("Are you sure to download Excel");
+    if (download_or_not) {
+      const wb = XLSX.utils.book_new();
+      const ws = XLSX.utils.json_to_sheet(formatedData);
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+      XLSX.writeFile(wb, "AllTickets.xlsx");
+    }
   };
   return (
     <>

@@ -1,6 +1,6 @@
 import React from "react";
 import httpMethods from "../api/Service";
-import { Status } from "../modals/UserModals";
+import { NameIdInterface, Status, UserModal } from "../modals/UserModals";
 import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
 
 export function calculateWorkingFrom(joinDate: any) {
@@ -90,18 +90,28 @@ export const getFullName = (user: FullNameType) => {
   }
   return "Invalid name";
 };
+
 export type DateType = "date" | "time";
+
 export const getFormattedTime = (dt = new Date()) => {
   const d = new Date(dt).toLocaleString().split(" ");
   const t = d[1].slice(0, -3);
   const time = t + " " + d[2];
   return time;
 };
+
 export const getDate = (date: Date = new Date()): Date => {
   if (date) {
     return new Date(date);
   }
   return new Date();
+};
+
+export const getNameId = (user: UserModal): NameIdInterface => {
+  if (!user._id) {
+    return {} as NameIdInterface;
+  }
+  return { name: getFullName(user), id: user._id };
 };
 
 export const getFormattedDate = (dt: Date, format?: string) => {

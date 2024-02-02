@@ -41,11 +41,6 @@ const AdminDashboard = () => {
     { name: "On Ticket", value: 0 },
   ]);
 
-  const [sendingStatuses, setSendingStatuses] = useState({
-    id: "",
-    data: { status: "" },
-  });
-
   const [usersStatuses, setUsersStatuses] = useState({
     totalUsers: 0,
     availableUsers: 0,
@@ -54,14 +49,7 @@ const AdminDashboard = () => {
     onTicketUsers: 0,
   });
   socket.off("newUser").on("newUser", ({ userPayload }) => {
-    const filtered = usersData.map((val) => {
-      const status = userPayload.find(
-        (user: UserModal) => user._id === val._id,
-      ).status;
-      val.status = status;
-      return val;
-    });
-    setUsersData(filtered);
+    setUsersData(userPayload);
   });
   const displayTable = (name: string) => {
     if (name == "users") {
@@ -72,19 +60,6 @@ const AdminDashboard = () => {
       navigate("/dashboard/ticketsTable");
     }
   };
-  useEffect(() => {
-    setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
-  }, []);
-  useEffect(() => {
-    httpMethods
-      .get<UserModal[]>("/users")
-      .then((result) => {
-        setUsersData(result);
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  }, []);
   useEffect(() => {
     const totalUsers = usersData.length;
     const availableUsers = usersData.filter(
@@ -114,6 +89,7 @@ const AdminDashboard = () => {
     ]);
   }, [usersData]);
   useEffect(() => {
+    socket.emit("newUser", { userId: currentUser._id });
     httpMethods.get<TicketModal[]>("/tickets").then((result) => {
       setTicketsData(result);
       const notAssignedTickets = result.filter(
@@ -194,6 +170,7 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div className="pie-chart">
+          <h3 className="text-primary">Tickets Data: </h3>
           <PieChartComponent
             data={pieChartData}
             totalTickets={ticketsData.length}
@@ -202,6 +179,7 @@ const AdminDashboard = () => {
       </div>
       <div className="ranges">
         <div className="sub-ranges">
+          <h3 className="text-primary">Users Data: </h3>
           <div className="main-container">
             <PieChartComponent
               data={pieChartStatuses}

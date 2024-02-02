@@ -7,6 +7,7 @@ import { Props } from "./TicketsMain";
 import "./index.css";
 import { Button, Dropdown } from "react-bootstrap";
 import XlSheet from "./XlSheet";
+import { FILTERS } from "../../utils/Constants";
 
 const Tickets = ({ url }: Props) => {
   const navigate = useNavigate();
@@ -15,11 +16,6 @@ const Tickets = ({ url }: Props) => {
     useState<TicketModal[]>(allTickets);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<string>("");
-  const [filters, setFilters] = useState([
-    "last 1 week",
-    "last 1 month",
-    "last 2 months",
-  ]);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   useEffect(() => {
     setLoading(true);
@@ -130,10 +126,10 @@ const Tickets = ({ url }: Props) => {
             {selected ? selected : "Select a filter"}
           </Dropdown.Toggle>
           <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-            {filters.map((stat, idx) => {
+            {FILTERS.map((filterType, idx) => {
               return (
-                <Dropdown.Item key={idx} eventKey={stat}>
-                  <b>{stat}</b>
+                <Dropdown.Item key={idx} eventKey={filterType}>
+                  <b>{filterType}</b>
                 </Dropdown.Item>
               );
             })}

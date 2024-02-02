@@ -9,3 +9,4 @@ export const GROUP_IMG_URL =
   "https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp";
 export const STATUS_TYPES = ["Offline", "Available", "Break", "On Ticket"];
 export const USER_STATUSES = "USER_STATUSES";
+export const FILTERS = ["last 1 week", "last 1 month", "last 2 months"];

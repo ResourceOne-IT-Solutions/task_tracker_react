@@ -61,7 +61,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
           )}
         </PieChart>
       ) : (
-        <h4>No Tickets Data</h4>
+        <h4>No {name == USER_STATUSES ? "Users" : "Tickets"} Data</h4>
       )}
       <h4 style={{ color: "#000000" }}>
         Total {name == USER_STATUSES ? "Users" : "Tickets"}: {totalTickets}

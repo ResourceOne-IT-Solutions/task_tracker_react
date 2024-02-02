@@ -89,7 +89,10 @@ function TicketsTable() {
     );
   }
   useEffect(() => {
-    Promise.all([getData<UserModal>("users"), getData<any>("tickets")])
+    Promise.all([
+      getData<UserModal>("users"),
+      getData<any>("tickets/pending-tickets"),
+    ])
       .then((results) => {
         setUsersData(results[0]);
         setTicketsData(results[1]);

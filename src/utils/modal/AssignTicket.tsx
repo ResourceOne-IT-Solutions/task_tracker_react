@@ -171,7 +171,7 @@ function AssignTicket({
                       .filter(
                         (item: UserModal) =>
                           !item.isAdmin &&
-                          !updateref.user.id.includes((item._id)) &&
+                          !updateref.user.id.includes(item._id) &&
                           !updateref.addOnResource.some((resource: any) =>
                             resource.id.includes(item._id),
                           ),

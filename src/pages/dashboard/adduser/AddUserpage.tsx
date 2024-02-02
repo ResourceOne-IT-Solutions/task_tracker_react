@@ -11,9 +11,9 @@ import {
   UserModal,
 } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
-import { getCurrentDate, getFullName } from "../../../utils/utils";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { FileModel } from "../../../modals/MessageModals";
+import { getCurrentDate, getFullName, getNameId } from "../../../utils/utils";
+import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 function AddUserpage() {
   const userContext = useUserContext();

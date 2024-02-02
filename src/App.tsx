@@ -121,7 +121,7 @@ function App() {
         document.removeEventListener("click", resetInactivityTimer);
       }
     };
-  }, [currentUser._id]);
+  }, [currentUser]);
   return (
     <div className="App">
       <Routespage />

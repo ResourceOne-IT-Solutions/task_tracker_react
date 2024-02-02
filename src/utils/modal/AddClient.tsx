@@ -2,47 +2,61 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import httpMethods from "../../api/Service";
 import { ClientModal, CreateClientModal } from "../../modals/ClientModals";
+import { getNameId } from "../utils";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
 interface prop {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AddClient({ setShowModal }: prop) {
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [clientData, setClientData] = useState<CreateClientModal>({
     firstName: "",
     email: "",
     mobile: "",
-    location: "",
+    area: "",
     technology: "",
     companyName: "",
     applicationType: "",
+    zone: "",
   });
   const [clientError, setClientError] = useState<string>("");
   const [clientSuccess, setClientSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [createdClient, setCreatedClient] = useState<CreateClientModal | null>(
-    null,
+  const [createdClient, setCreatedClient] = useState<ClientModal>(
+    {} as ClientModal,
   );
   const {
     firstName,
     email,
     mobile,
-    location,
+    area,
     technology,
     companyName,
     applicationType,
+    zone,
   } = clientData;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setClientData({ ...clientData, [event.target.name]: event.target.value });
+  };
+  const handleDropdownSelect = (eventKey: string | null = "") => {
+    setClientData((prev) => ({ ...prev, zone: eventKey as string }));
   };
   const submitClientData = async (
     event: React.FormEvent<HTMLButtonElement>,
   ) => {
     setLoading(true);
     httpMethods
-      .post<CreateClientModal, ClientModal>("/clients/create", clientData)
+      .post<CreateClientModal, ClientModal>("/clients/create", {
+        ...clientData,
+        location: { area, zone },
+        createdBy: getNameId(currentUser),
+      })
       .then((result) => {
         setCreatedClient(result);
         setClientError("");
@@ -53,10 +67,11 @@ function AddClient({ setShowModal }: prop) {
             firstName: "",
             email: "",
             mobile: "",
-            location: "",
+            area: "",
             technology: "",
             companyName: "",
             applicationType: "",
+            zone: "",
           });
           setTimeout(() => {
             setShowModal(false);
@@ -105,11 +120,27 @@ function AddClient({ setShowModal }: prop) {
           <Form.Group as={Col} md="6">
             <Form.Control
               type="text"
-              name="location"
-              value={location as string}
+              name="area"
+              value={area as string}
               onChange={handleChange}
               placeholder="Enter Location"
             />
+            <Dropdown onSelect={handleDropdownSelect}>
+              <Dropdown.Toggle variant="success" id="location-zone">
+                {clientData.zone ? clientData.zone : "Select Zone"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {["PST", "CST", "IST", "EST"].map((zone) => (
+                  <Dropdown.Item
+                    key={zone}
+                    eventKey={zone}
+                    active={clientData.zone === zone}
+                  >
+                    {zone}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
           </Form.Group>
         </Row>
         <Row className="mb-3">

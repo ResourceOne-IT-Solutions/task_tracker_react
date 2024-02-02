@@ -5,19 +5,29 @@ import "./styles/AddTicket.css";
 import httpMethods from "../../api/Service";
 import { ClientModal } from "../../modals/ClientModals";
 import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";
-import { getCurrentDate } from "../utils";
+import {
+  getCurrentDate,
+  getFormattedDate,
+  getFullName,
+  getNameId,
+} from "../utils";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
 interface TicketmodalInterface {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   clientsData: ClientModal | any;
 }
+
 function AddTicket(props: TicketmodalInterface) {
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [selectedItem, setSelectedItem] = useState(null);
   const [ticketData, setTicketData] = useState<CreateTicketModal>({
     client: { name: "", id: "", mobile: "", email: "" },
     user: { name: "", id: "" },
     technology: "",
     description: "",
-    targetDate: "",
+    targetDate: getFormattedDate(new Date()),
   });
   const [ticketError, setTicketError] = useState<string>("");
   const [ticketSuccess, setTicketSuccess] = useState<boolean>(false);
@@ -50,7 +60,10 @@ function AddTicket(props: TicketmodalInterface) {
     setLoading(true);
 
     httpMethods
-      .post<CreateTicketModal, TicketModal>("/tickets/create", ticketData)
+      .post<CreateTicketModal, TicketModal>("/tickets/create", {
+        ...ticketData,
+        createdBy: getNameId(currentUser),
+      })
       .then((result) => {
         setCreatedTicket(result);
         setTicketError("");

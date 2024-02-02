@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getData } from "../../../utils/utils";
+import {
+  getData,
+  getFormattedDate,
+  getFormattedTime,
+} from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import {
@@ -9,6 +13,11 @@ import {
 } from "../../../modals/MessageModals";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import {
+  NO_CHAT_REQUEST,
+  NO_MESSAGES_TO_DISPLAY,
+  NO_TICKET_REQUEST,
+} from "../../../utils/Constants";
 
 function AdminMessages() {
   const userContext = useUserContext();
@@ -77,7 +86,7 @@ function AdminMessages() {
   };
   return (
     <div>
-      <h1>Admin Messages</h1>
+      <h1>Messages From Admin</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back
       </Button>
@@ -86,53 +95,57 @@ function AdminMessages() {
           <h3>User Requested Chat</h3>
           {chatLoading ? (
             <p>Loading............</p>
-          ) : (
-            chatRequests?.map((chat) => {
-              return (
-                <div className="request-content-wrapper" key={chat.time}>
-                  <div className="chatrequest-message">
-                    <div>
-                      {chat.sender.name} is Requesting to Chat with{" "}
-                      {chat.opponent.name}.{" "}
-                    </div>
-                    <div>
-                      Time: {chat.date} {chat.time}
-                    </div>
+          ) : chatRequests && chatRequests.length > 0 ? (
+            chatRequests.map((chat) => (
+              <div className="request-content-wrapper" key={chat.time}>
+                <div className="chatrequest-message">
+                  <div>
+                    {chat.sender.name} is Requesting to Chat with{" "}
+                    {chat.opponent.name}.{" "}
                   </div>
-                  <p>
-                    {chat.isPending ? (
-                      <Button variant="danger" disabled>
-                        Not Approved
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="success"
-                        onClick={() => handleApprovedChat(chat)}
-                      >
-                        Approved
-                      </Button>
-                    )}
-                  </p>
+                  <div>
+                    Time: {chat.date} {chat.time}
+                  </div>
                 </div>
-              );
-            })
+                <p>
+                  {chat.isPending ? (
+                    <Button variant="danger" disabled>
+                      Not Approved
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="success"
+                      onClick={() => handleApprovedChat(chat)}
+                    >
+                      Approved
+                    </Button>
+                  )}
+                </p>
+              </div>
+            ))
+          ) : (
+            <p className="fw-bold">{NO_CHAT_REQUEST}</p>
           )}
         </div>
         <div className="request-sub-msg">
           <h3>User Requested Tickets</h3>
           {ticketLoading ? (
             <p>Loading............</p>
-          ) : (
+          ) : ticketRequests && ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
-                <div className="request-content-wrapper" key={ticket.time}>
+                <div
+                  className="request-content-wrapper"
+                  key={ticket.time.toString()}
+                >
                   <div className="message-request-content">
                     <div>
                       {ticket.sender.name} is Requesting for{" "}
                       {ticket.client.name} tickets.
                     </div>
                     <div>
-                      Time: {ticket.date} {ticket.time}
+                      Time: {getFormattedDate(ticket.date)}{" "}
+                      {getFormattedTime(ticket.time)}
                     </div>
                   </div>
                   <div>
@@ -152,20 +165,26 @@ function AdminMessages() {
                 </div>
               );
             })
+          ) : (
+            <p className="fw-bold">{NO_TICKET_REQUEST}</p>
           )}
         </div>
         <div className="request-sub-msg">
           <h3>All Admin Messages</h3>
           {messageLoading ? (
             <p>Loading............</p>
-          ) : (
+          ) : messageRequests && messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
-                <div className="request-content-wrapper" key={message.time}>
+                <div
+                  className="request-content-wrapper"
+                  key={message.time.toString()}
+                >
                   <div className="message-request-content">
                     <div className="my-2">Message: {message.content}</div>
                     <div className="my-2">
-                      Time: {message.date} {message.time}
+                      Time: {getFormattedDate(message.date)}{" "}
+                      {getFormattedTime(message.time)}
                     </div>
                     <div className="my-2">Sent by: {message.sender.name}</div>
                   </div>
@@ -177,13 +196,15 @@ function AdminMessages() {
                         variant="danger"
                         onClick={() => handleAdminMessageSeen(message)}
                       >
-                        Not Seen
+                        Confirm Seen
                       </Button>
                     )}
                   </div>
                 </div>
               );
             })
+          ) : (
+            <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
           )}
         </div>
       </div>

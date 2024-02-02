@@ -10,20 +10,20 @@ export interface ChatRequestInterface {
   _id: string;
 }
 export interface TicketRequestInterface {
-  date: string;
+  date: Date;
   isPending: boolean;
   client: NameIdInterface;
   sender: NameIdInterface;
-  time: string;
+  time: Date;
   __v: number;
   _id: string;
 }
 export interface MessageRequestInterface {
   content: string;
-  date: string;
+  date: Date;
   deliveredTo: string[];
   sender: NameIdInterface;
-  time: string;
+  time: Date;
   viewedBy: string[];
   __v: number;
   _id: string;

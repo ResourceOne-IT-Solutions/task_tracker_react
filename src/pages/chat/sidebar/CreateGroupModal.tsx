@@ -106,15 +106,17 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {users !== null &&
-                  users.map((user: UserModal) => (
-                    <Dropdown.Item
-                      key={user._id}
-                      eventKey={getFullName(user)}
-                      active={selectedUsers.includes(getFullName(user))}
-                    >
-                      {getFullName(user)}
-                    </Dropdown.Item>
-                  ))}
+                  users
+                    .filter((item: any) => item._id !== currentUser._id)
+                    .map((user: UserModal) => (
+                      <Dropdown.Item
+                        key={user._id}
+                        eventKey={getFullName(user)}
+                        active={selectedUsers.includes(getFullName(user))}
+                      >
+                        {getFullName(user)}
+                      </Dropdown.Item>
+                    ))}
               </Dropdown.Menu>
             </Dropdown>
             {selectedUsers.length > 0 && selectedUsers.join(", ")}

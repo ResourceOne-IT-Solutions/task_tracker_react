@@ -280,16 +280,21 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         style={{ maxHeight: "180px", overflowY: "auto" }}
                       >
                         {userData !== null
-                          ? userData.map((item: any, index: any) => {
-                              return (
-                                <Dropdown.Item
-                                  key={index}
-                                  eventKey={getFullName(item)}
-                                >
-                                  {getFullName(item)}
-                                </Dropdown.Item>
-                              );
-                            })
+                          ? userData
+                              .filter(
+                                (item: UserModal) =>
+                                  !item.isAdmin && item._id !== presentUser._id,
+                              )
+                              .map((item: any, index: any) => {
+                                return (
+                                  <Dropdown.Item
+                                    key={index}
+                                    eventKey={getFullName(item)}
+                                  >
+                                    {getFullName(item)}
+                                  </Dropdown.Item>
+                                );
+                              })
                           : null}
                       </Dropdown.Menu>
                     </Dropdown>

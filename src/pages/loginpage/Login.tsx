@@ -3,7 +3,6 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
-import Timezones from "../../components/features/timezone/Timezones";
 import httpMethods from "../../api/Service";
 import { setCookie } from "../../utils/utils";
 import { LoginPayload } from "../../modals/UserModals";
@@ -102,7 +101,6 @@ const Login = () => {
         </span>{" "}
         to navigate to {path == "User" ? "Admin" : "User"} login page
       </p>
-      <Timezones />
     </div>
   );
 };

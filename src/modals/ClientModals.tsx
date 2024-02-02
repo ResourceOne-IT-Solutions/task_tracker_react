@@ -1,3 +1,5 @@
+import { NameIdInterface } from "./UserModals";
+
 export interface ClientModal {
   firstName: string;
   location: {
@@ -11,13 +13,19 @@ export interface ClientModal {
   companyName: string;
   applicationType: string;
 }
-
+export interface Location {
+  area: string;
+  zone: string;
+}
 export interface CreateClientModal {
   firstName: string;
   email: string;
   mobile: string;
-  location: string | { area: string; zone: string };
+  area: string;
+  zone: string;
   technology: string;
   companyName: string;
   applicationType: string;
+  createdBy?: NameIdInterface;
+  location?: Location;
 }

@@ -10,3 +10,6 @@ export const GROUP_IMG_URL =
 export const STATUS_TYPES = ["Offline", "Available", "Break", "On Ticket"];
 export const USER_STATUSES = "USER_STATUSES";
 export const FILTERS = ["last 1 week", "last 1 month", "last 2 months"];
+export const NO_TICKET_REQUEST = "No Ticket requests Available.";
+export const NO_CHAT_REQUEST = "No Chat Request Avaialble.";
+export const NO_MESSAGES_TO_DISPLAY = "No Messages To Display.";

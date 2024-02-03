@@ -12,12 +12,13 @@ type Status =
   | "Pending"
   | "Resolved"
   | "Improper Requirment";
-interface Updates {
+export interface TicketUpdates {
   description: string;
   comments: string;
   date: string;
   status: Status;
-  updatedBy?: NameIdInterface;
+  updatedBy: NameIdInterface;
+  _id: string;
 }
 
 export interface TicketModal {
@@ -30,11 +31,12 @@ export interface TicketModal {
   receivedDate: Date;
   status: string;
   technology: string;
-  updates: Updates[];
+  updates: TicketUpdates[];
   user: TicketUserModal;
   assignedDate: Date;
   closedDate: Date;
   targetDate: Date;
+  updatedAt: Date;
 }
 
 export interface UpdateTicketProps {

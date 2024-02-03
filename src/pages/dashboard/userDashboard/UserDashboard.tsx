@@ -191,7 +191,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   return (
     <>
       <div className="userdashboard">
-        <p className="username">
+        <p className="username text-center">
           Welcome to <b>{getFullName(presentUser)}</b> Dashboard
         </p>
         <div className="usernavbar">

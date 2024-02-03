@@ -111,11 +111,41 @@ const Tickets = ({ url }: Props) => {
     setShowingTickets(filtered_data);
     setSelected("");
   };
+  const formattedTicketforXL = (tickets: TicketModal[]) => {
+    const formatedData = tickets.map((item, idx) => {
+      const resources = item.addOnResource.map((item) => item.name).join(",\n");
+      const updates = item.updates.map((item, idx) => {
+        const up = `UPDATE ${idx + 1}:\nUpdatedBy : ${
+          item.updatedBy.name
+        }\nDate: ${new Date(item.date).toLocaleString()},\nDescription : ${
+          item.description
+        },\nComments : ${item.comments},\nStatus : ${item.status} -----\n\n`;
+        return up;
+      });
+      return {
+        "Sl. No": idx + 1,
+        "Ticket id": item._id,
+        Consultant: item.client.name,
+        Owner: item.user.name,
+        Technology: item.technology,
+        Description: item.description,
+        Status: item.status,
+        Comments: item.comments,
+        "Created Date": new Date(item.receivedDate).toLocaleString(),
+        "Closed Date": item.closedDate
+          ? new Date(item.closedDate).toLocaleString()
+          : "Not Closed",
+        "Helped Resources": String(resources),
+        Updates: String(updates),
+      };
+    });
+    return formatedData;
+  };
   return (
     <>
-      <h4>
+      <h4 className="text-center">
         Total Tickets : <Button onClick={() => navigate(-1)}>Back</Button>{" "}
-        <XlSheet tableData={showingTickets} />
+        <XlSheet data={formattedTicketforXL(showingTickets)} />
       </h4>
       <div className="filters">
         <Dropdown onSelect={handleSelectStatus} className="drop-down">

@@ -1,9 +1,0 @@
-.newmsg-count {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  background-color: hsl(139.04deg 100% 40.78%);
-}

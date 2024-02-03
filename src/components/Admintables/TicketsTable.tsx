@@ -9,6 +9,7 @@ import { UserModal } from "../../modals/UserModals";
 import MailSender from "../../utils/modal/MailSender";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import httpMethods from "../../api/Service";
 
 function TicketsTable() {
   const navigate = useNavigate();
@@ -44,6 +45,23 @@ function TicketsTable() {
     });
     setShowModal(true);
   };
+  const handleClose = (ticket: TicketModal) => {
+    httpMethods
+      .put<any, any>("/tickets/update", {
+        id: ticket._id,
+        data: { isClosed: true },
+      })
+      .then((res) => {
+        setTicketsData((prevTableData) =>
+          prevTableData.map((ticket) =>
+            ticket._id === res._id ? res : ticket,
+          ),
+        );
+      })
+      .catch((err: any) => {
+        alert(err);
+      });
+  };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
     { title: "Client Name", key: "client.name" },
     { title: "User Name", key: "user.name" },
@@ -78,6 +96,15 @@ function TicketsTable() {
             Send Email
           </button>
         </div>
+      ),
+    },
+    {
+      title: "Close Ticket",
+      key: "",
+      tdFormat: (ticket) => (
+        <Button onClick={() => handleClose(ticket)} disabled={ticket.isClosed}>
+          {ticket.isClosed ? "Closed" : "Close Ticket"}
+        </Button>
       ),
     },
   ];

@@ -16,7 +16,7 @@ const ClientDashboard = () => {
     { name: "Assigned Tickets", value: 0 },
     { name: "In Progress Tickets", value: 0 },
     { name: "Pending Tickets", value: 0 },
-    { name: "Resolved Tickets", value: 0 },
+    { name: "Closed Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
   useEffect(() => {
@@ -37,7 +37,7 @@ const ClientDashboard = () => {
           (ticket) => ticket.status === "Pending",
         ).length;
         const resolvedTickets = tickets.filter(
-          (ticket) => ticket.status === "Resolved",
+          (ticket) => ticket.status === "Closed",
         ).length;
         const improperTickets = tickets.filter(
           (ticket) => ticket.status === "Improper Requirment",
@@ -48,7 +48,7 @@ const ClientDashboard = () => {
           { name: "Assigned Tickets", value: assignedTickets },
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Pending Tickets", value: pendingTickets },
-          { name: "Resolved Tickets", value: resolvedTickets },
+          { name: "Closed Tickets", value: resolvedTickets },
           { name: "Improper Requirment", value: improperTickets },
         ]);
       });

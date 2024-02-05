@@ -18,3 +18,6 @@
 .navbar-brand:hover {
   cursor: pointer;
 }
+.admin-status {
+  margin-right: 4px;
+}

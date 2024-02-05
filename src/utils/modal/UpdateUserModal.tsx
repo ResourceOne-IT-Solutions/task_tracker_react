@@ -132,7 +132,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
               style={{ flex: "1", minWidth: "150px" }}
             >
               <option value="In Progress">In Progress</option>
-              <option value="Resolved">Resolved</option>
+              <option value="Closed">Closed</option>
               <option value="Pending">Pending</option>
               <option value="Improper Requirment">Improper Requirment</option>
             </Form.Select>

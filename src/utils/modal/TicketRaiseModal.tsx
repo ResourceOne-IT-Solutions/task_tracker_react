@@ -4,7 +4,10 @@ import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { getFullName } from "../utils";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 
-function TicketRaiseModal(props: { adminsData: UserModal[] }) {
+function TicketRaiseModal(props: {
+  adminsData: UserModal[];
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const userContext = useUserContext();
   const { socket, currentUser } = userContext as UserContext;
   const [onlyAdmins, setOnlyAdmins] = useState<UserModal[]>(props.adminsData);
@@ -35,7 +38,13 @@ function TicketRaiseModal(props: { adminsData: UserModal[] }) {
         user: { name: getFullName(currentUser), id: currentUser._id },
         opponent: { name: exactAdminname, id: exactAdminid },
       });
-      setLoading(false);
+      setRaiseSuccess(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      setTimeout(() => {
+        props.setShowModal(false);
+      }, 3000);
     } else {
       setRaiseSuccess(false);
       setRaiseError("Please Select an Admin");

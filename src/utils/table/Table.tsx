@@ -3,7 +3,7 @@ import "./table.css";
 import TablePagination from "./TablePagination";
 
 export interface TableHeaders<T> {
-  title: string;
+  title: string | any;
   key: string;
   tdFormat?: (val: T) => JSX.Element;
   node?: string;

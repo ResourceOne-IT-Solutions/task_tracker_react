@@ -13,7 +13,7 @@ const allColors: any = {
   "Assigned Tickets": "#36A2EB",
   "In Progress Tickets": "#FFCE56",
   "Pending Tickets": "#b80301",
-  "Resolved Tickets": "#168f01",
+  "Closed Tickets": "#168f01",
   "Helped Tickets": "#FF6384",
   Available: "#00f02c",
   Offline: "#dc3545",

@@ -56,7 +56,8 @@ ul {
   width: 15%;
 }
 th {
-  padding: 29px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }
 input {
   width: 80%;

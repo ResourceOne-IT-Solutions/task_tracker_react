@@ -31,6 +31,17 @@ function AddClient({ setShowModal }: prop) {
   const [createdClient, setCreatedClient] = useState<ClientModal>(
     {} as ClientModal,
   );
+  const [isValid, setIsValid] = useState({
+    firstName: false,
+    email: false,
+    mobile: false,
+    applicationType: false,
+  });
+  const validData_or_not =
+    !isValid.firstName &&
+    !isValid.email &&
+    !isValid.mobile &&
+    !isValid.applicationType;
   const {
     firstName,
     email,
@@ -42,7 +53,21 @@ function AddClient({ setShowModal }: prop) {
     zone,
   } = clientData;
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setClientData({ ...clientData, [event.target.name]: event.target.value });
+    const { name, value } = event.target;
+    let isValidField = true;
+    if (name === "firstName" || name === "applicationType") {
+      isValidField =
+        /^[A-Za-z]+\s{0,1}[A-Za-z]*$/.test(value) && value.length >= 3;
+    } else if (name === "email") {
+      isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    } else if (name === "mobile") {
+      isValidField = /^\+[0-9]{1,2}\s\d{10}$/.test(value);
+    }
+    setIsValid((prevState) => ({
+      ...prevState,
+      [name]: !isValidField,
+    }));
+    setClientData({ ...clientData, [name]: value });
   };
   const handleDropdownSelect = (eventKey: string | null = "") => {
     setClientData((prev) => ({ ...prev, zone: eventKey as string }));
@@ -95,7 +120,11 @@ function AddClient({ setShowModal }: prop) {
               value={firstName}
               onChange={handleChange}
               placeholder="Enter FirstName"
+              isInvalid={isValid.firstName}
             />
+            <Form.Control.Feedback type="invalid">
+              Alphabets Only, Minimum 3 Characters
+            </Form.Control.Feedback>
           </Form.Group>
           <Form.Group as={Col} md="6">
             <Form.Control
@@ -104,7 +133,11 @@ function AddClient({ setShowModal }: prop) {
               value={email}
               onChange={handleChange}
               placeholder="Enter Email"
+              isInvalid={isValid.email}
             />
+            <Form.Control.Feedback type="invalid">
+              Please Enter A Valid Email
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
@@ -115,9 +148,13 @@ function AddClient({ setShowModal }: prop) {
               value={mobile}
               onChange={handleChange}
               placeholder="Enter Mobile"
+              isInvalid={isValid.mobile}
             />
+            <Form.Control.Feedback type="invalid">
+              Enter Country Code and Numbers only
+            </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="6">
+          <Form.Group as={Col} md="4">
             <Form.Control
               type="text"
               name="area"
@@ -125,9 +162,11 @@ function AddClient({ setShowModal }: prop) {
               onChange={handleChange}
               placeholder="Enter Location"
             />
+          </Form.Group>
+          <Form.Group as={Col} md="2">
             <Dropdown onSelect={handleDropdownSelect}>
               <Dropdown.Toggle variant="success" id="location-zone">
-                {clientData.zone ? clientData.zone : "Select Zone"}
+                {clientData.zone ? clientData.zone : "Zone"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {["PST", "CST", "IST", "EST"].map((zone) => (
@@ -171,12 +210,20 @@ function AddClient({ setShowModal }: prop) {
               value={applicationType}
               onChange={handleChange}
               placeholder="Enter ApplicationType"
+              isInvalid={isValid.applicationType}
             />
+            <Form.Control.Feedback type="invalid">
+              Alphabets Only, Minimum 3 Characters
+            </Form.Control.Feedback>
           </Form.Group>
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
-            <Button variant="primary" onClick={(e) => submitClientData(e)}>
+            <Button
+              variant="primary"
+              onClick={(e) => submitClientData(e)}
+              disabled={validData_or_not ? false : true}
+            >
               {loading ? "Creating" : "Add Client"}
             </Button>{" "}
           </Form.Group>

@@ -18,6 +18,8 @@ import ApprovedTickets from "../pages/tickets/ApprovedTickets";
 import UsersTable from "../components/Admintables/UsersTable";
 import ClientsTable from "../components/Admintables/ClientsTable";
 import TicketsTable from "../components/Admintables/TicketsTable";
+import TicketsMain from "../pages/tickets/TicketsMain";
+import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboardTickets";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -62,7 +64,17 @@ const Routespage = () => {
           />
           <Route
             path="/tickets"
-            element={isLoggedin ? <Tickets /> : <Navigate to="/" />}
+            element={
+              isLoggedin ? (
+                isAdmin ? (
+                  <Tickets />
+                ) : (
+                  <TicketsMain url={`/users/tickets/${currentUser._id}`} />
+                )
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route
             path="/dashboard/usersTable"
@@ -80,6 +92,12 @@ const Routespage = () => {
             path="/dashboard/ticketsTable"
             element={
               isLoggedin && isAdmin ? <TicketsTable /> : <Navigate to="/" />
+            }
+          />
+          <Route
+            path="/dashboard/userdashboardtickets"
+            element={
+              isLoggedin ? <UserDashboardTickets /> : <Navigate to="/" />
             }
           />
           <Route

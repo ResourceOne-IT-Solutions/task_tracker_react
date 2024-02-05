@@ -10,7 +10,7 @@ type Status =
   | "Assigned"
   | "In Progress"
   | "Pending"
-  | "Resolved"
+  | "Closed"
   | "Improper Requirment";
 export interface TicketUpdates {
   description: string;
@@ -37,6 +37,7 @@ export interface TicketModal {
   closedDate: Date;
   targetDate: Date;
   updatedAt: Date;
+  isClosed: boolean;
 }
 
 export interface UpdateTicketProps {

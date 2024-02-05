@@ -169,34 +169,46 @@ function Navbar() {
                       : "admin-logout-button"
                   }
                 >
-                  <Dropdown onSelect={handleSelectStatus} className="drop-down">
-                    <Dropdown.Toggle
-                      variant="secondary"
-                      id="dropdown-basic-user-status"
+                  {currentUser.isAdmin ? (
+                    <Button variant="success" className="admin-status">
+                      <span>
+                        {statusIndicator(currentUser.status)}{" "}
+                        {currentUser.status}
+                      </span>
+                    </Button>
+                  ) : (
+                    <Dropdown
+                      onSelect={handleSelectStatus}
+                      className="drop-down"
                     >
-                      {currentUser.status ? (
-                        <span>
-                          {statusIndicator(currentUser.status)}{" "}
-                          {currentUser.status}
-                        </span>
-                      ) : (
-                        "Select a User"
-                      )}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                      style={{ maxHeight: "180px", overflowY: "auto" }}
-                    >
-                      {STATUS_TYPES.map((stat, idx) => {
-                        return (
-                          <Dropdown.Item key={idx} eventKey={stat}>
-                            <b>
-                              {statusIndicator(stat as Status)} {stat}
-                            </b>
-                          </Dropdown.Item>
-                        );
-                      })}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                      <Dropdown.Toggle
+                        variant="secondary"
+                        id="dropdown-basic-user-status"
+                      >
+                        {currentUser.status ? (
+                          <span>
+                            {statusIndicator(currentUser.status)}{" "}
+                            {currentUser.status}
+                          </span>
+                        ) : (
+                          "Select a User"
+                        )}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        style={{ maxHeight: "180px", overflowY: "auto" }}
+                      >
+                        {STATUS_TYPES.map((stat, idx) => {
+                          return (
+                            <Dropdown.Item key={idx} eventKey={stat}>
+                              <b>
+                                {statusIndicator(stat as Status)} {stat}
+                              </b>
+                            </Dropdown.Item>
+                          );
+                        })}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  )}
                 </div>
                 <div className="admin-logout-button">
                   <Button variant="danger" onClick={handleLogoutClick}>

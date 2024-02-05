@@ -62,6 +62,7 @@ function AddUserpage() {
     password: false,
     designation: false,
   });
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const validData_or_not =
     !isValid.firstName &&
     !isValid.lastName &&
@@ -172,6 +173,9 @@ function AddUserpage() {
   const handleSelect = (item: any) => {
     setUserData({ ...userData, gender: item });
   };
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div>
       <Form
@@ -260,18 +264,27 @@ function AddUserpage() {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="6">
-            <Form.Control
-              type="password"
-              placeholder="Enter Password"
-              name="password"
-              onChange={handleChange}
-              value={password}
-              autoComplete="current-password"
-              isInvalid={isValid.password}
-            />
-            <Form.Control.Feedback type="invalid">
-              An Uppercase,Special symbol,Number,8 Characters Required
-            </Form.Control.Feedback>
+            <div className="password-icon">
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter Password"
+                name="password"
+                onChange={handleChange}
+                value={password}
+                autoComplete="current-password"
+                isInvalid={isValid.password}
+              />
+              <Form.Control.Feedback type="invalid">
+                An Uppercase,Special symbol,Number,8 Characters Required
+              </Form.Control.Feedback>
+              <span onClick={handleShowPassword} className="me-4">
+                {showPassword ? (
+                  <i className="bi bi-eye-fill"></i>
+                ) : (
+                  <i className="bi bi-eye-slash-fill"></i>
+                )}
+              </span>
+            </div>
           </Form.Group>
           <Form.Group as={Col} md="1">
             IsAdmin

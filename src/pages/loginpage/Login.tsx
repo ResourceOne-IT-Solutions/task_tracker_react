@@ -79,9 +79,9 @@ const Login = () => {
           />
           <span onClick={handleShowPassword}>
             {showPassword ? (
-              <i className="bi bi-eye-slash-fill"></i>
-            ) : (
               <i className="bi bi-eye-fill"></i>
+            ) : (
+              <i className="bi bi-eye-slash-fill"></i>
             )}
           </span>
         </div>

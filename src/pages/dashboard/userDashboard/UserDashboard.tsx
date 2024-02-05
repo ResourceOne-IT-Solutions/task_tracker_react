@@ -3,31 +3,20 @@ import "./UserDashboard.css";
 import httpMethods from "../../../api/Service";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import {
-  calculateWorkingFrom,
-  getData,
-  getFullName,
-  statusIndicator,
-} from "../../../utils/utils";
+import { getData, getFullName, statusIndicator } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import UpdateTicket from "../../../utils/modal/UpdateUserModal";
-import { useNavigate } from "react-router";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
-import ReusableModal from "../../../utils/modal/ReusableModal";
-import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
 import Timezones from "../../../components/features/timezone/Timezones";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { setCurrentUser, setIsLoggedIn, socket, currentUser } =
-    userContext as UserContext;
+  const { setCurrentUser, socket, currentUser } = userContext as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
-  const joinDate = presentUser.joinedDate;
-  const workingDuration = calculateWorkingFrom(joinDate);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
   const [pieChartData, setPieChartData] = useState([
@@ -45,15 +34,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
   const [userData, setUserData] = useState([]);
   const [selected, setSelected] = useState("");
-  const [admins, setAdmins] = useState<UserModal[]>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalName, setModalname] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [modalProps, setModalProps] = useState({
-    title: "",
-    setShowModal,
-    show: showModal,
-  });
   useEffect(() => {
     setIsLoading(true);
     httpMethods
@@ -65,7 +45,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           (ticket) => ticket.status === "Pending",
         ).length;
         const resolvedTickets = result.filter(
-          (ticket) => ticket.status === "Resolved",
+          (ticket) => ticket.status === "Closed",
         ).length;
         const progressTickets = result.filter(
           (ticket) => ticket.status === "In Progress",
@@ -111,20 +91,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       })
       .catch(() => setIsLoading(false));
   }, []);
-  const [showUpdateModal, setShowUpdateModal] = useState<{
-    show: boolean;
-    ticketData: TicketModal;
-  }>({
-    show: false,
-    ticketData: {} as TicketModal,
-  });
-  const updateTableData = (updatedTicket: TicketModal) => {
-    setTableData((prevTableData) =>
-      prevTableData.map((ticket) =>
-        ticket._id === updatedTicket._id ? updatedTicket : ticket,
-      ),
-    );
-  };
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
   }, []);
@@ -140,13 +106,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   }, [user]);
   const handleSelect = (item: any) => {
     setSelected(item);
-  };
-  const handleRequest = (items: TicketModal) => {
-    socket.emit("requestTickets", {
-      client: { id: items.client.id, name: items.client.name },
-      sender: { id: currentUser._id, name: getFullName(currentUser) },
-    });
-    alert("Ticket request sent");
   };
   const handleChatRequest = () => {
     setShowChatRequestPopup(true);
@@ -166,19 +125,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
     alert("Chat Request sent");
     setShowChatRequestPopup(false);
-  };
-  const handleTicketRaise = () => {
-    if (!currentUser.isAdmin) {
-      const onlyAdmins = userData.filter((user: UserModal) => user.isAdmin);
-      setAdmins(onlyAdmins);
-      setModalname("Ticket Raise");
-      setModalProps({
-        title: "Ticket Raise",
-        setShowModal,
-        show: !showModal,
-      });
-      setShowModal(true);
-    }
   };
   const groupedByStartDate = presentUser.breakTime.reduce((acc: any, obj) => {
     const startDate = obj.startDate;
@@ -252,6 +198,13 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               totalTickets={tableData.length}
             />
             <Timezones />
+            <Button
+              onClick={() => navigate("/dashboard/userdashboardtickets")}
+              variant="primary"
+              className="mt-3"
+            >
+              My Tickets
+            </Button>
           </div>
         </div>
       </div>
@@ -317,107 +270,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             </Modal.Footer>
           </Modal>
         </div>
-      )}
-
-      <table>
-        <thead>
-          <tr>
-            <th>Consultant</th>
-            <th>User</th>
-            <th>Technology</th>
-            <th>Received Date</th>
-            <th>Assigned Date</th>
-            <th>Description</th>
-            <th>Comments</th>
-            <th>Target Date</th>
-            <th>Closed Date</th>
-            <th>Status</th>
-            <th>
-              <Button variant="danger" onClick={handleTicketRaise}>
-                Ticket Raise
-              </Button>
-            </th>
-            {currentUser._id === presentUser._id && <th>Request Tickets</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {isLoading ? (
-            <tr>
-              <td colSpan={11}>
-                <h1>Data Loading...</h1>
-              </td>
-            </tr>
-          ) : (
-            <>
-              {tableData.length ? (
-                <>
-                  {tableData.map((items: TicketModal, index: any) => {
-                    return (
-                      <tr key={index}>
-                        <td>{items.client.name}</td>
-                        <td>{items.user.name}</td>
-                        <td>{items.technology}</td>
-                        <td>{dateConversion(items.receivedDate)}</td>
-                        <td>
-                          {items.assignedDate
-                            ? dateConversion(items.assignedDate)
-                            : "Not assigned"}
-                        </td>
-                        <td>{items.description}</td>
-                        <td>{items.comments}</td>
-                        <td>{dateConversion(items.targetDate)}</td>
-                        <td>{dateConversion(items.closedDate)}</td>
-                        <td>{items.status}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            onClick={() =>
-                              setShowUpdateModal({
-                                show: true,
-                                ticketData: items,
-                              })
-                            }
-                          >
-                            Update Ticket
-                          </Button>
-                        </td>
-                        {currentUser._id === presentUser._id && (
-                          <td>
-                            <Button
-                              variant={"dark"}
-                              onClick={() => handleRequest(items)}
-                            >
-                              Request Ticket
-                            </Button>
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  })}
-                </>
-              ) : (
-                <tr>
-                  <td colSpan={11}>
-                    <h1>NO Data</h1>
-                  </td>
-                </tr>
-              )}
-            </>
-          )}
-        </tbody>
-      </table>
-      <UpdateTicket
-        show={showUpdateModal.show}
-        onHide={() =>
-          setShowUpdateModal({ show: false, ticketData: {} as TicketModal })
-        }
-        ticketData={showUpdateModal.ticketData}
-        updateTableData={updateTableData}
-      />
-      {showModal && modalName == "Ticket Raise" && (
-        <ReusableModal vals={modalProps}>
-          <TicketRaiseModal adminsData={admins} />
-        </ReusableModal>
       )}
     </>
   );

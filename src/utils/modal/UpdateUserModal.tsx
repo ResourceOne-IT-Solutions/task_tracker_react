@@ -11,6 +11,7 @@ import {
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
 import { getFullName } from "../utils";
+import { TICKET_STATUS_TYPES } from "../Constants";
 
 const UpdateTicket: React.FC<UpdateTicketProps> = ({
   show,
@@ -131,10 +132,18 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
               onChange={handleChange}
               style={{ flex: "1", minWidth: "150px" }}
             >
-              <option value="In Progress">In Progress</option>
-              <option value="Closed">Closed</option>
-              <option value="Pending">Pending</option>
-              <option value="Improper Requirment">Improper Requirment</option>
+              <option value={TICKET_STATUS_TYPES.IN_PROGRESS}>
+                {TICKET_STATUS_TYPES.IN_PROGRESS}
+              </option>
+              <option value={TICKET_STATUS_TYPES.CLOSED}>
+                {TICKET_STATUS_TYPES.CLOSED}
+              </option>
+              <option value={TICKET_STATUS_TYPES.PENDING}>
+                {TICKET_STATUS_TYPES.PENDING}
+              </option>
+              <option value={TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT}>
+                {TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT}
+              </option>
             </Form.Select>
           </Form.Group>
         </Form>

@@ -44,7 +44,7 @@ const Timezones = () => {
         </div>
       </div>
       <div className="timezone-ist-btn">
-        <div className="bg-primary bg-opacity-25 rounded text-center">
+        <div className="bg-primary bg-opacity-25 rounded">
           <b>IST :</b> {timeByZones.IST}
         </div>
       </div>

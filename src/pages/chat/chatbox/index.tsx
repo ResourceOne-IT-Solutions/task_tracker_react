@@ -52,7 +52,10 @@ export const ChatBox = () => {
         </>
       ) : (
         <div>
-          <h3 style={{ fontFamily: "sans-serif", color: "#4caf50" }}>
+          <h3
+            style={{ fontFamily: "sans-serif", color: "#4caf50" }}
+            className="text-center"
+          >
             Welcome To ResourceOne Chat
           </h3>
         </div>

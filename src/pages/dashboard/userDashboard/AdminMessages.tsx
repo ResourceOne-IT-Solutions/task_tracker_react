@@ -84,8 +84,18 @@ function AdminMessages() {
   const handleApprovedTicket = (ticket: any) => {
     navigate("/approved/tickets", { state: ticket });
   };
+  socket
+    .off("userRequestApproved")
+    .on("userRequestApproved", ({ result, type }) => {
+      if (result.sender.id === currentUser._id) {
+        const msg = `Your ${
+          type == "CHAT" ? result.opponent.name : result.client.name
+        } ${type} Request Approved By ${result.approvedBy.name}`;
+        alert(msg);
+      }
+    });
   return (
-    <div>
+    <div className="text-center">
       <h1>Messages From Admin</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back

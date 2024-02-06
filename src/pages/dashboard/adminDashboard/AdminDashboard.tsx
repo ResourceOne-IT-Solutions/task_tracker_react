@@ -149,6 +149,7 @@ const AdminDashboard = () => {
             <h4>
               {getFullName(currentUser)}
               <span className="active-not">
+                {" "}
                 {statusIndicator(currentUser.status)}
               </span>{" "}
               <span>{`(${currentUser.userId})`}</span>
@@ -185,7 +186,7 @@ const AdminDashboard = () => {
       <div className="ranges">
         <div className="sub-ranges">
           <h3 className="text-primary">Users Data: </h3>
-          <div className="main-container">
+          <div className="main-container text-center">
             <PieChartComponent
               data={usersPieChartData}
               totalTickets={usersData.length}
@@ -259,7 +260,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="admin-btns">
+        <div className="admin-btns text-center">
           <div>
             <Button variant="danger" onClick={handleAdminBroadCastMessage}>
               Send Message to All

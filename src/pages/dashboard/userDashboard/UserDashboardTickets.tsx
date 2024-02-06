@@ -154,7 +154,7 @@ function UserDashboardTickets() {
       .catch((err) => err);
   }, []);
   return (
-    <div>
+    <div className="text-center">
       <h1>My Tickets</h1>
       <TaskTable<TicketModal>
         pagination

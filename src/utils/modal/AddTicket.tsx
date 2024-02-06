@@ -34,6 +34,10 @@ function AddTicket(props: TicketmodalInterface) {
   const [loading, setLoading] = useState<boolean>(false);
   const [createdTicket, setCreatedTicket] = useState({});
 
+  const isValidFields =
+    Boolean(ticketData.client.name) &&
+    Boolean(ticketData.technology) &&
+    Boolean(ticketData.targetDate);
   const handleSelect = (item: any) => {
     setSelectedItem(item);
     props.clientsData.forEach((val: ClientModal) => {
@@ -93,6 +97,11 @@ function AddTicket(props: TicketmodalInterface) {
     <div>
       <Form onSubmit={(e) => submitTicketData(e)}>
         <Row className="mb-3">
+          <Form.Label>
+            <b>
+              Select A Client <span className="text-danger">*</span>
+            </b>
+          </Form.Label>
           <Form.Group as={Col} md="12">
             <Dropdown onSelect={handleSelect}>
               <Dropdown.Toggle
@@ -117,6 +126,11 @@ function AddTicket(props: TicketmodalInterface) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
+            <Form.Label>
+              <b>
+                Enter Technology <span className="text-danger">*</span>
+              </b>
+            </Form.Label>
             <Form.Control
               type="text"
               placeholder="Enter Technology"
@@ -128,6 +142,9 @@ function AddTicket(props: TicketmodalInterface) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
+            <Form.Label>
+              <b>Enter Description</b>
+            </Form.Label>
             <Form.Control
               as={"textarea"}
               placeholder="Enter Description"
@@ -141,7 +158,9 @@ function AddTicket(props: TicketmodalInterface) {
         <Row className="mb-3">
           <Form.Group as={Col} md="3">
             <Form.Label className="date-label">
-              <b>TargetDate</b>
+              <b>
+                TargetDate <span className="text-danger">*</span>
+              </b>
             </Form.Label>
           </Form.Group>
           <Form.Group as={Col} md="9">
@@ -157,7 +176,11 @@ function AddTicket(props: TicketmodalInterface) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
-            <Button variant="primary" type="submit">
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={!isValidFields ? true : false}
+            >
               {loading ? "Creating" : "Add Ticket"}
             </Button>{" "}
           </Form.Group>

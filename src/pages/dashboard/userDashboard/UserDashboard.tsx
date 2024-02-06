@@ -21,7 +21,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
 
   const [pieChartData, setPieChartData] = useState([
     { name: "In Progress Tickets", value: 0 },
-    { name: "ResolvedTickets", value: 0 },
+    { name: "Closed Tickets", value: 0 },
     { name: "Helped Tickets", value: presentUser.helpedTickets },
     { name: "Pending Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
@@ -40,11 +40,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       .get<TicketModal[]>("/users/tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
-
         const pendingTickets = result.filter(
           (ticket) => ticket.status === "Pending",
         ).length;
-        const resolvedTickets = result.filter(
+        const closedTickets = result.filter(
           (ticket) => ticket.status === "Closed",
         ).length;
         const progressTickets = result.filter(
@@ -59,7 +58,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
 
         setPieChartData([
           { name: "Pending Tickets", value: pendingTickets },
-          { name: "Resolved Tickets", value: resolvedTickets },
+          { name: "Closed Tickets", value: closedTickets },
           { name: "In Progress Tickets", value: progressTickets },
           { name: "Helped Tickets", value: presentUser.helpedTickets },
           { name: "Assigned Tickets", value: assigned },
@@ -68,13 +67,13 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         setCurrentUser((data) => ({
           ...data,
           pendingTickets,
-          resolvedTickets,
+          closedTickets,
           progressTickets,
         }));
         setPresentUser((data) => ({
           ...data,
           pendingTickets,
-          resolvedTickets,
+          closedTickets,
           progressTickets,
         }));
         setIsLoading(false);

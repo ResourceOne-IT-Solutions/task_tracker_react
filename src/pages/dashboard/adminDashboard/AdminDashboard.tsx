@@ -11,15 +11,15 @@ import PieChartComponent from "../../../components/pieChart/PieChart";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
-import { USER_STATUSES } from "../../../utils/Constants";
+import { TICKET_STATUS_TYPES, USER_STATUSES } from "../../../utils/Constants";
 import Timezones from "../../../components/features/timezone/Timezones";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
+  const { currentUser, socket } = userContext as UserContext;
+  const [totalTickets, setTotalTickets] = useState<number>(0);
   const [usersData, setUsersData] = useState<UserModal[]>([]);
-  const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
   const [modalProps, setModalProps] = useState({
@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     setShowModal,
     show: showModal,
   });
-  const [pieChartData, setPieChartData] = useState([
+  const [ticketPieChartData, setTicketPieChartData] = useState([
     { name: "NotAssigned Tickets", value: 0 },
     { name: "Assigned Tickets", value: 0 },
     { name: "In Progress Tickets", value: 0 },
@@ -35,7 +35,7 @@ const AdminDashboard = () => {
     { name: "Closed Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
-  const [pieChartStatuses, setPieChartStatuses] = useState([
+  const [usersPieChartData, setUsersPieChartData] = useState([
     { name: "Available", value: 0 },
     { name: "Offline", value: 0 },
     { name: "Break", value: 0 },
@@ -61,6 +61,44 @@ const AdminDashboard = () => {
       navigate("/dashboard/ticketsTable");
     }
   };
+  socket
+    .off("dashboardStats")
+    .on("dashboardStats", ({ ticketStats, userStats }) => {
+      const ticketData = (status: string) => {
+        return ticketStats.find((v: any) => v.status === status)?.count || 0;
+      };
+      const totalTickets = ticketStats.reduce(
+        (a: number, c: any) => a + c.count,
+        0,
+      );
+      setTotalTickets(totalTickets);
+      setTicketPieChartData([
+        {
+          name: "NotAssigned Tickets",
+          value: ticketData(TICKET_STATUS_TYPES.NOT_ASSIGNED),
+        },
+        {
+          name: "Assigned Tickets",
+          value: ticketData(TICKET_STATUS_TYPES.ASSIGNED),
+        },
+        {
+          name: "In Progress Tickets",
+          value: ticketData(TICKET_STATUS_TYPES.IN_PROGRESS),
+        },
+        {
+          name: "Pending Tickets",
+          value: ticketData(TICKET_STATUS_TYPES.PENDING),
+        },
+        {
+          name: "Closed Tickets",
+          value: ticketData(TICKET_STATUS_TYPES.CLOSED),
+        },
+        {
+          name: "Improper Requirment",
+          value: ticketData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
+        },
+      ]);
+    });
   useEffect(() => {
     const totalUsers = usersData.length;
     const availableUsers = usersData.filter(
@@ -82,7 +120,7 @@ const AdminDashboard = () => {
       offlineUsers,
       onTicketUsers: onTicket,
     });
-    setPieChartStatuses([
+    setUsersPieChartData([
       { name: "Available", value: availableUsers },
       { name: "Offline", value: offlineUsers },
       { name: "Break", value: breakUsers },
@@ -91,42 +129,7 @@ const AdminDashboard = () => {
   }, [usersData]);
   useEffect(() => {
     socket.emit("newUser", { userId: currentUser._id });
-    httpMethods.get<TicketModal[]>("/tickets").then((result) => {
-      setTicketsData(result);
-      const notAssignedTickets = result.filter(
-        (ticket) => ticket.status === "Not Assigned",
-      ).length;
-      const assignedTickets = result.filter(
-        (ticket) => ticket.status === "Assigned",
-      ).length;
-      const progressTickets = result.filter(
-        (ticket) => ticket.status === "In Progress",
-      ).length;
-      const pendingTickets = result.filter(
-        (ticket) => ticket.status === "Pending",
-      ).length;
-      const resolvedTickets = result.filter(
-        (ticket) => ticket.status === "Closed",
-      ).length;
-      const improperTickets = result.filter(
-        (ticket) => ticket.status === "Improper Requirment",
-      ).length;
-
-      setPieChartData([
-        { name: "NotAssigned Tickets", value: notAssignedTickets },
-        { name: "Assigned Tickets", value: assignedTickets },
-        { name: "In Progress Tickets", value: progressTickets },
-        { name: "Pending Tickets", value: pendingTickets },
-        { name: "Closed Tickets", value: resolvedTickets },
-        { name: "Improper Requirment", value: improperTickets },
-      ]);
-      setCurrentUser((data) => ({
-        ...data,
-        pendingTickets,
-        resolvedTickets,
-        progressTickets,
-      }));
-    });
+    socket.emit("dashboardStats");
   }, []);
   const handleAdminBroadCastMessage = () => {
     setModalname("messageModal");
@@ -174,8 +177,8 @@ const AdminDashboard = () => {
         <div className="pie-chart">
           <h3 className="text-primary">Tickets Data: </h3>
           <PieChartComponent
-            data={pieChartData}
-            totalTickets={ticketsData.length}
+            data={ticketPieChartData}
+            totalTickets={totalTickets}
           />
         </div>
       </div>
@@ -184,7 +187,7 @@ const AdminDashboard = () => {
           <h3 className="text-primary">Users Data: </h3>
           <div className="main-container">
             <PieChartComponent
-              data={pieChartStatuses}
+              data={usersPieChartData}
               totalTickets={usersData.length}
               name={USER_STATUSES}
             />

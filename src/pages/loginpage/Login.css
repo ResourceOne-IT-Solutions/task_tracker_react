@@ -11,6 +11,11 @@
   min-height: 100vh;
   background-color: rgba(7, 7, 7, 0.733);
 }
+.login-main > h1,
+.logintext,
+.login-page {
+  text-align: center;
+}
 .error {
   color: red;
 }

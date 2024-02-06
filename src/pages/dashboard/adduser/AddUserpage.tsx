@@ -177,7 +177,7 @@ function AddUserpage() {
     setShowPassword(!showPassword);
   };
   return (
-    <div>
+    <div className="text-center">
       <Form
         ref={formRef}
         onSubmit={(e) => submitUserData(e)}

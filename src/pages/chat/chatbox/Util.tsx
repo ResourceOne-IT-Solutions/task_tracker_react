@@ -59,7 +59,7 @@ export const FileComponent = ({
       onClick={(e) => downloadFile(e, fileUrl, file.content)}
     >
       <div className="message-sender fw-semibold">{author} : </div>
-      <div className="img-wrapper">
+      <div className="img-wrapper text-center">
         {fileUrl && (
           <div>
             <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
@@ -69,7 +69,7 @@ export const FileComponent = ({
           <i className="bi bi-download"></i>
         </span>
       </div>
-      <div className="content">{file.content}</div>
+      <div className="content text-center">{file.content}</div>
       <p className="time-display">{getFormattedTime(file.time)}</p>
     </div>
   );

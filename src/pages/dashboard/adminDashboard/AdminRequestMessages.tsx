@@ -94,7 +94,7 @@ function AdminRequestMessages() {
     socket.emit("approveUserRequest", payload);
   };
   return (
-    <div>
+    <div className="text-center">
       <h1>Message Request From Users</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back

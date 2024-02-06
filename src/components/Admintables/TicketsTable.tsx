@@ -132,7 +132,7 @@ function TicketsTable() {
       });
   }, []);
   return (
-    <div>
+    <div className="text-center">
       <h2>Tickets Table</h2>
       <Button variant="warning" onClick={() => navigate(-1)}>
         Go Back

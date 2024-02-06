@@ -85,7 +85,7 @@ function AdminMessages() {
     navigate("/approved/tickets", { state: ticket });
   };
   return (
-    <div>
+    <div className="text-center">
       <h1>Messages From Admin</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back

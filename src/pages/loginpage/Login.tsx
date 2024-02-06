@@ -53,7 +53,7 @@ const Login = () => {
   };
 
   return (
-    <div className="login-main">
+    <div className="login-main text-center">
       <h1>{path} Login Page</h1>
       <Form className="login-page">
         <Form.Group className="mb-3">

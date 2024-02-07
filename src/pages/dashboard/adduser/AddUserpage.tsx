@@ -115,8 +115,8 @@ function AddUserpage() {
   };
   const submitUserData = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
     if (profileImageUrl) {
+      setLoading(true);
       const formData = new FormData();
       formData.append("file", profileImageUrl);
       const inres = await httpMethods
@@ -136,38 +136,48 @@ function AddUserpage() {
           profileImageUrl: inres._id,
           createdBy: { name: getFullName(currentUser), id: currentUser._id },
         };
-        httpMethods
-          .post<CreateUserPayload, UserModal>("/users/create", payloadData)
-          .then((result) => {
-            setCreatedData(result);
-            setUserError("");
-            setTimeout(() => {
+        if (validData_or_not) {
+          httpMethods
+            .post<CreateUserPayload, UserModal>("/users/create", payloadData)
+            .then((result) => {
+              setCreatedData(result);
+              setUserError("");
+              setTimeout(() => {
+                setLoading(false);
+                setUserData({
+                  firstName: "",
+                  lastName: "",
+                  email: "",
+                  mobile: "",
+                  password: "",
+                  dob: "",
+                  joinedDate: "",
+                  isAdmin: null,
+                  designation: "",
+                  profileImageUrl: null,
+                  address: "",
+                  gender: "",
+                });
+                //image field is not getting empty we are reseting the form
+                formRef.current.reset();
+                setUserSuccess(true);
+              }, 2000);
+            })
+            .catch((e: any) => {
+              setUserSuccess(false);
               setLoading(false);
-              setUserData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                mobile: "",
-                password: "",
-                dob: "",
-                joinedDate: "",
-                isAdmin: null,
-                designation: "",
-                profileImageUrl: null,
-                address: "",
-                gender: "",
-              });
-              //image field is not getting empty we are reseting the form
-              formRef.current.reset();
-              setUserSuccess(true);
-            }, 2000);
-          })
-          .catch((e: any) => {
-            setUserSuccess(false);
-            setLoading(false);
-            setUserError(e.message);
-          });
+              setUserError(e.message);
+            });
+        } else {
+          setUserError("Enter All Fields");
+          setLoading(false);
+          setUserSuccess(false);
+        }
       }
+    } else {
+      setUserError("Enter All Fields");
+      setLoading(false);
+      setUserSuccess(false);
     }
   };
   const handleSelect = (item: any) => {
@@ -392,9 +402,7 @@ function AddUserpage() {
           </Form.Group>
         </Row>
 
-        <Button type="submit" disabled={validData_or_not ? false : true}>
-          {loading ? "Creating" : "Add User"}
-        </Button>
+        <Button type="submit">{loading ? "Creating" : "Add User"}</Button>
         {userSuccess ? (
           <div className="scc-msg">
             User is Created<span>EmpId : {createdData?.empId}</span>

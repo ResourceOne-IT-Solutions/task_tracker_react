@@ -83,7 +83,7 @@ const UserList = ({
           </div>
         ))
       ) : (
-        <>
+        <div className="loader">
           <div>
             {" "}
             <span>Loading</span>
@@ -91,7 +91,7 @@ const UserList = ({
           <div className="spinner-border text-success" role="status">
             <span className="sr-only"></span>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

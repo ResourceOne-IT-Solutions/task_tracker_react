@@ -75,39 +75,43 @@ function AddClient({ setShowModal }: prop) {
   const submitClientData = async (
     event: React.FormEvent<HTMLButtonElement>,
   ) => {
-    setLoading(true);
-    httpMethods
-      .post<CreateClientModal, ClientModal>("/clients/create", {
-        ...clientData,
-        location: { area, zone },
-        createdBy: getNameId(currentUser),
-      })
-      .then((result) => {
-        setCreatedClient(result);
-        setClientError("");
-        setTimeout(() => {
-          setLoading(false);
-          setClientSuccess(true);
-          setClientData({
-            firstName: "",
-            email: "",
-            mobile: "",
-            area: "",
-            technology: "",
-            companyName: "",
-            applicationType: "",
-            zone: "",
-          });
+    if (validData_or_not) {
+      setLoading(true);
+      httpMethods
+        .post<CreateClientModal, ClientModal>("/clients/create", {
+          ...clientData,
+          location: { area, zone },
+          createdBy: getNameId(currentUser),
+        })
+        .then((result) => {
+          setCreatedClient(result);
+          setClientError("");
           setTimeout(() => {
-            setShowModal(false);
-          }, 1000);
-        }, 2000);
-      })
-      .catch((e: any) => {
-        setClientSuccess(false);
-        setLoading(false);
-        setClientError(e.message);
-      });
+            setLoading(false);
+            setClientSuccess(true);
+            setClientData({
+              firstName: "",
+              email: "",
+              mobile: "",
+              area: "",
+              technology: "",
+              companyName: "",
+              applicationType: "",
+              zone: "",
+            });
+            setTimeout(() => {
+              setShowModal(false);
+            }, 1000);
+          }, 2000);
+        })
+        .catch((e: any) => {
+          setClientSuccess(false);
+          setLoading(false);
+          setClientError(e.message);
+        });
+    } else {
+      setClientError("Enter All Fields");
+    }
   };
   return (
     <div>
@@ -219,11 +223,7 @@ function AddClient({ setShowModal }: prop) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
-            <Button
-              variant="primary"
-              onClick={(e) => submitClientData(e)}
-              disabled={validData_or_not ? false : true}
-            >
+            <Button variant="primary" onClick={(e) => submitClientData(e)}>
               {loading ? "Creating" : "Add Client"}
             </Button>{" "}
           </Form.Group>

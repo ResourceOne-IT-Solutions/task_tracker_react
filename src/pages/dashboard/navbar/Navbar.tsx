@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import AddClient from "../../../utils/modal/AddClient";
@@ -11,6 +10,7 @@ import { getData, setCookie, statusIndicator } from "../../../utils/utils";
 import { ClientModal } from "../../../modals/ClientModals";
 import "./Navbar.css";
 import { STATUS_TYPES } from "../../../utils/Constants";
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -97,13 +97,10 @@ function Navbar() {
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     {isLoggedin && currentUser.isAdmin && (
                       <>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            onClick={() => navigate("/admindashboard/adduser")}
-                          >
+                        <li className="nav-item adduser">
+                          <NavLink to={"/admindashboard/adduser"}>
                             Create User
-                          </a>
+                          </NavLink>
                         </li>
                         <li className="nav-item">
                           <a
@@ -121,43 +118,37 @@ function Navbar() {
                             Create Ticket
                           </a>
                         </li>
-                        <li className="nav-item">
-                          <Link
-                            className="nav-link"
-                            to="/dashboard/adminRequestmessages"
-                          >
+                        <li className="nav-item adduser mx-2">
+                          <NavLink to="/dashboard/adminRequestmessages">
                             View Requests
-                          </Link>
+                          </NavLink>
                         </li>
                       </>
                     )}
-                    <li className="nav-item">
-                      <a className="nav-link" onClick={handleChatClick}>
-                        Chat{" "}
-                        {notificationRooms ? (
-                          <span className="user-newmsg-count">
-                            {notificationRooms}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </a>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="/tickets">
-                        Tickets
-                      </Link>
-                    </li>
-                    {isLoggedin && !currentUser.isAdmin && (
-                      <li className="nav-item">
-                        <Link
-                          className="nav-link"
-                          to="/dashboard/adminmessages"
-                        >
-                          Admin Messages
-                        </Link>
+                    <>
+                      <li className="nav-item adduser">
+                        <NavLink to={"/chat"}>
+                          Chat{" "}
+                          {notificationRooms ? (
+                            <span className="user-newmsg-count">
+                              {notificationRooms}
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </NavLink>
                       </li>
-                    )}
+                      <li className="nav-item adduser mx-2">
+                        <NavLink to={"/tickets"}>Tickets</NavLink>
+                      </li>
+                      {isLoggedin && !currentUser.isAdmin && (
+                        <li className="nav-item adduser mx-2">
+                          <NavLink to={"/dashboard/adminmessages"}>
+                            Admin Messages
+                          </NavLink>
+                        </li>
+                      )}
+                    </>
                   </ul>
                 </form>
               </div>

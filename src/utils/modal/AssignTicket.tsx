@@ -138,6 +138,9 @@ function AssignTicket({
               setSelectedUser("");
               UpdateTicketsTableData(result);
               setAssignSuccess(true);
+              setTimeout(() => {
+                setShowModal(false);
+              }, 1000);
             }, 2000);
           })
           .catch((e: any) => {

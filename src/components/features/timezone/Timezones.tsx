@@ -43,7 +43,7 @@ const Timezones = () => {
           <b>EST :</b> {timeByZones.EST}
         </div>
       </div>
-      <div className="timezone-ist-btn">
+      <div className="timezone-ist-btn text-center">
         <div className="bg-primary bg-opacity-25 rounded">
           <b>IST :</b> {timeByZones.IST}
         </div>

@@ -59,3 +59,7 @@
 .selected-user {
   background-color: #29a08c;
 }
+.loader {
+  padding-top: 27%;
+  text-align: center;
+}

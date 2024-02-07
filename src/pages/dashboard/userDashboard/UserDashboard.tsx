@@ -160,34 +160,44 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               <li>Role : {presentUser.designation}</li>
               <span className="fw-bold d-block">Login Timings</span>
               {presentUser.loginTimings.map((logtime) => {
-                return (
-                  <li key={logtime._id}>
-                    <span className="fw-semibold">
-                      {new Date(logtime.date).toLocaleDateString()}
-                    </span>{" "}
-                    Login - {new Date(logtime.inTime).toLocaleTimeString()}{" "}
-                    Logout - {new Date(logtime.outTime).toLocaleTimeString()}{" "}
-                  </li>
-                );
+                if (
+                  new Date(logtime.inTime).toLocaleDateString() ==
+                  new Date().toLocaleDateString()
+                ) {
+                  return (
+                    <li key={logtime._id}>
+                      <span className="fw-semibold">
+                        {new Date(logtime.date).toLocaleDateString()}
+                      </span>{" "}
+                      Login - {new Date(logtime.inTime).toLocaleTimeString()}{" "}
+                      Logout - {new Date(logtime.outTime).toLocaleTimeString()}{" "}
+                    </li>
+                  );
+                }
               })}
               <span className="fw-bold d-block">Break Timings</span>
               {Object.entries(groupedByStartDate).map((key, i) => {
                 const arr: any = key[1];
-                return (
-                  <React.Fragment key={i}>
-                    <li className="fw-semibold">{key[0]}</li>
-                    <li>
-                      {arr.map((brtime: any, i: number) => {
-                        return (
-                          <span className="d-block" key={i}>
-                            startTime {brtime.startTime} endTime{" "}
-                            {brtime.endTime}
-                          </span>
-                        );
-                      })}
-                    </li>
-                  </React.Fragment>
-                );
+                if (
+                  new Date(key[0]).toLocaleDateString() ==
+                  new Date().toLocaleDateString()
+                ) {
+                  return (
+                    <React.Fragment key={i}>
+                      <li className="fw-semibold">{key[0]}</li>
+                      <li>
+                        {arr.map((brtime: any, i: number) => {
+                          return (
+                            <span className="d-block" key={i}>
+                              startTime {brtime.startTime} endTime{" "}
+                              {brtime.endTime}
+                            </span>
+                          );
+                        })}
+                      </li>
+                    </React.Fragment>
+                  );
+                }
               })}
             </ul>
           </div>
@@ -197,21 +207,22 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               totalTickets={tableData.length}
             />
             <Timezones />
-            <Button
-              onClick={() => navigate("/dashboard/userdashboardtickets")}
-              variant="primary"
-              className="mt-3"
-            >
-              My Tickets
-            </Button>
           </div>
         </div>
       </div>
       {currentUser._id === presentUser._id && (
         <div className="chat-link">
-          <Button onClick={() => handleChatRequest()}>
-            Request User to Chat
-          </Button>
+          <div className="user-btns">
+            <Button onClick={() => handleChatRequest()}>
+              Request User to Chat
+            </Button>
+            <Button
+              onClick={() => navigate("/dashboard/userdashboardtickets")}
+              variant="primary"
+            >
+              My Tickets
+            </Button>
+          </div>
           <Modal
             show={showChatRequestPopup}
             onHide={() => setShowChatRequestPopup(false)}

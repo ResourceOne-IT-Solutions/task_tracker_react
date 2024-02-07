@@ -37,7 +37,8 @@ function AddTicket(props: TicketmodalInterface) {
   const isValidFields =
     Boolean(ticketData.client.name) &&
     Boolean(ticketData.technology) &&
-    Boolean(ticketData.targetDate);
+    Boolean(ticketData.targetDate) &&
+    Boolean(ticketData.description);
   const handleSelect = (item: any) => {
     setSelectedItem(item);
     props.clientsData.forEach((val: ClientModal) => {
@@ -61,37 +62,40 @@ function AddTicket(props: TicketmodalInterface) {
   };
   const submitTicketData = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-
-    httpMethods
-      .post<CreateTicketModal, TicketModal>("/tickets/create", {
-        ...ticketData,
-        createdBy: getNameId(currentUser),
-      })
-      .then((result) => {
-        setCreatedTicket(result);
-        setTicketError("");
-        setTimeout(() => {
-          setLoading(false);
-          setTicketData({
-            client: { name: "", id: "", mobile: "", email: "" },
-            user: { name: "", id: "" },
-            technology: "",
-            description: "",
-            targetDate: "",
-          });
-          setSelectedItem(null);
-          setTicketSuccess(true);
+    if (isValidFields) {
+      setLoading(true);
+      httpMethods
+        .post<CreateTicketModal, TicketModal>("/tickets/create", {
+          ...ticketData,
+          createdBy: getNameId(currentUser),
+        })
+        .then((result) => {
+          setCreatedTicket(result);
+          setTicketError("");
           setTimeout(() => {
-            props.setShowModal(false);
-          }, 1000);
-        }, 2000);
-      })
-      .catch((e: any) => {
-        setTicketSuccess(false);
-        setLoading(false);
-        setTicketError(e.message);
-      });
+            setLoading(false);
+            setTicketData({
+              client: { name: "", id: "", mobile: "", email: "" },
+              user: { name: "", id: "" },
+              technology: "",
+              description: "",
+              targetDate: "",
+            });
+            setSelectedItem(null);
+            setTicketSuccess(true);
+            setTimeout(() => {
+              props.setShowModal(false);
+            }, 1000);
+          }, 2000);
+        })
+        .catch((e: any) => {
+          setTicketSuccess(false);
+          setLoading(false);
+          setTicketError(e.message);
+        });
+    } else {
+      setTicketError("Enter All Fields");
+    }
   };
   return (
     <div>
@@ -143,7 +147,9 @@ function AddTicket(props: TicketmodalInterface) {
         <Row className="mb-3">
           <Form.Group as={Col} md="12">
             <Form.Label>
-              <b>Enter Description</b>
+              <b>
+                Enter Description <span className="text-danger">*</span>
+              </b>
             </Form.Label>
             <Form.Control
               as={"textarea"}
@@ -176,11 +182,7 @@ function AddTicket(props: TicketmodalInterface) {
         </Row>
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={!isValidFields ? true : false}
-            >
+            <Button variant="primary" type="submit">
               {loading ? "Creating" : "Add Ticket"}
             </Button>{" "}
           </Form.Group>

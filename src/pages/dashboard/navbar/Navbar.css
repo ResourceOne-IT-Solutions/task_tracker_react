@@ -21,3 +21,20 @@
 .admin-status {
   margin-right: 4px;
 }
+/* .nav-item {
+  color: aliceblue !important;
+} */
+.adduser {
+  padding-top: 7px;
+}
+.navbar .nav-item a {
+  color: rgb(223, 224, 224);
+  text-decoration: none;
+}
+.navbar .nav-item a.active {
+  color: #eee;
+  font-weight: 700;
+}
+.navbar-brand b:hover {
+  color: grey;
+}

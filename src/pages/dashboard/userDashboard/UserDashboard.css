@@ -71,3 +71,10 @@ tr:hover {
   text-align: left;
   padding: 10px;
 }
+.user-btns {
+  display: flex;
+  justify-content: center;
+}
+.user-btns button {
+  margin-right: 5px;
+}

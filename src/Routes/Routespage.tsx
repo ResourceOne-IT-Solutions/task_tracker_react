@@ -11,7 +11,7 @@ import TicketDescription from "../pages/tickets/TicketDescription";
 import ClientDashboard from "../pages/dashboard/clientDashboard";
 import UserStatsPage from "../pages/dashboard/UserStatsPage";
 import AdminRequestMessages from "../pages/dashboard/adminDashboard/AdminRequestMessages";
-import Navbar from "../pages/dashboard/navbar/Navbar";
+import Navbar from "../pages/navbar/Navbar";
 import UserTickets from "../pages/tickets/UserTickets";
 import AdminMessages from "../pages/dashboard/userDashboard/AdminMessages";
 import ApprovedTickets from "../pages/tickets/ApprovedTickets";
@@ -20,6 +20,7 @@ import ClientsTable from "../components/Admintables/ClientsTable";
 import TicketsTable from "../components/Admintables/TicketsTable";
 import TicketsMain from "../pages/tickets/TicketsMain";
 import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboardTickets";
+import HelpedTickets from "../pages/tickets/HelpedTickets";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -133,6 +134,10 @@ const Routespage = () => {
           <Route
             path="/userTickets/:id"
             element={isLoggedin && <UserTickets />}
+          />
+          <Route
+            path="/dashboard/helpedtickets"
+            element={isLoggedin && <HelpedTickets />}
           />
           <Route
             path="/dashboard/adminmessages"

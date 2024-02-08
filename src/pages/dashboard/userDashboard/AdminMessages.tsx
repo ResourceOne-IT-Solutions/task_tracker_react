@@ -92,6 +92,24 @@ function AdminMessages() {
           type == "CHAT" ? result.opponent.name : result.client.name
         } ${type} Request Approved By ${result.approvedBy.name}`;
         alert(msg);
+        if (type == "CHAT") {
+          const latestChatData = chatRequests.map((msz) => {
+            if (msz._id === result._id) {
+              return result;
+            }
+            return msz;
+          });
+          setChatRequests(latestChatData);
+        }
+        if (type === "TICKET") {
+          const LatestTicketData = ticketRequests.map((msz) => {
+            if (msz._id === result._id) {
+              return result;
+            }
+            return msz;
+          });
+          setTicketRequests(LatestTicketData);
+        }
       }
     });
   return (

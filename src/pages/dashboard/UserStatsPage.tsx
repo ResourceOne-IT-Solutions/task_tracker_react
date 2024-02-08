@@ -1,7 +1,7 @@
 import React from "react";
 import UserDashboard from "./userDashboard/UserDashboard";
 import { useLocation } from "react-router";
-import Navbar from "./navbar/Navbar";
+import Navbar from "../navbar/Navbar";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
 

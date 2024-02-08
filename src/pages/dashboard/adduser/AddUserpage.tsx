@@ -120,7 +120,7 @@ function AddUserpage() {
       const formData = new FormData();
       formData.append("file", profileImageUrl);
       const inres = await httpMethods
-        .post<FormData, FileModel>("/file", formData, true)
+        .post<FormData, FileModel>("/file/profile-image", formData, true)
         .then((res) => res)
         .catch((err: any) => {
           setUserSuccess(false);
@@ -130,49 +130,48 @@ function AddUserpage() {
         });
       if (!inres) {
         return;
+      }
+      const payloadData = {
+        ...userData,
+        profileImageUrl: inres.filename,
+        createdBy: { name: getFullName(currentUser), id: currentUser._id },
+      };
+      if (validData_or_not) {
+        httpMethods
+          .post<CreateUserPayload, UserModal>("/users/create", payloadData)
+          .then((result) => {
+            setCreatedData(result);
+            setUserError("");
+            setLoading(false);
+            setTimeout(() => {
+              setUserData({
+                firstName: "",
+                lastName: "",
+                email: "",
+                mobile: "",
+                password: "",
+                dob: "",
+                joinedDate: "",
+                isAdmin: null,
+                designation: "",
+                profileImageUrl: null,
+                address: "",
+                gender: "",
+              });
+              //image field is not getting empty we are reseting the form
+              formRef.current.reset();
+              setUserSuccess(true);
+            }, 2000);
+          })
+          .catch((e: any) => {
+            setUserSuccess(false);
+            setLoading(false);
+            setUserError(e.message);
+          });
       } else {
-        const payloadData = {
-          ...userData,
-          profileImageUrl: inres._id,
-          createdBy: { name: getFullName(currentUser), id: currentUser._id },
-        };
-        if (validData_or_not) {
-          httpMethods
-            .post<CreateUserPayload, UserModal>("/users/create", payloadData)
-            .then((result) => {
-              setCreatedData(result);
-              setUserError("");
-              setTimeout(() => {
-                setLoading(false);
-                setUserData({
-                  firstName: "",
-                  lastName: "",
-                  email: "",
-                  mobile: "",
-                  password: "",
-                  dob: "",
-                  joinedDate: "",
-                  isAdmin: null,
-                  designation: "",
-                  profileImageUrl: null,
-                  address: "",
-                  gender: "",
-                });
-                //image field is not getting empty we are reseting the form
-                formRef.current.reset();
-                setUserSuccess(true);
-              }, 2000);
-            })
-            .catch((e: any) => {
-              setUserSuccess(false);
-              setLoading(false);
-              setUserError(e.message);
-            });
-        } else {
-          setUserError("Enter All Fields");
-          setLoading(false);
-          setUserSuccess(false);
-        }
+        setUserError("Enter All Fields");
+        setLoading(false);
+        setUserSuccess(false);
       }
     } else {
       setUserError("Enter All Fields");

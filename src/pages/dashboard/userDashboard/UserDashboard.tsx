@@ -3,7 +3,12 @@ import "./UserDashboard.css";
 import httpMethods from "../../../api/Service";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { getData, getFullName, statusIndicator } from "../../../utils/utils";
+import {
+  ProfileImage,
+  getData,
+  getFullName,
+  statusIndicator,
+} from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
@@ -32,16 +37,21 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     data: { status: "" },
   });
   const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState<UserModal[]>([]);
   const [selected, setSelected] = useState("");
   socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (msg) => {
     alert(msg);
   });
   useEffect(() => {
     setIsLoading(true);
-    httpMethods
-      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
-      .then((result) => {
+    setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
+    Promise.all([
+      getData<UserModal>("users"),
+      getData<TicketModal>("users/tickets/" + presentUser._id),
+    ])
+      .then((results) => {
+        setUserData(results[0]);
+        const result = results[1];
         setTableData(result);
         const pendingTickets = result.filter(
           (ticket) => ticket.status === "Pending",
@@ -83,29 +93,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       })
       .catch(() => setIsLoading(false));
   }, []);
-  useEffect(() => {
-    setIsLoading(true);
-    httpMethods
-      .get<TicketModal[]>("/users/tickets/" + presentUser._id)
-      .then((result) => {
-        setTableData(result);
-        setIsLoading(false);
-      })
-      .catch(() => setIsLoading(false));
-  }, []);
-  useEffect(() => {
-    setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
-  }, []);
-  useEffect(() => {
-    getData<UserModal>("users")
-      .then((res: any) => {
-        setUserData(res);
-      })
-      .catch((err) => err);
-  }, []);
+
   useEffect(() => {
     setPresentUser(user);
   }, [user]);
+
   const handleSelect = (item: any) => {
     setSelected(item);
   };
@@ -144,7 +136,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         </p>
         <div className="usernavbar">
           <div className="nav_img_container">
-            <img src={`${presentUser.profileImageUrl}`} />
+            <ProfileImage filename={presentUser.profileImageUrl} />
           </div>
           <p> {getFullName(presentUser)} </p>
           <span>{statusIndicator(presentUser.status)}</span>

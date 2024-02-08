@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import httpMethods from "../api/Service";
 import { NameIdInterface, Status, UserModal } from "../modals/UserModals";
 import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
+import { BE_URL, TOKEN } from "./Constants";
 
 export function calculateWorkingFrom(joinDate: any) {
   const currentDate = new Date();
@@ -150,4 +151,34 @@ export const getRoomId = (id1: string, id2: string) => {
   } else {
     return id2 + "-" + id1;
   }
+};
+
+export const getImage = async (path: string) => {
+  try {
+    const response = await fetch(`${BE_URL}${path}`, {
+      headers: {
+        Authorization: TOKEN(),
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    // Get the image blob and create a URL for it
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    return url;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
+
+export const ProfileImage = ({ filename }: { filename: string }) => {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    getImage(`/profile-images/${filename}`).then((url) => {
+      setImageUrl(url);
+    });
+  }, []);
+  return <img src={imageUrl} />;
 };

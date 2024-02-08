@@ -32,6 +32,7 @@ export interface MessageRequestInterface {
 
 export interface FileModel {
   fileName: string;
+  filename: string;
   size: number;
   type: Type;
   _id: string;

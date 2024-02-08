@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import ReusableModal from "../../../utils/modal/ReusableModal";
-import AddClient from "../../../utils/modal/AddClient";
-import AddTicket from "../../../utils/modal/AddTicket";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { Status, UserContext, UserModal } from "../../../modals/UserModals";
-import { getData, setCookie, statusIndicator } from "../../../utils/utils";
-import { ClientModal } from "../../../modals/ClientModals";
+import ReusableModal from "../../utils/modal/ReusableModal";
+import AddClient from "../../utils/modal/AddClient";
+import AddTicket from "../../utils/modal/AddTicket";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { Status, UserContext, UserModal } from "../../modals/UserModals";
+import { getData, setCookie, statusIndicator } from "../../utils/utils";
+import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
-import { STATUS_TYPES } from "../../../utils/Constants";
+import { STATUS_TYPES } from "../../utils/Constants";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {

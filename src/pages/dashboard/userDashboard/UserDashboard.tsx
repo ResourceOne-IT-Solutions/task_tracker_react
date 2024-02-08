@@ -225,6 +225,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             >
               My Tickets
             </Button>
+            <Button
+              onClick={() => navigate("/dashboard/helpedtickets")}
+              variant="primary"
+            >
+              Helped Tickets
+            </Button>
           </div>
           <Modal
             show={showChatRequestPopup}

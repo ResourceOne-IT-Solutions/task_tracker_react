@@ -14,7 +14,7 @@ async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
       body: isFile ? (data as FormData) : JSON.stringify(data),
     });
     const result = await response.json();
-    if (response.status > 399) {
+    if (!response.ok) {
       throw new Error(result.error);
     }
     return result;
@@ -31,7 +31,7 @@ async function get<S>(path: string): Promise<S> {
       },
     });
     const result = await response.json();
-    if (response.status > 399) {
+    if (!response.ok) {
       throw new Error(result.error);
     }
     return result;
@@ -51,7 +51,7 @@ async function put<T, R>(url: string, data: T): Promise<R> {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    if (response.status > 399) {
+    if (!response.ok) {
       throw new Error(result.error);
     }
     return result;
@@ -69,7 +69,7 @@ async function deleteCall<T>(url: string): Promise<T> {
       },
     });
     const result = await response.json();
-    if (response.status > 399) {
+    if (!response.ok) {
       throw new Error(result.error);
     }
     return result;

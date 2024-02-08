@@ -174,7 +174,7 @@ export const getImage = async (path: string) => {
 
 export const ProfileImage = ({ filename }: { filename: string }) => {
   const [imageUrl, setImageUrl] = useState("");
- 
+
   useEffect(() => {
     getImage(`/profile-images/${filename}`).then((url) => {
       setImageUrl(url);

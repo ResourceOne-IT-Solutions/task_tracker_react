@@ -47,12 +47,14 @@ function UserDashboardTickets() {
       setShowModal(true);
     }
   };
+  socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (msg) => {
+    alert(msg);
+  });
   const handleRequest = (items: TicketModal) => {
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },
       sender: { id: currentUser._id, name: getFullName(currentUser) },
     });
-    alert("Ticket request sent");
   };
   const userDashbHeaders: TableHeaders<TicketModal>[] = [
     { title: "Sl. No", key: "serialNo" },

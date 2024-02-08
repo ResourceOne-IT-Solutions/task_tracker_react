@@ -34,6 +34,9 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
   const [userData, setUserData] = useState([]);
   const [selected, setSelected] = useState("");
+  socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (msg) => {
+    alert(msg);
+  });
   useEffect(() => {
     setIsLoading(true);
     httpMethods
@@ -122,7 +125,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       user: { name: getFullName(currentUser), id: currentUser._id },
       opponent: { name: exactUsername, id: exactUserid },
     });
-    alert("Chat Request sent");
+    setSelected("");
     setShowChatRequestPopup(false);
   };
   const groupedByStartDate = presentUser.breakTime.reduce((acc: any, obj) => {

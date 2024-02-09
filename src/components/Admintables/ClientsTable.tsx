@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { ClientModal } from "../../modals/ClientModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { useNavigate } from "react-router-dom";
@@ -54,7 +54,14 @@ function ClientsTable() {
       title: "Client Name",
       key: "firstName",
       tdFormat: (client) => (
-        <div onClick={() => gotoDashboards(client)}>{client.firstName}</div>
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip>Click here to view client details</Tooltip>}
+        >
+          <div className="client-curser" onClick={() => gotoDashboards(client)}>
+            {client.firstName}
+          </div>
+        </OverlayTrigger>
       ),
     },
     { title: "Email", key: "email" },

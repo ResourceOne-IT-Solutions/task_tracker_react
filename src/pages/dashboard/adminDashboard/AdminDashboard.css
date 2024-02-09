@@ -123,3 +123,6 @@ input {
   font-size: 25px;
   color: orange;
 }
+.client-curser {
+  cursor: pointer;
+}

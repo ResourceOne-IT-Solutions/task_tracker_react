@@ -144,12 +144,14 @@ const TicketDescription = () => {
             })}
           </ul>
         </div>
-        <div>
-          <Button className="m-3" onClick={() => setShowModal(!showModal)}>
-            Send Email
-          </Button>
-          <XlSheet data={convertTicketToExcel(selectedTicket)} />
-        </div>
+        {currentUser.isAdmin && (
+          <div>
+            <Button className="m-3" onClick={() => setShowModal(!showModal)}>
+              Send Email
+            </Button>
+            <XlSheet data={convertTicketToExcel(selectedTicket)} />
+          </div>
+        )}
       </div>
 
       {showModal && (

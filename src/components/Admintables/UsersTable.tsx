@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { UserModal } from "../../modals/UserModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { getData, getFullName, statusIndicator } from "../../utils/utils";
@@ -63,7 +63,12 @@ function UsersTable() {
       title: "User Name",
       key: "firstName",
       tdFormat: (user) => (
-        <div onClick={() => gotoDashboards(user)}>{getFullName(user)}</div>
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip>Click here to view User details</Tooltip>}
+        >
+          <div onClick={() => gotoDashboards(user)}>{getFullName(user)}</div>
+        </OverlayTrigger>
       ),
     },
     { title: "Email", key: "email" },

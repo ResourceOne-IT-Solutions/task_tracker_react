@@ -5,12 +5,16 @@ import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
 import { Props } from "./TicketsMain";
 import "./index.css";
-import { Button, Dropdown } from "react-bootstrap";
+import { Button, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
 import XlSheet from "./XlSheet";
 import { FILTERS } from "../../utils/Constants";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
 
 const Tickets = ({ url }: Props) => {
   const navigate = useNavigate();
+  const userContext = useUserContext();
+  const { currentUser } = userContext as UserContext;
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);
@@ -71,9 +75,14 @@ const Tickets = ({ url }: Props) => {
       tdFormat: (tkt) => (
         <>
           {tkt.description}
-          <p onClick={() => handleDescription(tkt)} className="desc-link">
-            Click here to see full description
-          </p>
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>Click here to see full description</Tooltip>}
+          >
+            <p onClick={() => handleDescription(tkt)} className="desc-link">
+              click Here
+            </p>
+          </OverlayTrigger>
         </>
       ),
     },
@@ -145,7 +154,9 @@ const Tickets = ({ url }: Props) => {
     <>
       <h4 className="text-center">
         Total Tickets : <Button onClick={() => navigate(-1)}>Back</Button>{" "}
-        <XlSheet data={formattedTicketforXL(showingTickets)} />
+        {currentUser.isAdmin && (
+          <XlSheet data={formattedTicketforXL(showingTickets)} />
+        )}
       </h4>
       <div className="filters">
         <Dropdown onSelect={handleSelectStatus} className="drop-down">

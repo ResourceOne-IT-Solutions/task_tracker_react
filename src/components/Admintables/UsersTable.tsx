@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { UserModal } from "../../modals/UserModals";
+import { UserModal, UserContext } from "../../modals/UserModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
 import { getData, getFullName, statusIndicator } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
-import { ClientModal } from "../../modals/ClientModals";
 import httpMethods from "../../api/Service";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import UpdateUser from "../../utils/modal/UpdateUser";
+import { useUserContext } from "../Authcontext/AuthContext";
+import { Severity } from "../../utils/modal/notification";
 
 function UsersTable() {
   const navigate = useNavigate();
+  const { alertModal, popupNotification } = useUserContext() as UserContext;
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,10 +52,17 @@ function UsersTable() {
             (item) => item._id !== resp._id,
           );
           setUsersData(filtered_data);
-          window.alert(`${getFullName(resp)} account is deleted Successfully`);
+          popupNotification({
+            severity: Severity.SUCCESS,
+            content: `${getFullName(resp)} account is deleted Successfully`,
+          });
         })
         .catch((err: any) => {
-          window.alert("An error Occured while deleting");
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "User Delete",
+          });
         });
     }
   };
@@ -146,7 +155,10 @@ function UsersTable() {
         setUsersData(result);
       })
       .catch((err) => {
-        alert(err);
+        popupNotification({
+          severity: Severity.ERROR,
+          content: err.message,
+        });
       })
       .finally(() => {
         setLoading(false);

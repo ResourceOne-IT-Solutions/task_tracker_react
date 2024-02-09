@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import httpMethods from "../api/Service";
-import { NameIdInterface, Status, UserModal } from "../modals/UserModals";
+import {
+  NameIdInterface,
+  Status,
+  UserContext,
+  UserModal,
+} from "../modals/UserModals";
 import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
 import { BE_URL, TOKEN } from "./Constants";
+import { useUserContext } from "../components/Authcontext/AuthContext";
+import { Severity } from "./modal/notification";
 
 export function calculateWorkingFrom(joinDate: any) {
   const currentDate = new Date();
@@ -174,11 +181,20 @@ export const getImage = async (path: string) => {
 
 export const ProfileImage = ({ filename }: { filename: string }) => {
   const [imageUrl, setImageUrl] = useState("");
-
+  const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
-    getImage(`/profile-images/${filename}`).then((url) => {
-      setImageUrl(url);
-    });
+    if (!filename) return;
+    getImage(`/profile-images/${filename}`)
+      .then((url) => {
+        setImageUrl(url);
+      })
+      .catch((err) => {
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Profile Image",
+        });
+      });
   }, []);
   return <img src={imageUrl} />;
 };

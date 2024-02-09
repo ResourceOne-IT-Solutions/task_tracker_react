@@ -6,6 +6,7 @@ import httpMethods from "../../../api/Service";
 import { getFullName } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { GroupInterface } from "./Groups";
+import { Severity } from "../../../utils/modal/notification";
 
 interface CreateGroupProps {
   onCreateGroup: (group: GroupInterface) => void;
@@ -23,8 +24,7 @@ interface CreateGroupModel {
 }
 
 const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
-  const userContext = useUserContext();
-  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
+  const { currentUser, socket, alertModal } = useUserContext() as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [groupDetails, setGroupDetails] = useState<CreateGroupModel>({
@@ -77,8 +77,12 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
     socket.emit("createGroup", groups);
     setTimeout(() => {
       setShowModal(false);
-      alert("group created");
-    }, 1000);
+      alertModal({
+        severity: Severity.SUCCESS,
+        content: "Group Created",
+        title: "Alert",
+      });
+    }, 500);
   };
 
   return (

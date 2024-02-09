@@ -126,7 +126,7 @@ const ChatHeader = ({
       {currentUser.isAdmin && isPopupOpen && (
         <div className="popup-nav" ref={popupRef}>
           <Button variant="success" onClick={handleExportBtn}>
-            export chat
+            Export Chat
           </Button>
         </div>
       )}

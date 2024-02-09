@@ -14,11 +14,12 @@ import { UserContext, UserModal } from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
 import Timezones from "../../../components/features/timezone/Timezones";
 import { useNavigate } from "react-router-dom";
+import { Severity } from "../../../utils/modal/notification";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
-  const userContext = useUserContext();
-  const { setCurrentUser, socket, currentUser } = userContext as UserContext;
+  const { setCurrentUser, socket, currentUser, alertModal } =
+    useUserContext() as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
@@ -40,7 +41,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const [userData, setUserData] = useState<UserModal[]>([]);
   const [selected, setSelected] = useState("");
   socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (msg) => {
-    alert(msg);
+    alertModal({
+      severity: Severity.SUCCESS,
+      content: msg,
+      title: "Ticket Raise",
+    });
   });
   useEffect(() => {
     setIsLoading(true);

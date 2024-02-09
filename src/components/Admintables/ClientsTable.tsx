@@ -7,9 +7,13 @@ import httpMethods from "../../api/Service";
 import { getData, getFullName } from "../../utils/utils";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import UpdateClient from "../../utils/modal/UpdateClient";
+import { useUserContext } from "../Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
+import { Severity } from "../../utils/modal/notification";
 
 function ClientsTable() {
   const navigate = useNavigate();
+  const { alertModal } = useUserContext() as UserContext;
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,10 +45,18 @@ function ClientsTable() {
             (item) => item._id !== resp._id,
           );
           setClientsData(filtered_data);
-          window.alert(`${getFullName(resp)} account is deleted Successfully`);
+          alertModal({
+            severity: Severity.SUCCESS,
+            content: `${getFullName(resp)} account is deleted Successfully`,
+            title: "Client Delete",
+          });
         })
         .catch((err: any) => {
-          window.alert("An error Occured while deleting");
+          alertModal({
+            severity: Severity.ERROR,
+            content: "An error Occured while deleting",
+            title: "Client Delete",
+          });
         });
     }
   };
@@ -93,8 +105,12 @@ function ClientsTable() {
       .then((result) => {
         setClientsData(result);
       })
-      .catch((err) => {
-        alert(err);
+      .catch((e) => {
+        alertModal({
+          severity: Severity.ERROR,
+          content: e.message,
+          title: "Clients Fetch",
+        });
       })
       .finally(() => {
         setLoading(false);

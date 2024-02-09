@@ -21,11 +21,11 @@ import {
   NO_MESSAGES_TO_DISPLAY,
   NO_TICKET_REQUEST,
 } from "../../../utils/Constants";
+import { Severity } from "../../../utils/modal/notification";
 
 function AdminRequestMessages() {
-  const userContext = useUserContext();
   const navigate = useNavigate();
-  const { socket, currentUser } = userContext as UserContext;
+  const { socket, currentUser, alertModal } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
@@ -50,7 +50,13 @@ function AdminRequestMessages() {
         setTicketRequests(results[1]);
         setMessageRequests(results[2]);
       })
-      .catch((err) => alert(err))
+      .catch((err) =>
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Admin Messages",
+        }),
+      )
       .finally(() => {
         setChatLoading(false);
         setTicketLoading(false);

@@ -1,5 +1,20 @@
 import { Socket } from "socket.io-client";
 import { MessageModel } from "./MessageModals";
+import { Severity } from "../utils/modal/notification";
+
+export interface AlertModalProps {
+  content: string;
+  severity: Severity;
+  title?: string;
+}
+
+export interface PopupNotification {
+  content: string;
+  severity: Severity;
+}
+export interface ShowNotificationPopup extends PopupNotification {
+  show: boolean;
+}
 
 export interface UserContext {
   isLoggedin: boolean;
@@ -15,6 +30,16 @@ export interface UserContext {
   setTotalMessages: React.Dispatch<React.SetStateAction<number>>;
   notificationRooms: number;
   setNotificationRooms: React.Dispatch<React.SetStateAction<number>>;
+  alertModal: (data: AlertModalProps) => void;
+  alertModalContent: AlertModalProps;
+  setAlertModalContent: React.Dispatch<React.SetStateAction<AlertModalProps>>;
+  showAlertModal: boolean;
+  setShowAlertModal: React.Dispatch<React.SetStateAction<boolean>>;
+  popupNotification: (data: PopupNotification) => void;
+  showNotification: ShowNotificationPopup;
+  setShowNotification: React.Dispatch<
+    React.SetStateAction<ShowNotificationPopup>
+  >;
 }
 export type Status = "Available" | "Break" | "Offline" | "On Ticket";
 

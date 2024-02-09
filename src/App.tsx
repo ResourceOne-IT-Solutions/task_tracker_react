@@ -5,11 +5,23 @@ import { useUserContext } from "./components/Authcontext/AuthContext";
 import { UserContext } from "./modals/UserModals";
 import SocketEvents from "./utils/SocketEvents";
 import { AVAILABLE, BREAK } from "./utils/Constants";
+import Alert from "./utils/modal/alert";
+import Notification from "./utils/modal/notification";
+
 let isInBreak = false;
 function App() {
   const userContext = useUserContext();
-  const { socket, currentUser, setNotificationRooms, isLoggedin } =
-    userContext as UserContext;
+  const {
+    socket,
+    currentUser,
+    setNotificationRooms,
+    isLoggedin,
+    showAlertModal,
+    setShowAlertModal,
+    alertModalContent,
+    showNotification,
+    setShowNotification,
+  } = userContext as UserContext;
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;
   function resetInactivityTimer() {
@@ -54,6 +66,22 @@ function App() {
     <div className="App">
       <Routespage />
       {isLoggedin && <SocketEvents />}
+      {showAlertModal && (
+        <Alert
+          content={alertModalContent.content}
+          severity={alertModalContent.severity}
+          onClose={(val) => setShowAlertModal(val)}
+          title={alertModalContent.title}
+          show={showAlertModal}
+        />
+      )}
+      {showNotification.show && (
+        <Notification
+          content={showNotification.content}
+          severity={showNotification.severity}
+          onClose={(show) => setShowNotification({ ...showNotification, show })}
+        />
+      )}
     </div>
   );
 }

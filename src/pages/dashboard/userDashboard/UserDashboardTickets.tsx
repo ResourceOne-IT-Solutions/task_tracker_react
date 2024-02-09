@@ -47,9 +47,6 @@ function UserDashboardTickets() {
       setShowModal(true);
     }
   };
-  socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (msg) => {
-    alert(msg);
-  });
   const handleRequest = (items: TicketModal) => {
     socket.emit("requestTickets", {
       client: { id: items.client.id, name: items.client.name },

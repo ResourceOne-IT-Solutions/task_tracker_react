@@ -39,6 +39,7 @@ function Navbar() {
 
   const handleClick = (str: string) => {
     setModalname(str);
+    navigate("/dashboard");
     setModalProps({
       title: str == "Client" ? "Create Client" : "Create Ticket",
       setShowModal: setShowModal,

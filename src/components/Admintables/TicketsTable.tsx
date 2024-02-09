@@ -5,14 +5,17 @@ import { ClientModal } from "../../modals/ClientModals";
 import { getData } from "../../utils/utils";
 import AssignTicket from "../../utils/modal/AssignTicket";
 import ReusableModal from "../../utils/modal/ReusableModal";
-import { UserModal } from "../../modals/UserModals";
+import { UserContext, UserModal } from "../../modals/UserModals";
 import MailSender from "../../utils/modal/MailSender";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import httpMethods from "../../api/Service";
+import { useUserContext } from "../Authcontext/AuthContext";
+import { Severity } from "../../utils/modal/notification";
 
 function TicketsTable() {
   const navigate = useNavigate();
+  const { alertModal } = useUserContext() as UserContext;
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
@@ -59,7 +62,11 @@ function TicketsTable() {
         );
       })
       .catch((err: any) => {
-        alert(err);
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Ticket Update",
+        });
       });
   };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
@@ -125,7 +132,11 @@ function TicketsTable() {
         setTicketsData(results[1]);
       })
       .catch((err) => {
-        alert(err);
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "API Fetch Users, Pending Tickets",
+        });
       })
       .finally(() => {
         setLoading(false);

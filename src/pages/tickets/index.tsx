@@ -173,6 +173,7 @@ const Tickets = ({ url }: Props) => {
             id="from"
             onChange={handleDateRange}
             value={dateRange.from}
+            className="form-control"
           />
           <label htmlFor="to">To</label>
           <input
@@ -181,6 +182,7 @@ const Tickets = ({ url }: Props) => {
             id="to"
             onChange={handleDateRange}
             value={dateRange.to}
+            className="form-control"
           />
           <button
             className="btn btn-info"

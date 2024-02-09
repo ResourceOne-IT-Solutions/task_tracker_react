@@ -2,6 +2,7 @@ import React from "react";
 import { Socket } from "socket.io-client";
 import { UserContext, UserModal } from "../modals/UserModals";
 import { useUserContext } from "../components/Authcontext/AuthContext";
+import { Severity } from "./modal/notification";
 
 const SocketEvents = () => {
   const userContext = useUserContext();
@@ -11,6 +12,8 @@ const SocketEvents = () => {
     setCurrentUser,
     setNotificationRooms,
     setTotalMessages,
+    alertModal,
+    popupNotification,
   } = userContext as UserContext;
   socket
     .off("notifications")
@@ -27,7 +30,6 @@ const SocketEvents = () => {
         setNotificationRooms(roomsCount);
         setTotalMessages(totalMessage);
         setCurrentUser(currentUser);
-        // alert('You got a message from ' + sender.fName)
         if ("Notification" in window && Notification.permission === "granted") {
           const notification = new Notification("Message", {
             body: `You got a message from ${from.name}`,
@@ -35,7 +37,8 @@ const SocketEvents = () => {
             // Other options like icon, badge, etc.
           });
         }
-        alert(`You got a ${type} from ${from.name}`);
+        const content = `You got a ${type} from ${from.name}`;
+        alertModal({ severity: Severity.WARNING, content });
       }
     });
   socket.off("statusUpdate").on("statusUpdate", (user) => {
@@ -47,39 +50,43 @@ const SocketEvents = () => {
   });
   socket.off("ticketAssigned").on("ticketAssigned", (id, sender) => {
     if (currentUser._id === id) {
-      alert(`${sender.name} Assigned you A ticket`);
+      const content = `${sender.name} Assigned you A ticket`;
+      alertModal({ severity: Severity.WARNING, content });
     }
   });
   socket.off("ticketsRequest").on("ticketsRequest", ({ sender, client }) => {
     if (currentUser.isAdmin) {
-      alert(`${sender.name} is Requesting for ${client.name} Tickets`);
+      const content = `${sender.name} is Requesting for ${client.name} Tickets`;
+      alertModal({ severity: Severity.WARNING, content });
     }
   });
   socket.off("chatRequest").on("chatRequest", ({ sender, opponent }) => {
     if (currentUser.isAdmin) {
-      alert(`${sender.name} is Requesting to Chat  with ${opponent.name}`);
+      const content = `${sender.name} is Requesting to Chat  with ${opponent.name}`;
+      alertModal({ severity: Severity.WARNING, content });
     }
+  });
+  socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (content) => {
+    popupNotification({ severity: Severity.SUCCESS, content });
   });
   socket
     .off("resourceAssigned")
     .on("resourceAssigned", ({ ticket, sender, resource, user }) => {
       if (currentUser._id === user.id) {
-        alert(
-          `${sender.name} assigned ${resource.name} as a resource for your ${ticket.name} ticket`,
-        );
+        const content = `${sender.name} assigned ${resource.name} as a resource for your ${ticket.name} ticket`;
+        alertModal({ severity: Severity.WARNING, content });
       }
       if (currentUser._id === resource.id) {
-        alert(
-          `${user.name} is needs ur help for the ${ticket.name} ticket, ${sender.name} assigned you as a resource`,
-        );
+        const content = `${user.name} is needs ur help for the ${ticket.name} ticket, ${sender.name} assigned you as a resource`;
+        alertModal({ severity: Severity.WARNING, content });
       }
     });
   socket
     .off("adminMessageToAll")
     .on("adminMessageToAll", ({ sender, content, _id }) => {
       if (!currentUser.isAdmin) {
-        const message = `${content}   \n --- from ${sender.name}`;
-        alert(message);
+        const msg = `${content}   \n --- from ${sender.name}`;
+        alertModal({ severity: Severity.WARNING, content: msg });
         socket.emit("updateAdminMessageStatus", {
           userId: currentUser._id,
           messageId: _id,
@@ -87,8 +94,8 @@ const SocketEvents = () => {
         });
       }
     });
-  socket.off("error").on("error", (error) => {
-    alert(JSON.stringify(error));
+  socket.off("error").on("error", (content: string) => {
+    popupNotification({ severity: Severity.ERROR, content });
   });
   return <></>;
 };

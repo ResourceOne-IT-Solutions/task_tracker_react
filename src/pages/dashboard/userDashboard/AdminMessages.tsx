@@ -18,11 +18,12 @@ import {
   NO_MESSAGES_TO_DISPLAY,
   NO_TICKET_REQUEST,
 } from "../../../utils/Constants";
+import { Severity } from "../../../utils/modal/notification";
 
 function AdminMessages() {
-  const userContext = useUserContext();
-  const { currentUser, setSelectedUser, socket } = userContext as UserContext;
   const navigate = useNavigate();
+  const { currentUser, setSelectedUser, socket, alertModal } =
+    useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
@@ -74,7 +75,13 @@ function AdminMessages() {
         setTicketRequests(results[1]);
         setMessageRequests(results[2]);
       })
-      .catch((err) => alert(err))
+      .catch((err) =>
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Admin Messages",
+        }),
+      )
       .finally(() => {
         setChatLoading(false);
         setTicketLoading(false);
@@ -91,7 +98,11 @@ function AdminMessages() {
         const msg = `Your ${
           type == "CHAT" ? result.opponent.name : result.client.name
         } ${type} Request Approved By ${result.approvedBy.name}`;
-        alert(msg);
+        alertModal({
+          severity: Severity.ERROR,
+          content: msg,
+          title: `${type} Request`,
+        });
         if (type == "CHAT") {
           const latestChatData = chatRequests.map((msz) => {
             if (msz._id === result._id) {

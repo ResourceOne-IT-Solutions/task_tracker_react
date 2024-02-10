@@ -71,13 +71,13 @@ export function getData<T>(url: string): Promise<T[]> {
 
 export const statusIndicator = (status: Status) => {
   if (status === "Available") {
-    return <GreenDot />;
+    return <GreenDot title={status} />;
   } else if (status === "Break") {
-    return <OrangeDot />;
+    return <OrangeDot title={status} />;
   } else if (status === "On Ticket") {
-    return <BlueDot />;
+    return <BlueDot title={status} />;
   } else if (status === "Offline") {
-    return <RedDot />;
+    return <RedDot title={status} />;
   }
 };
 interface FullNameType {
@@ -179,7 +179,13 @@ export const getImage = async (path: string) => {
   }
 };
 
-export const ProfileImage = ({ filename }: { filename: string }) => {
+export const ProfileImage = ({
+  filename,
+  className,
+}: {
+  filename: string;
+  className?: string;
+}) => {
   const [imageUrl, setImageUrl] = useState("");
   const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
@@ -196,5 +202,20 @@ export const ProfileImage = ({ filename }: { filename: string }) => {
         });
       });
   }, []);
-  return <img src={imageUrl} />;
+  return <img src={imageUrl} className={className} />;
+};
+
+export const handleValidate = (name: string, value: string): boolean => {
+  let isValidField = true;
+  if (name === "firstName" || name === "lastName" || name === "designation") {
+    isValidField =
+      /^[A-Za-z]+\s{0,1}[A-Za-z]*$/.test(value) && value.length >= 3;
+  } else if (name === "email") {
+    isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  } else if (name === "mobile") {
+    isValidField = /^\+[0-9]{1,2}\s\d{10}$/.test(value);
+  } else if (name === "password") {
+    isValidField = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/.test(value);
+  }
+  return isValidField;
 };

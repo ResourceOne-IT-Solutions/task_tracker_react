@@ -138,7 +138,7 @@ function UserDashboardTickets() {
   useEffect(() => {
     setLoading(true);
     httpMethods
-      .get<TicketModal[]>("/users/tickets/" + currentUser._id)
+      .get<TicketModal[]>("/tickets/user/" + currentUser._id)
       .then((result) => {
         setTableData(result);
         setLoading(false);

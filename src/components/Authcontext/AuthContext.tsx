@@ -74,9 +74,14 @@ const AuthContext = ({ children }: AuthContextProps) => {
         setIsLoggedIn(true);
         socket.emit("newUser", { userId: data._id });
       })
-      .catch(() => {
+      .catch((e: any) => {
         setIsLoggedIn(false);
         setCurrentUser({} as UserModal);
+        alertModal({
+          severity: Severity.ERROR,
+          content: e.message,
+          title: "Login Error",
+        });
       });
   }, []);
   return (

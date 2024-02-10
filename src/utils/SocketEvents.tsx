@@ -95,7 +95,7 @@ const SocketEvents = () => {
       }
     });
   socket.off("error").on("error", (content: string) => {
-    popupNotification({ severity: Severity.ERROR, content });
+    alertModal({ severity: Severity.ERROR, content, title: "Socket Error" });
   });
   return <></>;
 };

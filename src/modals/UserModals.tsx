@@ -112,7 +112,7 @@ export interface CreateUserPayload {
   joinedDate: string;
   isAdmin: null;
   designation: string;
-  profileImageUrl: string | null;
+  profileImageUrl: File | null;
   userId?: string;
   address: string;
   gender: string;

@@ -3,9 +3,8 @@ import { useLocation } from "react-router-dom";
 import "./index.css";
 import httpMethods from "../../../api/Service";
 import { TicketModal } from "../../../modals/TicketModals";
-import TaskTable, { TableHeaders } from "../../../utils/table/Table";
-import TicketsMain from "../../tickets/TicketsMain";
 import PieChartComponent from "../../../components/pieChart/PieChart";
+import Tickets from "../../tickets";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
@@ -21,7 +20,7 @@ const ClientDashboard = () => {
   ]);
   useEffect(() => {
     httpMethods
-      .get<TicketModal[]>(`/clients/tickets/${clientState._id}`)
+      .get<TicketModal[]>(`/tickets/client/${clientState._id}`)
       .then((tickets) => {
         setSelectedTickets(tickets);
         const notAssignedTickets = tickets.filter(
@@ -84,7 +83,8 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      <TicketsMain url={`/clients/tickets/${clientState._id}`} />
+      {/* <TicketsMain url={`/clients/tickets/${clientState._id}`} /> */}
+      <Tickets url={`/tickets/client/${clientState._id}`} />
     </>
   );
 };

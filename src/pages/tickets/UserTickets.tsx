@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 function UserTickets() {
   const { id } = useParams();
-  const url = `/users/tickets/${id}`;
+  const url = `/tickets/user/${id}`;
   return (
     <div>
       <Tickets url={url} />

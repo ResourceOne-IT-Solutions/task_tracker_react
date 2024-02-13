@@ -33,7 +33,7 @@ export interface RaiseTicketInterface {
   content: string;
   date: string;
   isPending: boolean;
-  sender: { name: string; id: string };
+  sender: NameIdInterface;
   time: string;
   _id: string;
 }

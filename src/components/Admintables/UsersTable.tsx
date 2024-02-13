@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { UserModal, UserContext } from "../../modals/UserModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
-import { getData, getFullName, statusIndicator } from "../../utils/utils";
+import {
+  ProfileImage,
+  getData,
+  getFullName,
+  statusIndicator,
+} from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import httpMethods from "../../api/Service";
 import ReusableModal from "../../utils/modal/ReusableModal";
@@ -98,11 +103,7 @@ function UsersTable() {
           <span style={statusIndicatorStyle}>
             {statusIndicator(user.status)}
           </span>
-          <img
-            src={user.profileImageUrl}
-            alt="image"
-            style={{ width: "100%", height: "100%" }}
-          />
+          <ProfileImage className="w-100" filename={user.profileImageUrl} />
         </div>
       ),
     },

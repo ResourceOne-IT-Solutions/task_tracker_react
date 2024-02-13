@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
+import { Spinner } from "react-bootstrap";
 
 export interface TableHeaders<T> {
   title: string | any;
@@ -20,7 +21,7 @@ interface TableProps<R> {
   pagination?: boolean;
   paginationAlign?: string;
   paginationClassName?: string;
-  loader?: JSX.Element;
+  Loader?: any;
   loading: boolean;
 }
 
@@ -35,7 +36,7 @@ function TaskTable<R>(props: TableProps<R>) {
     pagination = false,
     paginationAlign = "center",
     paginationClassName = "table-pagination",
-    loader = <>Loading..</>,
+    Loader = Spinner,
     loading = false,
     ...args
   } = props;
@@ -125,8 +126,8 @@ function TaskTable<R>(props: TableProps<R>) {
         <tbody className={tBodyClassName}>
           {loading ? (
             <tr>
-              <td colSpan={headers.length}>
-                {loader ? loader : <div>Loading...</div>}
+              <td colSpan={headers.length} className="text-center">
+                {Loader ? <Loader /> : <div>Loading...</div>}
               </td>
             </tr>
           ) : (

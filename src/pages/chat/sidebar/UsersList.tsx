@@ -2,7 +2,12 @@ import React, { useEffect, useState } from "react";
 import "./styles/userlist.css";
 import { UserModal } from "../../../modals/UserModals";
 import { Socket } from "socket.io-client";
-import { getFullName, getRoomId, statusIndicator } from "../../../utils/utils";
+import {
+  ProfileImage,
+  getFullName,
+  getRoomId,
+  statusIndicator,
+} from "../../../utils/utils";
 
 interface UserListProps {
   users: UserModal[];
@@ -59,7 +64,7 @@ const UserList = ({
           >
             <div className="user">
               <div className="user-img">
-                <img src={user.profileImageUrl} alt="alt" />{" "}
+                <ProfileImage filename={user.profileImageUrl} />
                 {statusIndicator(user.status)}
               </div>
               <div className="user-name">

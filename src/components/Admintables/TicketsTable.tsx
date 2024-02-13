@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { TicketModal } from "../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
-import { ClientModal } from "../../modals/ClientModals";
 import { getData } from "../../utils/utils";
 import AssignTicket from "../../utils/modal/AssignTicket";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import { UserContext, UserModal } from "../../modals/UserModals";
 import MailSender from "../../utils/modal/MailSender";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import httpMethods from "../../api/Service";
 import { useUserContext } from "../Authcontext/AuthContext";
 import { Severity } from "../../utils/modal/notification";
@@ -123,6 +122,7 @@ function TicketsTable() {
     );
   }
   useEffect(() => {
+    setLoading(true);
     Promise.all([
       getData<UserModal>("users"),
       getData<any>("tickets/pending-tickets"),

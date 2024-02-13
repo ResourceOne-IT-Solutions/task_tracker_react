@@ -6,7 +6,7 @@ function ApprovedTickets() {
   const ticketData = useLocation().state;
   return (
     <div>
-      <TicketsMain url={`/clients/tickets/${ticketData.client.id}`} />
+      <TicketsMain url={`/tickets/client/${ticketData.client.id}`} />
     </div>
   );
 }

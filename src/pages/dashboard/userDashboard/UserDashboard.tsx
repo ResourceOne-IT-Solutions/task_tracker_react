@@ -6,6 +6,8 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   ProfileImage,
   getData,
+  getFormattedDate,
+  getFormattedTime,
   getFullName,
   statusIndicator,
 } from "../../../utils/utils";
@@ -52,7 +54,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
     Promise.all([
       getData<UserModal>("users"),
-      getData<TicketModal>("users/tickets/" + presentUser._id),
+      getData<TicketModal>("tickets/user/" + presentUser._id),
     ])
       .then((results) => {
         setUserData(results[0]);
@@ -189,8 +191,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         {arr.map((brtime: any, i: number) => {
                           return (
                             <span className="d-block" key={i}>
-                              startTime {brtime.startTime} endTime{" "}
-                              {brtime.endTime}
+                              startTime {getFormattedTime(brtime.startTime)}{" "}
+                              endTime {getFormattedTime(brtime.endTime)}
                             </span>
                           );
                         })}

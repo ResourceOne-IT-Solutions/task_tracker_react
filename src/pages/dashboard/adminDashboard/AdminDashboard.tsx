@@ -6,7 +6,11 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
-import { getFullName, statusIndicator } from "../../../utils/utils";
+import {
+  ProfileImage,
+  getFullName,
+  statusIndicator,
+} from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
@@ -145,7 +149,10 @@ const AdminDashboard = () => {
       <div className="admin-pie-chart">
         <div className="admin-details">
           <div className="heading-pic">
-            <img src={`${currentUser.profileImageUrl}`} alt="img" />
+            <ProfileImage
+              className="rounded-circle"
+              filename={currentUser.profileImageUrl}
+            />
             <h4>
               {getFullName(currentUser)}
               <span className="active-not">
@@ -158,7 +165,7 @@ const AdminDashboard = () => {
           <div className="all-details">
             <div className="pf">
               <h6>Profile Image</h6>
-              <img src={`${currentUser.profileImageUrl}`} alt="image" />
+              <ProfileImage filename={currentUser.profileImageUrl} />
             </div>
             <div>
               <h6>Admin Details</h6>

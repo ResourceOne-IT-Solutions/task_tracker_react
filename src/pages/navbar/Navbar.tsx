@@ -28,8 +28,10 @@ function Navbar() {
     setShowModal,
     show: showModal,
   });
+
   const [seconds, setSeconds] = useState(0);
   const userContext = useUserContext();
+
   const {
     currentUser,
     setCurrentUser,
@@ -37,7 +39,8 @@ function Navbar() {
     socket,
     isLoggedin,
     notificationRooms,
-  } = userContext as UserContext;
+    requestMessageCount,
+  } = useUserContext() as UserContext;
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
@@ -136,7 +139,14 @@ function Navbar() {
                         </li>
                         <li className="nav-item adduser mx-2">
                           <NavLink to="/dashboard/adminRequestmessages">
-                            View Requests
+                            View Requests{" "}
+                            {requestMessageCount ? (
+                              <span className="user-newmsg-count">
+                                {requestMessageCount}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </NavLink>
                         </li>
                       </>
@@ -164,6 +174,9 @@ function Navbar() {
                           </NavLink>
                         </li>
                       )}
+                      <li className="nav-item adduser mx-2">
+                        <NavLink to="/dashboard/feedback">Feedback</NavLink>
+                      </li>
                     </>
                   </ul>
                 </form>

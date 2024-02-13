@@ -40,6 +40,8 @@ export interface UserContext {
   setShowNotification: React.Dispatch<
     React.SetStateAction<ShowNotificationPopup>
   >;
+  setRequestMessageCount: React.Dispatch<React.SetStateAction<number>>;
+  requestMessageCount: number;
 }
 export type Status = "Available" | "Break" | "Offline" | "On Ticket" | "Sleep";
 

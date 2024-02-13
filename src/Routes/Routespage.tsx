@@ -21,6 +21,7 @@ import TicketsTable from "../components/Admintables/TicketsTable";
 import TicketsMain from "../pages/tickets/TicketsMain";
 import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboardTickets";
 import HelpedTickets from "../pages/tickets/HelpedTickets";
+import Feedback from "../pages/dashboard/Feedback/Feedback";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -108,6 +109,10 @@ const Routespage = () => {
           <Route
             path="/tickets/:id"
             element={isLoggedin ? <TicketDescription /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/dashboard/feedback"
+            element={isLoggedin ? <Feedback /> : <Navigate to="/" />}
           />
           <Route
             path="/client/:id"

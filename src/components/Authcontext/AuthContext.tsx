@@ -36,6 +36,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
       severity: Severity.NULL,
       content: "",
     });
+  const [requestMessageCount, setRequestMessageCount] = useState<number>(0);
   const alertModal = ({ content, severity, title }: AlertModalProps) => {
     setShowAlertModal(true);
     setAlertModalContent({ content, severity, title });
@@ -65,6 +66,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
     showNotification,
     setShowNotification,
     popupNotification,
+    requestMessageCount,
+    setRequestMessageCount,
   };
   useEffect(() => {
     httpMethods

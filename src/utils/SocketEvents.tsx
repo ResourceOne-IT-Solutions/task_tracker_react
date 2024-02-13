@@ -5,7 +5,6 @@ import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 
 const SocketEvents = () => {
-  const userContext = useUserContext();
   const {
     socket,
     currentUser,
@@ -14,7 +13,8 @@ const SocketEvents = () => {
     setTotalMessages,
     alertModal,
     popupNotification,
-  } = userContext as UserContext;
+    setRequestMessageCount,
+  } = useUserContext() as UserContext;
   socket
     .off("notifications")
     .on("notifications", ({ id, from, type, room }) => {
@@ -58,12 +58,14 @@ const SocketEvents = () => {
     if (currentUser.isAdmin) {
       const content = `${sender.name} is Requesting for ${client.name} Tickets`;
       alertModal({ severity: Severity.WARNING, content });
+      setRequestMessageCount((c) => c + 1);
     }
   });
   socket.off("chatRequest").on("chatRequest", ({ sender, opponent }) => {
     if (currentUser.isAdmin) {
       const content = `${sender.name} is Requesting to Chat  with ${opponent.name}`;
       alertModal({ severity: Severity.WARNING, content });
+      setRequestMessageCount((c) => c + 1);
     }
   });
   socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (content) => {

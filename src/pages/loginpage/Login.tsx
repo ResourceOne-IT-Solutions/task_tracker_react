@@ -97,7 +97,7 @@ const Login = () => {
       </Form>
       <p className="logintext">
         <span className="anchorclick" onClick={handleClick}>
-          click here
+          Click Here
         </span>{" "}
         to navigate to {path == "User" ? "Admin" : "User"} login page
       </p>

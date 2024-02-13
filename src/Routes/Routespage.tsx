@@ -71,7 +71,7 @@ const Routespage = () => {
                 isAdmin ? (
                   <Tickets />
                 ) : (
-                  <TicketsMain url={`/users/tickets/${currentUser._id}`} />
+                  <TicketsMain url={`/tickets/user/${currentUser._id}`} />
                 )
               ) : (
                 <Navigate to="/" />

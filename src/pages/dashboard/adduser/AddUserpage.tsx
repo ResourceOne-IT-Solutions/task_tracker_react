@@ -12,26 +12,20 @@ import {
 } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 import { FileModel } from "../../../modals/MessageModals";
-import { getCurrentDate, getFullName, getNameId } from "../../../utils/utils";
+import {
+  getCurrentDate,
+  getFullName,
+  getNameId,
+  handleValidate,
+} from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
+import { Severity } from "../../../utils/modal/notification";
+import { EMPTY_USER_PAYLOAD, GENDERS } from "../../../utils/Constants";
 
 function AddUserpage() {
-  const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
-  const [userData, setUserData] = useState<CreateUserPayload>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    mobile: "",
-    password: "",
-    dob: "",
-    joinedDate: "",
-    isAdmin: null,
-    designation: "",
-    profileImageUrl: null,
-    address: "",
-    gender: "",
-  });
+  const { currentUser, alertModal } = useUserContext() as UserContext;
+  const [userData, setUserData] =
+    useState<CreateUserPayload>(EMPTY_USER_PAYLOAD);
   const {
     firstName,
     lastName,
@@ -53,7 +47,7 @@ function AddUserpage() {
   const [loading, setLoading] = useState<boolean>(false);
   const formRef = useRef<any>(null);
   const navigate = useNavigate();
-  const [genders, setGenders] = useState(["MALE", "FEMALE", "NOT SPECIFIED"]);
+
   const [isValid, setIsValid] = useState({
     firstName: false,
     lastName: false,
@@ -75,36 +69,26 @@ function AddUserpage() {
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
-    const { name, value } = event.target;
-    let isValidField = true;
-    if (name === "firstName" || name === "lastName" || name === "designation") {
-      isValidField =
-        /^[A-Za-z]+\s{0,1}[A-Za-z]*$/.test(value) && value.length >= 3;
-    } else if (name === "email") {
-      isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-    } else if (name === "mobile") {
-      isValidField = /^\+[0-9]{1,2}\s\d{10}$/.test(value);
-    } else if (name === "password") {
-      isValidField = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/.test(value);
-    }
+    const { name, value, type } = event.target;
+    const isValidField = handleValidate(name, value);
     setIsValid((prevState) => ({
       ...prevState,
       [name]: !isValidField,
     }));
 
-    if (event.target.type == "radio") {
-      const val = event.target.value === "true" ? true : false;
+    if (type == "radio") {
+      const val = value === "true" ? true : false;
       setUserData((prevData) => {
-        return { ...prevData, [event.target.name]: val };
+        return { ...prevData, [name]: val };
       });
-    } else if (event.target.type == "file") {
+    } else if (type == "file") {
       const fileInput = event.target as HTMLInputElement;
 
       const file = fileInput.files?.[0];
       if (file) {
         setUserData({
           ...userData,
-          profileImageUrl: file as unknown as string,
+          profileImageUrl: file,
         });
       }
     } else {
@@ -113,66 +97,46 @@ function AddUserpage() {
       });
     }
   };
-  const submitUserData = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (profileImageUrl) {
+    if (validData_or_not && profileImageUrl) {
       setLoading(true);
       const formData = new FormData();
       formData.append("file", profileImageUrl);
-      const inres = await httpMethods
-        .post<FormData, FileModel>("/file/profile-image", formData, true)
-        .then((res) => res)
-        .catch((err: any) => {
-          setUserSuccess(false);
-          setLoading(false);
-          setUserError(err.message);
-          return null;
-        });
-      if (!inres) {
-        return;
-      }
-      const payloadData = {
+      const data = {
         ...userData,
-        profileImageUrl: inres.filename,
         createdBy: { name: getFullName(currentUser), id: currentUser._id },
       };
-      if (validData_or_not) {
-        httpMethods
-          .post<CreateUserPayload, UserModal>("/users/create", payloadData)
-          .then((result) => {
-            setCreatedData(result);
-            setUserError("");
-            setLoading(false);
-            setTimeout(() => {
-              setUserData({
-                firstName: "",
-                lastName: "",
-                email: "",
-                mobile: "",
-                password: "",
-                dob: "",
-                joinedDate: "",
-                isAdmin: null,
-                designation: "",
-                profileImageUrl: null,
-                address: "",
-                gender: "",
-              });
-              //image field is not getting empty we are reseting the form
-              formRef.current.reset();
-              setUserSuccess(true);
-            }, 2000);
-          })
-          .catch((e: any) => {
-            setUserSuccess(false);
-            setLoading(false);
-            setUserError(e.message);
+      formData.append("user", JSON.stringify(data));
+      httpMethods
+        .post<FormData, UserModal>("/users/create", formData, true)
+        .then((result) => {
+          setCreatedData(result);
+          setUserError("");
+          setUserData(EMPTY_USER_PAYLOAD);
+          setUserSuccess(true);
+          formRef.current.reset();
+          const content = `Name : ${getFullName(result)}\nUser ID: ${
+            result.userId
+          }\nEmployee ID : ${result.empId}\nPassword: ${userData.password}`;
+          alertModal({
+            severity: Severity.SUCCESS,
+            content,
+            title: "User Create",
           });
-      } else {
-        setUserError("Enter All Fields");
-        setLoading(false);
-        setUserSuccess(false);
-      }
+        })
+        .catch((e: any) => {
+          setUserSuccess(false);
+          setUserError(e.message);
+          alertModal({
+            severity: Severity.ERROR,
+            content: e.message,
+            title: "User Create",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     } else {
       setUserError("Enter All Fields");
       setLoading(false);
@@ -187,11 +151,7 @@ function AddUserpage() {
   };
   return (
     <div className="text-center">
-      <Form
-        ref={formRef}
-        onSubmit={(e) => submitUserData(e)}
-        className="add-user"
-      >
+      <Form ref={formRef} onSubmit={handleSubmit} className="add-user">
         <h2>Add User</h2>
         <Row className="mb-3">
           <Form.Group
@@ -325,7 +285,7 @@ function AddUserpage() {
                 {gender ? gender : "Select Gender"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {genders.map((item: string, index: any) => {
+                {GENDERS.map((item: string, index: any) => {
                   return (
                     <Dropdown.Item key={index} eventKey={item}>
                       {item}

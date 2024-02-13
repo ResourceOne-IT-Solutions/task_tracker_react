@@ -31,3 +31,18 @@ export const TICKET_STATUS_TYPES = {
   CLOSED,
   NOT_ASSIGNED,
 };
+export const GENDERS = ["MALE", "FEMALE", "NOT SPECIFIED"];
+export const EMPTY_USER_PAYLOAD = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  mobile: "",
+  password: "",
+  dob: "",
+  joinedDate: "",
+  isAdmin: null,
+  designation: "",
+  profileImageUrl: null,
+  address: "",
+  gender: "",
+};

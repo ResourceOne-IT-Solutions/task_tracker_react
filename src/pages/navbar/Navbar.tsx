@@ -149,6 +149,9 @@ function Navbar() {
                           </NavLink>
                         </li>
                       )}
+                      <li className="nav-item adduser mx-2">
+                        <NavLink to="/dashboard/feedback">Feedback</NavLink>
+                      </li>
                     </>
                   </ul>
                 </form>

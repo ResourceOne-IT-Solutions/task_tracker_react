@@ -6,7 +6,7 @@ import {
   UserContext,
   UserModal,
 } from "../modals/UserModals";
-import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
+import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
 import { BE_URL, TOKEN } from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
@@ -78,6 +78,8 @@ export const statusIndicator = (status: Status) => {
     return <BlueDot title={status} />;
   } else if (status === "Offline") {
     return <RedDot title={status} />;
+  } else if (status === "Sleep") {
+    return <GreyDot title={status} />;
   }
 };
 interface FullNameType {
@@ -218,4 +220,12 @@ export const handleValidate = (name: string, value: string): boolean => {
     isValidField = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/.test(value);
   }
   return isValidField;
+};
+//for Timer in userDashboard navbar
+export const formatTime = (time: number) => {
+  const minutes = Math.floor(time / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (time % 60).toString().padStart(2, "0");
+  return `${minutes}:${seconds}`;
 };

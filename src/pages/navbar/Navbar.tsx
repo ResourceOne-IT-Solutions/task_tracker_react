@@ -6,7 +6,12 @@ import AddClient from "../../utils/modal/AddClient";
 import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
-import { getData, setCookie, statusIndicator } from "../../utils/utils";
+import {
+  formatTime,
+  getData,
+  setCookie,
+  statusIndicator,
+} from "../../utils/utils";
 import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
 import { STATUS_TYPES } from "../../utils/Constants";
@@ -23,6 +28,7 @@ function Navbar() {
     setShowModal,
     show: showModal,
   });
+  const [seconds, setSeconds] = useState(0);
   const userContext = useUserContext();
   const {
     currentUser,
@@ -70,6 +76,15 @@ function Navbar() {
       });
     }
   }, [modalName]);
+  useEffect(() => {
+    if (currentUser.status === "Break") {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds + 1);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [currentUser.status]);
+  const timerMinutes = Number(formatTime(seconds).substring(0, 2));
   return (
     <div className="main-nav">
       <div className="header-nav">
@@ -202,6 +217,19 @@ function Navbar() {
                     </Dropdown>
                   )}
                 </div>
+                {!currentUser.isAdmin && (
+                  <div
+                    className={
+                      timerMinutes < 15
+                        ? "Break-timer mx-2 less-15"
+                        : timerMinutes < 20
+                          ? "Break-timer mx-2 less-20"
+                          : "Break-timer mx-2 more-20"
+                    }
+                  >
+                    {formatTime(seconds)}
+                  </div>
+                )}
                 <div className="admin-logout-button">
                   <Button variant="danger" onClick={handleLogoutClick}>
                     Logout

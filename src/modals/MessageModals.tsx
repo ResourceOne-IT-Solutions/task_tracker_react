@@ -29,7 +29,14 @@ export interface MessageRequestInterface {
   _id: string;
   isSeen: boolean;
 }
-
+export interface RaiseTicketInterface {
+  content: string;
+  date: string;
+  isPending: boolean;
+  sender: { name: string; id: string };
+  time: string;
+  _id: string;
+}
 export interface FileModel {
   fileName: string;
   filename: string;

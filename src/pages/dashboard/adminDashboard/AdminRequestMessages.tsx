@@ -33,22 +33,29 @@ function AdminRequestMessages() {
   const [messageRequests, setMessageRequests] = useState<
     MessageRequestInterface[]
   >([]);
+  const [ticketRaiseMsgs, setTicketRaiseMsgs] = useState<
+    TicketRequestInterface[]
+  >([]);
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
+  const [raiseTicketLoading, setRaiseTicketoading] = useState<boolean>(false);
   useEffect(() => {
     setChatLoading(true);
     setTicketLoading(true);
     setMessageLoading(true);
+    setRaiseTicketoading(true);
     Promise.all([
       getData<any>("message/user-chat-request"),
       getData<any>("message/user-ticket-request"),
       getData<MessageRequestInterface>(`message/admin-messages`),
+      getData<TicketRequestInterface>(`message/ticket-raise-messages`),
     ])
       .then((results) => {
         setChatRequests(results[0]);
         setTicketRequests(results[1]);
         setMessageRequests(results[2]);
+        setTicketRaiseMsgs(results[3]);
       })
       .catch((err) =>
         alertModal({
@@ -61,6 +68,7 @@ function AdminRequestMessages() {
         setChatLoading(false);
         setTicketLoading(false);
         setMessageLoading(false);
+        setRaiseTicketoading(false);
       });
   }, []);
   socket
@@ -201,6 +209,38 @@ function AdminRequestMessages() {
                         {message.viewedBy.length}{" "}
                       </span>
                     </span>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
+          )}
+        </div>
+        <div className="request-sub-msg">
+          <h3>TicketRaise Messages</h3>
+          {raiseTicketLoading ? (
+            <p>Loading............</p>
+          ) : ticketRaiseMsgs && ticketRaiseMsgs.length > 0 ? (
+            ticketRaiseMsgs?.map((message: any) => {
+              return (
+                <div className="request-content-wrapper" key={message._id}>
+                  <div className="message-request-content">
+                    <div>Message: {message.content}</div>
+                    <div>Sent by: {message.sender.name}</div>
+                    <div>
+                      Time: {getFormattedDate(message.date)}{" "}
+                      {getFormattedTime(message.time)}
+                    </div>
+                  </div>
+                  <div>
+                    {message.isPending ? (
+                      <Button variant="success">Approve</Button>
+                    ) : (
+                      <Button variant="success" disabled>
+                        Approved
+                      </Button>
+                    )}
                   </div>
                 </div>
               );

@@ -4,11 +4,11 @@ import Routespage from "./Routes/Routespage";
 import { useUserContext } from "./components/Authcontext/AuthContext";
 import { UserContext } from "./modals/UserModals";
 import SocketEvents from "./utils/SocketEvents";
-import { AVAILABLE, BREAK } from "./utils/Constants";
+import { AVAILABLE, SLEEP } from "./utils/Constants";
 import Alert from "./utils/modal/alert";
 import Notification from "./utils/modal/notification";
 
-let isInBreak = false;
+let isInSleep = false;
 function App() {
   const userContext = useUserContext();
   const {
@@ -25,8 +25,8 @@ function App() {
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;
   function resetInactivityTimer() {
-    if (isInBreak) {
-      isInBreak = false;
+    if (isInSleep) {
+      isInSleep = false;
       socket.emit("changeStatus", { id: currentUser._id, status: AVAILABLE });
     }
     clearTimeout(inactivityTimer);
@@ -39,8 +39,8 @@ function App() {
   }
   function changeStatus() {
     if (!currentUser.isAdmin && currentUser._id) {
-      isInBreak = true;
-      socket.emit("changeStatus", { id: currentUser._id, status: BREAK });
+      isInSleep = true;
+      socket.emit("changeStatus", { id: currentUser._id, status: SLEEP });
     }
   }
 

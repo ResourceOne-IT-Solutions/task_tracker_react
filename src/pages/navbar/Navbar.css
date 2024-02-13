@@ -38,3 +38,18 @@
 .navbar-brand b:hover {
   color: grey;
 }
+.Break-timer {
+  color: aliceblue;
+  padding-top: 7px;
+  font-weight: 700;
+  font-size: large;
+}
+.less-15 {
+  color: rgb(6, 255, 6);
+}
+.less-20 {
+  color: rgb(255, 166, 2);
+}
+.more-20 {
+  color: rgb(255, 0, 0);
+}

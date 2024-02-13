@@ -41,7 +41,7 @@ export interface UserContext {
     React.SetStateAction<ShowNotificationPopup>
   >;
 }
-export type Status = "Available" | "Break" | "Offline" | "On Ticket";
+export type Status = "Available" | "Break" | "Offline" | "On Ticket" | "Sleep";
 
 export interface NameIdInterface {
   name: string;

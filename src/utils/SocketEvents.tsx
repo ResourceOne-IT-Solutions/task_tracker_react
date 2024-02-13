@@ -70,6 +70,12 @@ const SocketEvents = () => {
     popupNotification({ severity: Severity.SUCCESS, content });
   });
   socket
+    .off("userRaisedTicket")
+    .on("userRaisedTicket", ({ sender, content }) => {
+      const content1 = `${sender.name} is saying ${content}`;
+      popupNotification({ severity: Severity.SUCCESS, content: content1 });
+    });
+  socket
     .off("resourceAssigned")
     .on("resourceAssigned", ({ ticket, sender, resource, user }) => {
       if (currentUser._id === user.id) {

@@ -66,3 +66,18 @@ export const BlueDot = ({ title, styles }: Props) => {
     ></span>
   );
 };
+export const GreyDot = ({ title, styles }: Props) => {
+  return (
+    <span
+      title={title}
+      style={{
+        background: "grey",
+        height: "15px",
+        width: "15px",
+        display: "inline-block",
+        borderRadius: "50%",
+        ...styles,
+      }}
+    ></span>
+  );
+};

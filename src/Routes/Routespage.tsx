@@ -22,6 +22,7 @@ import TicketsMain from "../pages/tickets/TicketsMain";
 import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboardTickets";
 import HelpedTickets from "../pages/tickets/HelpedTickets";
 import Feedback from "../pages/dashboard/Feedback/Feedback";
+import UserFeedback from "../pages/dashboard/Feedback/UserFeedback";
 import AddUser2 from "../pages/dashboard/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 
@@ -120,6 +121,10 @@ const Routespage = () => {
           <Route
             path="/dashboard/feedback"
             element={isLoggedin ? <Feedback /> : <Navigate to="/" />}
+          />
+          <Route
+            path="/dashboard/userfeedback"
+            element={isLoggedin ? <UserFeedback /> : <Navigate to="/" />}
           />
           <Route
             path="/client/:id"

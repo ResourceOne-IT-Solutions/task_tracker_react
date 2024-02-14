@@ -7,7 +7,14 @@ import {
   UserModal,
 } from "../modals/UserModals";
 import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
-import { BE_URL, TOKEN } from "./Constants";
+import {
+  BE_URL,
+  EMAIL_PATTERN,
+  MOBILE_PATTERN,
+  NAME_PATTERN,
+  PASSWORD_PATTERN,
+  TOKEN,
+} from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 
@@ -210,14 +217,13 @@ export const ProfileImage = ({
 export const handleValidate = (name: string, value: string): boolean => {
   let isValidField = true;
   if (name === "firstName" || name === "lastName" || name === "designation") {
-    isValidField =
-      /^[A-Za-z]+\s{0,1}[A-Za-z]*$/.test(value) && value.length >= 3;
+    isValidField = NAME_PATTERN.test(value) && value.length >= 3;
   } else if (name === "email") {
-    isValidField = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    isValidField = EMAIL_PATTERN.test(value);
   } else if (name === "mobile") {
-    isValidField = /^\+[0-9]{1,2}\s\d{10}$/.test(value);
+    isValidField = MOBILE_PATTERN.test(value);
   } else if (name === "password") {
-    isValidField = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/.test(value);
+    isValidField = PASSWORD_PATTERN.test(value);
   }
   return isValidField;
 };

@@ -6,6 +6,7 @@ export interface AlertModalProps {
   content: string;
   severity: Severity;
   title?: string;
+  onClose?: (val: boolean) => void;
 }
 
 export interface PopupNotification {
@@ -50,17 +51,18 @@ export interface NameIdInterface {
   id: string;
 }
 export interface loginInterface {
-  inTime: string;
-  outTime: string;
-  date: string;
+  inTime: Date;
+  outTime: Date;
+  date: Date;
   _id: string;
 }
 export interface BreakInterface {
   startDate: string;
-  startTime: string;
+  startTime: Date;
   endDate: string;
-  endTime: string;
+  endTime: Date;
   type: string;
+  status: string;
 }
 export interface UserModal {
   firstName: string;

@@ -120,3 +120,9 @@ export interface CreateUserPayload {
   gender: string;
   createdBy?: NameIdInterface;
 }
+export interface OtpInterface {
+  message: string;
+  otp: string;
+  userId?: string;
+  email?: string;
+}

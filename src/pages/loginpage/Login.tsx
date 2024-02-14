@@ -101,6 +101,14 @@ const Login = () => {
         </span>{" "}
         to navigate to {path == "User" ? "Admin" : "User"} login page
       </p>
+      <p>
+        <span
+          className="forgot-pwd"
+          onClick={() => navigate("/forgotpassword")}
+        >
+          Forgot Password
+        </span>
+      </p>
     </div>
   );
 };

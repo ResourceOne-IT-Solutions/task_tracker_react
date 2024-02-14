@@ -54,18 +54,20 @@ const SocketEvents = () => {
       alertModal({ severity: Severity.WARNING, content });
     }
   });
-  socket.off("ticketsRequest").on("ticketsRequest", ({ sender, client }) => {
-    if (currentUser.isAdmin) {
-      const content = `${sender.name} is Requesting for ${client.name} Tickets`;
-      alertModal({ severity: Severity.WARNING, content });
-      setRequestMessageCount((c) => c + 1);
-    }
-  });
-  socket.off("chatRequest").on("chatRequest", ({ sender, opponent }) => {
+  socket
+    .off("ticketsRequest")
+    .on("ticketsRequest", ({ sender, client, _id }) => {
+      if (currentUser.isAdmin) {
+        const content = `${sender.name} is Requesting for ${client.name} Tickets`;
+        alertModal({ severity: Severity.WARNING, content });
+        setRequestMessageCount((c) => [...c, _id]);
+      }
+    });
+  socket.off("chatRequest").on("chatRequest", ({ sender, opponent, _id }) => {
     if (currentUser.isAdmin) {
       const content = `${sender.name} is Requesting to Chat  with ${opponent.name}`;
       alertModal({ severity: Severity.WARNING, content });
-      setRequestMessageCount((c) => c + 1);
+      setRequestMessageCount((c) => [...c, _id]);
     }
   });
   socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (content) => {

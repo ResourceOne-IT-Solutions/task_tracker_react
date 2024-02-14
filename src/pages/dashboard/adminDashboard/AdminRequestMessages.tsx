@@ -25,24 +25,31 @@ import { Severity } from "../../../utils/modal/notification";
 
 function AdminRequestMessages() {
   const navigate = useNavigate();
-  const { socket, currentUser, alertModal, setRequestMessageCount } =
-    useUserContext() as UserContext;
+  const {
+    socket,
+    currentUser,
+    alertModal,
+    setRequestMessageCount,
+    requestMessageCount,
+  } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
+  const [requestIds, setRequestIds] = useState<string[]>(requestMessageCount);
   const [messageRequests, setMessageRequests] = useState<
     MessageRequestInterface[]
   >([]);
   const [ticketRaiseMsgs, setTicketRaiseMsgs] = useState<
     TicketRequestInterface[]
   >([]);
+
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
   const [raiseTicketLoading, setRaiseTicketoading] = useState<boolean>(false);
   useEffect(() => {
-    setRequestMessageCount(0);
+    setRequestMessageCount([]);
     setChatLoading(true);
     setTicketLoading(true);
     setMessageLoading(true);
@@ -95,6 +102,58 @@ function AdminRequestMessages() {
         setTicketRequests(LatestTicketData);
       }
     });
+  socket
+    .off("chatRequest")
+    .on("chatRequest", ({ sender, opponent, time, isPending, date, _id }) => {
+      if (currentUser.isAdmin) {
+        const payloadData = {
+          date,
+          isPending,
+          opponent,
+          sender,
+          time,
+          _id,
+        };
+        setChatRequests((previousData: any) => {
+          return [payloadData, ...previousData];
+        });
+      }
+    });
+  socket
+    .off("ticketsRequest")
+    .on("ticketsRequest", ({ client, date, isPending, sender, time, _id }) => {
+      if (currentUser.isAdmin) {
+        const payloadData = {
+          client,
+          date,
+          isPending,
+          sender,
+          time,
+          _id,
+        };
+        setTicketRequests((previousData: any) => {
+          return [payloadData, ...previousData];
+        });
+      }
+    });
+  socket
+    .off("userRaisedTicket")
+    .on(
+      "userRaisedTicket",
+      ({ sender, content, date, time, isPending, _id }) => {
+        const payloadData = {
+          sender,
+          content,
+          date,
+          time,
+          isPending,
+          _id,
+        };
+        setTicketRaiseMsgs((previousData: any) => {
+          return [payloadData, ...previousData];
+        });
+      },
+    );
   const handleRequestClick = (data: any, type: any) => {
     const payload = {
       user: {
@@ -123,7 +182,12 @@ function AdminRequestMessages() {
           ) : messageRequests && messageRequests.length > 0 ? (
             chatRequests?.map((chat) => {
               return (
-                <div className="request-content-wrapper" key={chat._id}>
+                <div
+                  className={`request-content-wrapper ${
+                    requestIds.includes(chat._id) && "bg-warning"
+                  } `}
+                  key={chat._id}
+                >
                   <div>
                     {chat.sender.name} is Requesting to Chat with{" "}
                     {chat.opponent.name}.{" "}
@@ -156,7 +220,12 @@ function AdminRequestMessages() {
           ) : ticketRequests && ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
-                <div className="request-content-wrapper" key={ticket._id}>
+                <div
+                  className={`request-content-wrapper ${
+                    requestIds.includes(ticket._id) && "bg-warning"
+                  } `}
+                  key={ticket._id}
+                >
                   <p>
                     {ticket.sender.name} is Requesting for {ticket.client.name}{" "}
                     tickets.
@@ -189,7 +258,12 @@ function AdminRequestMessages() {
           ) : messageRequests && messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
-                <div className="request-content-wrapper" key={message._id}>
+                <div
+                  className={`request-content-wrapper ${
+                    requestIds.includes(message._id) && "bg-warning"
+                  } `}
+                  key={message._id}
+                >
                   <div className="message-request-content">
                     <div className="my-2">Message: {message.content}</div>
                     <div className="my-2">
@@ -226,7 +300,12 @@ function AdminRequestMessages() {
           ) : ticketRaiseMsgs && ticketRaiseMsgs.length > 0 ? (
             ticketRaiseMsgs?.map((message: any) => {
               return (
-                <div className="request-content-wrapper" key={message._id}>
+                <div
+                  className={`request-content-wrapper ${
+                    requestIds.includes(message._id) && "bg-warning"
+                  } `}
+                  key={message._id}
+                >
                   <div className="message-request-content">
                     <div>Message: {message.content}</div>
                     <div>Sent by: {message.sender.name}</div>

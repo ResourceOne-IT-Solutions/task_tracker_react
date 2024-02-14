@@ -140,9 +140,9 @@ function Navbar() {
                         <li className="nav-item adduser mx-2">
                           <NavLink to="/dashboard/adminRequestmessages">
                             View Requests{" "}
-                            {requestMessageCount ? (
+                            {requestMessageCount.length ? (
                               <span className="user-newmsg-count">
-                                {requestMessageCount}
+                                {requestMessageCount.length}
                               </span>
                             ) : (
                               ""

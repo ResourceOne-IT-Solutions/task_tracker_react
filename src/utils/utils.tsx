@@ -6,8 +6,15 @@ import {
   UserContext,
   UserModal,
 } from "../modals/UserModals";
-import { BlueDot, GreenDot, OrangeDot, RedDot } from "./Dots/Dots";
-import { BE_URL, TOKEN } from "./Constants";
+import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
+import {
+  BE_URL,
+  EMAIL_PATTERN,
+  MOBILE_PATTERN,
+  NAME_PATTERN,
+  PASSWORD_PATTERN,
+  TOKEN,
+} from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 
@@ -71,13 +78,15 @@ export function getData<T>(url: string): Promise<T[]> {
 
 export const statusIndicator = (status: Status) => {
   if (status === "Available") {
-    return <GreenDot />;
+    return <GreenDot title={status} />;
   } else if (status === "Break") {
-    return <OrangeDot />;
+    return <OrangeDot title={status} />;
   } else if (status === "On Ticket") {
-    return <BlueDot />;
+    return <BlueDot title={status} />;
   } else if (status === "Offline") {
-    return <RedDot />;
+    return <RedDot title={status} />;
+  } else if (status === "Sleep") {
+    return <GreyDot title={status} />;
   }
 };
 interface FullNameType {
@@ -179,7 +188,13 @@ export const getImage = async (path: string) => {
   }
 };
 
-export const ProfileImage = ({ filename }: { filename: string }) => {
+export const ProfileImage = ({
+  filename,
+  className,
+}: {
+  filename: string;
+  className?: string;
+}) => {
   const [imageUrl, setImageUrl] = useState("");
   const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
@@ -196,5 +211,27 @@ export const ProfileImage = ({ filename }: { filename: string }) => {
         });
       });
   }, []);
-  return <img src={imageUrl} />;
+  return <img src={imageUrl} className={className} />;
+};
+
+export const handleValidate = (name: string, value: string): boolean => {
+  let isValidField = true;
+  if (name === "firstName" || name === "lastName" || name === "designation") {
+    isValidField = NAME_PATTERN.test(value) && value.length >= 3;
+  } else if (name === "email") {
+    isValidField = EMAIL_PATTERN.test(value);
+  } else if (name === "mobile") {
+    isValidField = MOBILE_PATTERN.test(value);
+  } else if (name === "password") {
+    isValidField = PASSWORD_PATTERN.test(value);
+  }
+  return isValidField;
+};
+//for Timer in userDashboard navbar
+export const formatTime = (time: number) => {
+  const minutes = Math.floor(time / 60)
+    .toString()
+    .padStart(2, "0");
+  const seconds = (time % 60).toString().padStart(2, "0");
+  return `${minutes}:${seconds}`;
 };

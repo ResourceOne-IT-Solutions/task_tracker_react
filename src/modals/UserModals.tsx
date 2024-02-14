@@ -6,6 +6,7 @@ export interface AlertModalProps {
   content: string;
   severity: Severity;
   title?: string;
+  onClose?: (val: boolean) => void;
 }
 
 export interface PopupNotification {
@@ -40,25 +41,28 @@ export interface UserContext {
   setShowNotification: React.Dispatch<
     React.SetStateAction<ShowNotificationPopup>
   >;
+  setRequestMessageCount: React.Dispatch<React.SetStateAction<string[]>>;
+  requestMessageCount: string[];
 }
-export type Status = "Available" | "Break" | "Offline" | "On Ticket";
+export type Status = "Available" | "Break" | "Offline" | "On Ticket" | "Sleep";
 
 export interface NameIdInterface {
   name: string;
   id: string;
 }
 export interface loginInterface {
-  inTime: string;
-  outTime: string;
-  date: string;
+  inTime: Date;
+  outTime: Date;
+  date: Date;
   _id: string;
 }
 export interface BreakInterface {
   startDate: string;
-  startTime: string;
+  startTime: Date;
   endDate: string;
-  endTime: string;
+  endTime: Date;
   type: string;
+  status: string;
 }
 export interface UserModal {
   firstName: string;
@@ -112,9 +116,15 @@ export interface CreateUserPayload {
   joinedDate: string;
   isAdmin: null;
   designation: string;
-  profileImageUrl: string | null;
+  profileImageUrl: File | null;
   userId?: string;
   address: string;
   gender: string;
   createdBy?: NameIdInterface;
+}
+export interface OtpInterface {
+  message: string;
+  otp: string;
+  userId?: string;
+  email?: string;
 }

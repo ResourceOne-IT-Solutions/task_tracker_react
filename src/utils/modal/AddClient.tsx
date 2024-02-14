@@ -8,13 +8,13 @@ import { ClientModal, CreateClientModal } from "../../modals/ClientModals";
 import { getNameId } from "../utils";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
+import { Severity } from "./notification";
 interface prop {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AddClient({ setShowModal }: prop) {
-  const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, alertModal } = useUserContext() as UserContext;
   const [clientData, setClientData] = useState<CreateClientModal>({
     firstName: "",
     email: "",
@@ -86,28 +86,35 @@ function AddClient({ setShowModal }: prop) {
         .then((result) => {
           setCreatedClient(result);
           setClientError("");
-          setTimeout(() => {
-            setLoading(false);
-            setClientSuccess(true);
-            setClientData({
-              firstName: "",
-              email: "",
-              mobile: "",
-              area: "",
-              technology: "",
-              companyName: "",
-              applicationType: "",
-              zone: "",
-            });
-            setTimeout(() => {
-              setShowModal(false);
-            }, 1000);
-          }, 2000);
+          setLoading(false);
+          setClientSuccess(true);
+          setClientData({
+            firstName: "",
+            email: "",
+            mobile: "",
+            area: "",
+            technology: "",
+            companyName: "",
+            applicationType: "",
+            zone: "",
+          });
+          setShowModal(false);
+          const content = `Client created successfully!\nName: ${result.firstName}\nEmail: ${result.email}\nMobile: ${result.mobile} `;
+          alertModal({
+            severity: Severity.SUCCESS,
+            content,
+            title: "Client Create",
+          });
         })
         .catch((e: any) => {
           setClientSuccess(false);
           setLoading(false);
-          setClientError(e.message);
+          alertModal({
+            severity: Severity.ERROR,
+            content: e.message,
+            title: "Client Create",
+          });
+          // setClientError(e.message);
         });
     } else {
       setClientError("Enter All Fields");

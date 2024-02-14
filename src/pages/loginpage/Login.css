@@ -16,9 +16,10 @@
 }
 .anchorclick {
   text-decoration: underline;
-  color: rgb(62, 62, 236);
+  color: rgb(2, 243, 122);
 }
-.anchorclick:hover {
+.anchorclick:hover,
+.forgot-pwd:hover {
   cursor: pointer;
 }
 .logintext {
@@ -34,4 +35,8 @@
   right: 5px;
   font-size: larger;
   color: green;
+}
+.forgot-pwd {
+  text-decoration: underline;
+  color: aqua;
 }

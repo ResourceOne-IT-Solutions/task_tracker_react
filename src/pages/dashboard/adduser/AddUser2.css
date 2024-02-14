@@ -1,0 +1,47 @@
+.add-user-container {
+  width: 60%;
+  margin: auto;
+  border: 2px solid grey;
+  padding: 15px;
+}
+.add-user-container .main-heading {
+  background-color: bisque;
+  border-bottom: 1px dotted black;
+  border-top: 1px dotted black;
+  text-align: center;
+}
+.add-user-container div {
+  display: flex;
+}
+.add-user-container div input {
+  padding: 4px;
+  border-radius: 10px;
+}
+.dates {
+  width: 50%;
+  margin-left: 2%;
+}
+.dates label b,
+.genders label b {
+  vertical-align: middle;
+}
+.genders {
+  width: 38%;
+  margin-left: 2%;
+}
+.image-genders {
+  display: flex;
+  gap: 10%;
+}
+.add-user-container textarea {
+  width: 70%;
+  margin-left: 2%;
+}
+.user-designation {
+  margin-left: 7%;
+  height: fit-content;
+}
+.submit-btn {
+  margin: auto;
+  width: 10%;
+}

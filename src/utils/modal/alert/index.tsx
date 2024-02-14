@@ -20,8 +20,12 @@ const Alert = ({
     onClose(false);
   };
   return (
-    <Modal show={show} className={`notification text-center ${severity}`}>
-      <Modal.Header closeButton>
+    <Modal
+      show={show}
+      className={`notification text-center ${severity}`}
+      onHide={handleClose}
+    >
+      <Modal.Header onClick={handleClose} closeButton>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body className="content">{content}</Modal.Body>

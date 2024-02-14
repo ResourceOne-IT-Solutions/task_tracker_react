@@ -6,6 +6,8 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   ProfileImage,
   getData,
+  getFormattedDate,
+  getFormattedTime,
   getFullName,
   statusIndicator,
 } from "../../../utils/utils";
@@ -52,7 +54,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
     Promise.all([
       getData<UserModal>("users"),
-      getData<TicketModal>("users/tickets/" + presentUser._id),
+      getData<TicketModal>("tickets/user/" + presentUser._id),
     ])
       .then((results) => {
         setUserData(results[0]);
@@ -169,8 +171,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                       <span className="fw-semibold">
                         {new Date(logtime.date).toLocaleDateString()}
                       </span>{" "}
-                      Login - {new Date(logtime.inTime).toLocaleTimeString()}{" "}
-                      Logout - {new Date(logtime.outTime).toLocaleTimeString()}{" "}
+                      Login - {getFormattedTime(logtime.inTime)} - Logout -{" "}
+                      {logtime.outTime
+                        ? getFormattedTime(logtime.outTime)
+                        : "---"}{" "}
                     </li>
                   );
                 }
@@ -189,8 +193,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         {arr.map((brtime: any, i: number) => {
                           return (
                             <span className="d-block" key={i}>
-                              startTime {brtime.startTime} endTime{" "}
-                              {brtime.endTime}
+                              <span>Type: {brtime.status} ---- </span>
+                              Start Time {getFormattedTime(
+                                brtime.startTime,
+                              )}{" "}
+                              --- End Time {getFormattedTime(brtime.endTime)}
                             </span>
                           );
                         })}

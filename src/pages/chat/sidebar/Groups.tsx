@@ -5,12 +5,13 @@ import { NameIdInterface, UserModal } from "../../../modals/UserModals";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
 import { Socket } from "socket.io-client";
+import { getFormattedTime } from "../../../utils/utils";
 
 export interface GroupInterface {
   name: string;
   members: NameIdInterface[];
   description: string;
-  time: string;
+  time: Date;
   date: string;
   _id: string;
   admin: NameIdInterface;
@@ -120,7 +121,7 @@ const Groups = ({
                   <p>{group.description}</p>
                 </div>
                 <div className="time-stamp">
-                  {group.time}-{" "}
+                  {getFormattedTime(group.time)}{" "}
                   {currentUser.newMessages[group._id] && (
                     <span className="newmsg-count">
                       {currentUser.newMessages[group._id]}

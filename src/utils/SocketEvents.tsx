@@ -5,7 +5,6 @@ import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 
 const SocketEvents = () => {
-  const userContext = useUserContext();
   const {
     socket,
     currentUser,
@@ -14,7 +13,8 @@ const SocketEvents = () => {
     setTotalMessages,
     alertModal,
     popupNotification,
-  } = userContext as UserContext;
+    setRequestMessageCount,
+  } = useUserContext() as UserContext;
   socket
     .off("notifications")
     .on("notifications", ({ id, from, type, room }) => {
@@ -54,21 +54,31 @@ const SocketEvents = () => {
       alertModal({ severity: Severity.WARNING, content });
     }
   });
-  socket.off("ticketsRequest").on("ticketsRequest", ({ sender, client }) => {
-    if (currentUser.isAdmin) {
-      const content = `${sender.name} is Requesting for ${client.name} Tickets`;
-      alertModal({ severity: Severity.WARNING, content });
-    }
-  });
-  socket.off("chatRequest").on("chatRequest", ({ sender, opponent }) => {
+  socket
+    .off("ticketsRequest")
+    .on("ticketsRequest", ({ sender, client, _id }) => {
+      if (currentUser.isAdmin) {
+        const content = `${sender.name} is Requesting for ${client.name} Tickets`;
+        alertModal({ severity: Severity.WARNING, content });
+        setRequestMessageCount((c) => [...c, _id]);
+      }
+    });
+  socket.off("chatRequest").on("chatRequest", ({ sender, opponent, _id }) => {
     if (currentUser.isAdmin) {
       const content = `${sender.name} is Requesting to Chat  with ${opponent.name}`;
       alertModal({ severity: Severity.WARNING, content });
+      setRequestMessageCount((c) => [...c, _id]);
     }
   });
   socket.off("ticketRaiseStatus").on("ticketRaiseStatus", (content) => {
     popupNotification({ severity: Severity.SUCCESS, content });
   });
+  socket
+    .off("userRaisedTicket")
+    .on("userRaisedTicket", ({ sender, content }) => {
+      const content1 = `${sender.name} is saying ${content}`;
+      popupNotification({ severity: Severity.SUCCESS, content: content1 });
+    });
   socket
     .off("resourceAssigned")
     .on("resourceAssigned", ({ ticket, sender, resource, user }) => {
@@ -95,7 +105,7 @@ const SocketEvents = () => {
       }
     });
   socket.off("error").on("error", (content: string) => {
-    popupNotification({ severity: Severity.ERROR, content });
+    alertModal({ severity: Severity.ERROR, content, title: "Socket Error" });
   });
   return <></>;
 };

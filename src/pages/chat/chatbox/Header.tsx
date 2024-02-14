@@ -49,14 +49,17 @@ const ChatHeader = ({
         ).toLocaleDateString()} ${new Date(message.time).toLocaleTimeString()}`;
       }),
     );
-
     const pdf = new jsPDF();
-
-    chatHistory.forEach((message, index) => {
-      const lineHeight = 15; // Increased line height
-      const marginLeft = 10; // Adjust the left margin as needed
-      const marginTop = 10 + index * lineHeight; // Adjust the top margin as needed
-
+    const pageSize = pdf.internal.pageSize;
+    const pageHeight = pageSize.height;
+    const lineHeight = 5; // Adjust as needed
+    const marginLeft = 10; // Adjust the left margin as needed
+    let cursorY = 10;
+    chatHistory.forEach((message) => {
+      if (cursorY + lineHeight > pageHeight) {
+        pdf.addPage(); // Add a new page
+        cursorY = 10; // Reset Y position
+      }
       // Split the message into lines if it's too long
       const lines = pdf.splitTextToSize(
         message,
@@ -65,11 +68,19 @@ const ChatHeader = ({
 
       // Output each line
       lines.forEach((line: string, lineIndex: number) => {
-        pdf.text(line, marginLeft, marginTop + lineIndex * lineHeight);
+        if (lineIndex === 0) {
+          pdf.text(line, marginLeft, cursorY);
+        } else {
+          pdf.text(line, marginLeft + 5, cursorY);
+        }
+        cursorY += lineHeight;
       });
+      cursorY += lineHeight;
     });
-
-    pdf.save("chat_export.pdf");
+    const pdfName = `${getFullName(currentUser)}-${getFullName(
+      selectedUser,
+    )}-Chat.pdf`;
+    pdf.save(pdfName);
   };
   return (
     <div className="header-container">

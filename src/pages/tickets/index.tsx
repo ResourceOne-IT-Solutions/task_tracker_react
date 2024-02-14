@@ -7,11 +7,12 @@ import { Props } from "./TicketsMain";
 import "./index.css";
 import { Button, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
 import XlSheet from "./XlSheet";
-import { FILTERS } from "../../utils/Constants";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
+import TicketFilters from "./TicketFilters";
+import { getFormattedDate } from "../../utils/utils";
 
-const Tickets = ({ url }: Props) => {
+const Tickets = ({ url = "/tickets" }: Props) => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
@@ -19,18 +20,11 @@ const Tickets = ({ url }: Props) => {
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);
   const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState<string>("");
-  const [dateRange, setDateRange] = useState({ from: "", to: "" });
+
   useEffect(() => {
     setLoading(true);
     if (url) {
       httpMethods.get<TicketModal[]>(url).then((tickets) => {
-        setAllTickets(tickets);
-        setShowingTickets(tickets);
-        setLoading(false);
-      });
-    } else {
-      httpMethods.get<TicketModal[]>("/tickets").then((tickets) => {
         setAllTickets(tickets);
         setShowingTickets(tickets);
         setLoading(false);
@@ -46,13 +40,21 @@ const Tickets = ({ url }: Props) => {
     { title: "Status", key: "status" },
     { title: "User", key: "user.name" },
     { title: "Technology", key: "technology" },
-    { title: "Received Date", key: "receivedDate" },
-    { title: "Closed Date", key: "closedDate" },
+    {
+      title: "Received Date",
+      key: "receivedDate",
+      tdFormat: (tkt) => <span>{getFormattedDate(tkt.receivedDate)}</span>,
+    },
+    {
+      title: "Closed Date",
+      key: "closedDate",
+      tdFormat: (tkt) => <span>{getFormattedDate(tkt.closedDate)}</span>,
+    },
     { title: "Comments", key: "comments" },
     {
       title: "TargetDate",
       key: "targetDate",
-      tdFormat: (ticket) => <p>{ticket?.targetDate?.toLocaleString()}</p>,
+      tdFormat: (tkt) => <span>{getFormattedDate(tkt.targetDate)}</span>,
     },
     {
       title: "Helped By",
@@ -80,46 +82,13 @@ const Tickets = ({ url }: Props) => {
             overlay={<Tooltip>Click here to see full description</Tooltip>}
           >
             <p onClick={() => handleDescription(tkt)} className="desc-link">
-              click Here
+              Click here
             </p>
           </OverlayTrigger>
         </>
       ),
     },
   ];
-  const handleSelectStatus = (item: any) => {
-    const date = new Date();
-    setSelected(item);
-    if (item == "last 1 week") {
-      date.setDate(date.getDate() - 7);
-      const lastWeekArray = allTickets.filter(
-        (item) => new Date(item.receivedDate) >= date,
-      );
-      setShowingTickets(lastWeekArray);
-    } else if (item == "last 1 month" || item == "last 2 months") {
-      const month = item == "last 1 month" ? 1 : 2;
-      date.setMonth(date.getMonth() - month);
-      const lastMonthArray = allTickets.filter(
-        (item) => new Date(item.receivedDate) >= date,
-      );
-      setShowingTickets(lastMonthArray);
-    }
-    setDateRange({ from: "", to: "" });
-  };
-  const handleDateRange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDateRange({ ...dateRange, [e.target.name]: e.target.value });
-  };
-  const handleDateRangeSubmit = () => {
-    const filtered_data = allTickets.filter((item) => {
-      const receivedDate = new Date(item.receivedDate);
-      return (
-        receivedDate >= new Date(dateRange.from) &&
-        receivedDate <= new Date(dateRange.to)
-      );
-    });
-    setShowingTickets(filtered_data);
-    setSelected("");
-  };
   const formattedTicketforXL = (tickets: TicketModal[]) => {
     const formatedData = tickets.map((item, idx) => {
       const resources = item.addOnResource.map((item) => item.name).join(",\n");
@@ -150,6 +119,7 @@ const Tickets = ({ url }: Props) => {
     });
     return formatedData;
   };
+
   return (
     <>
       <h4 className="text-center">
@@ -158,56 +128,15 @@ const Tickets = ({ url }: Props) => {
           <XlSheet data={formattedTicketforXL(showingTickets)} />
         )}
       </h4>
-      <div className="filters">
-        <Dropdown onSelect={handleSelectStatus} className="drop-down">
-          <Dropdown.Toggle
-            variant="secondary"
-            id="dropdown-basic-ticket-filter"
-          >
-            {selected ? selected : "Select a filter"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-            {FILTERS.map((filterType, idx) => {
-              return (
-                <Dropdown.Item key={idx} eventKey={filterType}>
-                  <b>{filterType}</b>
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
-        <div className="from-to">
-          <label htmlFor="from">From</label>
-          <input
-            type="date"
-            name="from"
-            id="from"
-            onChange={handleDateRange}
-            value={dateRange.from}
-            className="form-control"
-          />
-          <label htmlFor="to">To</label>
-          <input
-            type="date"
-            name="to"
-            id="to"
-            onChange={handleDateRange}
-            value={dateRange.to}
-            className="form-control"
-          />
-          <button
-            className="btn btn-info"
-            onClick={() => handleDateRangeSubmit()}
-            disabled={!dateRange.from || !dateRange.to ? true : false}
-          >
-            GetTickets
-          </button>
-        </div>
-      </div>
+      <TicketFilters
+        allTickets={allTickets}
+        setShowingTickets={setShowingTickets}
+      />
       <TaskTable
         headers={ticketHeaders}
         tableData={showingTickets}
         loading={loading}
+        pagination
       />
     </>
   );

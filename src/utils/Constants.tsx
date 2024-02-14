@@ -11,7 +11,8 @@ export const OFFLINE = "Offline";
 export const AVAILABLE = "Available";
 export const BREAK = "Break";
 export const ON_TICKET = "On Ticket";
-export const STATUS_TYPES = [OFFLINE, AVAILABLE, BREAK, ON_TICKET];
+export const SLEEP = "Sleep";
+export const STATUS_TYPES = [OFFLINE, AVAILABLE, BREAK, ON_TICKET, SLEEP];
 export const USER_STATUSES = "USER_STATUSES";
 export const FILTERS = ["last 1 week", "last 1 month", "last 2 months"];
 export const NO_TICKET_REQUEST = "No Ticket requests Available.";
@@ -31,3 +32,22 @@ export const TICKET_STATUS_TYPES = {
   CLOSED,
   NOT_ASSIGNED,
 };
+export const GENDERS = ["MALE", "FEMALE", "NOT SPECIFIED"];
+export const EMPTY_USER_PAYLOAD = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  mobile: "",
+  password: "",
+  dob: "",
+  joinedDate: "",
+  isAdmin: null,
+  designation: "",
+  profileImageUrl: null,
+  address: "",
+  gender: "",
+};
+export const NAME_PATTERN = /^[A-Za-z]+\s{0,1}[A-Za-z]*$/;
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const MOBILE_PATTERN = /^\+[0-9]{1,2}\s\d{10}$/;
+export const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;

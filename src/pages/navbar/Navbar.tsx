@@ -6,7 +6,12 @@ import AddClient from "../../utils/modal/AddClient";
 import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
-import { getData, setCookie, statusIndicator } from "../../utils/utils";
+import {
+  formatTime,
+  getData,
+  setCookie,
+  statusIndicator,
+} from "../../utils/utils";
 import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
 import { STATUS_TYPES } from "../../utils/Constants";
@@ -23,7 +28,10 @@ function Navbar() {
     setShowModal,
     show: showModal,
   });
+
+  const [seconds, setSeconds] = useState(0);
   const userContext = useUserContext();
+
   const {
     currentUser,
     setCurrentUser,
@@ -31,7 +39,8 @@ function Navbar() {
     socket,
     isLoggedin,
     notificationRooms,
-  } = userContext as UserContext;
+    requestMessageCount,
+  } = useUserContext() as UserContext;
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
@@ -70,6 +79,15 @@ function Navbar() {
       });
     }
   }, [modalName]);
+  useEffect(() => {
+    if (currentUser.status === "Break") {
+      const intervalId = setInterval(() => {
+        setSeconds((prevSeconds) => prevSeconds + 1);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [currentUser.status]);
+  const timerMinutes = Number(formatTime(seconds).substring(0, 2));
   return (
     <div className="main-nav">
       <div className="header-nav">
@@ -121,7 +139,14 @@ function Navbar() {
                         </li>
                         <li className="nav-item adduser mx-2">
                           <NavLink to="/dashboard/adminRequestmessages">
-                            View Requests
+                            View Requests{" "}
+                            {requestMessageCount.length ? (
+                              <span className="user-newmsg-count">
+                                {requestMessageCount.length}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </NavLink>
                         </li>
                       </>
@@ -149,6 +174,14 @@ function Navbar() {
                           </NavLink>
                         </li>
                       )}
+                      <li className="nav-item adduser mx-2">
+                        <NavLink to="/dashboard/feedback">Feedback</NavLink>
+                      </li>
+                      <li className="nav-item adduser mx-2">
+                        <NavLink to="/dashboard/userfeedback">
+                          User Feedbacks
+                        </NavLink>
+                      </li>
                     </>
                   </ul>
                 </form>
@@ -202,6 +235,19 @@ function Navbar() {
                     </Dropdown>
                   )}
                 </div>
+                {!currentUser.isAdmin && (
+                  <div
+                    className={
+                      timerMinutes < 15
+                        ? "Break-timer mx-2 less-15"
+                        : timerMinutes < 20
+                          ? "Break-timer mx-2 less-20"
+                          : "Break-timer mx-2 more-20"
+                    }
+                  >
+                    {formatTime(seconds)}
+                  </div>
+                )}
                 <div className="admin-logout-button">
                   <Button variant="danger" onClick={handleLogoutClick}>
                     Logout

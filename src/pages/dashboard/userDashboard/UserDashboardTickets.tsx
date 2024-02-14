@@ -17,7 +17,6 @@ function UserDashboardTickets() {
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [userData, setUserData] = useState([]);
-  const [admins, setAdmins] = useState<UserModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
   const [modalProps, setModalProps] = useState({
@@ -36,8 +35,6 @@ function UserDashboardTickets() {
 
   const handleTicketRaise = () => {
     if (!currentUser.isAdmin) {
-      const onlyAdmins = userData.filter((user: UserModal) => user.isAdmin);
-      setAdmins(onlyAdmins);
       setModalname("Ticket Raise");
       setModalProps({
         title: "Ticket Raise",
@@ -138,7 +135,7 @@ function UserDashboardTickets() {
   useEffect(() => {
     setLoading(true);
     httpMethods
-      .get<TicketModal[]>("/users/tickets/" + currentUser._id)
+      .get<TicketModal[]>("/tickets/user/" + currentUser._id)
       .then((result) => {
         setTableData(result);
         setLoading(false);
@@ -171,7 +168,7 @@ function UserDashboardTickets() {
       />
       {showModal && modalName == "Ticket Raise" && (
         <ReusableModal vals={modalProps}>
-          <TicketRaiseModal adminsData={admins} setShowModal={setShowModal} />
+          <TicketRaiseModal setShowModal={setShowModal} />
         </ReusableModal>
       )}
     </div>

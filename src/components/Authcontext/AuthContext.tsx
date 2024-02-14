@@ -36,9 +36,15 @@ const AuthContext = ({ children }: AuthContextProps) => {
       severity: Severity.NULL,
       content: "",
     });
-  const alertModal = ({ content, severity, title }: AlertModalProps) => {
+  const [requestMessageCount, setRequestMessageCount] = useState<string[]>([]);
+  const alertModal = ({
+    content,
+    severity,
+    title,
+    onClose,
+  }: AlertModalProps) => {
     setShowAlertModal(true);
-    setAlertModalContent({ content, severity, title });
+    setAlertModalContent({ content, severity, title, onClose });
   };
   const popupNotification = ({ content, severity }: PopupNotification) => {
     setShowNotification({ show: true, severity, content });
@@ -65,6 +71,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
     showNotification,
     setShowNotification,
     popupNotification,
+    requestMessageCount,
+    setRequestMessageCount,
   };
   useEffect(() => {
     httpMethods
@@ -74,9 +82,14 @@ const AuthContext = ({ children }: AuthContextProps) => {
         setIsLoggedIn(true);
         socket.emit("newUser", { userId: data._id });
       })
-      .catch(() => {
+      .catch((e: any) => {
         setIsLoggedIn(false);
         setCurrentUser({} as UserModal);
+        alertModal({
+          severity: Severity.ERROR,
+          content: e.message,
+          title: "Login Error",
+        });
       });
   }, []);
   return (

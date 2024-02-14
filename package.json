@@ -72,7 +72,7 @@
     "predeploy": "npm run test:ci && npm run build",
     "deploy": "gh-pages -d build",
     "test:ci": "npm test -- --watchAll=false",
-    "format": "prettier --write \"src/**/*.+(js|jsx|ts|tsx|json|css|scss|md)\"",
+    "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|scss|md)\"",
     "lint": "eslint ."
   },
   "eslintConfig": {

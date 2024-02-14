@@ -37,9 +37,14 @@ const AuthContext = ({ children }: AuthContextProps) => {
       content: "",
     });
   const [requestMessageCount, setRequestMessageCount] = useState<number>(0);
-  const alertModal = ({ content, severity, title }: AlertModalProps) => {
+  const alertModal = ({
+    content,
+    severity,
+    title,
+    onClose,
+  }: AlertModalProps) => {
     setShowAlertModal(true);
-    setAlertModalContent({ content, severity, title });
+    setAlertModalContent({ content, severity, title, onClose });
   };
   const popupNotification = ({ content, severity }: PopupNotification) => {
     setShowNotification({ show: true, severity, content });

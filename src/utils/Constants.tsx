@@ -47,3 +47,7 @@ export const EMPTY_USER_PAYLOAD = {
   address: "",
   gender: "",
 };
+export const NAME_PATTERN = /^[A-Za-z]+\s{0,1}[A-Za-z]*$/;
+export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+export const MOBILE_PATTERN = /^\+[0-9]{1,2}\s\d{10}$/;
+export const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;

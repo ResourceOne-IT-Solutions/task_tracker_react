@@ -171,8 +171,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                       <span className="fw-semibold">
                         {new Date(logtime.date).toLocaleDateString()}
                       </span>{" "}
-                      Login - {new Date(logtime.inTime).toLocaleTimeString()}{" "}
-                      Logout - {new Date(logtime.outTime).toLocaleTimeString()}{" "}
+                      Login - {getFormattedTime(logtime.inTime)} - Logout -{" "}
+                      {logtime.outTime
+                        ? getFormattedTime(logtime.outTime)
+                        : "---"}{" "}
                     </li>
                   );
                 }
@@ -191,8 +193,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         {arr.map((brtime: any, i: number) => {
                           return (
                             <span className="d-block" key={i}>
-                              startTime {getFormattedTime(brtime.startTime)}{" "}
-                              endTime {getFormattedTime(brtime.endTime)}
+                              <span>Type: {brtime.status} ---- </span>
+                              Start Time {getFormattedTime(
+                                brtime.startTime,
+                              )}{" "}
+                              --- End Time {getFormattedTime(brtime.endTime)}
                             </span>
                           );
                         })}

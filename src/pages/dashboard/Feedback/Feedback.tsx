@@ -86,13 +86,22 @@ const Feedback = () => {
       const formdata = new FormData();
       formdata.append("data", JSON.stringify(formDataWithUserDetails));
       formdata.append("files", formData.files[0]);
-      httpMethods.post("/feedback", formdata, true).catch((err) => {
-        alertModal({
-          severity: Severity.ERROR,
-          content: `${err.message}`,
-          title: "Feedback Sumit",
+      httpMethods
+        .post("/users/feedback", formdata, true)
+        .then((res: any) => {
+          alertModal({
+            severity: Severity.SUCCESS,
+            content: `${res.message}`,
+            title: "Feedback Submit",
+          });
+        })
+        .catch((err) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: `${err.message}`,
+            title: "Feedback Submit",
+          });
         });
-      });
     }
   };
 

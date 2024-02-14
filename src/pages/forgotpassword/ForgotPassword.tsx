@@ -130,7 +130,7 @@ function ForgotPassword() {
   return (
     <div className="forgot-main text-center">
       <h1>Forgot Password</h1>
-      <form className="pwd-forgot">
+      <form className="pwd-forgot mb-2">
         {!otpreceived ? (
           <>
             <label htmlFor="" className="mb-2">
@@ -201,6 +201,9 @@ function ForgotPassword() {
           </>
         )}
       </form>
+      <a onClick={() => navigate(-1)} className="go-back">
+        Go Back
+      </a>
     </div>
   );
 }

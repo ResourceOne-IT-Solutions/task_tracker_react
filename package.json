@@ -73,7 +73,7 @@
     "deploy": "gh-pages -d build",
     "test:ci": "npm test -- --watchAll=false",
     "format": "prettier --write \"**/*.+(js|jsx|ts|tsx|json|css|scss|md)\"",
-    "lint": "eslint ."
+    "lint": "eslint src/**/*.+(js|jsx|ts|tsx|json|css|scss|md)"
   },
   "eslintConfig": {
     "extends": [

@@ -23,6 +23,8 @@ import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboard
 import HelpedTickets from "../pages/tickets/HelpedTickets";
 import Feedback from "../pages/dashboard/Feedback/Feedback";
 import UserFeedback from "../pages/dashboard/Feedback/UserFeedback";
+import AddUser2 from "../pages/dashboard/adduser/AddUser2";
+import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -55,11 +57,16 @@ const Routespage = () => {
             path="/login"
             element={isLoggedin ? <Dashboard /> : <Login />}
           />
-          <Route
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          {/* <Route
             path="/admindashboard/adduser"
             element={
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
+          /> */}
+          <Route
+            path="/admindashboard/adduser"
+            element={isLoggedin && isAdmin ? <AddUser2 /> : <Navigate to="/" />}
           />
           <Route
             path="/chat"

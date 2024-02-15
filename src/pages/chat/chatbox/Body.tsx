@@ -61,6 +61,9 @@ const ChatBody = ({
           <div className="contact-render-info">
             <p>{contactrender.name}</p>
             <p>{contactrender.mobile}</p>
+            <p className="time-display">
+              {getFormattedTime(contactrender.time)}
+            </p>
           </div>
         </div>
       );

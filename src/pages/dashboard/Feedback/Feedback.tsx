@@ -85,7 +85,9 @@ const Feedback = () => {
       };
       const formdata = new FormData();
       formdata.append("data", JSON.stringify(formDataWithUserDetails));
-      formdata.append("files", formData.files[0]);
+      for (const file of formData.files) {
+        formdata.append("files", file);
+      }
       httpMethods
         .post("/users/feedback", formdata, true)
         .then((res: any) => {

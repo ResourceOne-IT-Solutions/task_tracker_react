@@ -53,3 +53,32 @@
 .more-20 {
   color: rgb(255, 0, 0);
 }
+.has-submenu {
+  position: relative;
+}
+.has-submenu .submenu {
+  display: none !important;
+  position: absolute;
+  top: 0;
+  right: calc(100% + 1px);
+  border: 1px solid #ddd;
+  margin-right: 3px;
+  box-shadow: 0px 1px 9px #0006;
+}
+
+.has-submenu:hover .submenu {
+  display: block !important;
+}
+
+.submenu > .dropdown-item:nth-child(1)::after {
+  content: "";
+  border: 1px solid #ddd;
+  width: 8px;
+  height: 8px;
+  position: absolute;
+  background: #fff;
+  transform: rotate(47deg);
+  right: -4px;
+  border-bottom: none;
+  border-left: none;
+}

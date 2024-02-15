@@ -85,11 +85,6 @@ const AuthContext = ({ children }: AuthContextProps) => {
       .catch((e: any) => {
         setIsLoggedIn(false);
         setCurrentUser({} as UserModal);
-        alertModal({
-          severity: Severity.ERROR,
-          content: e.message,
-          title: "Login Error",
-        });
       });
   }, []);
   return (

@@ -15,18 +15,22 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    httpMethods
-      .get<UserModal>("/get-user")
-      .then((response) => {
-        setCurrentUser(response);
-        setIsLoggedIn(true);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    if (!currentUser.firstName) {
+      httpMethods
+        .get<UserModal>("/get-user")
+        .then((response) => {
+          setCurrentUser(response);
+          setIsLoggedIn(true);
+        })
+        .catch(() => {
+          setIsLoading(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
   }, []);
 
   if (!isLoading && !isLoggedin) {

@@ -126,3 +126,8 @@ input {
 .client-curser {
   cursor: pointer;
 }
+.pending-tickets-chart {
+  border: 1px solid grey;
+  border-radius: 2%;
+  margin: 4px;
+}

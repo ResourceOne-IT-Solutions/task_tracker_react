@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const userContext = useUserContext();
   const { currentUser, socket } = userContext as UserContext;
   const [totalTickets, setTotalTickets] = useState<number>(0);
+  const [totalpendingTickets, setTotalPendingTickets] = useState<number>(0);
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
@@ -32,6 +33,14 @@ const AdminDashboard = () => {
     show: showModal,
   });
   const [ticketPieChartData, setTicketPieChartData] = useState([
+    { name: "NotAssigned Tickets", value: 0 },
+    { name: "Assigned Tickets", value: 0 },
+    { name: "In Progress Tickets", value: 0 },
+    { name: "Pending Tickets", value: 0 },
+    { name: "Closed Tickets", value: 0 },
+    { name: "Improper Requirment", value: 0 },
+  ]);
+  const [pendingticketPieChartData, setPendingTicketPieChartData] = useState([
     { name: "NotAssigned Tickets", value: 0 },
     { name: "Assigned Tickets", value: 0 },
     { name: "In Progress Tickets", value: 0 },
@@ -67,7 +76,7 @@ const AdminDashboard = () => {
   };
   socket
     .off("dashboardStats")
-    .on("dashboardStats", ({ ticketStats, userStats }) => {
+    .on("dashboardStats", ({ ticketStats, userStats, pendingTickets }) => {
       const ticketData = (status: string) => {
         return ticketStats.find((v: any) => v.status === status)?.count || 0;
       };
@@ -75,7 +84,15 @@ const AdminDashboard = () => {
         (a: number, c: any) => a + c.count,
         0,
       );
+      const pendingTicketsData = (status: string) => {
+        return pendingTickets.find((v: any) => v.status === status)?.count || 0;
+      };
+      const totalPending = pendingTickets.reduce(
+        (a: number, c: any) => a + c.count,
+        0,
+      );
       setTotalTickets(totalTickets);
+      setTotalPendingTickets(totalPending);
       setTicketPieChartData([
         {
           name: "NotAssigned Tickets",
@@ -100,6 +117,32 @@ const AdminDashboard = () => {
         {
           name: "Improper Requirment",
           value: ticketData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
+        },
+      ]);
+      setPendingTicketPieChartData([
+        {
+          name: "NotAssigned Tickets",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.NOT_ASSIGNED),
+        },
+        {
+          name: "Assigned Tickets",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.ASSIGNED),
+        },
+        {
+          name: "In Progress Tickets",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.IN_PROGRESS),
+        },
+        {
+          name: "Pending Tickets",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.PENDING),
+        },
+        {
+          name: "Closed Tickets",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.CLOSED),
+        },
+        {
+          name: "Improper Requirment",
+          value: pendingTicketsData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
         },
       ]);
     });
@@ -175,7 +218,6 @@ const AdminDashboard = () => {
                 <li>LastName : {currentUser.lastName}</li>
                 <li>Email : {currentUser.email}</li>
                 <li>Mobile : {currentUser.mobile}</li>
-                <li>Email : {currentUser.email}</li>
                 <li>Designation : {currentUser.designation}</li>
               </ul>
             </div>
@@ -183,10 +225,10 @@ const AdminDashboard = () => {
           <Timezones />
         </div>
         <div className="pie-chart">
-          <h3 className="text-primary">Tickets Data: </h3>
+          <h3 className="text-primary">Pending Tickets Data: </h3>
           <PieChartComponent
-            data={ticketPieChartData}
-            totalTickets={totalTickets}
+            data={pendingticketPieChartData}
+            totalTickets={totalpendingTickets}
           />
         </div>
       </div>
@@ -285,6 +327,13 @@ const AdminDashboard = () => {
             </Button>
           </div>
         </div>
+      </div>
+      <div className="pending-tickets-chart">
+        <h3 className="text-primary">Total Tickets Data: </h3>
+        <PieChartComponent
+          data={ticketPieChartData}
+          totalTickets={totalTickets}
+        />
       </div>
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>

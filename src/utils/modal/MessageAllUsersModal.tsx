@@ -2,17 +2,16 @@ import React, { useState } from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
-import { getDate } from "../utils";
+import { getDate, getFullName } from "../utils";
 interface ShowModalpopup {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 function MessageAllUsersModal({ setShowModal }: ShowModalpopup) {
   const userContext = useUserContext();
-  const { currentUser, setCurrentUser, socket } = userContext as UserContext;
+  const { currentUser, socket } = userContext as UserContext;
   const [message, setMessage] = useState<string>("");
   const [msgError, setmsgError] = useState<string>("");
   const [msgSuccess, setmsgSuccess] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
   };
@@ -21,7 +20,7 @@ function MessageAllUsersModal({ setShowModal }: ShowModalpopup) {
     if (message) {
       setmsgError("");
       socket.emit("adminMessage", {
-        sender: { id: currentUser._id, name: currentUser.firstName },
+        sender: { id: currentUser._id, name: getFullName(currentUser) },
         content: message,
         time: getDate(),
         date: getDate(),

@@ -193,11 +193,13 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         {arr.map((brtime: any, i: number) => {
                           return (
                             <span className="d-block" key={i}>
-                              <span>Type: {brtime.status} ---- </span>
+                              <span>{brtime.status} ---- </span>
                               Start Time {getFormattedTime(
                                 brtime.startTime,
                               )}{" "}
-                              --- End Time {getFormattedTime(brtime.endTime)}
+                              --- End Time {getFormattedTime(brtime.endTime)} -
+                              Duration {Math.round(brtime?.duration / 60)}:{" "}
+                              {Math.round(brtime.duration % 60)}
                             </span>
                           );
                         })}

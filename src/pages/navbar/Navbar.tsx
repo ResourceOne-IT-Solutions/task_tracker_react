@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Button, Dropdown } from "react-bootstrap";
+import {
+  Button,
+  Dropdown,
+  DropdownButton,
+  DropdownItem,
+  DropdownMenu,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import AddClient from "../../utils/modal/AddClient";
@@ -7,6 +13,7 @@ import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
 import {
+  Timer,
   formatTime,
   getData,
   setCookie,
@@ -14,7 +21,7 @@ import {
 } from "../../utils/utils";
 import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
-import { STATUS_TYPES } from "../../utils/Constants";
+import { BREAK, STATUS_TYPES } from "../../utils/Constants";
 import { NavLink } from "react-router-dom";
 
 function Navbar() {
@@ -28,9 +35,6 @@ function Navbar() {
     setShowModal,
     show: showModal,
   });
-
-  const [seconds, setSeconds] = useState(0);
-  const userContext = useUserContext();
 
   const {
     currentUser,
@@ -56,11 +60,10 @@ function Navbar() {
     });
     setShowModal(true);
   };
-  const handleChatClick = () => {
-    navigate("/chat");
-  };
   const handleSelectStatus = (status: any) => {
-    socket.emit("changeStatus", { id: currentUser._id, status });
+    if (status) {
+      socket.emit("changeStatus", { id: currentUser._id, status });
+    }
   };
   const handleLogoutClick = () => {
     setCookie("", 0);
@@ -79,15 +82,7 @@ function Navbar() {
       });
     }
   }, [modalName]);
-  useEffect(() => {
-    if (currentUser.status === "Break") {
-      const intervalId = setInterval(() => {
-        setSeconds((prevSeconds) => prevSeconds + 1);
-      }, 1000);
-      return () => clearInterval(intervalId);
-    }
-  }, [currentUser.status]);
-  const timerMinutes = Number(formatTime(seconds).substring(0, 2));
+
   return (
     <div className="main-nav">
       <div className="header-nav">
@@ -202,52 +197,37 @@ function Navbar() {
                       </span>
                     </Button>
                   ) : (
-                    <Dropdown
+                    <DropdownButton
+                      id="dropdown-basic-user-status1"
+                      title={currentUser.status}
+                      drop="down"
                       onSelect={handleSelectStatus}
-                      className="drop-down"
                     >
-                      <Dropdown.Toggle
-                        variant="secondary"
-                        id="dropdown-basic-user-status"
-                      >
-                        {currentUser.status ? (
-                          <span>
-                            {statusIndicator(currentUser.status)}{" "}
-                            {currentUser.status}
-                          </span>
-                        ) : (
-                          "Select a User"
-                        )}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        style={{ maxHeight: "180px", overflowY: "auto" }}
-                      >
-                        {STATUS_TYPES.map((stat, idx) => {
-                          return (
-                            <Dropdown.Item key={idx} eventKey={stat}>
-                              <b>
-                                {statusIndicator(stat as Status)} {stat}
-                              </b>
-                            </Dropdown.Item>
-                          );
-                        })}
-                      </Dropdown.Menu>
-                    </Dropdown>
+                      {STATUS_TYPES.map((status, idx) => {
+                        return (
+                          <Dropdown.Item
+                            key={idx}
+                            eventKey={status === BREAK ? "" : status}
+                            className={status === BREAK ? "has-submenu" : ""}
+                          >
+                            {statusIndicator(status as Status)} {status}
+                            {status === BREAK && (
+                              <div className="submenu">
+                                <Dropdown.Item eventKey="Breakfast Break">
+                                  Breakfast Break
+                                </Dropdown.Item>
+                                <Dropdown.Item eventKey="Lunch Break">
+                                  Lunch Break
+                                </Dropdown.Item>
+                              </div>
+                            )}
+                          </Dropdown.Item>
+                        );
+                      })}
+                    </DropdownButton>
                   )}
                 </div>
-                {!currentUser.isAdmin && (
-                  <div
-                    className={
-                      timerMinutes < 15
-                        ? "Break-timer mx-2 less-15"
-                        : timerMinutes < 20
-                          ? "Break-timer mx-2 less-20"
-                          : "Break-timer mx-2 more-20"
-                    }
-                  >
-                    {formatTime(seconds)}
-                  </div>
-                )}
+                {currentUser.status.includes(BREAK) && <Timer />}
                 <div className="admin-logout-button">
                   <Button variant="danger" onClick={handleLogoutClick}>
                     Logout

@@ -8,11 +8,16 @@ import {
 } from "../modals/UserModals";
 import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
 import {
+  AVAILABLE,
   BE_URL,
+  BREAK,
   EMAIL_PATTERN,
   MOBILE_PATTERN,
   NAME_PATTERN,
+  OFFLINE,
+  ON_TICKET,
   PASSWORD_PATTERN,
+  SLEEP,
   TOKEN,
 } from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
@@ -77,15 +82,15 @@ export function getData<T>(url: string): Promise<T[]> {
 }
 
 export const statusIndicator = (status: Status) => {
-  if (status === "Available") {
+  if (status === AVAILABLE) {
     return <GreenDot title={status} />;
-  } else if (status === "Break") {
+  } else if (status.includes(BREAK)) {
     return <OrangeDot title={status} />;
-  } else if (status === "On Ticket") {
+  } else if (status === ON_TICKET) {
     return <BlueDot title={status} />;
-  } else if (status === "Offline") {
+  } else if (status === OFFLINE) {
     return <RedDot title={status} />;
-  } else if (status === "Sleep") {
+  } else if (status === SLEEP) {
     return <GreyDot title={status} />;
   }
 };
@@ -234,4 +239,28 @@ export const formatTime = (time: number) => {
     .padStart(2, "0");
   const seconds = (time % 60).toString().padStart(2, "0");
   return `${minutes}:${seconds}`;
+};
+
+export const Timer = () => {
+  const [seconds, setSeconds] = useState(0);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setSeconds((prevSeconds) => prevSeconds + 1);
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
+  const timerMinutes = Number(formatTime(seconds).substring(0, 2));
+  return (
+    <div
+      className={
+        timerMinutes < 15
+          ? "Break-timer mx-2 less-15"
+          : timerMinutes < 20
+            ? "Break-timer mx-2 less-20"
+            : "Break-timer mx-2 more-20"
+      }
+    >
+      {formatTime(seconds)}
+    </div>
+  );
 };

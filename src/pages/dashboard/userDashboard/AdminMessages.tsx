@@ -11,7 +11,7 @@ import {
   MessageRequestInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
   NO_CHAT_REQUEST,
@@ -133,7 +133,7 @@ function AdminMessages() {
         <div className="request-sub-msg">
           <h3>User Requested Chat</h3>
           {chatLoading ? (
-            <p>Loading............</p>
+            <Spinner variant="success" />
           ) : chatRequests && chatRequests.length > 0 ? (
             chatRequests.map((chat) => (
               <div className="request-content-wrapper" key={chat.time}>
@@ -169,7 +169,7 @@ function AdminMessages() {
         <div className="request-sub-msg">
           <h3>User Requested Tickets</h3>
           {ticketLoading ? (
-            <p>Loading............</p>
+            <Spinner variant="success" />
           ) : ticketRequests && ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
@@ -211,7 +211,7 @@ function AdminMessages() {
         <div className="request-sub-msg">
           <h3>All Admin Messages</h3>
           {messageLoading ? (
-            <p>Loading............</p>
+            <Spinner variant="success" />
           ) : messageRequests && messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (

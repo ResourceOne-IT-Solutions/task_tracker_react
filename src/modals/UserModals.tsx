@@ -44,7 +44,14 @@ export interface UserContext {
   setRequestMessageCount: React.Dispatch<React.SetStateAction<string[]>>;
   requestMessageCount: string[];
 }
-export type Status = "Available" | "Break" | "Offline" | "On Ticket" | "Sleep" | "Breakfast Break" | "Lunch Break";
+export type Status =
+  | "Available"
+  | "Break"
+  | "Offline"
+  | "On Ticket"
+  | "Sleep"
+  | "Breakfast Break"
+  | "Lunch Break";
 
 export interface NameIdInterface {
   name: string;

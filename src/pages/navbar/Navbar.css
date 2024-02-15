@@ -70,7 +70,7 @@
   display: block !important;
 }
 
-.submenu >.dropdown-item:nth-child(1)::after {
+.submenu > .dropdown-item:nth-child(1)::after {
   content: "";
   border: 1px solid #ddd;
   width: 8px;

@@ -6,6 +6,7 @@ import AdminDashboard from "./adminDashboard/AdminDashboard";
 import { Navigate } from "react-router-dom";
 import { UserContext, UserModal } from "../../modals/UserModals";
 import Navbar from "../navbar/Navbar";
+import { Spinner } from "react-bootstrap";
 
 const Dashboard = () => {
   const userContext = useUserContext();
@@ -34,7 +35,7 @@ const Dashboard = () => {
   return (
     <div>
       {isLoading ? (
-        <div>Loading....</div>
+        <Spinner />
       ) : (
         <>
           {isLoggedin && currentUser.isAdmin && <AdminDashboard />}

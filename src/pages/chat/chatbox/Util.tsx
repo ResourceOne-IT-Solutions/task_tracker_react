@@ -4,7 +4,13 @@ import { FileModel, MessageModel } from "../../../modals/MessageModals";
 import "./styles/utils.css";
 import { getFormattedTime } from "../../../utils/utils";
 
-const FileRenderer = ({ type, fileUrl }: { type: string; fileUrl: string }) => {
+export const FileRenderer = ({
+  type,
+  fileUrl,
+}: {
+  type: string;
+  fileUrl: string;
+}) => {
   switch (type) {
     case "application/pdf": {
       return <iframe src={fileUrl} width="100%" title="PDF Viewer"></iframe>;
@@ -89,7 +95,7 @@ const downloadFile = async (
   return url;
 };
 
-const getMessageType = (data: string): string => {
+export const getMessageType = (data: string): string => {
   if (data.includes("pdf")) return "application/pdf";
   else if (data.includes("jpeg")) return "image/jpeg";
   else if (data.includes("sheet")) return "xlsx";

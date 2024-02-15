@@ -75,7 +75,7 @@ const SocketEvents = () => {
   });
   socket
     .off("userRaisedTicket")
-    .on("userRaisedTicket", ({ sender, content,_id }) => {
+    .on("userRaisedTicket", ({ sender, content, _id }) => {
       const content1 = `${sender.name} is saying ${content}`;
       popupNotification({ severity: Severity.SUCCESS, content: content1 });
       setRequestMessageCount((c) => [...c, _id]);

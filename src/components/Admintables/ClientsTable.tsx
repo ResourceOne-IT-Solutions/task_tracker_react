@@ -108,6 +108,7 @@ function ClientsTable() {
     );
   }
   useEffect(() => {
+    setLoading(true);
     getData<ClientModal>("clients")
       .then((result) => {
         setClientsData(result);

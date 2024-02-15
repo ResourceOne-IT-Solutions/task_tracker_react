@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./AdminRequestMessages.css";
-import { Button } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import {
   ChatRequestInterface,
   MessageRequestInterface,
@@ -43,17 +43,10 @@ function AdminRequestMessages() {
   const [ticketRaiseMsgs, setTicketRaiseMsgs] = useState<
     TicketRequestInterface[]
   >([]);
-
-  const [chatLoading, setChatLoading] = useState<boolean>(false);
-  const [ticketLoading, setTicketLoading] = useState<boolean>(false);
-  const [messageLoading, setMessageLoading] = useState<boolean>(false);
-  const [raiseTicketLoading, setRaiseTicketoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setRequestMessageCount([]);
-    setChatLoading(true);
-    setTicketLoading(true);
-    setMessageLoading(true);
-    setRaiseTicketoading(true);
+    setIsLoading(true);
     Promise.all([
       getData<any>("message/user-chat-request"),
       getData<any>("message/user-ticket-request"),
@@ -74,10 +67,7 @@ function AdminRequestMessages() {
         }),
       )
       .finally(() => {
-        setChatLoading(false);
-        setTicketLoading(false);
-        setMessageLoading(false);
-        setRaiseTicketoading(false);
+        setIsLoading(false);
       });
   }, []);
   socket
@@ -170,15 +160,15 @@ function AdminRequestMessages() {
   };
   return (
     <div className="text-center">
-      <h1>Message Request From Users</h1>
+      <h1>Total Requestes From Users</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back
       </Button>
       <div className="request-msgs">
         <div className="request-sub-msg">
           <h3>Chat Requests</h3>
-          {chatLoading ? (
-            <p>Loading............</p>
+          {isLoading ? (
+            <Spinner />
           ) : messageRequests && messageRequests.length > 0 ? (
             chatRequests?.map((chat) => {
               return (
@@ -215,8 +205,8 @@ function AdminRequestMessages() {
         </div>
         <div className="request-sub-msg">
           <h3>Ticket Requests</h3>
-          {ticketLoading ? (
-            <p>Loading............</p>
+          {isLoading ? (
+            <Spinner />
           ) : ticketRequests && ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
@@ -253,8 +243,8 @@ function AdminRequestMessages() {
         </div>
         <div className="request-sub-msg">
           <h3>All Admin Messages</h3>
-          {messageLoading ? (
-            <p>Loading............</p>
+          {isLoading ? (
+            <Spinner />
           ) : messageRequests && messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
@@ -295,8 +285,8 @@ function AdminRequestMessages() {
         </div>
         <div className="request-sub-msg">
           <h3>TicketRaise Messages</h3>
-          {raiseTicketLoading ? (
-            <p>Loading............</p>
+          {isLoading ? (
+            <Spinner />
           ) : ticketRaiseMsgs && ticketRaiseMsgs.length > 0 ? (
             ticketRaiseMsgs?.map((message: any) => {
               return (

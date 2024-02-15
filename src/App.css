@@ -84,6 +84,9 @@
     color: #e0e040;
   }
 }
+.w-80 {
+  width: 80%;
+}
 
 @keyframes widthReducer {
   0% {

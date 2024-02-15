@@ -253,6 +253,7 @@ const AdminDashboard = () => {
                   type="range"
                   name="available"
                   id="available"
+                  className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.availableUsers}
                   readOnly
@@ -269,6 +270,7 @@ const AdminDashboard = () => {
                   type="range"
                   name="offline"
                   id="offline"
+                  className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.offlineUsers}
                   readOnly
@@ -285,6 +287,7 @@ const AdminDashboard = () => {
                   type="range"
                   name="break"
                   id="break"
+                  className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.breakUsers}
                   readOnly
@@ -301,6 +304,7 @@ const AdminDashboard = () => {
                   type="range"
                   name="onticket"
                   id="onticket"
+                  className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.onTicketUsers}
                   readOnly

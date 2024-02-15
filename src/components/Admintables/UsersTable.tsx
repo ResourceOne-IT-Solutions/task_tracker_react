@@ -151,6 +151,7 @@ function UsersTable() {
     );
   }
   useEffect(() => {
+    setLoading(true);
     getData<UserModal>("users")
       .then((result) => {
         setUsersData(result);

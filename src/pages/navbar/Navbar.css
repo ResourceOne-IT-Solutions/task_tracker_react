@@ -32,11 +32,11 @@
   text-decoration: none;
 }
 .navbar .nav-item a.active {
-  color: #eee;
-  font-weight: 700;
+  color: #fff;
+  /* font-weight: 700; */
 }
-.navbar-brand b:hover {
-  color: grey;
+.navbar-brand b:hover,.navbar .nav-item a:hover {
+  color: #999;
 }
 .Break-timer {
   color: aliceblue;

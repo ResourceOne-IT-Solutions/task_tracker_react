@@ -17,6 +17,7 @@ export interface TicketRequestInterface {
   time: Date;
   __v: number;
   _id: string;
+  approvedBy: { name: string; id: string ;time:string;date:string};
 }
 export interface MessageRequestInterface {
   content: string;

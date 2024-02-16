@@ -66,9 +66,13 @@ function AdminMessages() {
     setTicketLoading(true);
     setMessageLoading(true);
     Promise.all([
-      getData<any>(`message/user-chat-request/${currentUser._id}`),
-      getData<any>(`message/user-ticket-request/${currentUser._id}`),
-      getData<any>(`message/admin-messages`),
+      getData<ChatRequestInterface>(
+        `message/user-chat-request/${currentUser._id}`,
+      ),
+      getData<TicketRequestInterface>(
+        `message/user-ticket-request/${currentUser._id}`,
+      ),
+      getData<MessageRequestInterface>(`message/admin-messages`),
     ])
       .then((results) => {
         setChatRequests(results[0]);
@@ -88,7 +92,7 @@ function AdminMessages() {
         setMessageLoading(false);
       });
   }, []);
-  const handleApprovedTicket = (ticket: any) => {
+  const handleApprovedTicket = (ticket: TicketRequestInterface) => {
     navigate("/approved/tickets", { state: ticket });
   };
   socket

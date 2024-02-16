@@ -12,6 +12,9 @@ export interface ClientModal {
   _id: string;
   companyName: string;
   applicationType: string;
+  createdAt: string;
+  createdBy: NameIdInterface;
+  ticketsCount: number;
 }
 export interface Location {
   area: string;

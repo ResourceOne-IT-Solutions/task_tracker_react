@@ -21,4 +21,3 @@ export interface UpdatePasswordInterface {
 export interface ErrorMessageInterface {
   message: string;
 }
-

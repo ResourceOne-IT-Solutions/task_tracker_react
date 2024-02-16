@@ -35,7 +35,8 @@
   color: #fff;
   /* font-weight: 700; */
 }
-.navbar-brand b:hover,.navbar .nav-item a:hover {
+.navbar-brand b:hover,
+.navbar .nav-item a:hover {
   color: #999;
 }
 .Break-timer {

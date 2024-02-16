@@ -6,7 +6,7 @@ import { UserContext } from "./modals/UserModals";
 import SocketEvents from "./utils/SocketEvents";
 import { AVAILABLE, SLEEP } from "./utils/Constants";
 import Alert from "./utils/modal/alert";
-import Notification from "./utils/modal/notification";
+import Notifications from "./utils/modal/notification";
 
 let isInSleep = false;
 function App() {
@@ -50,7 +50,21 @@ function App() {
       setNotificationRooms(roomsCount);
     }
   }, [currentUser.newMessages]);
-
+  useEffect(() => {
+    if ("Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          // Permission granted, you can now show notifications
+          const notification = new Notification("Wel-Come", {
+            body: `Welcome to ResourceOne ChatBox`,
+            icon: "#",
+            tag: "Welcome Message",
+            // Other options like icon, badge, etc.
+          });
+        }
+      });
+    }
+  }, []);
   useEffect(() => {
     if (!currentUser.isAdmin && isLoggedin) {
       document.addEventListener("click", resetInactivityTimer);
@@ -65,7 +79,7 @@ function App() {
   return (
     <div className="App">
       <Routespage />
-      {isLoggedin && <SocketEvents />}
+      <SocketEvents />
       {showAlertModal && (
         <Alert
           content={alertModalContent.content}
@@ -76,7 +90,7 @@ function App() {
         />
       )}
       {showNotification.show && (
-        <Notification
+        <Notifications
           content={showNotification.content}
           severity={showNotification.severity}
           onClose={(show) => setShowNotification({ ...showNotification, show })}

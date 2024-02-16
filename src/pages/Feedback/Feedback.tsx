@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { UserContext } from "../../../modals/UserModals";
-import { getFullName } from "../../../utils/utils";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
+import { getFullName } from "../../utils/utils";
 import "./Feedback.css";
 import { Button } from "react-bootstrap";
-import httpMethods from "../../../api/Service";
-import { Severity } from "../../../utils/modal/notification";
+import httpMethods from "../../api/Service";
+import { Severity } from "../../utils/modal/notification";
 
 const Feedback = () => {
   const userContext = useUserContext();

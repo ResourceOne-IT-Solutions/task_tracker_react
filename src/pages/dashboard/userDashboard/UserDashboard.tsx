@@ -19,6 +19,7 @@ import { TicketModal } from "../../../modals/TicketModals";
 import Timezones from "../../../components/features/timezone/Timezones";
 import { useNavigate } from "react-router-dom";
 import { Severity } from "../../../utils/modal/notification";
+import { getBreakTimings } from "./utils";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
@@ -52,13 +53,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   });
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
-    Promise.all([
-      getData<UserModal>("users"),
-      getData<TicketModal>("tickets/user/" + presentUser._id),
-    ])
-      .then((results) => {
-        setUserData(results[0]);
-        const result = results[1];
+    getData<TicketModal>("tickets/user/" + presentUser._id)
+      .then((result) => {
         setTableData(result);
         const pendingTickets = result.filter(
           (ticket) => ticket.status === "Pending",
@@ -108,7 +104,18 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSelected(item as string);
   };
   const handleChatRequest = () => {
-    setShowChatRequestPopup(true);
+    getData<UserModal>("users")
+      .then((users) => {
+        setUserData(users);
+      })
+      .catch((err: any) => {
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Users",
+        });
+      }),
+      setShowChatRequestPopup(true);
   };
   const handleSubmitRequest = () => {
     let exactUserid = "";
@@ -187,18 +194,29 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                 ) {
                   return (
                     <React.Fragment key={i}>
-                      <li className="fw-semibold">{key[0]}</li>
+                      <li className="fw-semibold">
+                        {key[0]} : Total={">"}
+                        {getBreakTimings(
+                          arr.reduce(
+                            (acc: any, obj: any) => acc + obj.duration,
+                            0,
+                          ),
+                        )}
+                      </li>
                       <li>
                         {arr.map((brtime: BreakInterface, i: number) => {
                           return (
                             <span className="d-block" key={i}>
-                              <span>{brtime.status} ---- </span>
-                              Start Time {getFormattedTime(
-                                brtime.startTime,
-                              )}{" "}
-                              --- End Time {getFormattedTime(brtime.endTime)} -
-                              Duration {Math.round(brtime?.duration / 60)}:{" "}
-                              {Math.round(brtime.duration % 60)}
+                              <span>{brtime.status} : </span>{" "}
+                              {getFormattedTime(brtime.startTime)} ---{" "}
+                              {getFormattedTime(brtime.endTime)}
+                              {brtime.duration ? (
+                                <>
+                                  - Duration: {getBreakTimings(brtime.duration)}
+                                </>
+                              ) : (
+                                ""
+                              )}
                             </span>
                           );
                         })}
@@ -221,9 +239,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       {currentUser._id === presentUser._id && (
         <div className="chat-link">
           <div className="user-btns">
-            <Button onClick={() => handleChatRequest()}>
-              Request User to Chat
-            </Button>
+            <Button onClick={handleChatRequest}>Request User to Chat</Button>
             <Button
               onClick={() => navigate("/dashboard/userdashboardtickets")}
               variant="primary"

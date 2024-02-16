@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import httpMethods from "../../../api/Service";
-import TaskTable, { TableHeaders } from "../../../utils/table/Table";
-import { getFormattedDate, getFormattedTime } from "../../../utils/utils";
+import httpMethods from "../../api/Service";
+import TaskTable, { TableHeaders } from "../../utils/table/Table";
+import { getFormattedDate, getFormattedTime } from "../../utils/utils";
 import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { Severity } from "../../../utils/modal/notification";
-import { UserContext } from "../../../modals/UserModals";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { Severity } from "../../utils/modal/notification";
+import { UserContext } from "../../modals/UserModals";
 
 const UserFeedback = () => {
   const { alertModal } = useUserContext() as UserContext;

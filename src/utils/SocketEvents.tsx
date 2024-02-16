@@ -1,6 +1,5 @@
 import React from "react";
-import { Socket } from "socket.io-client";
-import { UserContext, UserModal } from "../modals/UserModals";
+import { UserContext } from "../modals/UserModals";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 
@@ -30,14 +29,15 @@ const SocketEvents = () => {
         setNotificationRooms(roomsCount);
         setTotalMessages(totalMessage);
         setCurrentUser(currentUser);
+        const content = `You got a ${type} from ${from.name}`;
         if ("Notification" in window && Notification.permission === "granted") {
           const notification = new Notification("Message", {
-            body: `You got a message from ${from.name}`,
-            icon: "",
-            // Other options like icon, badge, etc.
+            body: content,
+            // You can add an icon if needed
+            // icon: "path/to/icon.png",
+            tag: type,
           });
         }
-        const content = `You got a ${type} from ${from.name}`;
         alertModal({ severity: Severity.WARNING, content });
       }
     });

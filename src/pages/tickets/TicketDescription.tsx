@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./TicketDescription.css";
 import { TicketModal, TicketUpdates } from "../../modals/TicketModals";
@@ -45,6 +45,7 @@ const TicketDescription = () => {
     to: currentUser.email,
     content: "",
   });
+  const navigate = useNavigate();
   const sendTicketUpdate = () => {
     setIsLoading(true);
     const payload = {
@@ -95,6 +96,9 @@ const TicketDescription = () => {
   return (
     <>
       <h3 className="text-center">TICKETS BY ID</h3>
+      <Button className="mx-2" variant="warning" onClick={() => navigate(-1)}>
+        Go Back
+      </Button>
       <div className="ticket-details d-flex w-75">
         <div className="">
           <p className="m-2">

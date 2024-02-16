@@ -242,7 +242,7 @@ function AddUser2() {
                     <option value="">Select a Gender</option>
                     <option value="Male">MALE</option>
                     <option value="Female">FEMALE</option>
-                    <option value="Not Specified">NOT SPECIFIED</option>
+                    <option value="Prefer not to say">PREFER NOT TO SAY</option>
                   </Field>
                   <ErrorMessage
                     name="gender"

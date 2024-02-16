@@ -40,6 +40,19 @@ const Feedback = () => {
 
   const handleFileChange = (e: any) => {
     const files = e.target.files;
+    const newErrors = { ...errors };
+
+    const maxSize = 300 * 1024;
+
+    for (const file of files) {
+      if (file.size > maxSize) {
+        newErrors.files = "File size exceeds the maximum limit of 300KB.";
+        e.target.value = null;
+        setErrors(newErrors);
+        return;
+      }
+    }
+
     setFormData({
       ...formData,
       files,
@@ -140,7 +153,7 @@ const Feedback = () => {
           <option value="" disabled>
             Select an issue type
           </option>
-          <option value="bug">Bug</option>
+          <option value="Bug">Bug</option>
           <option value="Feature">Feature</option>
           <option value="Update">Update</option>
         </select>

@@ -160,7 +160,7 @@ function AdminRequestMessages() {
   };
   return (
     <div className="text-center">
-      <h1>Total Requestes From Users</h1>
+      <h1>Total Request&apos;s From Users</h1>
       <Button variant="danger" onClick={() => navigate(-1)}>
         Go Back
       </Button>

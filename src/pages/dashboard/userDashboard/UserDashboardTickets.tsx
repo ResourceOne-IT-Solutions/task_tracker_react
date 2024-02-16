@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { TicketModal } from "../../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../../utils/table/Table";
-import { ClientModal } from "../../../modals/ClientModals";
 import httpMethods from "../../../api/Service";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import { UserContext } from "../../../modals/UserModals";
 import { Button } from "react-bootstrap";
-import { getData, getFullName } from "../../../utils/utils";
+import { getFullName } from "../../../utils/utils";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
+import { useNavigate } from "react-router-dom";
 
 function UserDashboardTickets() {
   const userContext = useUserContext();
   const { currentUser, socket } = userContext as UserContext;
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<TicketModal[]>([]);
-  const [userData, setUserData] = useState([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
   const [modalProps, setModalProps] = useState({
@@ -142,16 +142,14 @@ function UserDashboardTickets() {
       })
       .catch(() => setLoading(false));
   }, []);
-  useEffect(() => {
-    getData<UserModal>("users")
-      .then((res: any) => {
-        setUserData(res);
-      })
-      .catch((err) => err);
-  }, []);
   return (
     <div className="text-center">
-      <h1>My Tickets</h1>
+      <h1>
+        My Tickets{" "}
+        <Button variant="danger" onClick={() => navigate(-1)}>
+          Go Back
+        </Button>
+      </h1>
       <TaskTable<TicketModal>
         pagination
         headers={userDashbHeaders}

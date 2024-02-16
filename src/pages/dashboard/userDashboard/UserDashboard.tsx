@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "./UserDashboard.css";
-import httpMethods from "../../../api/Service";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   ProfileImage,
   getData,
-  getFormattedDate,
   getFormattedTime,
   getFullName,
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import {
+  BreakInterface,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 import { TicketModal } from "../../../modals/TicketModals";
 import Timezones from "../../../components/features/timezone/Timezones";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +26,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const { setCurrentUser, socket, currentUser, alertModal } =
     useUserContext() as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
 
@@ -51,7 +52,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
   });
   useEffect(() => {
-    setIsLoading(true);
     setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
     getData<TicketModal>("tickets/user/" + presentUser._id)
       .then((result) => {
@@ -92,17 +92,16 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           closedTickets,
           progressTickets,
         }));
-        setIsLoading(false);
       })
-      .catch(() => setIsLoading(false));
+      .catch(() => null);
   }, []);
 
   useEffect(() => {
     setPresentUser(user);
   }, [user]);
 
-  const handleSelect = (item: any) => {
-    setSelected(item);
+  const handleSelect = (item: string | null) => {
+    setSelected(item as string);
   };
   const handleChatRequest = () => {
     getData<UserModal>("users")
@@ -205,7 +204,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         )}
                       </li>
                       <li>
-                        {arr.map((brtime: any, i: number) => {
+                        {arr.map((brtime: BreakInterface, i: number) => {
                           return (
                             <span className="d-block" key={i}>
                               <span>{brtime.status} : </span>{" "}
@@ -281,7 +280,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                                 (item: UserModal) =>
                                   !item.isAdmin && item._id !== presentUser._id,
                               )
-                              .map((item: any, index: any) => {
+                              .map((item: UserModal, index: number) => {
                                 return (
                                   <Dropdown.Item
                                     key={index}

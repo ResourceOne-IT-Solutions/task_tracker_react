@@ -5,7 +5,7 @@ import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
 import { Props } from "./TicketsMain";
 import "./index.css";
-import { Button, Dropdown, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import XlSheet from "./XlSheet";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
@@ -30,7 +30,7 @@ const Tickets = ({ url = "/tickets" }: Props) => {
         setLoading(false);
       });
     }
-  }, []);
+  }, [url]);
   const handleDescription = (ticket: TicketModal) => {
     navigate(`/tickets/${ticket._id}`, { state: ticket });
   };
@@ -48,7 +48,11 @@ const Tickets = ({ url = "/tickets" }: Props) => {
     {
       title: "Closed Date",
       key: "closedDate",
-      tdFormat: (tkt) => <span>{getFormattedDate(tkt.closedDate)}</span>,
+      tdFormat: (tkt) => (
+        <span>
+          {tkt.closedDate == null ? "--" : getFormattedDate(tkt.closedDate)}
+        </span>
+      ),
     },
     { title: "Comments", key: "comments" },
     {

@@ -207,7 +207,7 @@ const ChatFooter = ({
           value={message}
         />
       </div>
-      <div className="send-btn" onClick={() => sendMessage(message)}>
+      <div className="send-btn mx-4" onClick={() => sendMessage(message)}>
         <div className="circle-icon">
           <i className="bi bi-send-fill"></i>
         </div>

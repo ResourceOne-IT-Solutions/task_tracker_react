@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Dropdown,
-  DropdownButton,
-  DropdownItem,
-  DropdownMenu,
-} from "react-bootstrap";
+import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import AddClient from "../../utils/modal/AddClient";
 import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
-import {
-  Timer,
-  formatTime,
-  getData,
-  setCookie,
-  statusIndicator,
-} from "../../utils/utils";
+import { Timer, getData, setCookie, statusIndicator } from "../../utils/utils";
 import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
 import { BREAK, STATUS_TYPES } from "../../utils/Constants";
@@ -29,7 +17,6 @@ function Navbar() {
   const [clientsData, setClientsData] = useState<ClientModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [modalProps, setModalProps] = useState({
     title: "",
     setShowModal,
@@ -60,7 +47,7 @@ function Navbar() {
     });
     setShowModal(true);
   };
-  const handleSelectStatus = (status: any) => {
+  const handleSelectStatus = (status: string | null) => {
     if (status) {
       socket.emit("changeStatus", { id: currentUser._id, status });
     }
@@ -77,7 +64,7 @@ function Navbar() {
   }, []);
   useEffect(() => {
     if (modalName == "Ticket") {
-      getData("clients").then((res: any) => {
+      getData<ClientModal>("clients").then((res: ClientModal[]) => {
         setClientsData(res);
       });
     }
@@ -202,6 +189,7 @@ function Navbar() {
                       title={currentUser.status}
                       drop="down"
                       onSelect={handleSelectStatus}
+                      className="mx-2"
                     >
                       {STATUS_TYPES.map((status, idx) => {
                         return (

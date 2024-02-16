@@ -21,8 +21,8 @@ import TicketsTable from "../components/Admintables/TicketsTable";
 import TicketsMain from "../pages/tickets/TicketsMain";
 import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboardTickets";
 import HelpedTickets from "../pages/tickets/HelpedTickets";
-import Feedback from "../pages/dashboard/Feedback/Feedback";
-import UserFeedback from "../pages/dashboard/Feedback/UserFeedback";
+import Feedback from "../pages/Feedback/Feedback";
+import UserFeedback from "../pages/Feedback/UserFeedback";
 import AddUser2 from "../pages/dashboard/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 

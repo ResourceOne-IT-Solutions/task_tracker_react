@@ -32,10 +32,7 @@ const Groups = ({
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
-  setCurrentUser,
 }: GroupChatProps) => {
-  const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [users, setUsers] = useState<UserModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
   const [totalGroups, setTotalGroups] = useState<GroupInterface[]>([]);
@@ -44,13 +41,7 @@ const Groups = ({
     setShowModal,
     show: showModal,
   });
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
-  };
   useEffect(() => {
-    httpMethods.get<UserModal[]>("/users").then((res: any) => {
-      setUsers(res);
-    });
     httpMethods
       .get<GroupInterface[]>(
         `/message/groups/${!currentUser.isAdmin ? currentUser._id : ""}`,

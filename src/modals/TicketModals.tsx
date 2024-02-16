@@ -38,6 +38,8 @@ export interface TicketModal {
   targetDate: Date;
   updatedAt: Date;
   isClosed: boolean;
+  createdBy: NameIdInterface;
+  serialNo: number;
 }
 
 export interface UpdateTicketProps {
@@ -70,4 +72,12 @@ export interface CreateTicketModal {
   description: string;
   targetDate: string;
   createdBy?: NameIdInterface;
+}
+export interface SendTicketEmail {
+  to: string;
+  content: TicketModal;
+  updateType: string;
+}
+export interface TicketUpdateMessage {
+  message: string;
 }

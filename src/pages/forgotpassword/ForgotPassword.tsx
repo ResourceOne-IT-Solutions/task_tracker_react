@@ -5,24 +5,33 @@ import { OtpInterface, UserContext } from "../../modals/UserModals";
 import { Severity } from "../../utils/modal/notification";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { PASSWORD_PATTERN } from "../../utils/Constants";
+import {
+  ErrorMessageInterface,
+  MailVerifyInterface,
+  OtpApiResponse,
+  OtpApidataInterface,
+  PasswordInterface,
+  UpdatePasswordInterface,
+} from "../../modals/interfaces";
 function ForgotPassword() {
   const { alertModal } = useUserContext() as UserContext;
   const navigate = useNavigate();
   const [payload, setPayload] = useState<string>("");
   const [otpResponse, setOtpResponse] = useState<OtpInterface>({
     message: "",
-    otp: "",
     userId: "",
     email: "",
   });
   const [otpreceived, setOtpReceived] = useState<boolean>(false);
   const [otpcompare, setOtpCompare] = useState<boolean>(false);
   const [enteredOTP, setEnteredOTP] = useState<string>("");
-  const [passwordCompare, setPasswordsCompare] = useState<any>({
+  const [passwordCompare, setPasswordsCompare] = useState<PasswordInterface>({
     password: "",
     repassword: "",
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -32,10 +41,22 @@ function ForgotPassword() {
     } else if (name === "otp") {
       setEnteredOTP(event.target.value);
     } else if (name === "passwd") {
-      setPasswordsCompare({
+      const pwdData = {
         ...passwordCompare,
         [event.target.name]: event.target.value,
-      });
+      };
+      if (PASSWORD_PATTERN.test(pwdData.password)) {
+        pwdData.password === pwdData.repassword
+          ? setErrorMessage("")
+          : pwdData.repassword.length > 0
+            ? setErrorMessage("Passwords are not matching")
+            : setErrorMessage("");
+      } else {
+        setErrorMessage(
+          "An Uppercase,Special symbol,Number,8 Characters Required",
+        );
+      }
+      setPasswordsCompare(pwdData);
     }
   };
   const handleSubmit = (
@@ -47,7 +68,9 @@ function ForgotPassword() {
     if (name === "user-email") {
       if (payload.trim().length) {
         httpMethods
-          .post<any, OtpInterface>("/mail-verify", { data: payload })
+          .post<MailVerifyInterface, OtpInterface>("/mail-verify", {
+            data: payload,
+          })
           .then((res: OtpInterface) => {
             alertModal({
               severity: Severity.SUCCESS,
@@ -57,7 +80,7 @@ function ForgotPassword() {
             setOtpReceived(true);
             setOtpResponse(res);
           })
-          .catch((err: any) => {
+          .catch((err: ErrorMessageInterface) => {
             alertModal({
               severity: Severity.ERROR,
               content: err.message,
@@ -74,18 +97,35 @@ function ForgotPassword() {
         setLoading(false);
       }
     } else if (name === "otp") {
-      if (otpResponse?.otp == enteredOTP) {
-        setOtpCompare(true);
-      } else {
-        alertModal({
-          severity: Severity.ERROR,
-          content: "Wrong Otp",
-          title: "Alert",
-        });
+      let msg = "";
+      const str_otp = String(enteredOTP);
+      if (str_otp.length == 0) {
+        msg = "Required";
+      } else if (str_otp.length > 15) {
+        msg = "Invalid OTP";
+      } else if (str_otp.length <= 15 || enteredOTP.length > 0) {
+        msg = "";
+      }
+      setErrorMessage(msg);
+      if (str_otp && !msg) {
+        const otpApiData = {
+          data: {
+            key: otpResponse?.userId || otpResponse.email,
+            otp: str_otp,
+          },
+        };
+        httpMethods
+          .post<OtpApidataInterface, OtpApiResponse>("/verify-otp", otpApiData)
+          .then((result: OtpApiResponse) => {
+            setOtpCompare(true);
+          })
+          .catch((error: ErrorMessageInterface) => {
+            setErrorMessage(error.message);
+          });
       }
       setLoading(false);
     } else if (name === "passwd") {
-      if (passwordCompare.password == passwordCompare.repassword) {
+      if (!errorMessage) {
         const credentials = otpResponse.userId
           ? { userId: otpResponse?.userId }
           : { email: otpResponse.email };
@@ -94,8 +134,11 @@ function ForgotPassword() {
           credentials,
         };
         httpMethods
-          .post("/update-password", pwdpayload)
-          .then((res: any) => {
+          .post<UpdatePasswordInterface, OtpApiResponse>(
+            "/update-password",
+            pwdpayload,
+          )
+          .then((res: OtpApiResponse) => {
             alertModal({
               severity: Severity.SUCCESS,
               content: res.message,
@@ -110,19 +153,13 @@ function ForgotPassword() {
             });
             navigate("/login", { state: "User" });
           })
-          .catch((err: any) => {
+          .catch((err: ErrorMessageInterface) => {
             alertModal({
               severity: Severity.ERROR,
               content: err.message,
               title: "Alert",
             });
           });
-      } else {
-        alertModal({
-          severity: Severity.ERROR,
-          content: "Password Not Matching",
-          title: "Alert",
-        });
       }
       setLoading(false);
     }
@@ -173,6 +210,7 @@ function ForgotPassword() {
               value={passwordCompare.repassword}
               onChange={(e) => handleChange(e, "passwd")}
             />
+            <p className="error-message mb-2">{errorMessage && errorMessage}</p>
             <button
               className="btn btn-primary"
               onClick={(e) => handleSubmit(e, "passwd")}
@@ -192,11 +230,12 @@ function ForgotPassword() {
               value={enteredOTP}
               onChange={(e) => handleChange(e, "otp")}
             />
+            <p className="error-message mb-2">{errorMessage && errorMessage}</p>
             <button
               className="btn btn-primary"
               onClick={(e) => handleSubmit(e, "otp")}
             >
-              Submit
+              Verify OTP
             </button>
           </>
         )}

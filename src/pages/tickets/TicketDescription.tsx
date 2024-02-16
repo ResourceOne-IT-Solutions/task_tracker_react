@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import "./TicketDescription.css";
-import { TicketModal, TicketUpdates } from "../../modals/TicketModals";
+import {
+  SendTicketEmail,
+  TicketUpdateMessage,
+  TicketModal,
+  TicketUpdates,
+} from "../../modals/TicketModals";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext } from "../../modals/UserModals";
+import { NameIdInterface, UserContext } from "../../modals/UserModals";
 import httpMethods from "../../api/Service";
 import XlSheet from "./XlSheet";
+import { ErrorMessageInterface } from "../../modals/interfaces";
 
 const updateContent = (updates: TicketUpdates[]) => {
   let str = "";
@@ -54,14 +60,17 @@ const TicketDescription = () => {
       content: selectedTicket,
     };
     httpMethods
-      .post<any, any>("/mail/ticket-update", payload)
-      .then((res) => {
+      .post<SendTicketEmail, TicketUpdateMessage>(
+        "/mail/ticket-update",
+        payload,
+      )
+      .then(() => {
         setResponseMessage({
           status: "SUCCESS",
           message: "Email Sent Successfully",
         });
       })
-      .catch((er: any) => {
+      .catch((er: ErrorMessageInterface) => {
         setResponseMessage({
           status: "ERROR",
           message: er.message,
@@ -88,7 +97,7 @@ const TicketDescription = () => {
 
   useEffect(() => {
     let x = "";
-    selectedTicket.addOnResource?.forEach((item: any) => {
+    selectedTicket.addOnResource?.forEach((item: NameIdInterface) => {
       x += item.name + ", ";
     });
     setResource(x);

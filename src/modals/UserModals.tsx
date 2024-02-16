@@ -70,6 +70,7 @@ export interface BreakInterface {
   endTime: Date;
   type: string;
   status: string;
+  duration: number;
 }
 export interface UserModal {
   firstName: string;
@@ -131,7 +132,6 @@ export interface CreateUserPayload {
 }
 export interface OtpInterface {
   message: string;
-  otp: string;
   userId?: string;
   email?: string;
 }

@@ -134,6 +134,7 @@ const Feedback = () => {
         <label htmlFor="content">Content:</label>{" "}
         <textarea
           id="content"
+          className="form-control"
           name="content"
           value={formData.content}
           onChange={handleInputChange}
@@ -148,7 +149,7 @@ const Feedback = () => {
           name="type"
           value={formData.type}
           onChange={handleInputChange}
-          className="select-border"
+          className="select-border form-control"
         >
           <option value="" disabled>
             Select an issue type
@@ -163,6 +164,7 @@ const Feedback = () => {
         <label htmlFor="file">File:</label>{" "}
         <input
           type="file"
+          className="form-control"
           id="file"
           name="file"
           onChange={handleFileChange}

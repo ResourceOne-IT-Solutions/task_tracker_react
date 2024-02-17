@@ -4,6 +4,7 @@ import { Button, Spinner } from "react-bootstrap";
 import {
   ChatRequestInterface,
   MessageRequestInterface,
+  TicketRaiseInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
 import {
@@ -41,17 +42,17 @@ function AdminRequestMessages() {
     MessageRequestInterface[]
   >([]);
   const [ticketRaiseMsgs, setTicketRaiseMsgs] = useState<
-    TicketRequestInterface[]
+    TicketRaiseInterface[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setRequestMessageCount([]);
     setIsLoading(true);
     Promise.all([
-      getData<any>("message/user-chat-request"),
-      getData<any>("message/user-ticket-request"),
+      getData<ChatRequestInterface>("message/user-chat-request"),
+      getData<TicketRequestInterface>("message/user-ticket-request"),
       getData<MessageRequestInterface>(`message/admin-messages`),
-      getData<TicketRequestInterface>(`message/ticket-raise-messages`),
+      getData<TicketRaiseInterface>(`message/ticket-raise-messages`),
     ])
       .then((results) => {
         setChatRequests(results[0]);
@@ -104,9 +105,7 @@ function AdminRequestMessages() {
           time,
           _id,
         };
-        setChatRequests((previousData: any) => {
-          return [payloadData, ...previousData];
-        });
+        setChatRequests([payloadData, ...chatRequests]);
       }
     });
   socket
@@ -121,9 +120,7 @@ function AdminRequestMessages() {
           time,
           _id,
         };
-        setTicketRequests((previousData: any) => {
-          return [payloadData, ...previousData];
-        });
+        setTicketRequests([payloadData, ...ticketRequests]);
       }
     });
   socket
@@ -139,12 +136,13 @@ function AdminRequestMessages() {
           isPending,
           _id,
         };
-        setTicketRaiseMsgs((previousData: any) => {
-          return [payloadData, ...previousData];
-        });
+        setTicketRaiseMsgs([payloadData, ...ticketRaiseMsgs]);
       },
     );
-  const handleRequestClick = (data: any, type: any) => {
+  const handleRequestClick = (
+    data: TicketRequestInterface | ChatRequestInterface,
+    type: string,
+  ) => {
     const payload = {
       user: {
         name: getFullName(currentUser),
@@ -288,7 +286,7 @@ function AdminRequestMessages() {
           {isLoading ? (
             <Spinner />
           ) : ticketRaiseMsgs && ticketRaiseMsgs.length > 0 ? (
-            ticketRaiseMsgs?.map((message: any) => {
+            ticketRaiseMsgs?.map((message: TicketRaiseInterface) => {
               return (
                 <div
                   className={`request-content-wrapper ${

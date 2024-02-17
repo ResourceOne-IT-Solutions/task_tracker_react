@@ -81,3 +81,7 @@ export interface SendTicketEmail {
 export interface TicketUpdateMessage {
   message: string;
 }
+export interface TicketStatsInterface{
+  count:number;
+  status: string;
+}

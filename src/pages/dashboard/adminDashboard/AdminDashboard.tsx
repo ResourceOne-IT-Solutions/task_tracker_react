@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
-import httpMethods from "../../../api/Service";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import { Button } from "react-bootstrap";
@@ -12,11 +11,11 @@ import {
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 import { TICKET_STATUS_TYPES, USER_STATUSES } from "../../../utils/Constants";
 import Timezones from "../../../components/features/timezone/Timezones";
+import { TicketStatsInterface } from "../../../modals/TicketModals";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -77,19 +76,25 @@ const AdminDashboard = () => {
   };
   socket
     .off("dashboardStats")
-    .on("dashboardStats", ({ ticketStats, userStats, pendingTickets }) => {
+    .on("dashboardStats", ({ ticketStats, pendingTickets }) => {
       const ticketData = (status: string) => {
-        return ticketStats.find((v: any) => v.status === status)?.count || 0;
+        return (
+          ticketStats.find((v: TicketStatsInterface) => v.status === status)
+            ?.count || 0
+        );
       };
       const totalTickets = ticketStats.reduce(
-        (a: number, c: any) => a + c.count,
+        (a: number, c: TicketStatsInterface) => a + c.count,
         0,
       );
       const pendingTicketsData = (status: string) => {
-        return pendingTickets.find((v: any) => v.status === status)?.count || 0;
+        return (
+          pendingTickets.find((v: TicketStatsInterface) => v.status === status)
+            ?.count || 0
+        );
       };
       const totalPending = pendingTickets.reduce(
-        (a: number, c: any) => a + c.count,
+        (a: number, c: TicketStatsInterface) => a + c.count,
         0,
       );
       setTotalTickets(totalTickets);

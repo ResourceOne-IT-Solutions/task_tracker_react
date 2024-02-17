@@ -22,6 +22,7 @@ import {
 } from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
+import { Modal } from "react-bootstrap";
 
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
@@ -177,6 +178,7 @@ export const ProfileImage = ({
   className?: string;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
+  const [showImage, setShowImage] = useState<boolean>(false);
   const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
@@ -192,7 +194,24 @@ export const ProfileImage = ({
         });
       });
   }, []);
-  return <img src={imageUrl} className={className} />;
+  return (
+    <>
+      <img
+        src={imageUrl}
+        className={className}
+        onClick={() => setShowImage(!showImage)}
+      />
+      <Modal
+        className="profileimg-zoom"
+        show={showImage}
+        onHide={() => setShowImage(false)}
+      >
+        <Modal.Body>
+          <img src={imageUrl} />
+        </Modal.Body>
+      </Modal>
+    </>
+  );
 };
 
 export const handleValidate = (name: string, value: string): boolean => {

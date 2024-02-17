@@ -61,6 +61,7 @@ const AdminDashboard = () => {
     breakUsers: 0,
     offlineUsers: 0,
     onTicketUsers: 0,
+    sleepUsers: 0,
   });
   socket.off("newUser").on("newUser", ({ userPayload }) => {
     setUsersData(userPayload);
@@ -160,12 +161,14 @@ const AdminDashboard = () => {
     const onTicket = usersData.filter(
       (user) => user.status == "On Ticket",
     ).length;
+    const sleep = usersData.filter((user) => user.status == "Sleep").length;
     setUsersStatuses({
       totalUsers,
       availableUsers,
       breakUsers,
       offlineUsers,
       onTicketUsers: onTicket,
+      sleepUsers: sleep,
     });
     setUsersPieChartData([
       { name: "Available", value: availableUsers },
@@ -206,10 +209,10 @@ const AdminDashboard = () => {
             </h4>
           </div>
           <div className="all-details">
-            <div className="pf">
+            {/* <div className="pf">
               <h6>Profile Image</h6>
               <ProfileImage filename={currentUser.profileImageUrl} />
-            </div>
+            </div> */}
             <div>
               <h6>Admin Details</h6>
               <ul>
@@ -229,6 +232,7 @@ const AdminDashboard = () => {
           <PieChartComponent
             data={pendingticketPieChartData}
             totalTickets={totalpendingTickets}
+            name="pending tickets"
           />
         </div>
       </div>
@@ -307,6 +311,23 @@ const AdminDashboard = () => {
                   className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.onTicketUsers}
+                  readOnly
+                />
+              </div>
+              <div>
+                <label htmlFor="sleep" className="fw-bold">
+                  Sleep{"----"}
+                  <span>
+                    {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="sleep"
+                  id="sleep"
+                  className="w-80"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.sleepUsers}
                   readOnly
                 />
               </div>

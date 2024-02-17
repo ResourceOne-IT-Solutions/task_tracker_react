@@ -6,6 +6,9 @@
   display: flex;
   justify-content: space-between;
 }
+.userdetails ul{
+  list-style-type: none;
+}
 .username {
   font-size: 40px;
   font-family: sans-serif;

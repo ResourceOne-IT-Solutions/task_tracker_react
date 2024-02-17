@@ -8,6 +8,9 @@
   display: flex;
   justify-content: center;
 }
+.heading-pic b{
+  color: dimgray;
+}
 .heading-pic img {
   width: 10%;
   height: 50px;

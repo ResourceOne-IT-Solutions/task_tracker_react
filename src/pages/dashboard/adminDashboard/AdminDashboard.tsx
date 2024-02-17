@@ -200,7 +200,7 @@ const AdminDashboard = () => {
               filename={currentUser.profileImageUrl}
             />
             <h4>
-              {getFullName(currentUser)}
+              <b>{getFullName(currentUser)}</b>
               <span className="active-not">
                 {" "}
                 {statusIndicator(currentUser.status)}

@@ -51,7 +51,8 @@ export type Status =
   | "On Ticket"
   | "Sleep"
   | "Breakfast Break"
-  | "Lunch Break";
+  | "Lunch Break"
+  | "";
 
 export interface NameIdInterface {
   name: string;

@@ -58,7 +58,7 @@ export function getData<T>(url: string): Promise<T[]> {
   return httpMethods.get(`/${url}`);
 }
 
-export const statusIndicator = (status: Status) => {
+export const statusIndicator = (status: Status = "") => {
   if (status === AVAILABLE) {
     return <GreenDot title={status} />;
   } else if (status.includes(BREAK)) {

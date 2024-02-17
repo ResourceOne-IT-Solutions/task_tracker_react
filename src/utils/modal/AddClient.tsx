@@ -238,7 +238,9 @@ function AddClient({ setShowModal }: prop) {
         {clientSuccess ? (
           <div className="scc-msg">Client Created Successfully</div>
         ) : null}
-        {clientError && <div className="err-msg">{clientError}</div>}
+        {clientError && (
+          <div className="err-msg text-danger">{clientError}</div>
+        )}
       </Form>
     </div>
   );

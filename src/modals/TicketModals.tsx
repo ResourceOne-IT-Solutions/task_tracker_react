@@ -40,6 +40,7 @@ export interface TicketModal {
   isClosed: boolean;
   createdBy: NameIdInterface;
   serialNo: number;
+  closedBy: NameIdInterface;
 }
 
 export interface UpdateTicketProps {

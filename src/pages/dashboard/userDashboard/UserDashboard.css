@@ -6,6 +6,9 @@
   display: flex;
   justify-content: space-between;
 }
+.userdetails ul {
+  list-style-type: none;
+}
 .username {
   font-size: 40px;
   font-family: sans-serif;
@@ -31,6 +34,9 @@
   height: 40px;
   border-radius: 50%;
   border: 1px solid black;
+}
+.nav_img_container img:hover {
+  cursor: pointer;
 }
 .usernavbar p {
   margin-right: 15px;

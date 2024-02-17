@@ -6,7 +6,6 @@ export interface ChatRequestInterface {
   opponent: NameIdInterface;
   sender: NameIdInterface;
   time: string;
-  __v: number;
   _id: string;
 }
 export interface TicketRequestInterface {
@@ -15,9 +14,15 @@ export interface TicketRequestInterface {
   client: NameIdInterface;
   sender: NameIdInterface;
   time: Date;
-  __v: number;
   _id: string;
-  approvedBy: { name: string; id: string; time: string; date: string };
+}
+export interface TicketRaiseInterface {
+  date: Date;
+  isPending: boolean;
+  sender: NameIdInterface;
+  time: Date;
+  _id: string;
+  content: string;
 }
 export interface MessageRequestInterface {
   content: string;

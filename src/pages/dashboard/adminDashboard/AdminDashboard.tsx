@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
-import httpMethods from "../../../api/Service";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
 import { Button } from "react-bootstrap";
@@ -12,11 +11,11 @@ import {
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { TicketModal } from "../../../modals/TicketModals";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 import { TICKET_STATUS_TYPES, USER_STATUSES } from "../../../utils/Constants";
 import Timezones from "../../../components/features/timezone/Timezones";
+import { TicketStatsInterface } from "../../../modals/TicketModals";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -61,6 +60,7 @@ const AdminDashboard = () => {
     breakUsers: 0,
     offlineUsers: 0,
     onTicketUsers: 0,
+    sleepUsers: 0,
   });
   socket.off("newUser").on("newUser", ({ userPayload }) => {
     setUsersData(userPayload);
@@ -76,19 +76,25 @@ const AdminDashboard = () => {
   };
   socket
     .off("dashboardStats")
-    .on("dashboardStats", ({ ticketStats, userStats, pendingTickets }) => {
+    .on("dashboardStats", ({ ticketStats, pendingTickets }) => {
       const ticketData = (status: string) => {
-        return ticketStats.find((v: any) => v.status === status)?.count || 0;
+        return (
+          ticketStats.find((v: TicketStatsInterface) => v.status === status)
+            ?.count || 0
+        );
       };
       const totalTickets = ticketStats.reduce(
-        (a: number, c: any) => a + c.count,
+        (a: number, c: TicketStatsInterface) => a + c.count,
         0,
       );
       const pendingTicketsData = (status: string) => {
-        return pendingTickets.find((v: any) => v.status === status)?.count || 0;
+        return (
+          pendingTickets.find((v: TicketStatsInterface) => v.status === status)
+            ?.count || 0
+        );
       };
       const totalPending = pendingTickets.reduce(
-        (a: number, c: any) => a + c.count,
+        (a: number, c: TicketStatsInterface) => a + c.count,
         0,
       );
       setTotalTickets(totalTickets);
@@ -160,12 +166,14 @@ const AdminDashboard = () => {
     const onTicket = usersData.filter(
       (user) => user.status == "On Ticket",
     ).length;
+    const sleep = usersData.filter((user) => user.status == "Sleep").length;
     setUsersStatuses({
       totalUsers,
       availableUsers,
       breakUsers,
       offlineUsers,
       onTicketUsers: onTicket,
+      sleepUsers: sleep,
     });
     setUsersPieChartData([
       { name: "Available", value: availableUsers },
@@ -197,7 +205,7 @@ const AdminDashboard = () => {
               filename={currentUser.profileImageUrl}
             />
             <h4>
-              {getFullName(currentUser)}
+              <b>{getFullName(currentUser)}</b>
               <span className="active-not">
                 {" "}
                 {statusIndicator(currentUser.status)}
@@ -206,10 +214,10 @@ const AdminDashboard = () => {
             </h4>
           </div>
           <div className="all-details">
-            <div className="pf">
+            {/* <div className="pf">
               <h6>Profile Image</h6>
               <ProfileImage filename={currentUser.profileImageUrl} />
-            </div>
+            </div> */}
             <div>
               <h6>Admin Details</h6>
               <ul>
@@ -229,6 +237,7 @@ const AdminDashboard = () => {
           <PieChartComponent
             data={pendingticketPieChartData}
             totalTickets={totalpendingTickets}
+            name="pending tickets"
           />
         </div>
       </div>
@@ -307,6 +316,23 @@ const AdminDashboard = () => {
                   className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.onTicketUsers}
+                  readOnly
+                />
+              </div>
+              <div>
+                <label htmlFor="sleep" className="fw-bold">
+                  Sleep{"----"}
+                  <span>
+                    {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
+                  </span>
+                </label>
+                <input
+                  type="range"
+                  name="sleep"
+                  id="sleep"
+                  className="w-80"
+                  max={usersStatuses.totalUsers}
+                  value={usersStatuses.sleepUsers}
                   readOnly
                 />
               </div>

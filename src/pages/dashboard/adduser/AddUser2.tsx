@@ -1,7 +1,11 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 import "./AddUser2.css";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import {
+  CreateUserPayload,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 import { EMPTY_USER_PAYLOAD } from "../../../utils/Constants";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
@@ -9,6 +13,7 @@ import { getCurrentDate, getFullName } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import httpMethods from "../../../api/Service";
 import { Severity } from "../../../utils/modal/notification";
+import { ErrorMessageInterface } from "../../../modals/interfaces";
 
 function AddUser2() {
   const { currentUser, alertModal } = useUserContext() as UserContext;
@@ -44,7 +49,7 @@ function AddUser2() {
       .required("Required"),
   });
   const handleSubmit = async (
-    values: any,
+    values: CreateUserPayload,
     { setSubmitting, resetForm }: any,
   ) => {
     if (values.profileImageUrl) {
@@ -71,7 +76,7 @@ function AddUser2() {
           });
           resetForm();
         })
-        .catch((e: any) => {
+        .catch((e: ErrorMessageInterface) => {
           alertModal({
             severity: Severity.ERROR,
             content: e.message,

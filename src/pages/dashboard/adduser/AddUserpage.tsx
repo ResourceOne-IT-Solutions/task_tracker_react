@@ -368,7 +368,7 @@ function AddUserpage() {
             <span>UserId : {createdData?.userId}</span>
           </div>
         ) : null}
-        {userError && <div className="err-msg">{userError}</div>}
+        {userError && <div className="err-msg text-danger">{userError}</div>}
         <div className="navigating">
           <a className="nav-link" onClick={() => navigate(-1)}>
             <Button variant="danger">Go Back</Button>

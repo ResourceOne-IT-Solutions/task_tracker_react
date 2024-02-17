@@ -123,7 +123,11 @@ const Groups = ({
             ))}
           </>
         ) : (
-          <div>NO GROUPS</div>
+          <div className="loader">
+            <div className="spinner-border text-success" role="status">
+              <span className="sr-only"></span>
+            </div>
+          </div>
         )}
       </div>
     </div>

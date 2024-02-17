@@ -23,7 +23,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     clientName: "",
     description: "",
     comments: "",
-    status: "In Progress",
+    status: "",
   });
   const userContext = useUserContext();
   const { socket, currentUser } = userContext as UserContext;
@@ -132,6 +132,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
               onChange={handleChange}
               style={{ flex: "1", minWidth: "150px" }}
             >
+              <option value={""}>{"Select Status"}</option>
               <option value={TICKET_STATUS_TYPES.IN_PROGRESS}>
                 {TICKET_STATUS_TYPES.IN_PROGRESS}
               </option>

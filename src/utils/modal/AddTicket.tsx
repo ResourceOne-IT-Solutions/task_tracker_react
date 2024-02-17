@@ -13,6 +13,8 @@ import {
 } from "../utils";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
+import { Severity } from "./notification";
+import { ErrorMessageInterface } from "../../modals/interfaces";
 interface TicketmodalInterface {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   clientsData: ClientModal | any;
@@ -20,7 +22,7 @@ interface TicketmodalInterface {
 
 function AddTicket(props: TicketmodalInterface) {
   const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, alertModal } = userContext as UserContext;
   const [selectedItem, setSelectedItem] = useState(null);
   const [ticketData, setTicketData] = useState<CreateTicketModal>({
     client: { name: "", id: "", mobile: "", email: "" },
@@ -72,26 +74,32 @@ function AddTicket(props: TicketmodalInterface) {
         .then((result) => {
           setCreatedTicket(result);
           setTicketError("");
-          setTimeout(() => {
-            setLoading(false);
-            setTicketData({
-              client: { name: "", id: "", mobile: "", email: "" },
-              user: { name: "", id: "" },
-              technology: "",
-              description: "",
-              targetDate: "",
-            });
-            setSelectedItem(null);
-            setTicketSuccess(true);
-            setTimeout(() => {
-              props.setShowModal(false);
-            }, 1000);
-          }, 2000);
+          setLoading(false);
+          setTicketData({
+            client: { name: "", id: "", mobile: "", email: "" },
+            user: { name: "", id: "" },
+            technology: "",
+            description: "",
+            targetDate: "",
+          });
+          setSelectedItem(null);
+          setTicketSuccess(true);
+          alertModal({
+            severity: Severity.SUCCESS,
+            content: `Ticket Created succesfully`,
+            title: "Alert",
+          });
+          props.setShowModal(false);
         })
-        .catch((e: any) => {
+        .catch((e: ErrorMessageInterface) => {
           setTicketSuccess(false);
           setLoading(false);
           setTicketError(e.message);
+          alertModal({
+            severity: Severity.ERROR,
+            content: e.message,
+            title: "Alert",
+          });
         });
     } else {
       setTicketError("Enter All Fields");
@@ -190,7 +198,9 @@ function AddTicket(props: TicketmodalInterface) {
         {ticketSuccess ? (
           <div className="scc-msg">Ticket Created Successfully</div>
         ) : null}
-        {ticketError && <div className="err-msg">{ticketError}</div>}
+        {ticketError && (
+          <div className="err-msg text-danger">{ticketError}</div>
+        )}
       </Form>
     </div>
   );

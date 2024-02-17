@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { TicketModal } from "../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
-import { getData, getFormattedDate } from "../../utils/utils";
+import { getData, getFormattedDate, getFullName } from "../../utils/utils";
 import AssignTicket from "../../utils/modal/AssignTicket";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import { UserContext, UserModal } from "../../modals/UserModals";
@@ -14,7 +14,7 @@ import { Severity } from "../../utils/modal/notification";
 
 function TicketsTable() {
   const navigate = useNavigate();
-  const { alertModal } = useUserContext() as UserContext;
+  const { alertModal, currentUser } = useUserContext() as UserContext;
   const [showModal, setShowModal] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [ticketsData, setTicketsData] = useState<TicketModal[]>([]);
@@ -48,25 +48,31 @@ function TicketsTable() {
     setShowModal(true);
   };
   const handleClose = (ticket: TicketModal) => {
-    httpMethods
-      .put<any, any>("/tickets/update", {
-        id: ticket._id,
-        data: { isClosed: true },
-      })
-      .then((res) => {
-        setTicketsData((prevTableData) =>
-          prevTableData.map((ticket) =>
-            ticket._id === res._id ? res : ticket,
-          ),
-        );
-      })
-      .catch((err: any) => {
-        alertModal({
-          severity: Severity.ERROR,
-          content: err.message,
-          title: "Ticket Update",
+    const confirm = window.confirm("Are you sure You want To Close the Ticket");
+    if (confirm) {
+      httpMethods
+        .put<any, any>("/tickets/update", {
+          id: ticket._id,
+          data: {
+            isClosed: true,
+            closedBy: { name: getFullName(currentUser), id: currentUser._id },
+          },
+        })
+        .then((res) => {
+          setTicketsData((prevTableData) =>
+            prevTableData.map((ticket) =>
+              ticket._id === res._id ? res : ticket,
+            ),
+          );
+        })
+        .catch((err: any) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "Ticket Update",
+          });
         });
-      });
+    }
   };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
     { title: "Client Name", key: "client.name" },

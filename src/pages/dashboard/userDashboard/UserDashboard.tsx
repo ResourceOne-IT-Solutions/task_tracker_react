@@ -244,7 +244,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               onClick={() => navigate("/dashboard/userdashboardtickets")}
               variant="primary"
             >
-              My Tickets
+              Today Tickets
             </Button>
             <Button
               onClick={() => navigate("/dashboard/helpedtickets")}

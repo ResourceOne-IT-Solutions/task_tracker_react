@@ -14,6 +14,7 @@ import { NameIdInterface, UserContext } from "../../modals/UserModals";
 import httpMethods from "../../api/Service";
 import XlSheet from "./XlSheet";
 import { ErrorMessageInterface } from "../../modals/interfaces";
+import { CLOSED } from "../../utils/Constants";
 
 const updateContent = (updates: TicketUpdates[]) => {
   let str = "";
@@ -122,6 +123,11 @@ const TicketDescription = () => {
           <p className="m-2">
             <b>Status :</b> {selectedTicket.status}
           </p>
+          {(selectedTicket.isClosed || selectedTicket.status == CLOSED) && (
+            <p className="m-2">
+              <b>Closed By :</b> {selectedTicket?.closedBy?.name}
+            </p>
+          )}
           <p className="m-2">
             <b>Description :</b> {selectedTicket.description}
           </p>

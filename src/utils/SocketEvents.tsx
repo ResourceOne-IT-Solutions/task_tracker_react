@@ -31,7 +31,7 @@ const SocketEvents = () => {
         setCurrentUser(currentUser);
         const content = `You got a ${type} from ${from.name}`;
         if ("Notification" in window && Notification.permission === "granted") {
-          const notification = new Notification("Message", {
+          new Notification("Message", {
             body: content,
             // You can add an icon if needed
             // icon: "path/to/icon.png",

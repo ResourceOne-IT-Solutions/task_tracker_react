@@ -5,6 +5,7 @@ import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import {
   ProfileImage,
   getData,
+  getFormattedDate,
   getFormattedTime,
   getFullName,
   statusIndicator,
@@ -12,6 +13,8 @@ import {
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import {
   BreakInterface,
+  BreakInterfaceObject,
+  LoginInterface,
   UserContext,
   UserModal,
 } from "../../../modals/UserModals";
@@ -20,6 +23,7 @@ import Timezones from "../../../components/features/timezone/Timezones";
 import { useNavigate } from "react-router-dom";
 import { Severity } from "../../../utils/modal/notification";
 import { getBreakTimings } from "./utils";
+import { ErrorMessageInterface } from "../../../modals/interfaces";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
@@ -28,7 +32,10 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
-
+  const [breakTimings, setBreakTimings] = useState<BreakInterfaceObject>({});
+  const [todayLogin, setTodayLogin] = useState<LoginInterface>(
+    {} as LoginInterface,
+  );
   const [pieChartData, setPieChartData] = useState([
     { name: "In Progress Tickets", value: 0 },
     { name: "Closed Tickets", value: 0 },
@@ -98,6 +105,23 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
 
   useEffect(() => {
     setPresentUser(user);
+    const today = getFormattedDate(new Date());
+    const groupedByStartDate = user.breakTime
+      .filter((time) => time.startDate === today)
+      .reduce((acc: { [key: string]: BreakInterface[] }, obj) => {
+        const startDate = obj.startDate;
+        if (!acc[startDate]) {
+          acc[startDate] = [];
+        }
+        acc[startDate].push(obj);
+        return acc;
+      }, {});
+    const todayLogin =
+      user.loginTimings.find(
+        (time) => getFormattedDate(time.inTime) === today,
+      ) || {};
+    setBreakTimings(groupedByStartDate);
+    setTodayLogin(todayLogin as LoginInterface);
   }, [user]);
 
   const handleSelect = (item: string | null) => {
@@ -108,7 +132,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       .then((users) => {
         setUserData(users);
       })
-      .catch((err: any) => {
+      .catch((err: ErrorMessageInterface) => {
         alertModal({
           severity: Severity.ERROR,
           content: err.message,
@@ -133,14 +157,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSelected("");
     setShowChatRequestPopup(false);
   };
-  const groupedByStartDate = presentUser.breakTime.reduce((acc: any, obj) => {
-    const startDate = obj.startDate;
-    if (!acc[startDate]) {
-      acc[startDate] = [];
-    }
-    acc[startDate].push(obj);
-    return acc;
-  }, {});
   return (
     <>
       <div className="userdashboard">
@@ -167,27 +183,18 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               <li>Phone : {presentUser.mobile}</li>
               <li>Role : {presentUser.designation}</li>
               <span className="fw-bold d-block">Login Timings</span>
-              {presentUser.loginTimings.map((logtime) => {
-                if (
-                  new Date(logtime.inTime).toLocaleDateString() ==
-                  new Date().toLocaleDateString()
-                ) {
-                  return (
-                    <li key={logtime._id}>
-                      <span className="fw-semibold">
-                        {new Date(logtime.date).toLocaleDateString()}
-                      </span>{" "}
-                      Login - {getFormattedTime(logtime.inTime)} - Logout -{" "}
-                      {logtime.outTime
-                        ? getFormattedTime(logtime.outTime)
-                        : "---"}{" "}
-                    </li>
-                  );
-                }
-              })}
+              <li>
+                <span className="fw-semibold">
+                  {new Date(todayLogin.date).toLocaleDateString()}
+                </span>{" "}
+                Login - {getFormattedTime(todayLogin.inTime)} - Logout -{" "}
+                {todayLogin.outTime
+                  ? getFormattedTime(todayLogin.outTime)
+                  : "---"}{" "}
+              </li>
               <span className="fw-bold d-block">Break Timings</span>
-              {Object.entries(groupedByStartDate).map((key, i) => {
-                const arr: any = key[1];
+              {Object.entries(breakTimings).map((key, i) => {
+                const arr: BreakInterface[] = key[1];
                 if (
                   new Date(key[0]).toLocaleDateString() ==
                   new Date().toLocaleDateString()
@@ -198,7 +205,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                         {key[0]} : Total={">"}
                         {getBreakTimings(
                           arr.reduce(
-                            (acc: any, obj: any) => acc + obj.duration,
+                            (acc: number, obj: BreakInterface) =>
+                              acc + (obj?.duration || 0),
                             0,
                           ),
                         )}
@@ -209,7 +217,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                             <span className="d-block" key={i}>
                               <span>{brtime.status} : </span>{" "}
                               {getFormattedTime(brtime.startTime)} ---{" "}
-                              {getFormattedTime(brtime.endTime)}
+                              {brtime.endTime ? (
+                                <>{getFormattedTime(brtime.endTime)}</>
+                              ) : (
+                                `Still In ${currentUser.status}`
+                              )}
                               {brtime.duration ? (
                                 <>
                                   - Duration: {getBreakTimings(brtime.duration)}

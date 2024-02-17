@@ -27,8 +27,7 @@ import { ErrorMessageInterface } from "../../../modals/interfaces";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
-  const { setCurrentUser, socket, currentUser, alertModal } =
-    useUserContext() as UserContext;
+  const { socket, currentUser, alertModal } = useUserContext() as UserContext;
   const [tableData, setTableData] = useState<TicketModal[]>([]);
   const [presentUser, setPresentUser] = useState<UserModal>(user);
   const dateConversion = (date: Date) => new Date(date).toLocaleDateString();
@@ -43,11 +42,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     { name: "Pending Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
-
-  const [sendingStatuses, setSendingStatuses] = useState({
-    id: "",
-    data: { status: "" },
-  });
   const [showChatRequestPopup, setShowChatRequestPopup] = useState(false);
   const [userData, setUserData] = useState<UserModal[]>([]);
   const [selected, setSelected] = useState("");
@@ -59,49 +53,45 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
   });
   useEffect(() => {
-    setSendingStatuses({ ...sendingStatuses, id: presentUser._id });
     getData<TicketModal>("tickets/user/" + presentUser._id)
       .then((result) => {
         setTableData(result);
-        const pendingTickets = result.filter(
-          (ticket) => ticket.status === "Pending",
-        ).length;
-        const closedTickets = result.filter(
-          (ticket) => ticket.status === "Closed",
-        ).length;
-        const progressTickets = result.filter(
-          (ticket) => ticket.status === "In Progress",
-        ).length;
-        const assigned = result.filter(
-          (ticket) => ticket.status === "Assigned",
-        ).length;
-        const improperTickets = result.filter(
-          (ticket) => ticket.status === "Improper Requirment",
-        ).length;
+        const ticketStats: { [key: string]: number } = {
+          Pending: 0,
+          Closed: 0,
+          "In Progress": 0,
+          Assigned: 0,
+          "Improper Requirment": 0,
+        };
+        result.forEach((tkt) => {
+          ticketStats[tkt.status] = ticketStats[tkt.status] + 1;
+        });
 
         setPieChartData([
-          { name: "Pending Tickets", value: pendingTickets },
-          { name: "Closed Tickets", value: closedTickets },
-          { name: "In Progress Tickets", value: progressTickets },
-          { name: "Helped Tickets", value: presentUser.helpedTickets },
-          { name: "Assigned Tickets", value: assigned },
-          { name: "Improper Requirment", value: improperTickets },
+          { name: "Pending Tickets", value: ticketStats["Pending"] },
+          { name: "Closed Tickets", value: ticketStats["Closed"] },
+          { name: "In Progress Tickets", value: ticketStats["In Progress"] },
+          { name: "Assigned Tickets", value: ticketStats["Assigned"] },
+          {
+            name: "Improper Requirment",
+            value: ticketStats["Improper Requirment"],
+          },
         ]);
-        setCurrentUser((data) => ({
-          ...data,
-          pendingTickets,
-          closedTickets,
-          progressTickets,
-        }));
         setPresentUser((data) => ({
           ...data,
-          pendingTickets,
-          closedTickets,
-          progressTickets,
+          pendingTickets: ticketStats["Pending"],
+          closedTickets: ticketStats["Closed"],
+          progressTickets: ticketStats["In Progress"],
         }));
       })
-      .catch(() => null);
-  }, []);
+      .catch((err: ErrorMessageInterface) => {
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "User Tickets",
+        });
+      });
+  }, [presentUser._id, alertModal]);
 
   useEffect(() => {
     setPresentUser(user);

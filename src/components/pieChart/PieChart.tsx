@@ -11,7 +11,7 @@ interface PieChartProps {
 const allColors: any = {
   "NotAssigned Tickets": "#FF6384",
   "Assigned Tickets": "#36A2EB",
-  "In Progress Tickets": "#FFCE56",
+  "In Progress Tickets": "#0420eb",
   "Pending Tickets": "#b80301",
   "Closed Tickets": "#168f01",
   "Helped Tickets": "#FF6384",
@@ -30,8 +30,8 @@ const PieChartComponent: React.FC<PieChartProps> = ({
     <div className="text-center">
       {totalTickets ? (
         <PieChart
-          width={name == USER_STATUSES ? 200 : 400}
-          height={name == USER_STATUSES ? 200 : 400}
+          width={name == USER_STATUSES ? 200 : 300}
+          height={name == USER_STATUSES ? 200 : 300}
           style={{ margin: "auto" }}
         >
           <Pie

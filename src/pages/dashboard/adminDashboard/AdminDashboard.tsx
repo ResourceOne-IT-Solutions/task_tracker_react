@@ -299,7 +299,7 @@ const AdminDashboard = () => {
                   type="range"
                   name="break"
                   id="break"
-                className="w-80"
+                  className="w-80"
                   max={usersStatuses.totalUsers}
                   value={usersStatuses.breakUsers}
                   readOnly

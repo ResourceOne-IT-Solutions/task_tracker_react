@@ -230,15 +230,18 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
-          <Timezones />
         </div>
         <div className="pie-chart">
-          <h3 className="text-primary">Pending Tickets Data: </h3>
+          {/* <h3 className="text-primary">Today Tickets Data: </h3>
           <PieChartComponent
             data={pendingticketPieChartData}
             totalTickets={totalpendingTickets}
             name="pending tickets"
-          />
+          /> */}
+          <div>
+            <h4 style={{ textAlign: "center" }}>Timezones : </h4>
+            <Timezones />
+          </div>
         </div>
       </div>
       <div className="ranges">
@@ -339,32 +342,36 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="admin-btns text-center">
-          <div>
-            <Button variant="danger" onClick={handleAdminBroadCastMessage}>
-              Send Message to All
-            </Button>
-            <Button onClick={() => displayTable("users")} variant="info">
-              Show Users
-            </Button>
-          </div>
-          <div>
-            <Button onClick={() => displayTable("clients")} variant="success">
-              Show Clients
-            </Button>
-            <Button variant="secondary" onClick={() => displayTable("tickets")}>
-              Today Tickets
-            </Button>
-          </div>
+        <div className="admin-btns pie-chart">
+          <h3 className="text-primary">Today Tickets Data: </h3>
+          <PieChartComponent
+            data={pendingticketPieChartData}
+            totalTickets={totalpendingTickets}
+            name="pending tickets"
+          />
         </div>
       </div>
-      <div className="pending-tickets-chart">
+      <div className="d-flex flex-direction-row gap-5 m-3">
+        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
+          Send Message to All
+        </Button>
+        <Button onClick={() => displayTable("users")} variant="info">
+          Show Users
+        </Button>
+        <Button onClick={() => displayTable("clients")} variant="success">
+          Show Clients
+        </Button>
+        <Button variant="secondary" onClick={() => displayTable("tickets")}>
+          Today Tickets
+        </Button>
+      </div>
+      {/* <div className="pending-tickets-chart">
         <h3 className="text-primary">Total Tickets Data: </h3>
         <PieChartComponent
           data={ticketPieChartData}
           totalTickets={totalTickets}
         />
-      </div>
+      </div> */}
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
           <MessageAllUsersModal setShowModal={setShowModal} />

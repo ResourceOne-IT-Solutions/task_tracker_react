@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./index.css";
 import httpMethods from "../../../api/Service";
 import { TicketModal } from "../../../modals/TicketModals";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import Tickets from "../../tickets";
+import { Button } from "react-bootstrap";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
   const [clientState, setClientState] = useState(state);
   const [selectedTickets, setSelectedTickets] = useState<TicketModal[]>([]);
   const [pieChartData, setPieChartData] = useState([
@@ -81,6 +83,9 @@ const ClientDashboard = () => {
             totalTickets={selectedTickets.length}
           />
         </div>
+        {/* <Button variant="warning" onClick={() => navigate(-1)}>
+          Go Back
+        </Button> */}
       </div>
 
       {/* <TicketsMain url={`/clients/tickets/${clientState._id}`} /> */}

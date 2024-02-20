@@ -238,7 +238,7 @@ function ForgotPassword() {
               className="btn btn-primary"
               onClick={(e) => handleSubmit(e, "passwd")}
             >
-              Submit
+              {loading ? "Loading.." : "Submit"}
             </button>
           </>
         ) : (
@@ -258,7 +258,7 @@ function ForgotPassword() {
               className="btn btn-primary"
               onClick={(e) => handleSubmit(e, "otp")}
             >
-              Verify OTP
+              {loading ? "Verifying" : "Verify OTP"}
             </button>
           </>
         )}

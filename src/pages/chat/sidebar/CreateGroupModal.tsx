@@ -38,6 +38,7 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
   });
   socket.off("groupCreated").on("groupCreated", (group) => {
     onCreateGroup(group);
+    setShowModal(false)
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupDetails({

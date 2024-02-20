@@ -14,6 +14,7 @@ import ReusableModal from "../../utils/modal/ReusableModal";
 import UpdateUser from "../../utils/modal/UpdateUser";
 import { useUserContext } from "../Authcontext/AuthContext";
 import { Severity } from "../../utils/modal/notification";
+import { ErrorMessageInterface } from "../../modals/interfaces";
 
 function UsersTable() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function UsersTable() {
     top: "0",
     right: "0",
   };
-  const handleUserTickets = (user: any) => {
+  const handleUserTickets = (user: { _id: string }) => {
     navigate(`/userTickets/${user._id}`);
   };
   const handleUpdate = <T,>(user: T) => {
@@ -52,7 +53,7 @@ function UsersTable() {
     if (delete_or_not) {
       httpMethods
         .deleteCall<UserModal>(`/users/${user._id}`)
-        .then((resp: any) => {
+        .then((resp: UserModal) => {
           const filtered_data = usersData.filter(
             (item) => item._id !== resp._id,
           );
@@ -62,7 +63,7 @@ function UsersTable() {
             content: `${getFullName(resp)} account is deleted Successfully`,
           });
         })
-        .catch((err: any) => {
+        .catch((err: ErrorMessageInterface) => {
           alertModal({
             severity: Severity.ERROR,
             content: err.message,

@@ -32,6 +32,9 @@ function ForgotPassword() {
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [confirmShowPassword, setConfirmShowPassword] =
+    useState<boolean>(false);
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     name: string,
@@ -170,13 +173,13 @@ function ForgotPassword() {
       <form className="pwd-forgot mb-2">
         {!otpreceived ? (
           <>
-            <label htmlFor="" className="mb-2">
+            <label htmlFor="" className="mb-2 form-label">
               <b>UserId (or) Email</b>
             </label>
             <input
               type="text"
               placeholder="Enter Userid or Email"
-              className="mb-2"
+              className="mb-2 form-control"
               onChange={(e) => handleChange(e, "user-email")}
             />
             <button
@@ -188,28 +191,48 @@ function ForgotPassword() {
           </>
         ) : otpcompare ? (
           <>
-            <label htmlFor="">
+            <label htmlFor="" className="form-label">
               <b>New Password</b>
             </label>
-            <input
-              type="password"
-              placeholder="Enter New Password"
-              name="password"
-              className="mb-2"
-              value={passwordCompare.password}
-              onChange={(e) => handleChange(e, "passwd")}
-            />
-            <label htmlFor="">
+            <div className="forgotpage-password-icon">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter New Password"
+                name="password"
+                className="mb-2 form-control"
+                value={passwordCompare.password}
+                onChange={(e) => handleChange(e, "passwd")}
+              />
+              <span onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <i className="bi bi-eye-fill"></i>
+                ) : (
+                  <i className="bi bi-eye-slash-fill"></i>
+                )}
+              </span>
+            </div>
+            <label htmlFor="" className="form-label">
               <b>Confirm Password</b>
             </label>
-            <input
-              type="password"
-              placeholder="Enter Confirm Password"
-              name="repassword"
-              className="mb-2"
-              value={passwordCompare.repassword}
-              onChange={(e) => handleChange(e, "passwd")}
-            />
+            <div className="forgotpage-password-icon">
+              <input
+                type={confirmShowPassword ? "text" : "password"}
+                placeholder="Enter Confirm Password"
+                name="repassword"
+                className="mb-2 form-control"
+                value={passwordCompare.repassword}
+                onChange={(e) => handleChange(e, "passwd")}
+              />
+              <span
+                onClick={() => setConfirmShowPassword(!confirmShowPassword)}
+              >
+                {confirmShowPassword ? (
+                  <i className="bi bi-eye-fill"></i>
+                ) : (
+                  <i className="bi bi-eye-slash-fill"></i>
+                )}
+              </span>
+            </div>
             <p className="error-message mb-2">{errorMessage && errorMessage}</p>
             <button
               className="btn btn-primary"
@@ -220,13 +243,13 @@ function ForgotPassword() {
           </>
         ) : (
           <>
-            <label htmlFor="">
+            <label htmlFor="" className="form-label">
               <b>OTP</b>
             </label>
             <input
               type="text"
               placeholder="Enter OTP"
-              className="mb-2"
+              className="mb-2 form-control"
               value={enteredOTP}
               onChange={(e) => handleChange(e, "otp")}
             />

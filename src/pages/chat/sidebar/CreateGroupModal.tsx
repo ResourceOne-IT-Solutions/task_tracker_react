@@ -24,7 +24,7 @@ interface CreateGroupModel {
 }
 
 const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
-  const { currentUser, socket, alertModal } = useUserContext() as UserContext;
+  const { currentUser, socket } = useUserContext() as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [groupDetails, setGroupDetails] = useState<CreateGroupModel>({
@@ -38,7 +38,7 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
   });
   socket.off("groupCreated").on("groupCreated", (group) => {
     onCreateGroup(group);
-    setShowModal(false)
+    setShowModal(false);
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGroupDetails({

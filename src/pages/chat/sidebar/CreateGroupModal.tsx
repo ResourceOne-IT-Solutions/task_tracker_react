@@ -75,14 +75,6 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
     };
     setGroupDetails(groups);
     socket.emit("createGroup", groups);
-    setTimeout(() => {
-      setShowModal(false);
-      alertModal({
-        severity: Severity.SUCCESS,
-        content: "Group Created",
-        title: "Alert",
-      });
-    }, 500);
   };
 
   return (

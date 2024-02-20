@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import "./AddUser2.css";
 import {
@@ -48,11 +48,13 @@ function AddUser2() {
       .min(3, "Alphabets Only, Minimum 3 Characters")
       .required("Required"),
   });
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (
     values: CreateUserPayload,
     { setSubmitting, resetForm }: any,
   ) => {
     if (values.profileImageUrl) {
+      setIsLoading(true);
       const formData = new FormData();
       formData.append("file", values.profileImageUrl);
       const data = {
@@ -66,9 +68,9 @@ function AddUser2() {
       httpMethods
         .post<FormData, UserModal>("/users/create", formData, true)
         .then((result) => {
-          const content = `Name : ${getFullName(result)}\nUser ID: ${
+          const content = `Name : ${getFullName(result)}, \nUser ID: ${
             result.userId
-          }\nEmployee ID : ${result.empId}\nPassword: ${values.password}`;
+          }, \nEmployee ID : ${result.empId}, \nPassword: ${values.password}\n`;
           alertModal({
             severity: Severity.SUCCESS,
             content,
@@ -82,9 +84,11 @@ function AddUser2() {
             content: e.message,
             title: "User Create",
           });
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
-    setSubmitting(false);
   };
   return (
     <div>
@@ -301,8 +305,8 @@ function AddUser2() {
               </div>
             </div>
             <div className="submit-btn">
-              <Button type="submit" disabled={isSubmitting}>
-                Submit
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? "Submitting..." : "Submit"}
               </Button>
             </div>
           </Form>

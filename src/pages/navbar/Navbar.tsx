@@ -61,7 +61,7 @@ function Navbar() {
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark justify-content-around">
           <div className="container-fluid">
             <a className="navbar-brand" onClick={() => navigate("/dashboard")}>
-              <b>DASHBOARD</b>
+              <b>ResourceOne IT Solutions</b>
             </a>
             <button
               className="navbar-toggler"

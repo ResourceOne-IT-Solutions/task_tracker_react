@@ -5,8 +5,7 @@ import UserDashboard from "./userDashboard/UserDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
 import { Navigate } from "react-router-dom";
 import { UserContext, UserModal } from "../../modals/UserModals";
-import Navbar from "../navbar/Navbar";
-import { Spinner } from "react-bootstrap";
+import { Loader } from "../../utils/utils";
 
 const Dashboard = () => {
   const userContext = useUserContext();
@@ -17,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (!currentUser.firstName) {
       httpMethods
-        .get<UserModal>("/get-user")
+        .get<UserModal>("/users/" + currentUser._id)
         .then((response) => {
           setCurrentUser(response);
           setIsLoggedIn(true);
@@ -39,7 +38,7 @@ const Dashboard = () => {
   return (
     <div>
       {isLoading ? (
-        <Spinner />
+        <Loader />
       ) : (
         <>
           {isLoggedin && currentUser.isAdmin && <AdminDashboard />}

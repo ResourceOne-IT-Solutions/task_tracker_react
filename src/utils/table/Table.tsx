@@ -131,9 +131,17 @@ function TaskTable<R>(props: TableProps<R>) {
               </td>
             </tr>
           ) : (
-            currentPageData.map((obj: any, idx: number) =>
-              renderBodyRow(obj, idx),
-            )
+            <>
+              {currentPageData.length ? (
+                currentPageData.map((obj: any, idx: number) =>
+                  renderBodyRow(obj, idx),
+                )
+              ) : (
+                <tr>
+                  <td colSpan={headers.length}>No Data Available</td>
+                </tr>
+              )}
+            </>
           )}
         </tbody>
       </table>

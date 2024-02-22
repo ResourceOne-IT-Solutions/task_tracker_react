@@ -150,9 +150,18 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
   return (
     <>
       <div className="userdashboard">
-        <p className="username text-center">
-          Welcome to <b>{getFullName(presentUser)}</b> Dashboard
-        </p>
+        <div className="d-flex justify-content-center">
+          <div className="username text-center">
+            Welcome to <b>{getFullName(presentUser)}</b> Dashboard
+          </div>
+          {currentUser._id !== presentUser._id && (
+            <div className="align-self-center">
+              <Button variant="warning" onClick={() => navigate(-1)}>
+                Go Back
+              </Button>
+            </div>
+          )}
+        </div>
         <div className="usernavbar">
           <div className="nav_img_container">
             <ProfileImage filename={presentUser.profileImageUrl} />

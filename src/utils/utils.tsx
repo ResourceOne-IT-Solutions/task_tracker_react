@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import httpMethods from "../api/Service";
 import {
   NameIdInterface,
@@ -256,6 +257,14 @@ export const Timer = () => {
       }
     >
       {formatTime(seconds)}
+    </div>
+  );
+};
+
+export const Loader = () => {
+  return (
+    <div className="align-items-center d-flex vh-100 justify-content-center">
+      <Spinner variant="succss" />
     </div>
   );
 };

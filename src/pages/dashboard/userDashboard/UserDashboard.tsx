@@ -210,7 +210,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                               {brtime.endTime ? (
                                 <>{getFormattedTime(brtime.endTime)}</>
                               ) : (
-                                `Still In ${currentUser.status}`
+                                `Still In ${presentUser.status}`
                               )}
                               {brtime.duration ? (
                                 <>

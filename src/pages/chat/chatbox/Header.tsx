@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./styles/header.css";
 import { RoomMessages, UserModal } from "../../../modals/UserModals";
-import { getFullName, statusIndicator } from "../../../utils/utils";
+import {
+  ProfileImage,
+  getFullName,
+  statusIndicator,
+} from "../../../utils/utils";
 import { GROUP_IMG_URL } from "../../../utils/Constants";
 import { Button } from "react-bootstrap";
 import jsPDF from "jspdf";
@@ -106,10 +110,11 @@ const ChatHeader = ({
         {selectedUser._id && (
           <>
             <div className="profile-img">
-              <img
-                src={selectedUser.profileImageUrl || GROUP_IMG_URL}
-                alt="img"
-              />
+              {selectedUser.profileImageUrl ? (
+                <ProfileImage filename={selectedUser.profileImageUrl} />
+              ) : (
+                <img src={GROUP_IMG_URL} />
+              )}
             </div>
             <div className="header-user-name">
               {getFullName(selectedUser)} &nbsp;{" "}

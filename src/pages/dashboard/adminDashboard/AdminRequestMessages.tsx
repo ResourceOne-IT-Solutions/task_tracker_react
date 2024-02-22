@@ -158,10 +158,18 @@ function AdminRequestMessages() {
   };
   return (
     <div className="text-center">
-      <h1>Total Request&apos;s From Users</h1>
-      <Button variant="danger" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
+      <h1 className="table-heading">
+        <Button
+          className="go-back"
+          variant="danger"
+          onClick={() => navigate(-1)}
+        >
+          <i className="fa fa-angle-left"></i>
+          Go Back
+        </Button>
+        Total Request&apos;s From Users
+      </h1>
+
       <div className="request-msgs">
         <div className="request-sub-msg">
           <h3>Chat Requests</h3>

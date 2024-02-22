@@ -1,0 +1,21 @@
+.side-bar{
+    min-width: 240px;
+    background: #212529;
+}
+.side-bar ul li{
+    padding: 10px;
+    margin: 0;
+}
+
+.side-bar ul li:first-child{
+    border-top: 2px solid #393b3d;
+}
+.side-bar ul li:hover{
+    background-color: #7f7f813b;
+    cursor: pointer;
+}
+.side-bar ul li a{
+    color: #fff;
+    text-decoration: none;
+    padding: 0;
+}

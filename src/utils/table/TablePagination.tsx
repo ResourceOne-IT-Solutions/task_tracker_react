@@ -64,12 +64,16 @@ const TablePagination = memo(
           className="next-btn"
           disabled={currentPageIndex == 0}
           onClick={() => setCurrentPageIndex(0)}
-        >{`<<`}</button>
+        >
+          <i className="fa fa-angle-double-left"></i>
+        </button>
         <button
           className="prev-btn"
           disabled={currentPageIndex == 0}
           onClick={previousFunc}
-        >{`< `}</button>
+        >
+          <i className="fa fa-angle-left"></i>
+        </button>
         {renderPageIndexes(pagesLength).map((page: any, idx: number) => (
           <span
             className={`${currentPageIndex == page && "selected"}`}
@@ -83,12 +87,18 @@ const TablePagination = memo(
           disabled={currentPageIndex == lastPage}
           className="next-btn"
           onClick={nextFunc}
-        >{`>`}</button>
+        >
+          {" "}
+          <i className="fa fa-angle-right"></i>
+        </button>
         <button
           disabled={currentPageIndex == lastPage}
           className="next-btn"
           onClick={() => setCurrentPageIndex(lastPage)}
-        >{`>>`}</button>
+        >
+          {" "}
+          <i className="fa fa-angle-double-right"></i>
+        </button>
         {defaultPageSize && (
           <select
             onChange={handlePageSizeChange}

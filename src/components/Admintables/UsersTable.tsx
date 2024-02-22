@@ -96,7 +96,7 @@ function UsersTable() {
         <div
           style={{
             width: "100px",
-            height: "100px",
+            height: "30px",
             cursor: "pointer",
             position: "relative",
           }}
@@ -104,7 +104,10 @@ function UsersTable() {
           <span style={statusIndicatorStyle}>
             {statusIndicator(user.status)}
           </span>
-          <ProfileImage className="w-100" filename={user.profileImageUrl} />
+          <ProfileImage
+            className="w-100 h-100"
+            filename={user.profileImageUrl}
+          />
         </div>
       ),
     },

@@ -70,21 +70,23 @@ const UserFeedback = () => {
       tdFormat: (feedback) =>
         feedback.files && feedback.files.length > 0 ? (
           <>
-            <img
-              style={{
-                width: "100px",
-                height: "100px",
-                cursor: "pointer",
-                position: "relative",
-              }}
-              src={`data:${feedback.files[0].mimetype};base64,${feedback.files[0].buffer}`}
-              alt="Feedback Image"
-            />
-            <p>
-              {feedback.files.length > 1 && (
-                <b>... {feedback.files.length - 1}more</b>
-              )}
-            </p>
+            <div className="count">
+              <img
+                style={{
+                  width: "50px",
+                  height: "50px",
+                  cursor: "pointer",
+                  position: "relative",
+                }}
+                src={`data:${feedback.files[0].mimetype};base64,${feedback.files[0].buffer}`}
+                alt="Feedback Image"
+              />
+              <p>
+                {feedback.files.length > 1 && (
+                  <b>{feedback.files.length - 1}</b>
+                )}
+              </p>
+            </div>
           </>
         ) : (
           <span>No image</span>

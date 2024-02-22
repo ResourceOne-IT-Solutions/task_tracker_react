@@ -25,6 +25,7 @@ import Feedback from "../pages/Feedback/Feedback";
 import UserFeedback from "../pages/Feedback/UserFeedback";
 import AddUser2 from "../pages/dashboard/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
+import Sidebar from "../pages/sidebar";
 
 const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
   element,
@@ -47,122 +48,144 @@ const Routespage = () => {
     <div>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         {isLoggedin && <Navbar />}
-        <Routes>
-          <Route
-            path="/"
-            element={isLoggedin ? <Navigate to="/dashboard" /> : <Home />}
-          />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route
-            path="/login"
-            element={isLoggedin ? <Dashboard /> : <Login />}
-          />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          {/* <Route
+        <div className="ful-content">
+          {isLoggedin && <Sidebar />}
+          <div className="router-outlet">
+            <h1>DASHBOARD</h1>
+            <Routes>
+              <Route
+                path="/"
+                element={isLoggedin ? <Navigate to="/dashboard" /> : <Home />}
+              />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route
+                path="/login"
+                element={isLoggedin ? <Dashboard /> : <Login />}
+              />
+              <Route path="/forgotpassword" element={<ForgotPassword />} />
+              {/* <Route
             path="/admindashboard/adduser"
             element={
               isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
             }
           /> */}
-          <Route
-            path="/admindashboard/adduser"
-            element={isLoggedin && isAdmin ? <AddUser2 /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/chat"
-            element={isLoggedin ? <Chat /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/tickets"
-            element={
-              isLoggedin ? (
-                isAdmin ? (
-                  <Tickets />
-                ) : (
-                  <TicketsMain url={`/tickets/user/${currentUser._id}`} />
-                )
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/dashboard/usersTable"
-            element={
-              isLoggedin && isAdmin ? <UsersTable /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/dashboard/clientsTable"
-            element={
-              isLoggedin && isAdmin ? <ClientsTable /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/dashboard/ticketsTable"
-            element={
-              isLoggedin && isAdmin ? <TicketsTable /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/dashboard/userdashboardtickets"
-            element={
-              isLoggedin ? <UserDashboardTickets /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="approved/tickets"
-            element={isLoggedin ? <ApprovedTickets /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/tickets/:id"
-            element={isLoggedin ? <TicketDescription /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/dashboard/feedback"
-            element={isLoggedin ? <Feedback /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/dashboard/userfeedback"
-            element={isLoggedin ? <UserFeedback /> : <Navigate to="/" />}
-          />
-          <Route
-            path="/client/:id"
-            element={
-              isLoggedin && isAdmin ? <ClientDashboard /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/user/:id"
-            element={
-              isLoggedin && isAdmin ? <UserStatsPage /> : <Navigate to="/" />
-            }
-          />
-          <Route
-            path="/dashboard/adminRequestmessages"
-            element={
-              isLoggedin && isAdmin ? (
-                <AdminRequestMessages />
-              ) : (
-                <Navigate to="/" />
-              )
-            }
-          />
-          <Route
-            path="/userTickets/:id"
-            element={isLoggedin && <UserTickets />}
-          />
-          <Route
-            path="/dashboard/helpedtickets"
-            element={isLoggedin && <HelpedTickets />}
-          />
-          <Route
-            path="/dashboard/adminmessages"
-            element={
-              isLoggedin && !isAdmin ? <AdminMessages /> : <Navigate to="/" />
-            }
-          />
-        </Routes>
+              <Route
+                path="/admindashboard/adduser"
+                element={
+                  isLoggedin && isAdmin ? <AddUser2 /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/chat"
+                element={isLoggedin ? <Chat /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/tickets"
+                element={
+                  isLoggedin ? (
+                    isAdmin ? (
+                      <Tickets />
+                    ) : (
+                      <TicketsMain url={`/tickets/user/${currentUser._id}`} />
+                    )
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/dashboard/usersTable"
+                element={
+                  isLoggedin && isAdmin ? <UsersTable /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/dashboard/clientsTable"
+                element={
+                  isLoggedin && isAdmin ? <ClientsTable /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/dashboard/ticketsTable"
+                element={
+                  isLoggedin && isAdmin ? <TicketsTable /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/dashboard/userdashboardtickets"
+                element={
+                  isLoggedin ? <UserDashboardTickets /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="approved/tickets"
+                element={isLoggedin ? <ApprovedTickets /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/tickets/:id"
+                element={
+                  isLoggedin ? <TicketDescription /> : <Navigate to="/" />
+                }
+              />
+              <Route
+                path="/dashboard/feedback"
+                element={isLoggedin ? <Feedback /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/dashboard/userfeedback"
+                element={isLoggedin ? <UserFeedback /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/client/:id"
+                element={
+                  isLoggedin && isAdmin ? (
+                    <ClientDashboard />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/user/:id"
+                element={
+                  isLoggedin && isAdmin ? (
+                    <UserStatsPage />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/dashboard/adminRequestmessages"
+                element={
+                  isLoggedin && isAdmin ? (
+                    <AdminRequestMessages />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+              <Route
+                path="/userTickets/:id"
+                element={isLoggedin && <UserTickets />}
+              />
+              <Route
+                path="/dashboard/helpedtickets"
+                element={isLoggedin && <HelpedTickets />}
+              />
+              <Route
+                path="/dashboard/adminmessages"
+                element={
+                  isLoggedin && !isAdmin ? (
+                    <AdminMessages />
+                  ) : (
+                    <Navigate to="/" />
+                  )
+                }
+              />
+            </Routes>
+          </div>
+        </div>
       </BrowserRouter>
     </div>
   );

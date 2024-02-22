@@ -4,11 +4,13 @@
 
 .task-table tr td,
 .task-table tr th {
-  padding: 10px;
+  padding: 10px 5px;
+  position: relative;
 }
 .table-pagination {
   display: flex;
   justify-content: center;
+  padding: 10px 0;
 }
 .table-pagination span,
 .table-pagination .prev-btn,
@@ -21,8 +23,9 @@
 }
 .table-pagination .prev-btn,
 .table-pagination .next-btn {
-  background-color: aquamarine;
+  background-color: #212529;
   border: none;
+  color: #fff;
 }
 .table-pagination .selected {
   background-color: cadetblue;
@@ -40,5 +43,30 @@
   cursor: pointer;
 }
 th {
-  background-color: rgb(24, 169, 225) !important;
+  background-color: #055e94 !important;
+  color: #fff;
+}
+.count{
+  position: relative;
+  display: inline-block;
+}
+.count p{
+  position: absolute;
+  margin: 0;
+  right: -10px;
+  top:-10px;
+}
+
+
+.count p b{
+  background-color: #f00;
+  color: #fff;
+  padding: 5px;
+  border-radius: 30px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  font-size: 12px;
+  align-items: center;
+  justify-self: center
 }

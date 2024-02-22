@@ -46,19 +46,18 @@ th {
   background-color: #055e94 !important;
   color: #fff;
 }
-.count{
+.count {
   position: relative;
   display: inline-block;
 }
-.count p{
+.count p {
   position: absolute;
   margin: 0;
   right: -10px;
-  top:-10px;
+  top: -10px;
 }
 
-
-.count p b{
+.count p b {
   background-color: #f00;
   color: #fff;
   padding: 5px;
@@ -68,5 +67,5 @@ th {
   display: flex;
   font-size: 12px;
   align-items: center;
-  justify-self: center
+  justify-self: center;
 }

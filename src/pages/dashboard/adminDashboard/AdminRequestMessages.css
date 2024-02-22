@@ -9,7 +9,7 @@
   border-bottom: 1px solid black;
   background-color: #055e94;
   color: #fff;
-  padding:15px 5px;
+  padding: 15px 5px;
   font-size: 20px;
 }
 .request-msgs .request-sub-msg .request-content {
@@ -25,8 +25,8 @@
   margin: 2px;
   padding: 6px;
 }
-.request-content-wrapper div{
-  flex:1;
+.request-content-wrapper div {
+  flex: 1;
 }
 .message-request-content {
   text-align: left;
@@ -40,17 +40,17 @@
 .delivery-status {
   text-align: left;
 }
-.table-heading{
+.table-heading {
   position: relative;
   font-size: 38px;
 }
-.go-back{
+.go-back {
   position: absolute;
   left: 0;
-  top:10px;
+  top: 10px;
 }
 
-.go-back i{
- display: inline-block;
- margin: 0 5px;
+.go-back i {
+  display: inline-block;
+  margin: 0 5px;
 }

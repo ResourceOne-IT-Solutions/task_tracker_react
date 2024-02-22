@@ -98,12 +98,11 @@
   }
 }
 
-
-.ful-content{
+.ful-content {
   display: flex;
   width: 100%;
 }
-.router-outlet{
-  flex:1;
+.router-outlet {
+  flex: 1;
   padding: 10px;
 }

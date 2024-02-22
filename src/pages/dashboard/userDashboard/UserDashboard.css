@@ -62,7 +62,7 @@ tr {
   border-bottom: 1px solid rgb(37, 155, 151) !important;
 }
 tr:hover {
-  background-color:#7f7f813b;
+  background-color: #7f7f813b;
   cursor: pointer !important;
 }
 .user-nav-header {

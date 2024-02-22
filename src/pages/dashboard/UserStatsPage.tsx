@@ -10,7 +10,7 @@ function UserStatsPage() {
   const [user, setUser] = useState<UserModal>(state);
   const [isLoading, setIsloading] = useState(true);
   useEffect(() => {
-    if (!state.mobile) {
+    if (!user.mobile) {
       setIsloading(true);
       httpMethods
         .get<UserModal>("/users/" + state._id)

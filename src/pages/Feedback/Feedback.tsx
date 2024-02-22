@@ -109,6 +109,20 @@ const Feedback = () => {
             content: `${res.message}`,
             title: "Feedback Submit",
           });
+          setFormData({
+            name: "",
+            email: "",
+            content: "",
+            files: [] as File[],
+            type: "",
+          });
+          setErrors({
+            name: "",
+            email: "",
+            content: "",
+            files: "",
+            type: "",
+          });
         })
         .catch((err) => {
           alertModal({
@@ -171,8 +185,9 @@ const Feedback = () => {
         />
         <span className="error">{errors.files}</span>
       </div>
-
-      <Button type="submit">Submit</Button>
+      <Button className="m-2" type="submit">
+        Submit
+      </Button>
     </form>
   );
 };

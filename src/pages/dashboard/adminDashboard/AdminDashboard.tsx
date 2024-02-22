@@ -197,8 +197,8 @@ const AdminDashboard = () => {
   };
   return (
     <div>
+      <h1>DASHBOARD</h1>
       <div className="admin-pie-chart">
-        <h1>DASHBOARD</h1>
         <div className="admin-details">
           <div className="heading-pic">
             <ProfileImage

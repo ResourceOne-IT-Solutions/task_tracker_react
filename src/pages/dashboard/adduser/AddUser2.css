@@ -1,17 +1,18 @@
 .add-user-container {
-  width: 60%;
+  width: 100%;
   margin: auto;
   border: 2px solid grey;
   padding: 15px;
 }
 .add-user-container .main-heading {
-  background-color: bisque;
-  border-bottom: 1px dotted black;
-  border-top: 1px dotted black;
+  background-color: #212529;
   text-align: center;
+  padding-bottom: 12px;
+  padding-top: 7px;
+  color: #fff;
 }
 .add-user-container div input {
-  padding: 4px;
+  padding: 10px;
   border-radius: 10px;
 }
 

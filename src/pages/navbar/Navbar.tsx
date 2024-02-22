@@ -14,14 +14,6 @@ import { NavLink } from "react-router-dom";
 
 function Navbar() {
   const navigate = useNavigate();
-  const [clientsData, setClientsData] = useState<ClientModal[]>([]);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [modalName, setModalname] = useState<string>("");
-  const [modalProps, setModalProps] = useState({
-    title: "",
-    setShowModal,
-    show: showModal,
-  });
 
   const {
     currentUser,
@@ -37,16 +29,16 @@ function Navbar() {
     data: { status: "" },
   });
 
-  const handleClick = (str: string) => {
-    setModalname(str);
-    navigate("/dashboard");
-    setModalProps({
-      title: str == "Client" ? "Create Client" : "Create Ticket",
-      setShowModal: setShowModal,
-      show: !showModal,
-    });
-    setShowModal(true);
-  };
+  // const handleClick = (str: string) => {
+  //   setModalname(str);
+  //   navigate("/dashboard");
+  //   setModalProps({
+  //     title: str == "Client" ? "Create Client" : "Create Ticket",
+  //     setShowModal: setShowModal,
+  //     show: !showModal,
+  //   });
+  //   setShowModal(true);
+  // };
   const handleSelectStatus = (status: string | null) => {
     if (status) {
       socket.emit("changeStatus", { id: currentUser._id, status });
@@ -62,13 +54,6 @@ function Navbar() {
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
-  useEffect(() => {
-    if (modalName == "Ticket") {
-      getData<ClientModal>("clients").then((res: ClientModal[]) => {
-        setClientsData(res);
-      });
-    }
-  }, [modalName]);
 
   return (
     <div className="main-nav">
@@ -93,7 +78,7 @@ function Navbar() {
               className="collapse navbar-collapse"
               id="navbarSupportedContent"
             >
-              <div>
+              {/* <div>
                 <form className="d-flex">
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                     {isLoggedin && currentUser.isAdmin && (
@@ -169,7 +154,7 @@ function Navbar() {
                     </>
                   </ul>
                 </form>
-              </div>
+              </div> */}
               <form className="d-flex">
                 <div
                   className={
@@ -228,16 +213,6 @@ function Navbar() {
           </div>
         </nav>
       </div>
-      {showModal && modalName == "Client" && (
-        <ReusableModal vals={modalProps}>
-          <AddClient setShowModal={setShowModal} />
-        </ReusableModal>
-      )}
-      {showModal && modalName == "Ticket" && (
-        <ReusableModal vals={modalProps}>
-          <AddTicket clientsData={clientsData} setShowModal={setShowModal} />
-        </ReusableModal>
-      )}
     </div>
   );
 }

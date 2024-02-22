@@ -9,6 +9,7 @@ import Alert from "./utils/modal/alert";
 import Notifications from "./utils/modal/notification";
 
 let isInSleep = false;
+let status = "";
 function App() {
   const userContext = useUserContext();
   const {
@@ -24,6 +25,7 @@ function App() {
   } = userContext as UserContext;
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;
+  status = currentUser.status;
   function resetInactivityTimer() {
     if (isInSleep) {
       isInSleep = false;
@@ -38,7 +40,7 @@ function App() {
     );
   }
   function changeStatus() {
-    if (!currentUser.isAdmin && currentUser._id) {
+    if (!currentUser.isAdmin && currentUser._id && status !== "On Ticket") {
       isInSleep = true;
       socket.emit("changeStatus", { id: currentUser._id, status: SLEEP });
     }

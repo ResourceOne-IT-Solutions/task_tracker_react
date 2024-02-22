@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./AdminDashboard.css";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import {
@@ -11,16 +11,28 @@ import {
   statusIndicator,
 } from "../../../utils/utils";
 import PieChartComponent from "../../../components/pieChart/PieChart";
-import { UserContext, UserModal } from "../../../modals/UserModals";
+import { Status, UserContext, UserModal } from "../../../modals/UserModals";
 import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
-import { TICKET_STATUS_TYPES, USER_STATUSES } from "../../../utils/Constants";
+import {
+  AVAILABLE,
+  BREAK,
+  OFFLINE,
+  ON_TICKET,
+  SLEEP,
+  STATUS_INDICATOR_STYLES,
+  STATUS_TYPES,
+  TICKET_STATUS_TYPES,
+  USER_STATUSES,
+} from "../../../utils/Constants";
 import Timezones from "../../../components/features/timezone/Timezones";
 import { TicketStatsInterface } from "../../../modals/TicketModals";
+import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const userContext = useUserContext();
   const { currentUser, socket } = userContext as UserContext;
+  const [selectedRangeStatus, setSelectedRangeStatus] = useState<Status>("");
   const [totalTickets, setTotalTickets] = useState<number>(0);
   const [totalpendingTickets, setTotalPendingTickets] = useState<number>(0);
   const [usersData, setUsersData] = useState<UserModal[]>([]);
@@ -154,6 +166,7 @@ const AdminDashboard = () => {
     });
   useEffect(() => {
     const totalUsers = usersData.length;
+
     const availableUsers = usersData.filter(
       (user) => user.status == "Available",
     ).length;
@@ -195,6 +208,56 @@ const AdminDashboard = () => {
     });
     setShowModal(true);
   };
+  const handleRangeClick = (status: Status) => {
+    setModalname("USERS");
+    setSelectedRangeStatus(status);
+    setModalProps({
+      title: `${status} Users`,
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
+  const gotoDashboards = (user: UserModal) => {
+    navigate(`/user/${user._id}`, { state: user });
+  };
+  const rangeUserHeaders: TableHeaders<UserModal>[] = [
+    {
+      title: "Name",
+      key: "firstName",
+      tdFormat: (user) => (
+        <OverlayTrigger
+          placement="top"
+          overlay={<Tooltip>Click here to view User details</Tooltip>}
+        >
+          <div onClick={() => gotoDashboards(user)}>{getFullName(user)}</div>
+        </OverlayTrigger>
+      ),
+    },
+    { title: "Role", key: "designation" },
+    {
+      title: "Profile Image",
+      key: "",
+      tdFormat: (user) => (
+        <div
+          style={{
+            width: "100px",
+            height: "30px",
+            cursor: "pointer",
+            position: "relative",
+          }}
+        >
+          <span style={STATUS_INDICATOR_STYLES}>
+            {statusIndicator(user.status)}
+          </span>
+          <ProfileImage
+            className="w-100 h-100"
+            filename={user.profileImageUrl}
+          />
+        </div>
+      ),
+    },
+  ];
   return (
     <div>
       <h1>DASHBOARD</h1>
@@ -215,10 +278,6 @@ const AdminDashboard = () => {
             </h4>
           </div>
           <div className="all-details">
-            {/* <div className="pf">
-              <h6>Profile Image</h6>
-              <ProfileImage filename={currentUser.profileImageUrl} />
-            </div> */}
             <div>
               <h6>Admin Details</h6>
               <ul>
@@ -233,12 +292,6 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div className="pie-chart">
-          {/* <h3 className="text-primary">Today Tickets Data: </h3>
-          <PieChartComponent
-            data={pendingticketPieChartData}
-            totalTickets={totalpendingTickets}
-            name="pending tickets"
-          /> */}
           <div>
             <h4 style={{ textAlign: "center" }}>Timezones : </h4>
             <Timezones />
@@ -256,7 +309,11 @@ const AdminDashboard = () => {
             />
             <div className="show-range">
               <div>
-                <label htmlFor="available" className="fw-bold">
+                <label
+                  htmlFor="available"
+                  className="fw-bold"
+                  onClick={() => handleRangeClick(AVAILABLE)}
+                >
                   Available{"----"}
                   <span>
                     {`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}
@@ -273,7 +330,11 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="offline" className="fw-bold">
+                <label
+                  htmlFor="offline"
+                  className="fw-bold"
+                  onClick={() => handleRangeClick(OFFLINE)}
+                >
                   Offline{"----"}
                   <span>
                     {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
@@ -290,7 +351,11 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="break" className="fw-bold">
+                <label
+                  htmlFor="break"
+                  className="fw-bold"
+                  onClick={() => handleRangeClick(BREAK)}
+                >
                   Break{"----"}
                   <span>
                     {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
@@ -307,7 +372,11 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="break" className="fw-bold">
+                <label
+                  htmlFor="break"
+                  className="fw-bold"
+                  onClick={() => handleRangeClick(ON_TICKET)}
+                >
                   On Ticket{"----"}
                   <span>
                     {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
@@ -324,7 +393,11 @@ const AdminDashboard = () => {
                 />
               </div>
               <div>
-                <label htmlFor="sleep" className="fw-bold">
+                <label
+                  htmlFor="sleep"
+                  className="fw-bold"
+                  onClick={() => handleRangeClick(SLEEP)}
+                >
                   Sleep{"----"}
                   <span>
                     {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
@@ -366,16 +439,21 @@ const AdminDashboard = () => {
           Today Tickets
         </Button>
       </div>
-      {/* <div className="pending-tickets-chart">
-        <h3 className="text-primary">Total Tickets Data: </h3>
-        <PieChartComponent
-          data={ticketPieChartData}
-          totalTickets={totalTickets}
-        />
-      </div> */}
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
           <MessageAllUsersModal setShowModal={setShowModal} />
+        </ReusableModal>
+      )}
+      {showModal && modalName === "USERS" && (
+        <ReusableModal vals={modalProps}>
+          <TaskTable<UserModal>
+            pagination
+            headers={rangeUserHeaders}
+            tableData={usersData.filter(
+              (tkt) => tkt.status === selectedRangeStatus,
+            )}
+            loading={false}
+          />
         </ReusableModal>
       )}
     </div>

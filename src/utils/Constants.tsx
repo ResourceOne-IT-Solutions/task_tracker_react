@@ -1,3 +1,4 @@
+import React from "react";
 import { cookieComp } from "./utils";
 
 const BE_SERVER = "https://task-tracker-server-2njm.onrender.com";
@@ -51,3 +52,8 @@ export const NAME_PATTERN = /^[A-Za-z]+\s{0,1}[A-Za-z]*$/;
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const MOBILE_PATTERN = /^\+[0-9]{1,2}\s\d{10}$/;
 export const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
+export const STATUS_INDICATOR_STYLES: React.CSSProperties = {
+  position: "absolute",
+  top: "0",
+  right: "0",
+};

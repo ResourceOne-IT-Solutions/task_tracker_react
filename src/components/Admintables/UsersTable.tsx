@@ -15,6 +15,7 @@ import UpdateUser from "../../utils/modal/UpdateUser";
 import { useUserContext } from "../Authcontext/AuthContext";
 import { Severity } from "../../utils/modal/notification";
 import { ErrorMessageInterface } from "../../modals/interfaces";
+import { STATUS_INDICATOR_STYLES } from "../../utils/Constants";
 
 function UsersTable() {
   const navigate = useNavigate();
@@ -31,11 +32,7 @@ function UsersTable() {
   const gotoDashboards = (user: UserModal) => {
     navigate(`/user/${user._id}`, { state: user });
   };
-  const statusIndicatorStyle: React.CSSProperties = {
-    position: "absolute",
-    top: "0",
-    right: "0",
-  };
+
   const handleUserTickets = (user: { _id: string }) => {
     navigate(`/userTickets/${user._id}`);
   };
@@ -101,7 +98,7 @@ function UsersTable() {
             position: "relative",
           }}
         >
-          <span style={statusIndicatorStyle}>
+          <span style={STATUS_INDICATOR_STYLES}>
             {statusIndicator(user.status)}
           </span>
           <ProfileImage

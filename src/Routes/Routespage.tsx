@@ -51,7 +51,6 @@ const Routespage = () => {
         <div className="ful-content">
           {isLoggedin && <Sidebar />}
           <div className="router-outlet">
-            <h1>DASHBOARD</h1>
             <Routes>
               <Route
                 path="/"

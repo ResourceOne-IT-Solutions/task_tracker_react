@@ -1,22 +1,26 @@
 .admin-details {
-  width: 50%;
-  border: 1px solid rgb(185, 11, 185);
+  max-width: 250px;
+  background-color: ;
   margin: 4px;
   border-radius: 12px;
 }
 .heading-pic {
   display: flex;
   justify-content: start;
+  align-items: center;
+  
 }
 .heading-pic b {
   color: dimgray;
 }
 .heading-pic img {
-  width: 10%;
-  height: 50px;
+  width: 80px;
+  height: 80px;
+  margin: 8px;
 }
 .heading-pic h4 {
   padding-top: 7px;
+  text-align: center;
 }
 .all-details h6 {
   font-size: 30px;
@@ -103,10 +107,10 @@ th {
   margin: 4px;
 }
 .sub-ranges .main-container {
-  width: 85%;
+  /* width: 85%;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: center; */
   margin: 6px;
   border-radius: 10px;
 }
@@ -118,7 +122,8 @@ th {
   color: green;
 }
 .show-range {
-  width: 60%;
+  /* width: 60%; */
+  justify-content: center;
 }
 .show-range label {
   display: block;
@@ -126,7 +131,7 @@ th {
 }
 .show-range span {
   font-size: 20px;
-  color: orange;
+  color: #fff;
 }
 .client-curser {
   cursor: pointer;

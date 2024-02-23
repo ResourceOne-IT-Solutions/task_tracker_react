@@ -1,8 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import App from "./App";
 import AuthContext from "./components/Authcontext/AuthContext";
 
 const rootElement = document.getElementById("root");

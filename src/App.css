@@ -104,5 +104,5 @@
 }
 .router-outlet {
   flex: 1;
-  padding: 10px;
+  padding-left: 10px;
 }

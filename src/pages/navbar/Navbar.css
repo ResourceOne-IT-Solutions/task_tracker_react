@@ -29,10 +29,7 @@
   color: rgb(223, 224, 224);
   text-decoration: none;
 }
-.navbar .nav-item a.active {
-  color: #fff;
-  /* font-weight: 700; */
-}
+
 .navbar-brand b:hover,
 .navbar .nav-item a:hover {
   color: #999;

@@ -174,9 +174,11 @@ export const getImage = async (path: string) => {
 export const ProfileImage = ({
   filename,
   className,
+  imgPopup = true,
 }: {
   filename: string;
   className?: string;
+  imgPopup?: boolean;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [showImage, setShowImage] = useState<boolean>(false);
@@ -195,13 +197,14 @@ export const ProfileImage = ({
         });
       });
   }, []);
+  const handleImageClick = () => {
+    if (imgPopup) {
+      setShowImage(!showImage);
+    }
+  };
   return (
     <>
-      <img
-        src={imageUrl}
-        className={className}
-        onClick={() => setShowImage(!showImage)}
-      />
+      <img src={imageUrl} className={className} onClick={handleImageClick} />
       <Modal
         className="profileimg-zoom"
         show={showImage}

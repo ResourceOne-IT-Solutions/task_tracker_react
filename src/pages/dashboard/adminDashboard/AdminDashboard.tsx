@@ -349,7 +349,7 @@ const AdminDashboard = () => {
           </div>
           <div className="ranges"></div>
         </div>
-        <div className="admin-details">
+        {/* <div className="admin-details">
           <div className="heading-pic">
             <ProfileImage
               className="rounded-circle"
@@ -377,7 +377,7 @@ const AdminDashboard = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="d-flex flex-direction-row gap-5 m-3">
         <Button variant="danger" onClick={handleAdminBroadCastMessage}>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import ReusableModal from "../../utils/modal/ReusableModal";
@@ -6,39 +6,30 @@ import AddClient from "../../utils/modal/AddClient";
 import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
-import { Timer, getData, setCookie, statusIndicator } from "../../utils/utils";
+import {
+  ProfileImage,
+  Timer,
+  getData,
+  setCookie,
+  statusIndicator,
+} from "../../utils/utils";
 import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
 import { BREAK, STATUS_TYPES } from "../../utils/Constants";
 import { NavLink } from "react-router-dom";
+import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 function Navbar() {
   const navigate = useNavigate();
-
-  const {
-    currentUser,
-    setCurrentUser,
-    setIsLoggedIn,
-    socket,
-    isLoggedin,
-    notificationRooms,
-    requestMessageCount,
-  } = useUserContext() as UserContext;
+  const profilRef = useRef<HTMLDivElement>(null);
+  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
+    useUserContext() as UserContext;
   const [sendingStatuses, setSendingStatuses] = useState({
     id: "",
     data: { status: "" },
   });
-
-  // const handleClick = (str: string) => {
-  //   setModalname(str);
-  //   navigate("/dashboard");
-  //   setModalProps({
-  //     title: str == "Client" ? "Create Client" : "Create Ticket",
-  //     setShowModal: setShowModal,
-  //     show: !showModal,
-  //   });
-  //   setShowModal(true);
-  // };
+  const [openProfileModal, setOpenProfileModal] = useState(false);
+  useOutsideClick(profilRef, () => setOpenProfileModal(false));
   const handleSelectStatus = (status: string | null) => {
     if (status) {
       socket.emit("changeStatus", { id: currentUser._id, status });
@@ -51,6 +42,7 @@ function Navbar() {
     socket.emit("logout", currentUser._id);
     navigate("/");
   };
+  const handleProfileModal = () => setOpenProfileModal(!openProfileModal);
   useEffect(() => {
     setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
   }, []);
@@ -207,6 +199,34 @@ function Navbar() {
                   <Button variant="danger" onClick={handleLogoutClick}>
                     Logout
                   </Button>
+                </div>
+                <div
+                  className="position-relative profile-button mx-1"
+                  ref={profilRef}
+                >
+                  <Button onClick={handleProfileModal}>
+                    <span className="nav-profile-img">
+                      <ProfileImage
+                        filename={currentUser.profileImageUrl}
+                        className="rounded-circle"
+                        imgPopup={false}
+                      />
+                    </span>
+                    Profile
+                  </Button>
+                  {openProfileModal && (
+                    <div className="bg-success position-absolute profile-modal top-100 rounded-2">
+                      <h6>Admin Details</h6>
+                      <ul>
+                        <li>EmpId : {currentUser.empId}</li>
+                        <li>FirstName : {currentUser.firstName}</li>
+                        <li>LastName : {currentUser.lastName}</li>
+                        <li>Email : {currentUser.email}</li>
+                        <li>Mobile : {currentUser.mobile}</li>
+                        <li>Designation : {currentUser.designation}</li>
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </form>
             </div>

@@ -16,7 +16,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (!currentUser.firstName) {
       httpMethods
-        .get<UserModal>("/users/" + currentUser._id)
+        .get<UserModal>("/get-user")
         .then((response) => {
           setCurrentUser(response);
           setIsLoggedIn(true);

@@ -30,10 +30,8 @@ import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const userContext = useUserContext();
-  const { currentUser, socket } = userContext as UserContext;
+  const { currentUser, socket } = useUserContext() as UserContext;
   const [selectedRangeStatus, setSelectedRangeStatus] = useState<Status>("");
-  const [totalTickets, setTotalTickets] = useState<number>(0);
   const [totalpendingTickets, setTotalPendingTickets] = useState<number>(0);
   const [usersData, setUsersData] = useState<UserModal[]>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -43,14 +41,6 @@ const AdminDashboard = () => {
     setShowModal,
     show: showModal,
   });
-  const [ticketPieChartData, setTicketPieChartData] = useState([
-    { name: "NotAssigned Tickets", value: 0 },
-    { name: "Assigned Tickets", value: 0 },
-    { name: "In Progress Tickets", value: 0 },
-    { name: "Pending Tickets", value: 0 },
-    { name: "Closed Tickets", value: 0 },
-    { name: "Improper Requirment", value: 0 },
-  ]);
   const [pendingticketPieChartData, setPendingTicketPieChartData] = useState([
     { name: "NotAssigned Tickets", value: 0 },
     { name: "Assigned Tickets", value: 0 },
@@ -75,7 +65,7 @@ const AdminDashboard = () => {
     sleepUsers: 0,
   });
   socket.off("newUser").on("newUser", ({ userPayload }) => {
-    setUsersData(userPayload);
+    setUsersData(userPayload.filter((user: UserModal) => !user.isAdmin));
   });
   const displayTable = (name: string) => {
     if (name == "users") {
@@ -89,16 +79,6 @@ const AdminDashboard = () => {
   socket
     .off("dashboardStats")
     .on("dashboardStats", ({ ticketStats, pendingTickets }) => {
-      const ticketData = (status: string) => {
-        return (
-          ticketStats.find((v: TicketStatsInterface) => v.status === status)
-            ?.count || 0
-        );
-      };
-      const totalTickets = ticketStats.reduce(
-        (a: number, c: TicketStatsInterface) => a + c.count,
-        0,
-      );
       const pendingTicketsData = (status: string) => {
         return (
           pendingTickets.find((v: TicketStatsInterface) => v.status === status)
@@ -109,34 +89,7 @@ const AdminDashboard = () => {
         (a: number, c: TicketStatsInterface) => a + c.count,
         0,
       );
-      setTotalTickets(totalTickets);
       setTotalPendingTickets(totalPending);
-      setTicketPieChartData([
-        {
-          name: "NotAssigned Tickets",
-          value: ticketData(TICKET_STATUS_TYPES.NOT_ASSIGNED),
-        },
-        {
-          name: "Assigned Tickets",
-          value: ticketData(TICKET_STATUS_TYPES.ASSIGNED),
-        },
-        {
-          name: "In Progress Tickets",
-          value: ticketData(TICKET_STATUS_TYPES.IN_PROGRESS),
-        },
-        {
-          name: "Pending Tickets",
-          value: ticketData(TICKET_STATUS_TYPES.PENDING),
-        },
-        {
-          name: "Closed Tickets",
-          value: ticketData(TICKET_STATUS_TYPES.CLOSED),
-        },
-        {
-          name: "Improper Requirment",
-          value: ticketData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
-        },
-      ]);
       setPendingTicketPieChartData([
         {
           name: "NotAssigned Tickets",
@@ -165,34 +118,29 @@ const AdminDashboard = () => {
       ]);
     });
   useEffect(() => {
-    const totalUsers = usersData.length;
-
-    const availableUsers = usersData.filter(
-      (user) => user.status == "Available",
-    ).length;
-    const offlineUsers = usersData.filter(
-      (user) => user.status == "Offline",
-    ).length;
-    const breakUsers = usersData.filter(
-      (user) => user.status == "Break",
-    ).length;
-    const onTicket = usersData.filter(
-      (user) => user.status == "On Ticket",
-    ).length;
-    const sleep = usersData.filter((user) => user.status == "Sleep").length;
+    const userStats: { [key: string]: number } = {
+      Available: 0,
+      Break: 0,
+      Offline: 0,
+      "On Ticket": 0,
+      Sleep: 0,
+    };
+    usersData.forEach((user) => {
+      userStats[user.status] = userStats[user.status] + 1;
+    });
     setUsersStatuses({
-      totalUsers,
-      availableUsers,
-      breakUsers,
-      offlineUsers,
-      onTicketUsers: onTicket,
-      sleepUsers: sleep,
+      totalUsers: usersData.length,
+      availableUsers: userStats[AVAILABLE],
+      breakUsers: userStats[BREAK],
+      offlineUsers: userStats[OFFLINE],
+      onTicketUsers: userStats[ON_TICKET],
+      sleepUsers: userStats[SLEEP],
     });
     setUsersPieChartData([
-      { name: "Available", value: availableUsers },
-      { name: "Offline", value: offlineUsers },
-      { name: "Break", value: breakUsers },
-      { name: "On Ticket", value: onTicket },
+      { name: "Available", value: userStats[AVAILABLE] },
+      { name: "Offline", value: userStats[OFFLINE] },
+      { name: "Break", value: userStats[BREAK] },
+      { name: "On Ticket", value: userStats[ON_TICKET] },
     ]);
   }, [usersData]);
   useEffect(() => {
@@ -450,7 +398,7 @@ const AdminDashboard = () => {
             pagination
             headers={rangeUserHeaders}
             tableData={usersData.filter(
-              (tkt) => tkt.status === selectedRangeStatus,
+              (user) => user.status === selectedRangeStatus,
             )}
             loading={false}
           />

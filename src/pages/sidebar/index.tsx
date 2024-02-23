@@ -98,12 +98,12 @@ const Sidebar = () => {
           </li>
         </>
       </ul>
-      {showModal && modalName == "Client" && (
+      {showModal && modalName === "Client" && (
         <ReusableModal vals={modalProps}>
           <AddClient setShowModal={setShowModal} />
         </ReusableModal>
       )}
-      {showModal && modalName == "Ticket" && (
+      {showModal && modalName === "Ticket" && (
         <ReusableModal vals={modalProps}>
           <AddTicket clientsData={clientsData} setShowModal={setShowModal} />
         </ReusableModal>

@@ -167,7 +167,7 @@ function AdminRequestMessages() {
           <i className="fa fa-angle-left"></i>
           Go Back
         </Button>
-        Total Request&apos;s From Users
+        Total Requests From Users
       </h1>
 
       <div className="request-msgs">

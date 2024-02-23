@@ -85,7 +85,7 @@
   }
 }
 .nav-item a.active {
-  color: #999;
+  color: #999 !important;
   /* font-weight: 700; */
 }
 .w-80 {

@@ -45,7 +45,9 @@ const Sidebar = () => {
         {isLoggedin && currentUser.isAdmin && (
           <>
             <li className="nav-item adduser">
-              <NavLink to={"/admindashboard/adduser"}>Create User</NavLink>
+              <NavLink className="nav-link" to={"/admindashboard/adduser"}>
+                Create User
+              </NavLink>
             </li>
             <li className="nav-item">
               <a className="nav-link" onClick={() => handleClick("Client")}>
@@ -58,7 +60,10 @@ const Sidebar = () => {
               </a>
             </li>
             <li className="nav-item adduser">
-              <NavLink to="/dashboard/adminRequestmessages">
+              <NavLink
+                className="nav-link"
+                to="/dashboard/adminRequestmessages"
+              >
                 View Requests{" "}
                 {requestMessageCount.length ? (
                   <span className="user-newmsg-count">
@@ -73,7 +78,7 @@ const Sidebar = () => {
         )}
         <>
           <li className="nav-item adduser">
-            <NavLink to={"/chat"}>
+            <NavLink className="nav-link" to={"/chat"}>
               Chat{" "}
               {notificationRooms ? (
                 <span className="user-newmsg-count">{notificationRooms}</span>
@@ -83,19 +88,29 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li className="nav-item adduser">
-            <NavLink to={"/tickets"}>Tickets</NavLink>
+            <NavLink className="nav-link" to={"/tickets"}>
+              Tickets
+            </NavLink>
           </li>
           {isLoggedin && !currentUser.isAdmin && (
             <li className="nav-item adduser">
-              <NavLink to={"/dashboard/adminmessages"}>Admin Messages</NavLink>
+              <NavLink className="nav-link" to={"/dashboard/adminmessages"}>
+                Admin Messages
+              </NavLink>
             </li>
           )}
           <li className="nav-item adduser">
-            <NavLink to="/dashboard/feedback">Feedback</NavLink>
+            <NavLink className="nav-link" to="/dashboard/feedback">
+              Feedback
+            </NavLink>
           </li>
-          <li className="nav-item adduser">
-            <NavLink to="/dashboard/userfeedback">User Feedbacks</NavLink>
-          </li>
+          {currentUser.isAdmin && (
+            <li className="nav-item adduser">
+              <NavLink className="nav-link" to="/dashboard/userfeedback">
+                User Feedbacks
+              </NavLink>
+            </li>
+          )}
         </>
       </ul>
       {showModal && modalName === "Client" && (

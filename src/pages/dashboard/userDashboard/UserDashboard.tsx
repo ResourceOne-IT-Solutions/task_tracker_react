@@ -53,7 +53,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
   });
   useEffect(() => {
-    getData<TicketModal>("tickets/user/" + presentUser._id)
+    getData<TicketModal>("tickets/user/pending-tickets/" + presentUser._id)
       .then((result) => {
         setTableData(result);
         const ticketStats: { [key: string]: number } = {

@@ -164,11 +164,23 @@ export const getImage = async (path: string) => {
     }
     // Get the image blob and create a URL for it
     const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    return url;
+    return blob;
   } catch (error: any) {
     throw new Error(error.message);
   }
+};
+const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = (reader.result as string).split(",")[1];
+      resolve(base64String);
+    };
+    reader.onerror = () => {
+      reject(new Error("Failed to read the Blob object"));
+    };
+    reader.readAsDataURL(blob);
+  });
 };
 
 export const ProfileImage = ({
@@ -185,17 +197,32 @@ export const ProfileImage = ({
   const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
-    getImage(`/profile-images/${filename}`)
-      .then((url) => {
-        setImageUrl(url);
-      })
-      .catch((err) => {
-        alertModal({
-          severity: Severity.ERROR,
-          content: err.message,
-          title: "Profile Image",
+    const img = sessionStorage.getItem(`img-${filename}`);
+    if (img) {
+      setImageUrl(img);
+    } else {
+      getImage(`/profile-images/${filename}`)
+        .then((blob) => {
+          blobToBase64(blob)
+            .then((res) => {
+              const url = `data:image/jpeg;base64,${res}`;
+              sessionStorage.setItem(`img-${filename}`, url as string);
+              setImageUrl(url as string);
+            })
+            .catch((err) => {
+              console.error("blob_err:::", err);
+            });
+          // const url = URL.createObjectURL(blob);
+          // setImageUrl(url);
+        })
+        .catch((err) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "Profile Image",
+          });
         });
-      });
+    }
   }, []);
   const handleImageClick = () => {
     if (imgPopup) {

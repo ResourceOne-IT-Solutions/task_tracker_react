@@ -145,7 +145,7 @@ function TaskTable<R>(props: TableProps<R>) {
           )}
         </tbody>
       </table>
-      {pagination && (
+      {!loading && pagination && (
         <TablePagination
           paginationClassName={paginationClassName}
           paginationAlign={paginationAlign}

@@ -91,7 +91,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           title: "User Tickets",
         });
       });
-  }, [presentUser._id, alertModal]);
+  }, [presentUser._id]);
 
   useEffect(() => {
     setPresentUser(user);

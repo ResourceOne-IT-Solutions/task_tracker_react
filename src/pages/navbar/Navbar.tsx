@@ -215,15 +215,27 @@ function Navbar() {
                     Profile
                   </Button>
                   {openProfileModal && (
-                    <div className="bg-success position-absolute profile-modal top-100 rounded-2">
+                    <div className="profile position-absolute profile-modal top-100 rounded-2">
                       <h6>Admin Details</h6>
                       <ul>
-                        <li>EmpId : {currentUser.empId}</li>
-                        <li>FirstName : {currentUser.firstName}</li>
-                        <li>LastName : {currentUser.lastName}</li>
-                        <li>Email : {currentUser.email}</li>
-                        <li>Mobile : {currentUser.mobile}</li>
-                        <li>Designation : {currentUser.designation}</li>
+                        <li>
+                          <span>EmpId :</span> {currentUser.empId}
+                        </li>
+                        <li>
+                          <span>FirstName :</span> {currentUser.firstName}
+                        </li>
+                        <li>
+                          <span>LastName :</span> {currentUser.lastName}
+                        </li>
+                        <li>
+                          <span>Email :</span> {currentUser.email}
+                        </li>
+                        <li>
+                          <span>Mobile:</span> {currentUser.mobile}
+                        </li>
+                        <li>
+                          <span>Designation :</span> {currentUser.designation}
+                        </li>
                       </ul>
                     </div>
                   )}

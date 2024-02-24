@@ -82,6 +82,7 @@ th {
   border: 1px solid grey;
   border-radius: 10px;
   margin: 4px;
+  overflow: hidden;
 }
 .navbar-collapse {
   justify-content: end;
@@ -124,10 +125,19 @@ th {
 .show-range {
   /* width: 60%; */
   justify-content: center;
+  display: flex;
 }
 .show-range label {
   display: block;
   font-size: 20px;
+}
+
+.show-range .user-list{
+  flex: 1;
+}
+
+.show-range .user-list button{
+  overflow: hidden;
 }
 .show-range span {
   font-size: 20px;

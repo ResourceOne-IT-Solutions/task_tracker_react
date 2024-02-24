@@ -215,141 +215,135 @@ const AdminDashboard = () => {
   ];
   return (
     <div>
-      <div className="d-flex">
-        <div className="dashboard-content">
-          <h1>DASHBOARD</h1>
-          <div className="sub-ranges">
-            <h3 className="text-primary">Users Data: </h3>
-            <div className="main-container text-center">
-              <div className="show-range row">
-                <div className="col-12 col-md-4 mb-4">
-                  <Button className="btn user-details icon-avaliable col-8">
-                    <div className="d-flex p-2 px-4">
-                      <img className="user-icons" src={avalable} />
+      {/* <div className="d-flex"> */}
+      <div className="dashboard-content">
+        <h1>DASHBOARD</h1>
+        <div className="sub-ranges">
+          <h3 className="text-primary">Users Data: </h3>
+          <div className="main-container text-center">
+            <div className="show-range">
+              <div className="user-list mx-2">
+                <Button className="btn user-details icon-avaliable col-8">
+                  <div className="d-flex p-2 px-4 col-12">
+                    <img className="user-icons" src={avalable} />
 
-                      <h4>
-                        <span>{`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}</span>
-                        Available
-                      </h4>
-                    </div>
-                    <p
-                      className="m-0"
-                      onClick={() => handleRangeClick(AVAILABLE)}
-                    >
-                      View Details
-                      <i className="fa fa-arrow-circle-o-right"></i>
-                    </p>
-                  </Button>
-                </div>
-                <div className="col-12 col-md-4 mb-4">
-                  <Button className="btn user-details icon-offline col-8">
-                    <div className="d-flex p-2 px-4">
-                      <img className="user-icons" src={Offline} />
-
-                      <h4>
-                        <span>
-                          {" "}
-                          {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
-                        </span>
-                        Offline
-                      </h4>
-                    </div>
-                    <p
-                      className="m-0"
-                      onClick={() => handleRangeClick(OFFLINE)}
-                    >
-                      View Details
-                      <i className="fa fa-arrow-circle-o-right"></i>
-                    </p>
-                  </Button>
-                </div>
-                <div className="col-12 col-md-4 mb-4">
-                  <Button className="btn user-details icon-break col-8 ">
-                    <div className="d-flex p-2 px-4">
-                      <img className="user-icons" src={Brack} />
-                      <h4>
-                        <span>
-                          {" "}
-                          {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
-                        </span>
-                        Break
-                      </h4>
-                    </div>
-                    <p className="m-0" onClick={() => handleRangeClick(BREAK)}>
-                      View Details
-                      <i className="fa fa-arrow-circle-o-right"></i>
-                    </p>
-                  </Button>
-                </div>
-                <div className="col-12 col-md-4 mb-4">
-                  <Button className="btn user-details icon-onTrack col-8">
-                    <div className="d-flex p-2 px-4">
-                      <img className="user-icons" src={OnTrack} />
-
-                      <h4>
-                        <span>
-                          {" "}
-                          {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
-                        </span>
-                        On Ticket
-                      </h4>
-                    </div>
-                    <p
-                      className="m-0"
-                      onClick={() => handleRangeClick(ON_TICKET)}
-                    >
-                      View Details
-                      <i className="fa fa-arrow-circle-o-right"></i>
-                    </p>
-                  </Button>
-                </div>
-                <div className="col-12 col-md-4 mb-4">
-                  <Button className="btn user-details icon-sleep col-8">
-                    <div className="d-flex p-2 px-4">
-                      <img className="user-icons" src={sleep} />
-
-                      <h4>
-                        <span>
-                          {" "}
-                          {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
-                        </span>
-                        Sleep
-                      </h4>
-                    </div>
-                    <p className="m-0" onClick={() => handleRangeClick(SLEEP)}>
-                      View Details
-                      <i className="fa fa-arrow-circle-o-right"></i>
-                    </p>
-                  </Button>
-                </div>
+                    <h4>
+                      <span>{`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}</span>
+                      Available
+                    </h4>
+                  </div>
+                  <p
+                    className="m-0"
+                    onClick={() => handleRangeClick(AVAILABLE)}
+                  >
+                    View Details
+                    <i className="fa fa-arrow-circle-o-right"></i>
+                  </p>
+                </Button>
               </div>
+              <div className="user-list mx-2">
+                <Button className="btn user-details icon-offline col-8">
+                  <div className="d-flex p-2 px-4 col-12">
+                    <img className="user-icons" src={Offline} />
 
-              {/* <PieChartComponent
+                    <h4>
+                      <span>
+                        {" "}
+                        {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
+                      </span>
+                      Offline
+                    </h4>
+                  </div>
+                  <p className="m-0" onClick={() => handleRangeClick(OFFLINE)}>
+                    View Details
+                    <i className="fa fa-arrow-circle-o-right"></i>
+                  </p>
+                </Button>
+              </div>
+              <div className="user-list mx-2">
+                <Button className="btn user-details icon-break col-8 ">
+                  <div className="d-flex p-2 px-4 col-12">
+                    <img className="user-icons" src={Brack} />
+                    <h4>
+                      <span>
+                        {" "}
+                        {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
+                      </span>
+                      Break
+                    </h4>
+                  </div>
+                  <p className="m-0" onClick={() => handleRangeClick(BREAK)}>
+                    View Details
+                    <i className="fa fa-arrow-circle-o-right"></i>
+                  </p>
+                </Button>
+              </div>
+              <div className="user-list mx-2">
+                <Button className="btn user-details icon-onTrack col-8">
+                  <div className="d-flex p-2 px-4">
+                    <img className="user-icons" src={OnTrack} />
+
+                    <h4>
+                      <span>
+                        {" "}
+                        {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
+                      </span>
+                      On Ticket
+                    </h4>
+                  </div>
+                  <p
+                    className="m-0"
+                    onClick={() => handleRangeClick(ON_TICKET)}
+                  >
+                    View Details
+                    <i className="fa fa-arrow-circle-o-right"></i>
+                  </p>
+                </Button>
+              </div>
+              <div className="user-list mx-2">
+                <Button className="btn user-details icon-sleep col-8">
+                  <div className="d-flex p-2 px-4 col-12">
+                    <img className="user-icons" src={sleep} />
+
+                    <h4>
+                      <span>
+                        {" "}
+                        {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
+                      </span>
+                      Sleep
+                    </h4>
+                  </div>
+                  <p className="m-0" onClick={() => handleRangeClick(SLEEP)}>
+                    View Details
+                    <i className="fa fa-arrow-circle-o-right"></i>
+                  </p>
+                </Button>
+              </div>
+            </div>
+
+            {/* <PieChartComponent
                 data={usersPieChartData}
                 totalTickets={usersData.length}
                 name={USER_STATUSES}
               /> */}
-            </div>
           </div>
-          <div className="admin-pie-chart">
-            <div className="pie-chart">
-              <div>
-                <h4 style={{ textAlign: "center" }}>Timezones : </h4>
-                <Timezones />
-              </div>
-            </div>
-            <div className="admin-btns pie-chart">
-              <h3 className="text-primary">Today Tickets Data: </h3>
-              <PieChartComponent
-                data={pendingticketPieChartData}
-                totalTickets={totalpendingTickets}
-                name="pending tickets"
-              />
-            </div>
-          </div>
-          <div className="ranges"></div>
         </div>
-        {/* <div className="admin-details">
+        <div className="admin-pie-chart">
+          <div className="pie-chart">
+            <Timezones />
+          </div>
+          <div className="admin-btns pie-chart">
+            <h3 className="sub-heading">Today Tickets Data: </h3>
+            <PieChartComponent
+              data={pendingticketPieChartData}
+              totalTickets={totalpendingTickets}
+              name="pending tickets"
+            />
+          </div>
+        </div>
+        <div className="ranges"></div>
+      </div>
+      {/* <div className="admin-details">
           <div className="heading-pic">
             <ProfileImage
               className="rounded-circle"
@@ -378,7 +372,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div> */}
-      </div>
+      {/* </div> */}
       <div className="d-flex flex-direction-row gap-5 m-3">
         <Button variant="danger" onClick={handleAdminBroadCastMessage}>
           Send Message to All

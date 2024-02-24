@@ -102,6 +102,9 @@ function AddUser2() {
             <h2 className="main-heading">Add User</h2>
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
+                <label>
+                  <b>EmpId</b>
+                </label>
                 <Field
                   name="empId"
                   type="number"
@@ -115,6 +118,9 @@ function AddUser2() {
                 />
               </div>
               <div className="w-50 ms-2">
+                <label>
+                  <b>Mobile</b>
+                </label>
                 <Field
                   name="mobile"
                   type="tel"
@@ -130,6 +136,9 @@ function AddUser2() {
             </div>
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
+                <label>
+                  <b>First Name</b>
+                </label>
                 <Field
                   name="firstName"
                   type="text"
@@ -143,6 +152,9 @@ function AddUser2() {
                 />
               </div>
               <div className="w-50 ms-2">
+                <label>
+                  <b>Last Name</b>
+                </label>
                 <Field
                   name="lastName"
                   type="text"
@@ -158,6 +170,9 @@ function AddUser2() {
             </div>
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
+                <label>
+                  <b>Email ID</b>
+                </label>
                 <Field
                   name="email"
                   type="email"
@@ -171,6 +186,9 @@ function AddUser2() {
                 />
               </div>
               <div className="w-50 ms-2">
+                <label>
+                  <b>Password</b>
+                </label>
                 <Field
                   name="password"
                   type="password"
@@ -221,8 +239,8 @@ function AddUser2() {
               </div>
             </div>
             <div className="mb-3 image-genders d-flex w-100">
-              <div className="w-50 genders d-flex">
-                <div className="w-50 ">
+              <div className="w-50 genders">
+                <div className="w-50">
                   <label htmlFor="isAdmin">
                     <b>Admin: </b>
                   </label>
@@ -247,6 +265,9 @@ function AddUser2() {
                   />
                 </div>
                 <div className="w-50">
+                  <label>
+                    <b>Gender</b>
+                  </label>
                   <Field name="gender" as="select" className="form-control">
                     <option value="">Select a Gender</option>
                     <option value="Male">MALE</option>
@@ -261,6 +282,9 @@ function AddUser2() {
                 </div>
               </div>
               <div className="w-50 ms-2">
+                <label>
+                  <b>Upload</b>
+                </label>
                 <Field
                   name="p-image"
                   type="file"
@@ -278,6 +302,9 @@ function AddUser2() {
             </div>
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
+                <label>
+                  <b>Gender</b>
+                </label>
                 <Field
                   as={"textarea"}
                   placeholder="Enter Address"
@@ -291,6 +318,9 @@ function AddUser2() {
                 />
               </div>
               <div className="w-50 ms-2">
+                <label>
+                  <b>Designation</b>
+                </label>
                 <Field
                   type="text"
                   placeholder="Enter Designation"

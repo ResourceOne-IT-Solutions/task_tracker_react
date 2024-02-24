@@ -31,7 +31,10 @@ const Timezones = () => {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div>
+    <>
+      <h4 className="sub-heading" style={{ textAlign: "center" }}>
+        Timezones :{" "}
+      </h4>
       <div className="timezone-btns text-center">
         <div className="bg-info bg-opacity-25 rounded">
           <b>PST :</b> {timeByZones.PST}
@@ -48,7 +51,7 @@ const Timezones = () => {
           <b>IST :</b> {timeByZones.IST}
         </div>
       </div> */}
-    </div>
+    </>
   );
 };
 export default Timezones;

@@ -27,7 +27,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
   name,
 }) => {
   return (
-    <div className="text-center">
+    <div className="pie-chart-wrapper text-center">
       {totalTickets ? (
         <PieChart
           width={name == USER_STATUSES ? 200 : 300}

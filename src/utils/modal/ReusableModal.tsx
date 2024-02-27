@@ -13,8 +13,8 @@ function ReusableModal({ vals, children }: ClientProps) {
   const handleClose = () => vals.setShowModal(false);
   return (
     <>
-      <Modal show={vals.show} onHide={handleClose}>
-        <Modal.Header closeButton>
+      <Modal show={vals.show} onHide={handleClose} className="">
+        <Modal.Header closeButton className="popup-header">
           <Modal.Title>{vals.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>{children}</Modal.Body>

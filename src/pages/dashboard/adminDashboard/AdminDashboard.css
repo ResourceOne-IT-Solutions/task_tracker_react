@@ -1,6 +1,6 @@
 .admin-details {
   max-width: 250px;
-  background-color: ;
+  background-color:;
   margin: 4px;
   border-radius: 12px;
 }
@@ -8,7 +8,6 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  
 }
 .heading-pic b {
   color: dimgray;
@@ -132,11 +131,11 @@ th {
   font-size: 20px;
 }
 
-.show-range .user-list{
+.show-range .user-list {
   flex: 1;
 }
 
-.show-range .user-list button{
+.show-range .user-list button {
   overflow: hidden;
 }
 .show-range span {

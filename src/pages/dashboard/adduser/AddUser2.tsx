@@ -105,33 +105,37 @@ function AddUser2() {
                 <label>
                   <b>EmpId</b>
                 </label>
-                <Field
-                  name="empId"
-                  type="number"
-                  placeholder="Enter EmpId"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="empId"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="empId"
+                    type="number"
+                    placeholder="Enter EmpId"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="empId"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
               <div className="w-50 ms-2">
                 <label>
                   <b>Mobile</b>
                 </label>
-                <Field
-                  name="mobile"
-                  type="tel"
-                  placeholder="Enter Mobile"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="mobile"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="mobile"
+                    type="tel"
+                    placeholder="Enter Mobile"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="mobile"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 d-flex w-100">
@@ -139,33 +143,37 @@ function AddUser2() {
                 <label>
                   <b>First Name</b>
                 </label>
-                <Field
-                  name="firstName"
-                  type="text"
-                  placeholder="Enter FirstName"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="firstName"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="firstName"
+                    type="text"
+                    placeholder="Enter FirstName"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="firstName"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
               <div className="w-50 ms-2">
                 <label>
                   <b>Last Name</b>
                 </label>
-                <Field
-                  name="lastName"
-                  type="text"
-                  placeholder="Enter LastName"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="lastName"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="lastName"
+                    type="text"
+                    placeholder="Enter LastName"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="lastName"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 d-flex w-100">
@@ -173,33 +181,37 @@ function AddUser2() {
                 <label>
                   <b>Email ID</b>
                 </label>
-                <Field
-                  name="email"
-                  type="email"
-                  placeholder="Enter Email"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="email"
+                    type="email"
+                    placeholder="Enter Email"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
               <div className="w-50 ms-2">
                 <label>
                   <b>Password</b>
                 </label>
-                <Field
-                  name="password"
-                  type="password"
-                  placeholder="Enter Password"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="password"
+                    type="password"
+                    placeholder="Enter Password"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="password"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 d-flex w-100">
@@ -207,97 +219,111 @@ function AddUser2() {
                 <label htmlFor="dob">
                   <b>DOB</b>
                 </label>
-                <Field
-                  name="dob"
-                  type="date"
-                  className="form-control"
-                  min={"1900-01-01"}
-                  max={getCurrentDate()}
-                />
-                <ErrorMessage
-                  name="dob"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="dob"
+                    type="date"
+                    className="form-control"
+                    min={"1900-01-01"}
+                    max={getCurrentDate()}
+                  />
+                  <ErrorMessage
+                    name="dob"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
               <div className="dates w-50 ms-2">
                 <label htmlFor="dob">
                   <b>JoinedDate</b>
                 </label>
-                <Field
-                  name="joinedDate"
-                  type="date"
-                  className="form-control"
-                  min={"1900-01-01"}
-                  max={getCurrentDate()}
-                />
-                <ErrorMessage
-                  name="joinedDate"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="joinedDate"
+                    type="date"
+                    className="form-control"
+                    min={"1900-01-01"}
+                    max={getCurrentDate()}
+                  />
+                  <ErrorMessage
+                    name="joinedDate"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 image-genders d-flex w-100">
-              <div className="w-50 genders">
-                <div className="w-50">
+              <div className="w-50 genders row m-0">
+                <div className="col-3 px-0">
                   <label htmlFor="isAdmin">
                     <b>Admin: </b>
                   </label>
-                  <Field
-                    type="radio"
-                    name="isAdmin"
-                    value="true"
-                    className="ms-2"
-                  />{" "}
-                  Yes
-                  <Field
-                    type="radio"
-                    name="isAdmin"
-                    value="false"
-                    className="ms-2"
-                  />{" "}
-                  No
-                  <ErrorMessage
-                    name="isAdmin"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <div className="input-filed">
+                    <div className="form-control">
+                      <Field
+                        type="radio"
+                        name="isAdmin"
+                        value="true"
+                        className="ms-2"
+                      />{" "}
+                      Yes
+                      <Field
+                        type="radio"
+                        name="isAdmin"
+                        value="false"
+                        className="ms-2"
+                      />{" "}
+                      No
+                      <ErrorMessage
+                        name="isAdmin"
+                        component="div"
+                        className="text-danger error"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="w-50">
+                <div className="col-9">
                   <label>
                     <b>Gender</b>
                   </label>
-                  <Field name="gender" as="select" className="form-control">
-                    <option value="">Select a Gender</option>
-                    <option value="Male">MALE</option>
-                    <option value="Female">FEMALE</option>
-                    <option value="Prefer not to say">PREFER NOT TO SAY</option>
-                  </Field>
-                  <ErrorMessage
-                    name="gender"
-                    component="div"
-                    className="text-danger"
-                  />
+                  <div className="input-filed">
+                    <Field name="gender" as="select" className="form-control">
+                      <option value="">Select a Gender</option>
+                      <option value="Male">MALE</option>
+                      <option value="Female">FEMALE</option>
+                      <option value="Prefer not to say">
+                        PREFER NOT TO SAY
+                      </option>
+                    </Field>
+                    <ErrorMessage
+                      name="gender"
+                      component="div"
+                      className="text-danger error"
+                    />
+                  </div>
                 </div>
               </div>
               <div className="w-50 ms-2">
                 <label>
                   <b>Upload</b>
                 </label>
-                <Field
-                  name="p-image"
-                  type="file"
-                  className="form-control"
-                  onChange={(event: any) => {
-                    setFieldValue("profileImageUrl", event.target.files[0]);
-                  }}
-                />
-                <ErrorMessage
-                  name="profileImageUrl"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    name="p-image"
+                    type="file"
+                    className="form-control"
+                    onChange={(event: any) => {
+                      setFieldValue("profileImageUrl", event.target.files[0]);
+                    }}
+                  />
+                  <ErrorMessage
+                    name="profileImageUrl"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-3 d-flex w-100">
@@ -305,33 +331,37 @@ function AddUser2() {
                 <label>
                   <b>Gender</b>
                 </label>
-                <Field
-                  as={"textarea"}
-                  placeholder="Enter Address"
-                  name="address"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="address"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    as={"textarea"}
+                    placeholder="Enter Address"
+                    name="address"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="address"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
               <div className="w-50 ms-2">
                 <label>
                   <b>Designation</b>
                 </label>
-                <Field
-                  type="text"
-                  placeholder="Enter Designation"
-                  name="designation"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="designation"
-                  component="div"
-                  className="text-danger"
-                />
+                <div className="input-filed">
+                  <Field
+                    type="text"
+                    placeholder="Enter Designation"
+                    name="designation"
+                    className="form-control"
+                  />
+                  <ErrorMessage
+                    name="designation"
+                    component="div"
+                    className="text-danger error"
+                  />
+                </div>
               </div>
             </div>
             <div className="submit-btn">

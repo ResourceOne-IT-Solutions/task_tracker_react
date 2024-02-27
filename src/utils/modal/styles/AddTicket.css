@@ -9,3 +9,11 @@
 .err-msg {
   text-align: center;
 }
+
+.popup-header{
+  background: #343651;
+    color: #fff;
+}
+.popup-header .btn-close{
+  color: #FFF;
+}

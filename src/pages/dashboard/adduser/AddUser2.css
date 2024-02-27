@@ -25,3 +25,10 @@
   margin: auto;
   width: 10%;
 }
+.input-filed{
+  position: relative;
+}
+.input-filed .error{
+  position: absolute;
+  bottom: -20px;
+}

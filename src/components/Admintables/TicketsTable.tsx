@@ -11,6 +11,7 @@ import MailSender from "../../utils/modal/MailSender";
 import httpMethods from "../../api/Service";
 import { useUserContext } from "../Authcontext/AuthContext";
 import { Severity } from "../../utils/modal/notification";
+import CloseTicketModal from "../../utils/modal/CloseTicketModal";
 
 function TicketsTable() {
   const navigate = useNavigate();
@@ -48,31 +49,44 @@ function TicketsTable() {
     setShowModal(true);
   };
   const handleClose = (ticket: TicketModal) => {
-    const confirm = window.confirm("Are you sure You want To Close the Ticket");
-    if (confirm) {
-      httpMethods
-        .put<any, any>("/tickets/update", {
-          id: ticket._id,
-          data: {
-            isClosed: true,
-            closedBy: { name: getFullName(currentUser), id: currentUser._id },
-          },
-        })
-        .then((res) => {
-          setTicketsData((prevTableData) =>
-            prevTableData.map((ticket) =>
-              ticket._id === res._id ? res : ticket,
-            ),
-          );
-        })
-        .catch((err: any) => {
-          alertModal({
-            severity: Severity.ERROR,
-            content: err.message,
-            title: "Ticket Update",
-          });
-        });
-    }
+    // const confirm = window.confirm("Are you sure You want To Close the Ticket");
+    setModalname("Close Ticket");
+    setUpdateReference(ticket);
+    setModalProps({
+      title: "Close Ticket",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+    // if (confirm) {
+    //   httpMethods
+    //     .put<any, any>("/tickets/update", {
+    //       id: ticket._id,
+    //       data: {
+    //         isClosed: true,
+    //         closedBy: { name: getFullName(currentUser), id: currentUser._id },
+    //       },
+    //     })
+    //     .then((res) => {
+    //       setTicketsData((prevTableData) =>
+    //         prevTableData.map((ticket) =>
+    //           ticket._id === res._id ? res : ticket,
+    //         ),
+    //       );
+    //     })
+    //     .catch((err: any) => {
+    //       alertModal({
+    //         severity: Severity.ERROR,
+    //         content: err.message,
+    //         title: "Ticket Update",
+    //       });
+    //     });
+    // }
+  };
+  const updateTicketsTable = (res: any) => {
+    setTicketsData((prevTableData) =>
+      prevTableData.map((ticket) => (ticket._id === res._id ? res : ticket)),
+    );
   };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
     { title: "Client Name", key: "client.name" },
@@ -179,6 +193,15 @@ function TicketsTable() {
           <MailSender
             updateReference={updateReference}
             setShowModal={setShowModal}
+          />
+        </ReusableModal>
+      )}
+      {showModal && modalName == "Close Ticket" && (
+        <ReusableModal vals={modalProps}>
+          <CloseTicketModal
+            updateReference={updateReference}
+            setShowModal={setShowModal}
+            updateTicketsTable={updateTicketsTable}
           />
         </ReusableModal>
       )}

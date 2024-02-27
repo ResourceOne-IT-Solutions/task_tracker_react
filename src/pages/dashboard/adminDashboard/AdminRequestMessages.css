@@ -55,7 +55,7 @@
   margin: 0 5px;
 }
 
-.user-details{
+.user-details {
   border-radius: 5px;
   padding: 0px;
   height: 100%;
@@ -63,26 +63,25 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
 }
-.user-details img{
+.user-details img {
   width: 70px;
   height: fit-content;
 }
-.user-details h4 span{
-  display: block ;
+.user-details h4 span {
+  display: block;
 }
 
-.icon-avaliable{
+.icon-avaliable {
   background-color: #00f02c;
   border: 1px solid#00f02c;
 }
-.user-details h4{
+.user-details h4 {
   text-align: center;
-  flex:1;
+  flex: 1;
 }
-.user-details p{
-  background-color: #F5F5F5;
+.user-details p {
+  background-color: #f5f5f5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -91,38 +90,37 @@
   width: 100%;
 }
 .icon-avaliable p {
-  color: #337AB7;;
+  color: #337ab7;
 }
 
-.icon-offline{
-  background-color: #D9534F;
-  border: 1px solid #D9534F;
+.icon-offline {
+  background-color: #d9534f;
+  border: 1px solid #d9534f;
 }
 
-
-.icon-offline p{
-  color: #D9534F;
+.icon-offline p {
+  color: #d9534f;
 }
 .icon-break {
   background-color: #6c757d;
   border: 1px solid #6c757d;
 }
-.icon-break p{
+.icon-break p {
   color: #6c757d;
 }
 
-.icon-onTrack{
-  background-color:#198754;
+.icon-onTrack {
+  background-color: #198754;
   border: 1px solid #198754;
 }
-.icon-onTrack p{
- color:#198754;
+.icon-onTrack p {
+  color: #198754;
 }
 
-.icon-sleep{
-  background-color:#0dcaf0;
+.icon-sleep {
+  background-color: #0dcaf0;
   border: 1px solid #0dcaf0;
 }
-.icon-sleep p{
- color:#0dcaf0;
+.icon-sleep p {
+  color: #0dcaf0;
 }

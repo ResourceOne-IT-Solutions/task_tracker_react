@@ -59,7 +59,7 @@ const Routespage = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route
                 path="/login"
-                element={isLoggedin ? <Dashboard /> : <Login />}
+                element={isLoggedin ? <Navigate to="/dashboard" /> : <Login />}
               />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
               {/* <Route

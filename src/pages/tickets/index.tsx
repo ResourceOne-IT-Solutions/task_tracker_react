@@ -11,11 +11,11 @@ import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
 import TicketFilters from "./TicketFilters";
 import { getFormattedDate } from "../../utils/utils";
+import { Severity } from "../../utils/modal/notification";
 
 const Tickets = ({ url = "/tickets" }: Props) => {
   const navigate = useNavigate();
-  const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
+  const { currentUser, alertModal } = useUserContext() as UserContext;
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);
@@ -24,11 +24,20 @@ const Tickets = ({ url = "/tickets" }: Props) => {
   useEffect(() => {
     setLoading(true);
     if (url) {
-      httpMethods.get<TicketModal[]>(url).then((tickets) => {
-        setAllTickets(tickets);
-        setShowingTickets(tickets);
-        setLoading(false);
-      });
+      httpMethods
+        .get<TicketModal[]>(url)
+        .then((tickets) => {
+          setAllTickets(tickets);
+          setShowingTickets(tickets);
+        })
+        .catch((err) =>
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "Tickets",
+          }),
+        )
+        .finally(() => setLoading(false));
     }
   }, [url]);
   const handleDescription = (ticket: TicketModal) => {

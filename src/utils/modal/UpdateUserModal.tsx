@@ -72,7 +72,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
 
   return (
     <Modal show={show} onHide={onHide}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="popup-header">
         <Modal.Title>Update Ticket</Modal.Title>
       </Modal.Header>
       <Modal.Body>

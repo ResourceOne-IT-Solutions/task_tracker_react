@@ -268,7 +268,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             show={showChatRequestPopup}
             onHide={() => setShowChatRequestPopup(false)}
           >
-            <Modal.Header closeButton>
+            <Modal.Header closeButton className="popup-header">
               <Modal.Title>Chat Request</Modal.Title>
             </Modal.Header>
             <Modal.Body>

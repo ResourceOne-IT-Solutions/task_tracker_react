@@ -216,7 +216,7 @@ function Navbar() {
                   </Button>
                   {openProfileModal && (
                     <div className="profile position-absolute profile-modal top-100 rounded-2">
-                      <h6>Admin Details</h6>
+                      <h6>{currentUser.isAdmin ? "Admin" : "User"} Details</h6>
                       <ul>
                         <li>
                           <span>EmpId :</span> {currentUser.empId}

@@ -11,33 +11,35 @@
 }
 .search {
   padding: 15px 10px;
-  background-color:#085693;
+  background-color: #085693;
   border-right: 1px solid grey;
-  color: #fff ;
-}
-.users-group {
-  height: 33%;
-  border: 1px solid grey;
+  color: #fff;
 }
 .users-list {
-  height: 55%;
+  height: 89%;
   border-right: 1px solid grey;
   border-left: 1px solid grey;
   border-bottom: 1px solid grey;
+  overflow: hidden;
+}
+.chat-tabs {
+  border: 1px solid grey;
+  display: flex;
+  justify-content: space-evenly;
 }
 /* chatbox*/
 .chatbox {
   width: 70%;
   height: 100%;
 }
-.resource-logo{
+.resource-logo {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .chat-header {
-  background-color:#085693;
+  background-color: #085693;
   padding: 8px 10px;
 }
 .chat-body {
@@ -45,8 +47,8 @@
   background-color: #eeeeee;
 }
 .chat-footer {
-  background-color:#085693;
-  padding: 10px;
+  background-color: #085693;
+  padding: 7px;
   color: #fff;
   position: relative;
 }

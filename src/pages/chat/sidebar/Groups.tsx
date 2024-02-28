@@ -24,6 +24,7 @@ interface GroupChatProps {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
+  selectedUser: UserModal;
 }
 
 const Groups = ({
@@ -32,6 +33,7 @@ const Groups = ({
   setSelectedUser,
   currentRoom,
   setCurrentRoom,
+  selectedUser,
 }: GroupChatProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
@@ -73,7 +75,7 @@ const Groups = ({
       {currentUser.isAdmin && (
         <div className="create-group" onClick={handleModalClick}>
           <p className="m-0">
-            <b>Groups</b>
+            <b>Add New Group</b>
           </p>{" "}
           <p className="m-0">
             <i
@@ -98,7 +100,9 @@ const Groups = ({
             {totalGroups.map((group) => (
               <div
                 key={group._id}
-                className="group"
+                className={`group ${
+                  selectedUser._id === group._id ? "selected-user" : ""
+                }`}
                 onClick={() => handleGroupClick(group)}
               >
                 <div className="group-img">

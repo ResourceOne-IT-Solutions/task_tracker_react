@@ -5,17 +5,12 @@ import { TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
 import { Props } from "./TicketsMain";
 import "./index.css";
-import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
-import XlSheet from "./XlSheet";
-import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { UserContext } from "../../modals/UserModals";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import TicketFilters from "./TicketFilters";
 import { getFormattedDate } from "../../utils/utils";
 
 const Tickets = ({ url = "/tickets" }: Props) => {
   const navigate = useNavigate();
-  const userContext = useUserContext();
-  const { currentUser } = userContext as UserContext;
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);
@@ -93,48 +88,10 @@ const Tickets = ({ url = "/tickets" }: Props) => {
       ),
     },
   ];
-  const formattedTicketforXL = (tickets: TicketModal[]) => {
-    const formatedData = tickets.map((item, idx) => {
-      const resources = item.addOnResource.map((item) => item.name).join(",\n");
-      const updates = item.updates.map((item, idx) => {
-        const up = `UPDATE ${idx + 1}:\nUpdatedBy : ${
-          item.updatedBy.name
-        }\nDate: ${new Date(item.date).toLocaleString()},\nDescription : ${
-          item.description
-        },\nComments : ${item.comments},\nStatus : ${item.status} -----\n\n`;
-        return up;
-      });
-      return {
-        "Sl. No": idx + 1,
-        "Ticket id": item._id,
-        Consultant: item.client.name,
-        Owner: item.user.name,
-        Technology: item.technology,
-        Description: item.description,
-        Status: item.status,
-        Comments: item.comments,
-        "Created Date": new Date(item.receivedDate).toLocaleString(),
-        "Closed Date": item.closedDate
-          ? new Date(item.closedDate).toLocaleString()
-          : "Not Closed",
-        "Helped Resources": String(resources),
-        Updates: String(updates),
-      };
-    });
-    return formatedData;
-  };
 
   return (
     <>
-      <h4 className="text-center">
-        <Button onClick={() => navigate(-1)} className="mx-2">
-          Back
-        </Button>{" "}
-        Total Tickets
-        {currentUser.isAdmin && (
-          <XlSheet data={formattedTicketforXL(showingTickets)} />
-        )}
-      </h4>
+      <h4 className="text-center">Total Tickets</h4>
       <TicketFilters
         allTickets={allTickets}
         setShowingTickets={setShowingTickets}

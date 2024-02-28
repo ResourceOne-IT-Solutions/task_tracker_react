@@ -48,6 +48,8 @@
   position: absolute;
   left: 0;
   top: 10px;
+  background-color: #000;
+  border: 1px solid #000;
 }
 
 .go-back i {

@@ -159,11 +159,7 @@ function AdminRequestMessages() {
   return (
     <div className="text-center">
       <h1 className="table-heading">
-        <Button
-          className="go-back"
-          variant="danger"
-          onClick={() => navigate(-1)}
-        >
+        <Button className="go-back" onClick={() => navigate(-1)}>
           <i className="fa fa-angle-left"></i>
           Go Back
         </Button>

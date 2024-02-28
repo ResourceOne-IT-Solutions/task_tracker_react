@@ -118,7 +118,7 @@ function TaskTable<R>(props: TableProps<R>) {
     );
   };
   return (
-    <>
+    <div className="table-scroll">
       <table className={className} {...args}>
         <thead className={tHeadClassName}>
           <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>
@@ -153,7 +153,7 @@ function TaskTable<R>(props: TableProps<R>) {
           setCurrentPageData={setCurrentPageData}
         />
       )}
-    </>
+    </div>
   );
 }
 

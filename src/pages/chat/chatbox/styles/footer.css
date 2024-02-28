@@ -8,7 +8,7 @@
   margin-right: 10px;
 }
 .message-input {
- flex: 1;
+  flex: 1;
   position: relative;
 }
 .message-input input {

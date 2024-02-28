@@ -7,7 +7,7 @@
   width: 9px;
 }
 .user-list-container::-webkit-scrollbar-thumb {
-  background-color:#085693;
+  background-color: #085693;
   border-radius: 6px;
 }
 
@@ -15,7 +15,7 @@
   background-color: #eeeeee;
 }
 .user-main {
-  background-color:#cccccc47;
+  background-color: #cccccc47;
 }
 .user-main:hover {
   cursor: pointer;
@@ -39,10 +39,10 @@
   border-radius: 50%;
   object-fit: cover;
 }
-.user-img span{
+.user-img span {
   position: absolute;
   right: 8px;
-  top:calc(50% - 8px);
+  top: calc(50% - 8px);
 }
 .user-name {
   width: 45%;
@@ -62,7 +62,7 @@
   align-items: center;
 }
 .selected-user {
-  background-color:#085693;;
+  background-color: #085693;
   color: #fff;
 }
 .loader {

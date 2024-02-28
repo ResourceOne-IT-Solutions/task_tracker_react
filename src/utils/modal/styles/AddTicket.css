@@ -10,17 +10,17 @@
   text-align: center;
 }
 
-.popup-header{
+.popup-header {
   background: #343651;
-    color: #fff;
+  color: #fff;
 }
-.popup-header .btn-close{
-  color: #FFF;
+.popup-header .btn-close {
+  color: #fff;
   background: #343651;
   position: relative;
 }
 
-.popup-header .btn-close::before{
+.popup-header .btn-close::before {
   content: "X";
   font-weight: bold;
   color: #fff;

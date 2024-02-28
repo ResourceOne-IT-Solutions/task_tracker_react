@@ -5,6 +5,7 @@ import Search from "./Search";
 import UserList from "./UsersList";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext, UserModal } from "../../../modals/UserModals";
+import { Button } from "react-bootstrap";
 
 const ChatSideBar = () => {
   const userContext = useUserContext();
@@ -22,6 +23,7 @@ const ChatSideBar = () => {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
+  const [isGroupSelected, setIsGroupSelected] = useState(false);
   socket
     .off("newUser")
     .on("newUser", ({ userPayload, userId, opponentPayload, opponentId }) => {
@@ -42,33 +44,42 @@ const ChatSideBar = () => {
   useEffect(() => {
     socket.emit("newUser", { userId: currentUser._id });
   }, []);
+  const handleSelectTab = (isGroups: boolean) => {
+    setIsGroupSelected(isGroups);
+  };
   return (
     <div className="sidebar">
       <div className="search">
         <Search onSearch={handleSearch} />
       </div>
-      <div className="users-group">
-        <Groups
-          socket={socket}
-          currentUser={currentUser}
-          setSelectedUser={setSelectedUser}
-          currentRoom={currentRoom}
-          setCurrentRoom={setCurrentRoom}
-          setCurrentUser={setCurrentUser}
-        />
-      </div>
       <div className="users-list">
-        <UserList
-          users={users}
-          currentUser={currentUser}
-          setSelectedUser={setSelectedUser}
-          selectedUser={selectedUser}
-          currentRoom={currentRoom}
-          setCurrentRoom={setCurrentRoom}
-          socket={socket}
-          searchQuery={searchQuery}
-          setCurrentUser={setCurrentUser}
-        />
+        <div className="chat-tabs">
+          <span onClick={() => handleSelectTab(false)}>Users</span>
+          <span onClick={() => handleSelectTab(true)}>Groups</span>
+        </div>
+        {isGroupSelected ? (
+          <Groups
+            socket={socket}
+            currentUser={currentUser}
+            setSelectedUser={setSelectedUser}
+            currentRoom={currentRoom}
+            setCurrentRoom={setCurrentRoom}
+            setCurrentUser={setCurrentUser}
+            selectedUser={selectedUser}
+          />
+        ) : (
+          <UserList
+            users={users}
+            currentUser={currentUser}
+            setSelectedUser={setSelectedUser}
+            selectedUser={selectedUser}
+            currentRoom={currentRoom}
+            setCurrentRoom={setCurrentRoom}
+            socket={socket}
+            searchQuery={searchQuery}
+            setCurrentUser={setCurrentUser}
+          />
+        )}
       </div>
     </div>
   );

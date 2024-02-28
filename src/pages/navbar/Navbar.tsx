@@ -40,6 +40,8 @@ function Navbar() {
     setCurrentUser({} as UserModal);
     setIsLoggedIn(false);
     socket.emit("logout", currentUser._id);
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
     navigate("/");
   };
   const handleProfileModal = () => setOpenProfileModal(!openProfileModal);

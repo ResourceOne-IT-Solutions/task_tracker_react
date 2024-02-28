@@ -183,6 +183,15 @@ const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
   });
 };
 
+let base64Cache: { [key: string]: string } = {};
+
+const addCache = (name: string, data: string) => {
+  base64Cache = { ...base64Cache, [name]: data };
+};
+const isValidBase64 = (base64String: string) => {
+  const base64Regex = /^data:[\w/]+;base64,[a-zA-Z0-9+/]+={0,2}$/;
+  return base64Regex.test(base64String);
+};
 export const ProfileImage = ({
   filename,
   className,
@@ -197,7 +206,7 @@ export const ProfileImage = ({
   const { alertModal } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
-    const img = sessionStorage.getItem(`img-${filename}`);
+    const img = base64Cache[`img-${filename}`];
     if (img) {
       setImageUrl(img);
     } else {
@@ -206,14 +215,14 @@ export const ProfileImage = ({
           blobToBase64(blob)
             .then((res) => {
               const url = `data:image/jpeg;base64,${res}`;
-              sessionStorage.setItem(`img-${filename}`, url as string);
-              setImageUrl(url as string);
+              if (isValidBase64(url)) {
+                addCache(`img-${filename}`, url as string);
+                setImageUrl(url as string);
+              }
             })
             .catch((err) => {
               console.error("blob_err:::", err);
             });
-          // const url = URL.createObjectURL(blob);
-          // setImageUrl(url);
         })
         .catch((err) => {
           alertModal({
@@ -232,15 +241,17 @@ export const ProfileImage = ({
   return (
     <>
       <img src={imageUrl} className={className} onClick={handleImageClick} />
-      <Modal
-        className="profileimg-zoom"
-        show={showImage}
-        onHide={() => setShowImage(false)}
-      >
-        <Modal.Body>
-          <img src={imageUrl} />
-        </Modal.Body>
-      </Modal>
+      {showImage && (
+        <Modal
+          className="profileimg-zoom"
+          show={showImage}
+          onHide={() => setShowImage(false)}
+        >
+          <Modal.Body>
+            <img src={imageUrl} />
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };

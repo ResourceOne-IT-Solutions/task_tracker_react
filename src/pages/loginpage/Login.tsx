@@ -37,8 +37,13 @@ const Login = () => {
     setError("");
     setIsLoading(true);
     httpMethods
-      .post<LoginPayload, { token: string }>("/verify-login", data)
+      .login<LoginPayload, { token: string; refreshToken: string }>(
+        "/verify-login",
+        data,
+      )
       .then((result) => {
+        localStorage.setItem("accessToken", result.token);
+        localStorage.setItem("refreshToken", result.refreshToken);
         setCookie(result.token, 8);
         setIsLoading(false);
         navigate("/dashboard");

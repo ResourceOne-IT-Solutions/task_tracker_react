@@ -121,7 +121,7 @@ function AddClient({ setShowModal }: prop) {
     }
   };
   return (
-    <div>
+    <div className="create-client-modal">
       <Form>
         <Row className="mb-3">
           <Form.Group as={Col} md="6">
@@ -165,16 +165,36 @@ function AddClient({ setShowModal }: prop) {
               Enter Country Code and Numbers only
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="4">
+          <Form.Group as={Col} md="6">
+            <Form.Control
+              type="text"
+              name="technology"
+              value={technology}
+              onChange={handleChange}
+              placeholder="Enter Technology"
+            />
+          </Form.Group>
+        </Row>
+        <Row className="mb-3">
+          <Form.Group as={Col} md="6">
+            <Form.Control
+              type="text"
+              name="companyName"
+              value={companyName}
+              onChange={handleChange}
+              placeholder="Enter CompanyName"
+            />
+          </Form.Group>
+          <Form.Group as={Col} md="3">
             <Form.Control
               type="text"
               name="area"
               value={area as string}
               onChange={handleChange}
-              placeholder="Enter Location"
+              placeholder="Location"
             />
           </Form.Group>
-          <Form.Group as={Col} md="2">
+          <Form.Group as={Col} md="3">
             <Dropdown onSelect={handleDropdownSelect}>
               <Dropdown.Toggle variant="success" id="location-zone">
                 {clientData.zone ? clientData.zone : "Zone"}
@@ -191,26 +211,6 @@ function AddClient({ setShowModal }: prop) {
                 ))}
               </Dropdown.Menu>
             </Dropdown>
-          </Form.Group>
-        </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6">
-            <Form.Control
-              type="text"
-              name="technology"
-              value={technology}
-              onChange={handleChange}
-              placeholder="Enter Technology"
-            />
-          </Form.Group>
-          <Form.Group as={Col} md="6">
-            <Form.Control
-              type="text"
-              name="companyName"
-              value={companyName}
-              onChange={handleChange}
-              placeholder="Enter CompanyName"
-            />
           </Form.Group>
         </Row>
         <Row className="mb-3">

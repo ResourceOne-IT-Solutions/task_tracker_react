@@ -127,13 +127,13 @@ const Tickets = ({ url = "/tickets" }: Props) => {
   return (
     <>
       <h4 className="text-center">
-        Total Tickets :
-        {currentUser.isAdmin && (
-          <XlSheet data={formattedTicketforXL(showingTickets)} />
-        )}
         <Button onClick={() => navigate(-1)} className="mx-2">
           Back
         </Button>{" "}
+        Total Tickets
+        {currentUser.isAdmin && (
+          <XlSheet data={formattedTicketforXL(showingTickets)} />
+        )}
       </h4>
       <TicketFilters
         allTickets={allTickets}

@@ -4,10 +4,10 @@
   overflow-y: scroll;
 }
 .user-list-container::-webkit-scrollbar {
-  height: 12px;
+  width: 9px;
 }
 .user-list-container::-webkit-scrollbar-thumb {
-  background-color: rgb(180, 174, 174);
+  background-color:#085693;
   border-radius: 6px;
 }
 
@@ -15,29 +15,34 @@
   background-color: #eeeeee;
 }
 .user-main {
-  background-color: #eeeeee;
+  background-color:#cccccc47;
 }
 .user-main:hover {
   cursor: pointer;
 }
 .user {
   display: flex;
-  border-bottom: 1px solid #f0e1e1;
-  margin-bottom: 6px;
+  border-bottom: 2px solid #fff;
+  margin-bottom: 0px;
   padding: 5px 0px 5px 0px;
+  position: relative;
 }
 .user-img {
   width: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
 }
 .user-img img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+}
+.user-img span{
+  position: absolute;
+  right: 8px;
+  top:calc(50% - 8px);
 }
 .user-name {
   width: 45%;
@@ -57,7 +62,8 @@
   align-items: center;
 }
 .selected-user {
-  background-color: #29a08c;
+  background-color:#085693;;
+  color: #fff;
 }
 .loader {
   padding-top: 27%;

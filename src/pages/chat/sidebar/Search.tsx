@@ -17,10 +17,15 @@ const Search = ({ onSearch }: SearchBarProps) => {
     <div className="search-box">
       <div className="chat-back-btn" onClick={handleChatBack}>
         <i className="bi bi-arrow-left-circle-fill font-size-icon"></i>
-        <span>Go Back</span>
+        {/* <span>Go Back</span> */}
       </div>
       <div>
-        <input type="text" placeholder="Search" onChange={handleInputChange} />
+        <input
+          type="text"
+          placeholder="Search"
+          className="form-control"
+          onChange={handleInputChange}
+        />
       </div>
     </div>
   );

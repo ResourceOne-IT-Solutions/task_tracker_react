@@ -3,6 +3,7 @@ import ChatBody from "./Body";
 import ChatFooter from "./Footer";
 import ChatHeader from "./Header";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
+import logo from "../../../assets/images/Logo.png";
 import {
   RoomMessages,
   UserContext,
@@ -51,13 +52,15 @@ export const ChatBox = () => {
           </div>
         </>
       ) : (
-        <div>
-          <h3
+        <div className="resource-logo">
+          {/* <h3
             style={{ fontFamily: "sans-serif", color: "#4caf50" }}
             className="text-center"
-          >
-            Welcome 🙏 To ResourceOne Chat 💬
-          </h3>
+          > */}
+          {/* <h4> Welcome To </h4>
+            <h4> ResourceOne Chat</h4> */}
+          <img src={logo} />
+          {/* </h3> */}
         </div>
       )}
     </div>

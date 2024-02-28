@@ -72,10 +72,10 @@ const Groups = ({
     <div className="group-list-container">
       {currentUser.isAdmin && (
         <div className="create-group" onClick={handleModalClick}>
-          <p>
+          <p className="m-0">
             <b>Groups</b>
           </p>{" "}
-          <p>
+          <p className="m-0">
             <i
               className="bi bi-plus-circle-fill"
               style={{ fontSize: "20px" }}

@@ -16,4 +16,12 @@
 }
 .popup-header .btn-close{
   color: #FFF;
+  background: #343651;
+  position: relative;
+}
+
+.popup-header .btn-close::before{
+  content: "X";
+  font-weight: bold;
+  color: #fff;
 }

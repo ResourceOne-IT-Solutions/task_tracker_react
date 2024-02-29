@@ -6,7 +6,7 @@ import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
 import { Socket } from "socket.io-client";
 import { getFormattedTime } from "../../../utils/utils";
-import { ChatLoader } from "./utils/utils";
+import { ChatLoader } from "./utils/util";
 
 export interface GroupInterface {
   name: string;

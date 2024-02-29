@@ -2,6 +2,7 @@ import React, { memo, useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
 import { Spinner } from "react-bootstrap";
+import { RectangularSkeleton } from "../shimmer";
 
 export interface TableHeaders<T> {
   title: string | any;
@@ -125,11 +126,25 @@ function TaskTable<R>(props: TableProps<R>) {
         </thead>
         <tbody className={tBodyClassName}>
           {loading ? (
-            <tr>
-              <td colSpan={headers.length} className="text-center">
-                {Loader ? <Loader /> : <div>Loading...</div>}
-              </td>
-            </tr>
+            <>
+              {Array(3)
+                .fill(0)
+                .map((_, index) => (
+                  <tr key={index}>
+                    {Array(headers.length)
+                      .fill(0)
+                      .map((_, idx) => (
+                        <td className="text-center" key={idx}>
+                          {Loader ? (
+                            <RectangularSkeleton />
+                          ) : (
+                            <div>Loading...</div>
+                          )}
+                        </td>
+                      ))}
+                  </tr>
+                ))}
+            </>
           ) : (
             <>
               {currentPageData.length ? (

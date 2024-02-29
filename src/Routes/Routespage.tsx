@@ -45,7 +45,7 @@ const Routespage = () => {
   const { isLoggedin, currentUser } = userContext;
   const isAdmin = currentUser.isAdmin;
   return (
-    <div>
+    <>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
         {isLoggedin && <Navbar />}
         <div className="ful-content">
@@ -186,7 +186,7 @@ const Routespage = () => {
           </div>
         </div>
       </BrowserRouter>
-    </div>
+    </>
   );
 };
 

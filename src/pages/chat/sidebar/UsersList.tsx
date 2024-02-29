@@ -8,6 +8,7 @@ import {
   getRoomId,
   statusIndicator,
 } from "../../../utils/utils";
+import { ChatLoader } from "./utils/utils";
 
 interface UserListProps {
   users: UserModal[];
@@ -17,8 +18,8 @@ interface UserListProps {
   currentRoom: string;
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   searchQuery: string;
-  setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   selectedUser: UserModal;
+  isLoading: boolean;
 }
 
 const UserList = ({
@@ -30,7 +31,7 @@ const UserList = ({
   currentRoom,
   setCurrentRoom,
   searchQuery,
-  setCurrentUser,
+  isLoading,
 }: UserListProps) => {
   const handleProfileClick = (user: UserModal) => {
     setSelectedUser(user);
@@ -53,46 +54,48 @@ const UserList = ({
     : filteredUsers.filter((user) => user.isAdmin);
   return (
     <div className="user-list-container">
-      {filteredUsers.length ? (
-        filteredUsers.map((user: UserModal) => (
-          <div
-            key={user._id}
-            className={`user-main ${
-              selectedUser._id === user._id ? "selected-user" : ""
-            }`}
-            onClick={() => handleProfileClick(user)}
-          >
-            <div className="user">
-              <div className="user-img">
-                <ProfileImage filename={user.profileImageUrl} />
-                {statusIndicator(user.status)}
-              </div>
-              <div className="user-name">
-                <p>{getFullName(user)}</p>
-                <p>{user.designation}</p>
-              </div>
-              <div className="user-time-stamp">
-                {currentUser.newMessages[
-                  getRoomId(currentUser._id, user._id)
-                ] && (
-                  <div className="newmsg-count">
-                    {
-                      currentUser.newMessages[
-                        getRoomId(currentUser._id, user._id)
-                      ]
-                    }
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        ))
+      {isLoading ? (
+        <ChatLoader />
       ) : (
-        <div className="loader">
-          <div className="spinner-border text-success" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+        <>
+          {filteredUsers.length ? (
+            filteredUsers.map((user: UserModal) => (
+              <div
+                key={user._id}
+                className={`user-main ${
+                  selectedUser._id === user._id ? "selected-user" : ""
+                }`}
+                onClick={() => handleProfileClick(user)}
+              >
+                <div className="user">
+                  <div className="user-img">
+                    <ProfileImage filename={user.profileImageUrl} />
+                    {statusIndicator(user.status)}
+                  </div>
+                  <div className="user-name">
+                    <p>{getFullName(user)}</p>
+                    <p>{user.designation}</p>
+                  </div>
+                  <div className="user-time-stamp">
+                    {currentUser.newMessages[
+                      getRoomId(currentUser._id, user._id)
+                    ] && (
+                      <div className="newmsg-count">
+                        {
+                          currentUser.newMessages[
+                            getRoomId(currentUser._id, user._id)
+                          ]
+                        }
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>No Users Available</div>
+          )}
+        </>
       )}
     </div>
   );

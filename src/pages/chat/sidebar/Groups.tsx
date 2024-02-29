@@ -6,6 +6,7 @@ import ReusableModal from "../../../utils/modal/ReusableModal";
 import CreateGroup from "./CreateGroupModal";
 import { Socket } from "socket.io-client";
 import { getFormattedTime } from "../../../utils/utils";
+import { ChatLoader } from "./utils/utils";
 
 export interface GroupInterface {
   name: string;
@@ -25,6 +26,9 @@ interface GroupChatProps {
   setCurrentRoom: React.Dispatch<React.SetStateAction<string>>;
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   selectedUser: UserModal;
+  setTotalGroups: React.Dispatch<React.SetStateAction<GroupInterface[]>>;
+  totalGroups: GroupInterface[];
+  isLoading: boolean;
 }
 
 const Groups = ({
@@ -34,25 +38,18 @@ const Groups = ({
   currentRoom,
   setCurrentRoom,
   selectedUser,
+  totalGroups,
+  setTotalGroups,
+  isLoading,
 }: GroupChatProps) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [modalName, setModalname] = useState<string>("");
-  const [totalGroups, setTotalGroups] = useState<GroupInterface[]>([]);
+
   const [modalProps, setModalProps] = useState({
     title: "",
     setShowModal,
     show: showModal,
   });
-  useEffect(() => {
-    httpMethods
-      .get<GroupInterface[]>(
-        `/message/groups/${!currentUser.isAdmin ? currentUser._id : ""}`,
-      )
-      .then((groups) => {
-        setTotalGroups(groups);
-      })
-      .catch((error) => error);
-  }, []);
   const handleModalClick = () => {
     setModalname("Create Group");
     setModalProps({
@@ -94,44 +91,46 @@ const Groups = ({
         </ReusableModal>
       )}
       <div className="group-main">
-        {totalGroups.length ? (
-          <>
-            {" "}
-            {totalGroups.map((group) => (
-              <div
-                key={group._id}
-                className={`group ${
-                  selectedUser._id === group._id ? "selected-user" : ""
-                }`}
-                onClick={() => handleGroupClick(group)}
-              >
-                <div className="group-img">
-                  <img
-                    src="https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp"
-                    alt="alt"
-                  />
-                </div>
-                <div className="group-name">
-                  <p>{group.name}</p>
-                  <p>{group.description}</p>
-                </div>
-                <div className="time-stamp">
-                  {getFormattedTime(group.time)}{" "}
-                  {currentUser.newMessages[group._id] && (
-                    <span className="newmsg-count">
-                      {currentUser.newMessages[group._id]}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </>
+        {isLoading ? (
+          <ChatLoader />
         ) : (
-          <div className="loader">
-            <div className="spinner-border text-success" role="status">
-              <span className="sr-only"></span>
-            </div>
-          </div>
+          <>
+            {totalGroups.length ? (
+              <>
+                {" "}
+                {totalGroups.map((group) => (
+                  <div
+                    key={group._id}
+                    className={`group ${
+                      selectedUser._id === group._id ? "selected-user" : ""
+                    }`}
+                    onClick={() => handleGroupClick(group)}
+                  >
+                    <div className="group-img">
+                      <img
+                        src="https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp"
+                        alt="alt"
+                      />
+                    </div>
+                    <div className="group-name">
+                      <p>{group.name}</p>
+                      <p>{group.description}</p>
+                    </div>
+                    <div className="time-stamp">
+                      {getFormattedTime(group.time)}{" "}
+                      {currentUser.newMessages[group._id] && (
+                        <span className="newmsg-count">
+                          {currentUser.newMessages[group._id]}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <div>No Groups Availble</div>
+            )}
+          </>
         )}
       </div>
     </div>

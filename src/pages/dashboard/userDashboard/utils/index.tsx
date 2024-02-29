@@ -8,7 +8,7 @@ export const getBreakTimings = (duration: number) => {
   };
   const sec = Math.round(duration % 60);
   let min = Math.round(duration / 60);
-  const hrs = Math.round(min / 60);
+  const hrs = Math.floor(min / 60);
   if (hrs > 0) {
     min = min % 60;
     return `${addZero(hrs)}:${addZero(min)}:${addZero(sec)}`;

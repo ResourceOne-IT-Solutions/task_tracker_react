@@ -8,7 +8,7 @@ import {
   getRoomId,
   statusIndicator,
 } from "../../../utils/utils";
-import { ChatLoader } from "./utils/utils";
+import { ChatLoader } from "./utils/util";
 
 interface UserListProps {
   users: UserModal[];

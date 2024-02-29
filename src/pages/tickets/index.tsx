@@ -9,9 +9,12 @@ import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import TicketFilters from "./TicketFilters";
 import { getFormattedDate } from "../../utils/utils";
 import { Severity } from "../../utils/modal/notification";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import { UserContext } from "../../modals/UserModals";
 
 const Tickets = ({ url = "/tickets" }: Props) => {
   const navigate = useNavigate();
+  const { alertModal } = useUserContext() as UserContext;
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);

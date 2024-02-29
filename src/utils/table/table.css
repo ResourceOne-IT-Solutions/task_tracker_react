@@ -69,3 +69,7 @@ th {
   align-items: center;
   justify-self: center;
 }
+.table-scroll{
+  width: 100%;
+  overflow: auto;
+}

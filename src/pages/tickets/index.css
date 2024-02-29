@@ -6,7 +6,8 @@
 }
 .filters {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 10px 0px;
 }
 .drop-down {
   width: 40%;
@@ -15,4 +16,12 @@
   display: flex;
   gap: 20px;
   align-items: baseline;
+}
+.back-btn{
+  background-color: #000;
+  border: 1px solid #000;
+}
+.back-btn i{
+  display: inline-block;
+  margin: 0 5px;
 }

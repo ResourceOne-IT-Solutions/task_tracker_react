@@ -19,7 +19,7 @@ const Search = ({ onSearch }: SearchBarProps) => {
         <i className="bi bi-arrow-left-circle-fill font-size-icon"></i>
         {/* <span>Go Back</span> */}
       </div>
-      <div>
+      <div className="search-bar">
         <input
           type="text"
           placeholder="Search"

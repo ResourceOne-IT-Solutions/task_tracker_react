@@ -54,10 +54,18 @@ const ChatSideBar = () => {
       </div>
       <div className="users-list">
         <div className="chat-tabs">
-          <span className="active" onClick={() => handleSelectTab(false)}>
+          <span
+            className={!isGroupSelected ? "active" : ""}
+            onClick={() => handleSelectTab(false)}
+          >
             Users
           </span>
-          <span onClick={() => handleSelectTab(true)}>Groups</span>
+          <span
+            className={isGroupSelected ? "active" : ""}
+            onClick={() => handleSelectTab(true)}
+          >
+            Groups
+          </span>
         </div>
         {isGroupSelected ? (
           <Groups

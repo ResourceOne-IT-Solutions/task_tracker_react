@@ -56,7 +56,7 @@ const UserList = ({
       ? filteredData
       : filteredData.filter((user) => user.isAdmin);
     setFilteredUsers(filteredData);
-  }, [users]);
+  }, [users, searchQuery]);
   return (
     <div className="user-list-container">
       {isLoading ? (

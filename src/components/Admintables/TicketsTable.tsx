@@ -48,7 +48,7 @@ function TicketsTable() {
     });
     setShowModal(true);
   };
-  const handleClose = (ticket: TicketModal) => {
+  const handleTicketClose = (ticket: TicketModal) => {
     // const confirm = window.confirm("Are you sure You want To Close the Ticket");
     setModalname("Close Ticket");
     setUpdateReference(ticket);
@@ -132,7 +132,7 @@ function TicketsTable() {
       title: "Close Ticket",
       key: "",
       tdFormat: (ticket) => (
-        <Button onClick={() => handleClose(ticket)} disabled={ticket.isClosed}>
+        <Button onClick={() => handleTicketClose(ticket)} disabled={ticket.isClosed}>
           {ticket.isClosed ? "Closed" : "Close Ticket"}
         </Button>
       ),

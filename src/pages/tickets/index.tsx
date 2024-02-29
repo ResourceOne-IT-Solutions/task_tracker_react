@@ -104,7 +104,9 @@ const Tickets = ({ url = "/tickets" }: Props) => {
 
   return (
     <>
-      <h4 className="text-center">Total Tickets</h4>
+      <h4 className="text-center">
+        Tickets: {showingTickets.length} / {allTickets.length}{" "}
+      </h4>
       <TicketFilters
         allTickets={allTickets}
         setShowingTickets={setShowingTickets}

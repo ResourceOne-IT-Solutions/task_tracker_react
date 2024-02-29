@@ -78,7 +78,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   };
   useEffect(() => {
     setIsUserFetching(true);
-    const token = localStorage.getItem("token") ?? "";
+    const token = localStorage.getItem("accessToken") ?? "";
     if (token) {
       httpMethods
         .get<UserModal>("/get-user")

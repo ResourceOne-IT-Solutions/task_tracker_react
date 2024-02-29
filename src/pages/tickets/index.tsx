@@ -12,7 +12,6 @@ import { Severity } from "../../utils/modal/notification";
 
 const Tickets = ({ url = "/tickets" }: Props) => {
   const navigate = useNavigate();
-  const { currentUser, alertModal } = useUserContext() as UserContext;
   const [allTickets, setAllTickets] = useState<TicketModal[]>([]);
   const [showingTickets, setShowingTickets] =
     useState<TicketModal[]>(allTickets);

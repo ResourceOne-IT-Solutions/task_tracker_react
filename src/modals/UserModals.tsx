@@ -43,6 +43,7 @@ export interface UserContext {
   >;
   setRequestMessageCount: React.Dispatch<React.SetStateAction<string[]>>;
   requestMessageCount: string[];
+  isUserFetching: boolean;
 }
 export type Status =
   | "Available"

@@ -7,6 +7,7 @@ import SocketEvents from "./utils/SocketEvents";
 import { AVAILABLE, SLEEP } from "./utils/Constants";
 import Alert from "./utils/modal/alert";
 import Notifications from "./utils/modal/notification";
+import { Loader } from "./utils/utils";
 
 let isInSleep = false;
 let status = "";
@@ -22,6 +23,7 @@ function App() {
     alertModalContent,
     showNotification,
     setShowNotification,
+    isUserFetching,
   } = userContext as UserContext;
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;
@@ -79,26 +81,34 @@ function App() {
     };
   }, [isLoggedin]);
   return (
-    <div className="App">
-      <Routespage />
-      <SocketEvents />
-      {showAlertModal && (
-        <Alert
-          content={alertModalContent.content}
-          severity={alertModalContent.severity}
-          onClose={(val) => setShowAlertModal(val)}
-          title={alertModalContent.title}
-          show={showAlertModal}
-        />
+    <>
+      {isUserFetching ? (
+        <Loader />
+      ) : (
+        <div className="App">
+          <Routespage />
+          <SocketEvents />
+          {showAlertModal && (
+            <Alert
+              content={alertModalContent.content}
+              severity={alertModalContent.severity}
+              onClose={(val) => setShowAlertModal(val)}
+              title={alertModalContent.title}
+              show={showAlertModal}
+            />
+          )}
+          {showNotification.show && (
+            <Notifications
+              content={showNotification.content}
+              severity={showNotification.severity}
+              onClose={(show) =>
+                setShowNotification({ ...showNotification, show })
+              }
+            />
+          )}
+        </div>
       )}
-      {showNotification.show && (
-        <Notifications
-          content={showNotification.content}
-          severity={showNotification.severity}
-          onClose={(show) => setShowNotification({ ...showNotification, show })}
-        />
-      )}
-    </div>
+    </>
   );
 }
 

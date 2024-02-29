@@ -25,6 +25,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   const [totalMessages, setTotalMessages] = useState<number>(0);
   const [notificationRooms, setNotificationRooms] = useState<number>(0);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
+  const [isUserFetching, setIsUserFetching] = useState<boolean>(false);
   const [alertModalContent, setAlertModalContent] = useState<AlertModalProps>({
     content: "",
     severity: Severity.NULL,
@@ -73,19 +74,29 @@ const AuthContext = ({ children }: AuthContextProps) => {
     popupNotification,
     requestMessageCount,
     setRequestMessageCount,
+    isUserFetching,
   };
   useEffect(() => {
-    httpMethods
-      .get<UserModal>("/get-user")
-      .then((data) => {
-        setCurrentUser(data);
-        setIsLoggedIn(true);
-        socket.emit("newUser", { userId: data._id });
-      })
-      .catch((e: any) => {
-        setIsLoggedIn(false);
-        setCurrentUser({} as UserModal);
-      });
+    setIsUserFetching(true);
+    const token = localStorage.getItem("token") ?? "";
+    if (token) {
+      httpMethods
+        .get<UserModal>("/get-user")
+        .then((data) => {
+          setCurrentUser(data);
+          setIsLoggedIn(true);
+          socket.emit("newUser", { userId: data._id });
+        })
+        .catch((e: any) => {
+          setIsLoggedIn(false);
+          setCurrentUser({} as UserModal);
+        })
+        .finally(() => {
+          setIsUserFetching(false);
+        });
+    } else {
+      setIsUserFetching(false);
+    }
   }, []);
   return (
     <UserContextProvider.Provider value={value}>

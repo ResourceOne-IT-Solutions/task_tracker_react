@@ -1,5 +1,26 @@
 import { BE_URL, TOKEN } from "../utils/Constants";
+import { fetchWithAccessToken } from "./api";
 
+async function login<T, R>(path: string, data: T): Promise<R> {
+  try {
+    const headers = {
+      Authorization: TOKEN(),
+      "Content-Type": "application/json",
+    } as any;
+    const response = await fetch(BE_URL + path, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error);
+    }
+    return result;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
 async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
   try {
     const headers = {
@@ -8,7 +29,7 @@ async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
     if (!isFile) {
       headers["Content-Type"] = "application/json";
     }
-    const response = await fetch(BE_URL + path, {
+    const response = await fetchWithAccessToken(BE_URL + path, {
       method: "POST",
       headers: headers,
       body: isFile ? (data as FormData) : JSON.stringify(data),
@@ -25,11 +46,7 @@ async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
 
 async function get<S>(path: string): Promise<S> {
   try {
-    const response = await fetch(BE_URL + path, {
-      headers: {
-        Authorization: TOKEN(),
-      },
-    });
+    const response = await fetchWithAccessToken(BE_URL + path, {});
     const result = await response.json();
     if (!response.ok) {
       throw new Error(result.error);
@@ -42,11 +59,10 @@ async function get<S>(path: string): Promise<S> {
 
 async function put<T, R>(url: string, data: T): Promise<R> {
   try {
-    const response = await fetch(BE_URL + url, {
+    const response = await fetchWithAccessToken(BE_URL + url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: TOKEN(),
       },
       body: JSON.stringify(data),
     });
@@ -62,11 +78,8 @@ async function put<T, R>(url: string, data: T): Promise<R> {
 
 async function deleteCall<T>(url: string): Promise<T> {
   try {
-    const response = await fetch(BE_URL + url, {
+    const response = await fetchWithAccessToken(BE_URL + url, {
       method: "DELETE",
-      headers: {
-        Authorization: TOKEN(),
-      },
     });
     const result = await response.json();
     if (!response.ok) {
@@ -78,5 +91,5 @@ async function deleteCall<T>(url: string): Promise<T> {
   }
 }
 
-const httpMethods = { post, put, deleteCall, get };
+const httpMethods = { post, put, deleteCall, get, login };
 export default httpMethods;

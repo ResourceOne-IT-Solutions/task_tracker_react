@@ -19,7 +19,7 @@ const TicketFilters = ({
   const navigate = useNavigate();
   const { currentUser } = useUserContext() as UserContext;
   const [selected, setSelected] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<TicketModal[]>([]);
+  const [filteredData, setFilteredData] = useState<TicketModal[]>(allTickets);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const handleSelectStatus = (item: any) => {

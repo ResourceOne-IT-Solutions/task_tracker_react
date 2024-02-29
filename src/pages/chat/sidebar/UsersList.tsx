@@ -41,17 +41,22 @@ const UserList = ({
     socket.emit("joinRoom", { room: RoomId, previousRoom: currentRoom });
     socket.emit("updateUser", currentUser);
   };
-  let filteredUsers = users.filter((user) => {
-    const fullName = getFullName(user).toLowerCase();
-    const designation = user.designation.toLowerCase();
-    return (
-      fullName.includes(searchQuery.toLowerCase()) ||
-      designation.includes(searchQuery.toLowerCase())
-    );
-  });
-  filteredUsers = currentUser.isAdmin
-    ? filteredUsers
-    : filteredUsers.filter((user) => user.isAdmin);
+  const [filteredUsers, setFilteredUsers] = useState<UserModal[]>(users);
+
+  useEffect(() => {
+    let filteredData = users.filter((user) => {
+      const fullName = getFullName(user).toLowerCase();
+      const designation = user.designation.toLowerCase();
+      return (
+        fullName.includes(searchQuery.toLowerCase()) ||
+        designation.includes(searchQuery.toLowerCase())
+      );
+    });
+    filteredData = currentUser.isAdmin
+      ? filteredData
+      : filteredData.filter((user) => user.isAdmin);
+    setFilteredUsers(filteredData);
+  }, [users, searchQuery]);
   return (
     <div className="user-list-container">
       {isLoading ? (

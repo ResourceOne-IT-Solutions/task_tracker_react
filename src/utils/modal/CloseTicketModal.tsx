@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Row, Col, Button, Dropdown } from "react-bootstrap";
 import { TICKET_STATUS_TYPES } from "../Constants";
 import httpMethods from "../../api/Service";
-import { getFullName } from "../utils";
+import { getNameId } from "../utils";
 import { Severity } from "./notification";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
@@ -34,12 +34,12 @@ function CloseTicketModal({
         isClosed: true,
         description,
         status: selectedItem,
-        closedBy: { name: getFullName(currentUser), id: currentUser._id },
+        updatedBy: getNameId(currentUser),
       };
     } else {
       data = {
         isClosed: true,
-        closedBy: { name: getFullName(currentUser), id: currentUser._id },
+        updatedBy: getNameId(currentUser),
       };
     }
     httpMethods

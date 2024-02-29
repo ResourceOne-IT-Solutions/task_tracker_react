@@ -10,8 +10,10 @@ import {
 } from "../../modals/TicketModals";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
-import { getFullName } from "../utils";
+import { getNameId } from "../utils";
 import { TICKET_STATUS_TYPES } from "../Constants";
+import { Severity } from "./notification";
+import { ErrorMessageInterface } from "../../modals/interfaces";
 
 const UpdateTicket: React.FC<UpdateTicketProps> = ({
   show,
@@ -25,8 +27,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     comments: "",
     status: "",
   });
-  const userContext = useUserContext();
-  const { socket, currentUser } = userContext as UserContext;
+  const { socket, currentUser, alertModal } = useUserContext() as UserContext;
 
   // Update the form data when the ticketData prop changes
   React.useEffect(() => {
@@ -52,7 +53,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
     description: formData.description,
     comments: formData.comments,
     status: formData.status,
-    updatedBy: { id: currentUser._id, name: getFullName(currentUser) },
+    updatedBy: getNameId(currentUser),
   };
 
   const handleSaveChanges = () => {
@@ -64,10 +65,16 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
       )
       .then((result) => {
         updateTableData(result);
-        setIsLoading(false);
+        onHide();
       })
-      .catch(() => setIsLoading(false));
-    onHide();
+      .catch((err: ErrorMessageInterface) =>
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Ticket Update",
+        }),
+      )
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -153,8 +160,12 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
         <Button variant="secondary" onClick={onHide}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={handleSaveChanges}>
-          Update Changes
+        <Button
+          variant="primary"
+          onClick={handleSaveChanges}
+          disabled={isLoading}
+        >
+          {isLoading ? "Updating..." : "Update Changes"}
         </Button>
       </Modal.Footer>
     </Modal>

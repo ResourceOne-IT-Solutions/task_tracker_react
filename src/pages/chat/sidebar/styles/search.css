@@ -1,6 +1,6 @@
 .search-box input {
   border-radius: 25px;
-  width: 200px;
+  width: 100%;
   background-color: #ebeef3;
   text-align: center;
   border: none;
@@ -12,6 +12,12 @@
 }
 .search-box input:focus {
   outline: none;
+}
+.search-box .scarch{
+  flex: 1;
+}
+.search-bar{
+  padding: 0 10px;
 }
 .font-size-icon {
   font-size: 24px;

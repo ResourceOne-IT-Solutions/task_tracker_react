@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Dropdown, DropdownButton } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import ReusableModal from "../../utils/modal/ReusableModal";
-import AddClient from "../../utils/modal/AddClient";
-import AddTicket from "../../utils/modal/AddTicket";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
 import {
   ProfileImage,
   Timer,
-  getData,
   setCookie,
   statusIndicator,
 } from "../../utils/utils";
-import { ClientModal } from "../../modals/ClientModals";
 import "./Navbar.css";
 import { BREAK, STATUS_TYPES } from "../../utils/Constants";
-import { NavLink } from "react-router-dom";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 function Navbar() {
@@ -138,7 +132,7 @@ function Navbar() {
                   <h6>{currentUser.isAdmin ? "Admin" : "User"} Details</h6>
                   <ul>
                     <li>
-                      <span>EmpId :</span> {currentUser.empId}
+                      <span>Employee Id :</span> {currentUser.empId}
                     </li>
                     <li>
                       <span>FirstName :</span> {currentUser.firstName}

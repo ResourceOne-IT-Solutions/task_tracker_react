@@ -36,7 +36,7 @@ const Dashboard = () => {
     return <Navigate to="/" />;
   }
   return (
-    <div>
+    <>
       {isLoading ? (
         <Loader />
       ) : (
@@ -47,7 +47,7 @@ const Dashboard = () => {
           )}
         </>
       )}
-    </div>
+    </>
   );
 };
 export default Dashboard;

@@ -26,20 +26,18 @@
   border: 1px solid grey;
   display: flex;
   justify-content: space-evenly;
- 
 }
-.chat-tabs span{
+.chat-tabs span {
   cursor: pointer;
-  flex:1; 
+  flex: 1;
   padding: 10px 0;
   text-align: center;
   font-size: 20px;
 }
 
-.chat-tabs span.active{
+.chat-tabs span.active {
   background: #085693;
   color: #fff;
-
 }
 /* chatbox*/
 .chatbox {

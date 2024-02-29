@@ -13,10 +13,10 @@
 .search-box input:focus {
   outline: none;
 }
-.search-box .scarch{
+.search-box .scarch {
   flex: 1;
 }
-.search-bar{
+.search-bar {
   padding: 0 10px;
 }
 .font-size-icon {

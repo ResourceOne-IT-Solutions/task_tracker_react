@@ -59,7 +59,7 @@ export interface NameIdInterface {
   name: string;
   id: string;
 }
-export interface LoginInterface {
+export interface LoginTimingInterface {
   inTime: Date;
   outTime: Date;
   date: Date;
@@ -103,7 +103,7 @@ export interface UserModal {
   newMessages: { [key: string]: number };
   members: NameIdInterface[];
   gender: string;
-  loginTimings: LoginInterface[];
+  loginTimings: LoginTimingInterface[];
   breakTime: BreakInterface[];
 }
 export type Type = "message" | "application/pdf" | "image/jpeg" | "contact";

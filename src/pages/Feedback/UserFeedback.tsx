@@ -52,16 +52,14 @@ const UserFeedback = () => {
       title: "Description",
       key: "",
       tdFormat: (feedback) => (
-        <p
+        <span
           style={{
             textOverflow: "ellipsis",
-            height: "20px",
             overflow: "hidden",
-            width: "20%",
           }}
         >
-          {feedback.content.slice(0, 20)}
-        </p>
+          {feedback.content.slice(0, 50)}
+        </span>
       ),
     },
     {

@@ -6,6 +6,9 @@
   display: flex;
   justify-content: space-between;
 }
+.userdetails .user-data {
+  width: 40%;
+}
 .userdetails ul {
   list-style-type: none;
 }

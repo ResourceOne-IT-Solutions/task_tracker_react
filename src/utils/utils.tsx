@@ -72,11 +72,13 @@ export const statusIndicator = (status: Status = "") => {
     return <GreyDot title={status} />;
   }
 };
-interface FullNameType {
+export interface FullNameType {
   firstName: string;
   lastName: string;
   name?: string;
 }
+export type DateFormat = "dd-mm-yyyy" | "mm-dd-yyyy" | "";
+export type DateType = "date" | "time";
 
 export const getFullName = (user: FullNameType) => {
   if (user.firstName && user.lastName) {
@@ -90,8 +92,6 @@ export const getFullName = (user: FullNameType) => {
   }
   return "Invalid name";
 };
-
-export type DateType = "date" | "time";
 
 export const getFormattedTime = (dt = new Date()) => {
   const d = new Date(dt).toLocaleString().split(" ");
@@ -114,7 +114,7 @@ export const getNameId = (user: UserModal): NameIdInterface => {
   return { name: getFullName(user), id: user._id };
 };
 
-export const getFormattedDate = (dt: Date, format?: string) => {
+export const getFormattedDate = (dt: Date, format?: DateFormat) => {
   const date = new Date(dt);
   const year = date.getFullYear();
   let month = (1 + date.getMonth()).toString();
@@ -308,4 +308,11 @@ export const Loader = () => {
       <Spinner variant="succss" />
     </div>
   );
+};
+
+export const isEmptyObject = (object: any) => {
+  if (Object.keys(object).length) {
+    return false;
+  }
+  return true;
 };

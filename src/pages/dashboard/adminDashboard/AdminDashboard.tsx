@@ -56,12 +56,6 @@ const AdminDashboard = () => {
     { name: "Closed Tickets", value: 0 },
     { name: "Improper Requirment", value: 0 },
   ]);
-  const [usersPieChartData, setUsersPieChartData] = useState([
-    { name: "Available", value: 0 },
-    { name: "Offline", value: 0 },
-    { name: "Break", value: 0 },
-    { name: "On Ticket", value: 0 },
-  ]);
 
   const [usersStatuses, setUsersStatuses] = useState({
     totalUsers: 0,
@@ -143,12 +137,6 @@ const AdminDashboard = () => {
       onTicketUsers: userStats[ON_TICKET],
       sleepUsers: userStats[SLEEP],
     });
-    setUsersPieChartData([
-      { name: "Available", value: userStats[AVAILABLE] },
-      { name: "Offline", value: userStats[OFFLINE] },
-      { name: "Break", value: userStats[BREAK] },
-      { name: "On Ticket", value: userStats[ON_TICKET] },
-    ]);
   }, [usersData]);
   useEffect(() => {
     socket.emit("newUser", { userId: currentUser._id });
@@ -320,12 +308,6 @@ const AdminDashboard = () => {
                 </Button>
               </div>
             </div>
-
-            {/* <PieChartComponent
-                data={usersPieChartData}
-                totalTickets={usersData.length}
-                name={USER_STATUSES}
-              /> */}
           </div>
         </div>
         <div className="admin-pie-chart">
@@ -343,36 +325,6 @@ const AdminDashboard = () => {
         </div>
         <div className="ranges"></div>
       </div>
-      {/* <div className="admin-details">
-          <div className="heading-pic">
-            <ProfileImage
-              className="rounded-circle"
-              filename={currentUser.profileImageUrl}
-            />
-            <h4>
-              <b>{getFullName(currentUser)}</b>
-              <span className="active-not">
-                {" "}
-                {statusIndicator(currentUser.status)}
-              </span>{" "}
-              <span>{`(${currentUser.userId})`}</span>
-            </h4>
-          </div>
-          <div className="all-details">
-            <div>
-              <h6>Admin Details</h6>
-              <ul>
-                <li>EmpId : {currentUser.empId}</li>
-                <li>FirstName : {currentUser.firstName}</li>
-                <li>LastName : {currentUser.lastName}</li>
-                <li>Email : {currentUser.email}</li>
-                <li>Mobile : {currentUser.mobile}</li>
-                <li>Designation : {currentUser.designation}</li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
-      {/* </div> */}
       <div className="d-flex flex-direction-row gap-5 m-3">
         <Button variant="danger" onClick={handleAdminBroadCastMessage}>
           Send Message to All

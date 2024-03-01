@@ -29,6 +29,7 @@ const ChatFooter = ({
   };
 
   const sendMessage = (message: string, type = "message", fileLink = "") => {
+    if (!message) return;
     let isGroup = false;
     if (!selectedUser.firstName) {
       isGroup = true;

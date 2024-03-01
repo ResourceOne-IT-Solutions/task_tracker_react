@@ -89,6 +89,9 @@
 .w-80 {
   width: 80%;
 }
+.w-30 {
+  width: 30%;
+}
 
 @keyframes widthReducer {
   0% {

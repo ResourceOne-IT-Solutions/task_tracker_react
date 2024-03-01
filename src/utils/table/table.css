@@ -73,3 +73,10 @@ th {
   width: 100%;
   overflow: auto;
 }
+.c-pointer {
+  cursor: pointer;
+}
+.c-pointer:hover {
+  color: #999;
+  background-color: #333;
+}

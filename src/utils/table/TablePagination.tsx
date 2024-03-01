@@ -61,14 +61,14 @@ const TablePagination = memo(
         style={{ justifyContent: paginationAlign }}
       >
         <button
-          className="next-btn"
+          className="next-btn c-pointer"
           disabled={currentPageIndex == 0}
           onClick={() => setCurrentPageIndex(0)}
         >
           <i className="fa fa-angle-double-left"></i>
         </button>
         <button
-          className="prev-btn"
+          className="prev-btn c-pointer"
           disabled={currentPageIndex == 0}
           onClick={previousFunc}
         >
@@ -76,7 +76,7 @@ const TablePagination = memo(
         </button>
         {renderPageIndexes(pagesLength).map((page: any, idx: number) => (
           <span
-            className={`${currentPageIndex == page && "selected"}`}
+            className={`c-pointer ${currentPageIndex == page && "selected"}`}
             onClick={() => setCurrentPageIndex(page)}
             key={idx}
           >
@@ -85,7 +85,7 @@ const TablePagination = memo(
         ))}
         <button
           disabled={currentPageIndex == lastPage}
-          className="next-btn"
+          className="c-pointer next-btn"
           onClick={nextFunc}
         >
           {" "}
@@ -93,7 +93,7 @@ const TablePagination = memo(
         </button>
         <button
           disabled={currentPageIndex == lastPage}
-          className="next-btn"
+          className="c-pointer next-btn"
           onClick={() => setCurrentPageIndex(lastPage)}
         >
           {" "}

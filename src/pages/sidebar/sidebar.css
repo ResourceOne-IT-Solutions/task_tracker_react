@@ -2,6 +2,10 @@
   min-width: 240px;
   background: #212529;
 }
+.side-bar ul{
+  position: sticky;
+  top: 60px;
+}
 .side-bar ul li {
   padding: 10px;
   margin: 0;

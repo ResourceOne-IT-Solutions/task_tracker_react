@@ -51,7 +51,7 @@ function AddUser2() {
   const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (
     values: CreateUserPayload,
-    { setSubmitting, resetForm }: any,
+    { resetForm }: any,
   ) => {
     if (values.profileImageUrl) {
       setIsLoading(true);
@@ -97,7 +97,7 @@ function AddUser2() {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ setFieldValue, isSubmitting }) => (
+        {({ setFieldValue }) => (
           <Form className="add-user-container">
             <h2 className="main-heading">Add User</h2>
             <div className="mb-3 d-flex w-100">

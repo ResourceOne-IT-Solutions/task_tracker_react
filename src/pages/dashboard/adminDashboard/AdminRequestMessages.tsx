@@ -27,18 +27,12 @@ import { Severity } from "../../../utils/modal/notification";
 
 function AdminRequestMessages() {
   const navigate = useNavigate();
-  const {
-    socket,
-    currentUser,
-    alertModal,
-    setRequestMessageCount,
-    requestMessageCount,
-  } = useUserContext() as UserContext;
+  const { socket, currentUser, alertModal, setRequestMessageCount } =
+    useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
-  const [requestIds, setRequestIds] = useState<string[]>(requestMessageCount);
   const [messageRequests, setMessageRequests] = useState<
     AdminMessageInterface[]
   >([]);

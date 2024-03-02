@@ -26,16 +26,6 @@ import AddUser2 from "../pages/dashboard/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 import Sidebar from "../pages/sidebar";
 
-const ProtectedRoute: React.FC<{ element: React.ReactElement }> = ({
-  element,
-}) => {
-  const userContext = useUserContext();
-  if (userContext == null) {
-    return <Navigate to="/" />;
-  }
-  const { isLoggedin } = userContext;
-  return isLoggedin ? element : <Navigate to="/" />;
-};
 const Routespage = () => {
   const userContext = useUserContext();
   if (userContext === null) {

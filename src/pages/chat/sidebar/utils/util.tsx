@@ -4,7 +4,7 @@ import { RectangularSkeleton } from "../../../../utils/shimmer";
 export const ChatLoader = () => {
   return (
     <>
-      {Array(4)
+      {Array(5)
         .fill(0)
         .map((_, idx) => (
           <RectangularSkeleton key={idx} />

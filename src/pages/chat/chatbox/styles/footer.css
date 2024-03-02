@@ -28,6 +28,7 @@
 .popup {
   border: 1px solid #212529;
   background-color: #eeeeee;
+  color: #212529;
   position: absolute;
   width: 130px;
   bottom: 50px;

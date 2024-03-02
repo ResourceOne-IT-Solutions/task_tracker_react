@@ -44,7 +44,7 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
         </>
       ) : (
         <table>
-          <thead>
+          <thead className="timings-table-header">
             <tr>
               <th>Date</th>
               <th>Login</th>

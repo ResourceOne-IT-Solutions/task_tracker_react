@@ -126,8 +126,6 @@
   width: 100%;
 }
 .router-outlet {
-  height: 100dvh;
-  overflow: scroll;
   flex: 1;
   padding-left: 10px;
 }

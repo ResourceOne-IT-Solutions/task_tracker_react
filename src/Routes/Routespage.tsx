@@ -51,12 +51,6 @@ const Routespage = () => {
                 element={isLoggedin ? <Navigate to="/dashboard" /> : <Login />}
               />
               <Route path="/forgotpassword" element={<ForgotPassword />} />
-              {/* <Route
-            path="/admindashboard/adduser"
-            element={
-              isLoggedin && isAdmin ? <AddUserpage /> : <Navigate to="/" />
-            }
-          /> */}
               <Route
                 path="/admindashboard/adduser"
                 element={

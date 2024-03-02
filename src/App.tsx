@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import Routespage from "./Routes/Routespage";
 import { useUserContext } from "./components/Authcontext/AuthContext";
@@ -59,7 +59,7 @@ function App() {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
           // Permission granted, you can now show notifications
-          const notification = new Notification("Wel-Come", {
+          new Notification("Wel-Come", {
             body: `Welcome to ResourceOne ChatBox`,
             icon: "#",
             tag: "Welcome Message",

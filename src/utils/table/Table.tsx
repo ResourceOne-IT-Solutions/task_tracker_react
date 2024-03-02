@@ -31,7 +31,7 @@ function TaskTable<R>(props: TableProps<R>) {
     handleRowClick = (obj) => obj,
     headers = [],
     tableData = [],
-    tHeadClassName = "",
+    tHeadClassName = "table-header",
     tBodyClassName = "",
     className = "task-table",
     pagination = false,

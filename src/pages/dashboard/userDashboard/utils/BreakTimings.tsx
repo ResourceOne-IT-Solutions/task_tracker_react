@@ -74,7 +74,7 @@ const BreakTimings = ({ user, todayOnly = false }: BreakTimingProps) => {
         </>
       ) : (
         <table>
-          <thead>
+          <thead className="login-logout-header">
             <tr>
               <th>Date</th>
               <th>Breaks</th>

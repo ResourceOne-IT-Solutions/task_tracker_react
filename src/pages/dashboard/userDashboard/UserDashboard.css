@@ -87,3 +87,7 @@ tr:hover {
 .user-btns button {
   margin-right: 5px;
 }
+.login-logout-header {
+  position: sticky;
+  top: 0;
+}

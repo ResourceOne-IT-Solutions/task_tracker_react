@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
+  AdminMessageCard,
+  UserRequestCard,
   getData,
-  getFormattedDate,
-  getFormattedTime,
 } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext, UserModal } from "../../../modals/UserModals";
 import {
   ChatRequestInterface,
-  MessageRequestInterface,
+  AdminMessageInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
 import { Button, Spinner } from "react-bootstrap";
@@ -29,20 +29,20 @@ function AdminMessages() {
     TicketRequestInterface[]
   >([]);
   const [messageRequests, setMessageRequests] = useState<
-    MessageRequestInterface[]
+    AdminMessageInterface[]
   >([]);
 
   const [chatLoading, setChatLoading] = useState<boolean>(false);
   const [ticketLoading, setTicketLoading] = useState<boolean>(false);
   const [messageLoading, setMessageLoading] = useState<boolean>(false);
 
-  const handleApprovedChat = (chat: ChatRequestInterface) => {
-    getData<UserModal>(`users/${chat.opponent.id}`).then((res: any) => {
+  const handleApprovedChat = (id: string) => {
+    getData<UserModal>(`users/${id}`).then((res: any) => {
       setSelectedUser(res);
       navigate("/chat");
     });
   };
-  const handleAdminMessageSeen = (message: MessageRequestInterface) => {
+  const handleAdminMessageSeen = (message: AdminMessageInterface) => {
     const payload = {
       userId: currentUser._id,
       messageId: message._id,
@@ -72,7 +72,7 @@ function AdminMessages() {
       getData<TicketRequestInterface>(
         `message/user-ticket-request/${currentUser._id}`,
       ),
-      getData<MessageRequestInterface>(`message/admin-messages`),
+      getData<AdminMessageInterface>(`message/admin-messages`),
     ])
       .then((results) => {
         setChatRequests(results[0]);
@@ -138,33 +138,17 @@ function AdminMessages() {
           <h3>User Requested Chat</h3>
           {chatLoading ? (
             <Spinner variant="success" />
-          ) : chatRequests && chatRequests.length > 0 ? (
+          ) : chatRequests.length > 0 ? (
             chatRequests.map((chat) => (
-              <div className="request-content-wrapper" key={chat.time}>
-                <div className="chatrequest-message">
-                  <div>
-                    {chat.sender.name} is Requesting to Chat with{" "}
-                    {chat.opponent.name}.{" "}
-                  </div>
-                  <div>
-                    Time: {chat.date} {chat.time}
-                  </div>
-                </div>
-                <p>
-                  {chat.isPending ? (
-                    <Button variant="danger" disabled>
-                      Not Approved
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="success"
-                      onClick={() => handleApprovedChat(chat)}
-                    >
-                      Approved
-                    </Button>
-                  )}
-                </p>
-              </div>
+              <UserRequestCard
+                key={chat._id}
+                type="CHAT"
+                sender={chat.sender.name}
+                receiver={chat.opponent.name}
+                time={chat.time}
+                isPending={chat.isPending}
+                onApprove={() => handleApprovedChat(chat.opponent.id)}
+              />
             ))
           ) : (
             <p className="fw-bold">{NO_CHAT_REQUEST}</p>
@@ -174,38 +158,18 @@ function AdminMessages() {
           <h3>User Requested Tickets</h3>
           {ticketLoading ? (
             <Spinner variant="success" />
-          ) : ticketRequests && ticketRequests.length > 0 ? (
+          ) : ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
-                <div
-                  className="request-content-wrapper"
-                  key={ticket.time.toString()}
-                >
-                  <div className="message-request-content">
-                    <div>
-                      {ticket.sender.name} is Requesting for{" "}
-                      {ticket.client.name} tickets.
-                    </div>
-                    <div>
-                      Time: {getFormattedDate(ticket.date)}{" "}
-                      {getFormattedTime(ticket.time)}
-                    </div>
-                  </div>
-                  <div>
-                    {ticket.isPending ? (
-                      <Button variant="danger" disabled>
-                        Not Approved
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="success"
-                        onClick={() => handleApprovedTicket(ticket)}
-                      >
-                        Approved
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                <UserRequestCard
+                  key={ticket._id}
+                  type="TICKET"
+                  sender={ticket.sender.name}
+                  receiver={ticket.client.name}
+                  time={ticket.time}
+                  isPending={ticket.isPending}
+                  onApprove={() => handleApprovedTicket(ticket)}
+                />
               );
             })
           ) : (
@@ -216,34 +180,15 @@ function AdminMessages() {
           <h3>All Admin Messages</h3>
           {messageLoading ? (
             <Spinner variant="success" />
-          ) : messageRequests && messageRequests.length > 0 ? (
+          ) : messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
-                <div
-                  className="request-content-wrapper"
-                  key={message.time.toString()}
-                >
-                  <div className="message-request-content">
-                    <div className="my-2">Message: {message.content}</div>
-                    <div className="my-2">
-                      Time: {getFormattedDate(message.date)}{" "}
-                      {getFormattedTime(message.time)}
-                    </div>
-                    <div className="my-2">Sent by: {message.sender.name}</div>
-                  </div>
-                  <div className="message-seen-btn">
-                    {message.viewedBy.includes(currentUser._id) ? (
-                      <Button variant="success">seen</Button>
-                    ) : (
-                      <Button
-                        variant="danger"
-                        onClick={() => handleAdminMessageSeen(message)}
-                      >
-                        Confirm Seen
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                <AdminMessageCard
+                  key={message._id}
+                  message={message}
+                  isAdmin={false}
+                  onConfirm={handleAdminMessageSeen}
+                />
               );
             })
           ) : (

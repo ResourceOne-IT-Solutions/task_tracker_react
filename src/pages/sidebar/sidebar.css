@@ -2,7 +2,7 @@
   min-width: 240px;
   background: #212529;
 }
-.side-bar ul{
+.side-bar ul {
   position: sticky;
   top: 60px;
 }

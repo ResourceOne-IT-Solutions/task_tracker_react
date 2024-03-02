@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate, Route, BrowserRouter, Routes } from "react-router-dom";
 import Home from "../pages/homepage/Home";
 import { useUserContext } from "../components/Authcontext/AuthContext";
-import AddUserpage from "../pages/dashboard/adduser/AddUserpage";
 import Dashboard from "../pages/dashboard";
 import Login from "../pages/loginpage/Login";
 import Chat from "../pages/chat";

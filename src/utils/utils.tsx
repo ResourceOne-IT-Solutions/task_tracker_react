@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Button, Spinner } from "react-bootstrap";
 import httpMethods from "../api/Service";
 import {
   NameIdInterface,
@@ -24,6 +24,12 @@ import {
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
 import { Modal } from "react-bootstrap";
+import {
+  AdminMessageCardProps,
+  AdminRequestCardProps,
+  TicketRaiseCardProps,
+  UserRequestCardProps,
+} from "../modals/MessageModals";
 
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
@@ -315,4 +321,173 @@ export const isEmptyObject = (object: any) => {
     return false;
   }
   return true;
+};
+
+export const getContent = (type: string, sender: string, receiver: string) => {
+  switch (type) {
+    case "CHAT": {
+      return `${sender} is Requesting to Chat with ${receiver}`;
+    }
+    case "TICKET": {
+      return `${sender} is Requesting for ${receiver} tickets.`;
+    }
+  }
+};
+
+export const AdminRequestCard = ({
+  id,
+  sender,
+  receiver,
+  isPending,
+  onApprove,
+  type,
+  time,
+}: AdminRequestCardProps) => {
+  const { requestMessageCount } = useUserContext() as UserContext;
+  return (
+    <div
+      className={`request-content-wrapper ${
+        requestMessageCount.includes(id) && "bg-warning"
+      } `}
+    >
+      <div>
+        {getContent(type, sender, receiver)}
+        <div>Time: {new Date(time).toLocaleString()}</div>
+      </div>
+
+      <div>
+        {isPending ? (
+          <Button variant="success" onClick={() => onApprove(id, "CHAT")}>
+            Give Access
+          </Button>
+        ) : (
+          <Button variant="success" disabled>
+            Resolved
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const getAdminMessageFormat = (
+  content: string,
+  sender: string,
+  time: Date,
+) => {
+  return (
+    <>
+      <div className="my-2">Message: {content}</div>
+      <div className="my-2">Sent by: {sender}</div>
+      <div className="my-2">Time: {new Date(time).toLocaleString()}</div>
+    </>
+  );
+};
+
+export const AdminMessageCard = ({
+  message,
+  isAdmin,
+  onConfirm,
+}: AdminMessageCardProps) => {
+  const { requestMessageCount, currentUser } = useUserContext() as UserContext;
+  return (
+    <div
+      className={`request-content-wrapper ${
+        requestMessageCount.includes(message._id) && "bg-warning"
+      } `}
+      key={message._id}
+    >
+      <div className="message-request-content">
+        {getAdminMessageFormat(
+          message.content,
+          message.sender.name,
+          message.time,
+        )}
+      </div>
+      <div className="d-flex flex-column delivery-status">
+        {isAdmin ? (
+          <>
+            <span>
+              Delivered to{" "}
+              <span className="fw-bold">{message.deliveredTo.length}</span>
+            </span>
+            <span>
+              Seen : <span className="fw-bold">{message.viewedBy.length} </span>
+            </span>
+          </>
+        ) : (
+          <div className="message-seen-btn">
+            {message.viewedBy.includes(currentUser._id) ? (
+              <Button variant="success">Seen</Button>
+            ) : (
+              <Button
+                variant="danger"
+                onClick={() => onConfirm && onConfirm(message)}
+              >
+                Confirm Seen
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const UserRequestCard = ({
+  sender,
+  receiver,
+  type,
+  time,
+  isPending,
+  onApprove,
+}: UserRequestCardProps) => {
+  return (
+    <div className="request-content-wrapper">
+      <div className="chatrequest-message">
+        <div>{getContent(type, sender, receiver)}</div>
+        <div>Time: {new Date(time).toLocaleString()}</div>
+      </div>
+      <p>
+        {isPending ? (
+          <Button variant="danger" disabled>
+            Not Approved
+          </Button>
+        ) : (
+          <Button variant="success" onClick={onApprove}>
+            Approved
+          </Button>
+        )}
+      </p>
+    </div>
+  );
+};
+
+export const TicketRaiseCard = ({ message }: TicketRaiseCardProps) => {
+  const { requestMessageCount } = useUserContext() as UserContext;
+  return (
+    <div
+      className={`request-content-wrapper ${
+        requestMessageCount.includes(message._id) && "bg-warning"
+      } `}
+      key={message._id}
+    >
+      <div className="message-request-content">
+        {getAdminMessageFormat(
+          message.content,
+          message.sender.name,
+          message.time,
+        )}
+      </div>
+      <div>
+        {message.isPending ? (
+          <Button variant="success">Approve</Button>
+        ) : (
+          <Button variant="success" disabled>
+            Approved
+          </Button>
+        )}
+      </div>
+    </div>
+  );
 };

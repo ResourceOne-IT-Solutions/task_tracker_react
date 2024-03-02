@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./table.css";
 import TablePagination from "./TablePagination";
 import { Spinner } from "react-bootstrap";
@@ -97,7 +97,7 @@ function TaskTable<R>(props: TableProps<R>) {
         );
     }
   };
-  const renderBodyRow = (obj: any, idx: number) => {
+  const renderBodyRow = (obj: any) => {
     return (
       <tr onClick={() => handleRowClick(obj)} key={obj._id}>
         {headers.map((val1: any, index) => {
@@ -127,7 +127,7 @@ function TaskTable<R>(props: TableProps<R>) {
         <tbody className={tBodyClassName}>
           {loading ? (
             <>
-              {Array(3)
+              {Array(5)
                 .fill(0)
                 .map((_, index) => (
                   <tr key={index}>
@@ -148,9 +148,7 @@ function TaskTable<R>(props: TableProps<R>) {
           ) : (
             <>
               {currentPageData.length ? (
-                currentPageData.map((obj: any, idx: number) =>
-                  renderBodyRow(obj, idx),
-                )
+                currentPageData.map((obj: any) => renderBodyRow(obj))
               ) : (
                 <tr>
                   <td colSpan={headers.length}>No Data Available</td>

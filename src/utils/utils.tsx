@@ -316,7 +316,7 @@ export const Loader = () => {
   );
 };
 
-export const isEmptyObject = (object: any) => {
+export const isEmptyObject = (object: object) => {
   if (Object.keys(object).length) {
     return false;
   }

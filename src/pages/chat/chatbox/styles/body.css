@@ -33,7 +33,7 @@
 
 .message-right {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   background: #a7a7a7;
   border: 1px solid #a7a7a7;
   width: fit-content;

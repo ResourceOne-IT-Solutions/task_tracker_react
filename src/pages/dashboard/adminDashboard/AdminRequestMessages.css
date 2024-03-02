@@ -4,6 +4,8 @@
 .request-msgs .request-sub-msg {
   width: 50%;
   border: 1px solid black;
+  height: 80dvh;
+  overflow: hidden scroll;
 }
 .request-msgs .request-sub-msg h3 {
   border-bottom: 1px solid black;
@@ -11,6 +13,9 @@
   color: #fff;
   padding: 15px 5px;
   font-size: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 .request-msgs .request-sub-msg .request-content {
   display: flex;
@@ -25,9 +30,9 @@
   margin: 0px;
   padding: 6px;
 }
-.request-content-wrapper div {
+/* .request-content-wrapper div {
   flex: 1;
-}
+} */
 .message-request-content {
   text-align: left;
 }

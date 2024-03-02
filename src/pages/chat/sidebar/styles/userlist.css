@@ -3,17 +3,6 @@
   overflow-x: hidden;
   overflow-y: scroll;
 }
-.user-list-container::-webkit-scrollbar {
-  width: 9px;
-}
-.user-list-container::-webkit-scrollbar-thumb {
-  background-color: #085693;
-  border-radius: 6px;
-}
-
-.user-list-container::-webkit-scrollbar-track {
-  background-color: #eeeeee;
-}
 .user-main {
   background-color: #cccccc47;
 }

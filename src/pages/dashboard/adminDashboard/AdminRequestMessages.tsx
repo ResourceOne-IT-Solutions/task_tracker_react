@@ -3,15 +3,16 @@ import "./AdminRequestMessages.css";
 import { Button, Spinner } from "react-bootstrap";
 import {
   ChatRequestInterface,
-  MessageRequestInterface,
+  AdminMessageInterface,
   TicketRaiseInterface,
   TicketRequestInterface,
 } from "../../../modals/MessageModals";
 import {
+  AdminMessageCard,
+  AdminRequestCard,
+  TicketRaiseCard,
   getData,
   getDate,
-  getFormattedDate,
-  getFormattedTime,
   getFullName,
 } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
@@ -39,7 +40,7 @@ function AdminRequestMessages() {
   >([]);
   const [requestIds, setRequestIds] = useState<string[]>(requestMessageCount);
   const [messageRequests, setMessageRequests] = useState<
-    MessageRequestInterface[]
+    AdminMessageInterface[]
   >([]);
   const [ticketRaiseMsgs, setTicketRaiseMsgs] = useState<
     TicketRaiseInterface[]
@@ -51,7 +52,7 @@ function AdminRequestMessages() {
     Promise.all([
       getData<ChatRequestInterface>("message/user-chat-request"),
       getData<TicketRequestInterface>("message/user-ticket-request"),
-      getData<MessageRequestInterface>(`message/admin-messages`),
+      getData<AdminMessageInterface>(`message/admin-messages`),
       getData<TicketRaiseInterface>(`message/ticket-raise-messages`),
     ])
       .then((results) => {
@@ -139,10 +140,7 @@ function AdminRequestMessages() {
         setTicketRaiseMsgs([payloadData, ...ticketRaiseMsgs]);
       },
     );
-  const handleRequestClick = (
-    data: TicketRequestInterface | ChatRequestInterface,
-    type: string,
-  ) => {
+  const handleRequestClick = (id: string, type: string) => {
     const payload = {
       user: {
         name: getFullName(currentUser),
@@ -150,7 +148,7 @@ function AdminRequestMessages() {
         time: getDate(),
         date: getDate(),
       },
-      requestId: data._id,
+      requestId: id,
       type,
       status: false,
     };
@@ -171,34 +169,19 @@ function AdminRequestMessages() {
           <h3>Chat Requests</h3>
           {isLoading ? (
             <Spinner />
-          ) : messageRequests && messageRequests.length > 0 ? (
+          ) : messageRequests.length > 0 ? (
             chatRequests?.map((chat) => {
               return (
-                <div
-                  className={`request-content-wrapper ${
-                    requestIds.includes(chat._id) && "bg-warning"
-                  } `}
+                <AdminRequestCard
                   key={chat._id}
-                >
-                  <div>
-                    {chat.sender.name} is Requesting to Chat with{" "}
-                    {chat.opponent.name}.{" "}
-                  </div>
-                  <div>
-                    {chat.isPending ? (
-                      <Button
-                        variant="success"
-                        onClick={() => handleRequestClick(chat, "CHAT")}
-                      >
-                        Give Access
-                      </Button>
-                    ) : (
-                      <Button variant="success" disabled>
-                        Resolved
-                      </Button>
-                    )}
-                  </div>
-                </div>
+                  id={chat._id}
+                  time={chat.time}
+                  sender={chat.sender.name}
+                  receiver={chat.opponent.name}
+                  isPending={chat.isPending}
+                  onApprove={handleRequestClick}
+                  type="CHAT"
+                />
               );
             })
           ) : (
@@ -209,34 +192,19 @@ function AdminRequestMessages() {
           <h3>Ticket Requests</h3>
           {isLoading ? (
             <Spinner />
-          ) : ticketRequests && ticketRequests.length > 0 ? (
+          ) : ticketRequests.length > 0 ? (
             ticketRequests?.map((ticket) => {
               return (
-                <div
-                  className={`request-content-wrapper ${
-                    requestIds.includes(ticket._id) && "bg-warning"
-                  } `}
+                <AdminRequestCard
                   key={ticket._id}
-                >
-                  <p>
-                    {ticket.sender.name} is Requesting for {ticket.client.name}{" "}
-                    tickets.
-                  </p>
-                  <p>
-                    {ticket.isPending ? (
-                      <Button
-                        variant="success"
-                        onClick={() => handleRequestClick(ticket, "TICKET")}
-                      >
-                        Give Access
-                      </Button>
-                    ) : (
-                      <Button variant="success" disabled>
-                        Resolved
-                      </Button>
-                    )}
-                  </p>
-                </div>
+                  id={ticket._id}
+                  time={ticket.time}
+                  sender={ticket.sender.name}
+                  receiver={ticket.client.name}
+                  isPending={ticket.isPending}
+                  onApprove={handleRequestClick}
+                  type="TICKET"
+                />
               );
             })
           ) : (
@@ -247,38 +215,14 @@ function AdminRequestMessages() {
           <h3>All Admin Messages</h3>
           {isLoading ? (
             <Spinner />
-          ) : messageRequests && messageRequests.length > 0 ? (
+          ) : messageRequests.length > 0 ? (
             messageRequests?.map((message) => {
               return (
-                <div
-                  className={`request-content-wrapper ${
-                    requestIds.includes(message._id) && "bg-warning"
-                  } `}
+                <AdminMessageCard
                   key={message._id}
-                >
-                  <div className="message-request-content">
-                    <div className="my-2">Message: {message.content}</div>
-                    <div className="my-2">
-                      Time: {getFormattedDate(message.date)}{" "}
-                      {getFormattedTime(message.time)}
-                    </div>
-                    <div className="my-2">Sent by: {message.sender.name}</div>
-                  </div>
-                  <div className="d-flex flex-column delivery-status">
-                    <span>
-                      Delivered to{" "}
-                      <span className="fw-bold">
-                        {message.deliveredTo.length}
-                      </span>
-                    </span>
-                    <span>
-                      Seen :{" "}
-                      <span className="fw-bold">
-                        {message.viewedBy.length}{" "}
-                      </span>
-                    </span>
-                  </div>
-                </div>
+                  message={message}
+                  isAdmin={true}
+                />
               );
             })
           ) : (
@@ -289,34 +233,9 @@ function AdminRequestMessages() {
           <h3>TicketRaise Messages</h3>
           {isLoading ? (
             <Spinner />
-          ) : ticketRaiseMsgs && ticketRaiseMsgs.length > 0 ? (
-            ticketRaiseMsgs?.map((message: TicketRaiseInterface) => {
-              return (
-                <div
-                  className={`request-content-wrapper ${
-                    requestIds.includes(message._id) && "bg-warning"
-                  } `}
-                  key={message._id}
-                >
-                  <div className="message-request-content">
-                    <div>Message: {message.content}</div>
-                    <div>Sent by: {message.sender.name}</div>
-                    <div>
-                      Time: {getFormattedDate(message.date)}{" "}
-                      {getFormattedTime(message.time)}
-                    </div>
-                  </div>
-                  <div>
-                    {message.isPending ? (
-                      <Button variant="success">Approve</Button>
-                    ) : (
-                      <Button variant="success" disabled>
-                        Approved
-                      </Button>
-                    )}
-                  </div>
-                </div>
-              );
+          ) : ticketRaiseMsgs.length > 0 ? (
+            ticketRaiseMsgs?.map((message) => {
+              return <TicketRaiseCard key={message._id} message={message} />;
             })
           ) : (
             <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>

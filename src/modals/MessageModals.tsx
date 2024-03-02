@@ -5,7 +5,7 @@ export interface ChatRequestInterface {
   isPending: boolean;
   opponent: NameIdInterface;
   sender: NameIdInterface;
-  time: string;
+  time: Date;
   _id: string;
 }
 export interface TicketRequestInterface {
@@ -24,7 +24,7 @@ export interface TicketRaiseInterface {
   _id: string;
   content: string;
 }
-export interface MessageRequestInterface {
+export interface AdminMessageInterface {
   content: string;
   date: Date;
   deliveredTo: string[];
@@ -68,4 +68,31 @@ export interface MessageModel {
   date: string;
   fileLink: string;
   _id: string;
+}
+export interface TicketRaiseCardProps {
+  message: TicketRaiseInterface;
+}
+
+export interface AdminRequestCardProps {
+  id: string;
+  sender: string;
+  receiver: string;
+  isPending: boolean;
+  onApprove: (id: string, type: string) => void;
+  type: string;
+  time: Date;
+}
+
+export interface AdminMessageCardProps {
+  message: AdminMessageInterface;
+  isAdmin: boolean;
+  onConfirm?: (message: AdminMessageInterface) => void;
+}
+export interface UserRequestCardProps {
+  sender: string;
+  receiver: string;
+  type: string;
+  time: Date;
+  isPending: boolean;
+  onApprove: () => void;
 }

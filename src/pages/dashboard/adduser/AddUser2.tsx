@@ -103,13 +103,13 @@ function AddUser2() {
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
                 <label>
-                  <b>EmpId</b>
+                  <b>Employee Id</b>
                 </label>
                 <div className="input-filed">
                   <Field
                     name="empId"
                     type="number"
-                    placeholder="Enter EmpId"
+                    placeholder="Enter Employee Id"
                     className="form-control"
                   />
                   <ErrorMessage

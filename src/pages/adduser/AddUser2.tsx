@@ -5,15 +5,15 @@ import {
   CreateUserPayload,
   UserContext,
   UserModal,
-} from "../../../modals/UserModals";
-import { EMPTY_USER_PAYLOAD } from "../../../utils/Constants";
+} from "../../modals/UserModals";
+import { EMPTY_USER_PAYLOAD } from "../../utils/Constants";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { getCurrentDate, getFullName } from "../../../utils/utils";
-import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import httpMethods from "../../../api/Service";
-import { Severity } from "../../../utils/modal/notification";
-import { ErrorMessageInterface } from "../../../modals/interfaces";
+import { getCurrentDate, getFullName } from "../../utils/utils";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
+import httpMethods from "../../api/Service";
+import { Severity } from "../../utils/modal/notification";
+import { ErrorMessageInterface } from "../../modals/interfaces";
 
 function AddUser2() {
   const { currentUser, alertModal } = useUserContext() as UserContext;
@@ -49,6 +49,33 @@ function AddUser2() {
       .required("Required"),
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isUserCreated, setIsUserCreated] = useState(false);
+  const [isMailSending, setIsMailSending] = useState(false);
+  const [userId, setUserId] = useState("");
+  const sendUserDataToMail = async () => {
+    setIsMailSending(true);
+    httpMethods
+      .post("/mail/user-update", {
+        content: { id: userId },
+        updateType: "USER",
+      })
+      .then(() => {
+        setIsUserCreated(false);
+        alertModal({
+          severity: Severity.SUCCESS,
+          content: "Email Sent Successfully",
+          title: "User Credentials",
+        });
+      })
+      .catch((e) =>
+        alertModal({
+          severity: Severity.ERROR,
+          content: e.message,
+          title: "User Create",
+        }),
+      )
+      .finally(() => setIsMailSending(false));
+  };
   const handleSubmit = async (
     values: CreateUserPayload,
     { resetForm }: any,
@@ -68,14 +95,18 @@ function AddUser2() {
       httpMethods
         .post<FormData, UserModal>("/users/create", formData, true)
         .then((result) => {
-          const content = `Name : ${getFullName(result)}, \nUser ID: ${
+          const content = `${getFullName(
+            result,
+          )} account created Successfully, \nUser ID: ${
             result.userId
-          }, \nEmployee ID : ${result.empId}, \nPassword: ${values.password}\n`;
+          }, \nEmployee ID : ${result.empId}\n`;
+          setUserId(result._id);
           alertModal({
             severity: Severity.SUCCESS,
             content,
             title: "User Create",
           });
+          setIsUserCreated(true);
           resetForm();
         })
         .catch((e: ErrorMessageInterface) => {
@@ -364,10 +395,20 @@ function AddUser2() {
                 </div>
               </div>
             </div>
-            <div className="submit-btn">
+            <div className="d-flex justify-content-center">
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? "Submitting..." : "Submit"}
               </Button>
+              {isUserCreated && (
+                <Button
+                  type="button"
+                  variant="info"
+                  onClick={sendUserDataToMail}
+                  className="mx-1"
+                >
+                  {isMailSending ? "Sending" : "Send via Email"}
+                </Button>
+              )}
             </div>
           </Form>
         )}

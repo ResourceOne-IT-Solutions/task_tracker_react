@@ -22,7 +22,7 @@ import UserDashboardTickets from "../pages/dashboard/userDashboard/UserDashboard
 import HelpedTickets from "../pages/tickets/HelpedTickets";
 import Feedback from "../pages/Feedback/Feedback";
 import UserFeedback from "../pages/Feedback/UserFeedback";
-import AddUser2 from "../pages/dashboard/adduser/AddUser2";
+import AddUser2 from "../pages/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 import Sidebar from "../pages/sidebar";
 

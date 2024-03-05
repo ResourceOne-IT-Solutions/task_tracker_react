@@ -117,19 +117,26 @@ const ChatHeader = ({
               )}
             </div>
             <div className="header-user-name">
-              {getFullName(selectedUser)} &nbsp;{" "}
-              {statusIndicator(selectedUser?.status)}
-              {selectedUser.members && `(${selectedUser?.members?.length})`}
-            </div>
-
-            {selectedUser.members && (
-              <span style={{ color: "white" }}>
-                {" "}
-                {selectedUser.members.map((items) =>
-                  items.name.concat(","),
-                )}{" "}
+              <span>
+                {getFullName(selectedUser)} &nbsp;{" "}
+                {statusIndicator(selectedUser?.status)}
+                {selectedUser.members && `(${selectedUser?.members?.length})`}
               </span>
-            )}
+
+              {selectedUser.members && (
+                <p
+                  style={{ color: "white" }}
+                  title={`${selectedUser.members.map((items) =>
+                    items.name.concat(","),
+                  )}`}
+                >
+                  {" "}
+                  {selectedUser.members.map((items) =>
+                    items.name.concat(","),
+                  )}{" "}
+                </p>
+              )}
+            </div>
           </>
         )}
       </div>
@@ -140,10 +147,17 @@ const ChatHeader = ({
         ></i>
       </div>
       {currentUser.isAdmin && isPopupOpen && (
-        <div className="popup-nav" ref={popupRef}>
-          <Button variant="success" onClick={handleExportBtn}>
-            Export Chat
-          </Button>
+        <div className="popup-nav m-2" ref={popupRef}>
+          <ul>
+            <li className="mb-1">
+              <Button variant="success" onClick={handleExportBtn}>
+                Export Chat
+              </Button>
+            </li>
+            <li>
+              <Button>Show Users</Button>
+            </li>
+          </ul>
         </div>
       )}
     </div>

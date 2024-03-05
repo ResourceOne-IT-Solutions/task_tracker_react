@@ -119,45 +119,47 @@ function TaskTable<R>(props: TableProps<R>) {
     );
   };
   return (
-    <div className="table-scroll">
-      <table className={className} {...args}>
-        <thead className={tHeadClassName}>
-          <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>
-        </thead>
-        <tbody className={tBodyClassName}>
-          {loading ? (
-            <>
-              {Array(5)
-                .fill(0)
-                .map((_, index) => (
-                  <tr key={index}>
-                    {Array(headers.length)
-                      .fill(0)
-                      .map((_, idx) => (
-                        <td className="text-center" key={idx}>
-                          {Loader ? (
-                            <RectangularSkeleton />
-                          ) : (
-                            <div>Loading...</div>
-                          )}
-                        </td>
-                      ))}
+    <>
+      <div className="table-scroll">
+        <table className={className} {...args}>
+          <thead className={tHeadClassName}>
+            <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>
+          </thead>
+          <tbody className={tBodyClassName}>
+            {loading ? (
+              <>
+                {Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <tr key={index}>
+                      {Array(headers.length)
+                        .fill(0)
+                        .map((_, idx) => (
+                          <td className="text-center" key={idx}>
+                            {Loader ? (
+                              <RectangularSkeleton />
+                            ) : (
+                              <div>Loading...</div>
+                            )}
+                          </td>
+                        ))}
+                    </tr>
+                  ))}
+              </>
+            ) : (
+              <>
+                {currentPageData.length ? (
+                  currentPageData.map((obj: any) => renderBodyRow(obj))
+                ) : (
+                  <tr>
+                    <td colSpan={headers.length}>No Data Available</td>
                   </tr>
-                ))}
-            </>
-          ) : (
-            <>
-              {currentPageData.length ? (
-                currentPageData.map((obj: any) => renderBodyRow(obj))
-              ) : (
-                <tr>
-                  <td colSpan={headers.length}>No Data Available</td>
-                </tr>
-              )}
-            </>
-          )}
-        </tbody>
-      </table>
+                )}
+              </>
+            )}
+          </tbody>
+        </table>
+      </div>
       {!loading && pagination && (
         <TablePagination
           paginationClassName={paginationClassName}
@@ -166,7 +168,7 @@ function TaskTable<R>(props: TableProps<R>) {
           setCurrentPageData={setCurrentPageData}
         />
       )}
-    </div>
+    </>
   );
 }
 

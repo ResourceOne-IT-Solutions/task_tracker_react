@@ -13,7 +13,7 @@
   overflow: hidden;
 }
 .header-navbar {
-  width: 70%;
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -49,8 +49,19 @@
 }
 .header-user-name {
   color: white;
-  display: flex;
-  align-items: center;
+  position: relative;
+  top:-10px;
+  width: 100%;
+}
+
+
+.header-user-name p{
+  position: absolute;
+  top: 20px;
+  width: 70%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .vertical-dots-header:hover {
   position: relative;

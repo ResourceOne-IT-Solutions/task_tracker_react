@@ -325,7 +325,7 @@ const AdminDashboard = () => {
         </div>
         <div className="ranges"></div>
       </div>
-      <div className="d-flex flex-direction-row gap-5 m-3">
+      <div className="d-flex flex-direction-row gap-5 m-3 dashboard-actions">
         <Button variant="danger" onClick={handleAdminBroadCastMessage}>
           Send Message to All
         </Button>

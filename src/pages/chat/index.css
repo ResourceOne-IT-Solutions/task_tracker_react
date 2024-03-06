@@ -57,7 +57,7 @@
   padding: 8px 10px;
 }
 .chat-body {
-  height: 100%;
+  height:calc(100% - 120px);
   background-color: #eeeeee;
 }
 .chat-footer {

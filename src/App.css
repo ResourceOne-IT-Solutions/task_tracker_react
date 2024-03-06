@@ -129,3 +129,12 @@
   flex: 1;
   padding-left: 10px;
 }
+
+
+@media only screen and (max-width: 767px) {
+  
+.ful-content {
+  flex-direction: column;
+}
+
+}

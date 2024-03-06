@@ -2,7 +2,7 @@
   display: flex;
 }
 .request-msgs .request-sub-msg {
-  width: 50%;
+  width: 100%;
   border: 1px solid black;
   height: 80dvh;
   overflow: hidden scroll;
@@ -24,11 +24,12 @@
 }
 .request-content-wrapper {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   border: 1px solid grey;
   align-items: center;
   margin: 0px;
   padding: 6px;
+  text-align: left;
 }
 /* .request-content-wrapper div {
   flex: 1;
@@ -130,4 +131,8 @@
 }
 .icon-sleep p {
   color: #0dcaf0;
+}
+
+.chat-request-toggle-btns {
+  background-color: #055e94;
 }

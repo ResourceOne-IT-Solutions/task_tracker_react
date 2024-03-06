@@ -57,3 +57,7 @@ export const STATUS_INDICATOR_STYLES: React.CSSProperties = {
   top: "0",
   right: "0",
 };
+export const CHAT_REQUEST = "Chat Requests";
+export const TICKET_REQUEST = "Ticket Requests";
+export const ADMIN_MESSAGE = "Admin Messages";
+export const TICKETRAISE_MESSAGE = "TicketRaise Messages";

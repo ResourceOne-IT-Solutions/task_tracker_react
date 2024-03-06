@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import httpMethods from "../../api/Service";
-import { useUserContext } from "../../components/Authcontext/AuthContext";
+import {
+  useAuth,
+  useUserContext,
+} from "../../components/Authcontext/AuthContext";
 import UserDashboard from "./userDashboard/UserDashboard";
 import AdminDashboard from "./adminDashboard/AdminDashboard";
 import { Navigate } from "react-router-dom";
@@ -9,28 +12,18 @@ import { Loader } from "../../utils/utils";
 
 const Dashboard = () => {
   const userContext = useUserContext();
+  const { getLogin } = useAuth();
   const { currentUser, setCurrentUser, isLoggedin, setIsLoggedIn } =
     userContext as UserContext;
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (!currentUser.firstName) {
-      httpMethods
-        .get<UserModal>("/get-user")
-        .then((response) => {
-          setCurrentUser(response);
-          setIsLoggedIn(true);
-        })
-        .catch(() => {
-          setIsLoading(false);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      getLogin();
     } else {
       setIsLoading(false);
     }
-  }, []);
+  }, [currentUser.firstName]);
 
   if (!isLoading && !isLoggedin) {
     return <Navigate to="/" />;

@@ -11,25 +11,30 @@ import {
   AdminMessageCard,
   AdminRequestCard,
   TicketRaiseCard,
-  getData,
   getDate,
   getFullName,
+  getPath,
 } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 import {
+  ADMIN_MESSAGE,
+  CHAT_REQUEST,
   NO_CHAT_REQUEST,
   NO_MESSAGES_TO_DISPLAY,
   NO_TICKET_REQUEST,
+  TICKETRAISE_MESSAGE,
+  TICKET_REQUEST,
 } from "../../../utils/Constants";
 import { Severity } from "../../../utils/modal/notification";
+import httpMethods from "../../../api/Service";
 
 function AdminRequestMessages() {
   const navigate = useNavigate();
-  const { socket, currentUser, alertModal, setRequestMessageCount } =
-    useUserContext() as UserContext;
+  const { socket, currentUser, alertModal } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
+  const [showingTable, setShowingTable] = useState(ADMIN_MESSAGE);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
@@ -40,32 +45,6 @@ function AdminRequestMessages() {
     TicketRaiseInterface[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    setRequestMessageCount([]);
-    setIsLoading(true);
-    Promise.all([
-      getData<ChatRequestInterface>("message/user-chat-request"),
-      getData<TicketRequestInterface>("message/user-ticket-request"),
-      getData<AdminMessageInterface>(`message/admin-messages`),
-      getData<TicketRaiseInterface>(`message/ticket-raise-messages`),
-    ])
-      .then((results) => {
-        setChatRequests(results[0]);
-        setTicketRequests(results[1]);
-        setMessageRequests(results[2]);
-        setTicketRaiseMsgs(results[3]);
-      })
-      .catch((err) =>
-        alertModal({
-          severity: Severity.ERROR,
-          content: err.message,
-          title: "Admin Messages",
-        }),
-      )
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, []);
   socket
     .off("userRequestApproved")
     .on("userRequestApproved", ({ result, type }) => {
@@ -148,91 +127,166 @@ function AdminRequestMessages() {
     };
     socket.emit("approveUserRequest", payload);
   };
+  const checkIsFirstTime = (type: string) => {
+    if (type === ADMIN_MESSAGE) {
+      return messageRequests.length == 0;
+    }
+    if (type === TICKETRAISE_MESSAGE) {
+      return ticketRaiseMsgs.length == 0;
+    }
+    if (type === CHAT_REQUEST) {
+      return chatRequests.length == 0;
+    }
+    if (type === TICKET_REQUEST) {
+      return ticketRequests.length == 0;
+    }
+    return true;
+  };
+  const getTableData = (tableName: string) => {
+    httpMethods
+      .get<any>(`/message/${getPath(tableName)}`)
+      .then((data: any[]) => {
+        if (tableName === CHAT_REQUEST) {
+          setChatRequests(data);
+        }
+        if (tableName === TICKET_REQUEST) {
+          setTicketRequests(data);
+        }
+        if (tableName === ADMIN_MESSAGE) {
+          setMessageRequests(data);
+        }
+        if (tableName === TICKETRAISE_MESSAGE) {
+          setTicketRaiseMsgs(data);
+        }
+      })
+      .catch((err) =>
+        alertModal({
+          severity: Severity.ERROR,
+          content: err.message,
+          title: "Admin Messages",
+        }),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+  const handleButtonClick = (tableName: string) => {
+    setShowingTable(tableName);
+    if (checkIsFirstTime(tableName)) {
+      setIsLoading(true);
+    }
+    getTableData(tableName);
+  };
+  useEffect(() => {
+    setIsLoading(true);
+    getTableData(ADMIN_MESSAGE);
+  }, []);
   return (
     <div className="text-center">
-      <h1 className="table-heading">
+      <div className="table-heading">
         <Button className="go-back" onClick={() => navigate(-1)}>
           <i className="fa fa-angle-left"></i>
           Go Back
         </Button>
-        Total Requests From Users
-      </h1>
-
+        <h1>Total Requests From Users</h1>
+      </div>
+      <div className="d-flex justify-content-center gap-5 mb-2">
+        {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST, TICKETRAISE_MESSAGE].map(
+          (btn, idx) => (
+            <Button
+              className={`chat-request-toggle-btns ${
+                showingTable === btn && "active"
+              }`}
+              onClick={() => handleButtonClick(btn)}
+              key={idx}
+            >
+              {btn}
+            </Button>
+          ),
+        )}
+      </div>
       <div className="request-msgs">
         <div className="request-sub-msg">
-          <h3>Chat Requests</h3>
+          <h3>{showingTable}</h3>
           {isLoading ? (
             <Spinner />
-          ) : messageRequests.length > 0 ? (
-            chatRequests?.map((chat) => {
-              return (
-                <AdminRequestCard
-                  key={chat._id}
-                  id={chat._id}
-                  time={chat.time}
-                  sender={chat.sender.name}
-                  receiver={chat.opponent.name}
-                  isPending={chat.isPending}
-                  onApprove={handleRequestClick}
-                  type="CHAT"
-                />
-              );
-            })
           ) : (
-            <p className="fw-bold">{NO_CHAT_REQUEST}</p>
-          )}
-        </div>
-        <div className="request-sub-msg">
-          <h3>Ticket Requests</h3>
-          {isLoading ? (
-            <Spinner />
-          ) : ticketRequests.length > 0 ? (
-            ticketRequests?.map((ticket) => {
-              return (
-                <AdminRequestCard
-                  key={ticket._id}
-                  id={ticket._id}
-                  time={ticket.time}
-                  sender={ticket.sender.name}
-                  receiver={ticket.client.name}
-                  isPending={ticket.isPending}
-                  onApprove={handleRequestClick}
-                  type="TICKET"
-                />
-              );
-            })
-          ) : (
-            <p className="fw-bold">{NO_TICKET_REQUEST}</p>
-          )}
-        </div>
-        <div className="request-sub-msg">
-          <h3>All Admin Messages</h3>
-          {isLoading ? (
-            <Spinner />
-          ) : messageRequests.length > 0 ? (
-            messageRequests?.map((message) => {
-              return (
-                <AdminMessageCard
-                  key={message._id}
-                  message={message}
-                  isAdmin={true}
-                />
-              );
-            })
-          ) : (
-            <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
-          )}
-        </div>
-        <div className="request-sub-msg">
-          <h3>TicketRaise Messages</h3>
-          {isLoading ? (
-            <Spinner />
-          ) : ticketRaiseMsgs.length > 0 ? (
-            ticketRaiseMsgs?.map((message) => {
-              return <TicketRaiseCard key={message._id} message={message} />;
-            })
-          ) : (
-            <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
+            <>
+              {showingTable === CHAT_REQUEST && (
+                <>
+                  {chatRequests.length > 0 ? (
+                    chatRequests?.map((chat) => {
+                      return (
+                        <AdminRequestCard
+                          type="CHAT"
+                          key={chat._id}
+                          id={chat._id}
+                          time={chat.time}
+                          sender={chat.sender.name}
+                          receiver={chat.opponent.name}
+                          isPending={chat.isPending}
+                          onApprove={handleRequestClick}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_CHAT_REQUEST}</p>
+                  )}
+                </>
+              )}
+              {showingTable === TICKET_REQUEST && (
+                <>
+                  {ticketRequests.length > 0 ? (
+                    ticketRequests?.map((ticket) => {
+                      return (
+                        <AdminRequestCard
+                          type="TICKET"
+                          key={ticket._id}
+                          id={ticket._id}
+                          time={ticket.time}
+                          sender={ticket.sender.name}
+                          receiver={ticket.client.name}
+                          isPending={ticket.isPending}
+                          onApprove={handleRequestClick}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_TICKET_REQUEST}</p>
+                  )}
+                </>
+              )}
+              {showingTable === ADMIN_MESSAGE && (
+                <>
+                  {messageRequests.length > 0 ? (
+                    messageRequests?.map((message) => {
+                      return (
+                        <AdminMessageCard
+                          key={message._id}
+                          message={message}
+                          isAdmin={true}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
+                  )}
+                </>
+              )}
+              {showingTable === TICKETRAISE_MESSAGE && (
+                <>
+                  {ticketRaiseMsgs.length > 0 ? (
+                    ticketRaiseMsgs?.map((message) => {
+                      return (
+                        <TicketRaiseCard key={message._id} message={message} />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </div>

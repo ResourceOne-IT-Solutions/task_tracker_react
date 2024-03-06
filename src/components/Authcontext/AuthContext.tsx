@@ -81,25 +81,31 @@ const AuthContext = ({ children }: AuthContextProps) => {
     setIsUserFetching(true);
     const token = localStorage.getItem("accessToken") ?? "";
     if (token) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const { latitude, longitude } = position.coords;
-        httpMethods
-          .get<UserModal>(
-            `/get-user?latitude=${latitude}&longitude=${longitude}`,
-          )
-          .then((data) => {
-            setCurrentUser(data);
-            setIsLoggedIn(true);
-            socket.emit("newUser", { userId: data._id });
-          })
-          .catch((e: any) => {
-            setIsLoggedIn(false);
-            setCurrentUser({} as UserModal);
-          })
-          .finally(() => {
-            setIsUserFetching(false);
-          });
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          httpMethods
+            .get<UserModal>(
+              `/get-user?latitude=${latitude}&longitude=${longitude}`,
+            )
+            .then((data) => {
+              setCurrentUser(data);
+              setIsLoggedIn(true);
+              socket.emit("newUser", { userId: data._id });
+            })
+            .catch((e: any) => {
+              setIsLoggedIn(false);
+              setCurrentUser({} as UserModal);
+            })
+            .finally(() => {
+              setIsUserFetching(false);
+            });
+        },
+        () => {
+          setIsUserFetching(false);
+          setIsLoggedIn(false);
+        },
+      );
     } else {
       setIsUserFetching(false);
     }
@@ -111,5 +117,24 @@ const AuthContext = ({ children }: AuthContextProps) => {
   );
 };
 export const useUserContext = () => useContext(UserContextProvider);
-
+export const useAuth = () => {
+  const { setCurrentUser, setIsLoggedIn } = useUserContext() as UserContext;
+  const getLogin = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const { latitude, longitude } = position.coords;
+      httpMethods
+        .get<UserModal>(`/get-user?latitude=${latitude}&longitude=${longitude}`)
+        .then((data) => {
+          setCurrentUser(data);
+          setIsLoggedIn(true);
+          socket.emit("newUser", { userId: data._id });
+        })
+        .catch((e: any) => {
+          setIsLoggedIn(false);
+          setCurrentUser({} as UserModal);
+        });
+    });
+  };
+  return { getLogin };
+};
 export default AuthContext;

@@ -35,7 +35,7 @@ const UserFeedback = () => {
     setSelectedFeedback(feedback);
     setshowFeedbackTable(false);
   };
-  const ticketTableHeaders: TableHeaders<any>[] = [
+  const feedbackTableHeaders: TableHeaders<any>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Sender Name", key: "sender.name" },
     {
@@ -121,7 +121,7 @@ const UserFeedback = () => {
           <h1 className="text-center">User Feedbacks</h1>
           <TaskTable<any>
             pagination
-            headers={ticketTableHeaders}
+            headers={feedbackTableHeaders}
             tableData={userFeedbacks}
             loading={loading}
           />

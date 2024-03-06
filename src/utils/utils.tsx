@@ -9,9 +9,11 @@ import {
 } from "../modals/UserModals";
 import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
 import {
+  ADMIN_MESSAGE,
   AVAILABLE,
   BE_URL,
   BREAK,
+  CHAT_REQUEST,
   EMAIL_PATTERN,
   MOBILE_PATTERN,
   NAME_PATTERN,
@@ -19,6 +21,8 @@ import {
   ON_TICKET,
   PASSWORD_PATTERN,
   SLEEP,
+  TICKETRAISE_MESSAGE,
+  TICKET_REQUEST,
   TOKEN,
 } from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
@@ -490,4 +494,17 @@ export const TicketRaiseCard = ({ message }: TicketRaiseCardProps) => {
       </div>
     </div>
   );
+};
+
+export const getPath = (type: string) => {
+  switch (type) {
+    case CHAT_REQUEST:
+      return "user-chat-request";
+    case TICKET_REQUEST:
+      return "user-ticket-request";
+    case ADMIN_MESSAGE:
+      return "admin-messages";
+    case TICKETRAISE_MESSAGE:
+      return "ticket-raise-messages";
+  }
 };

@@ -10,6 +10,7 @@ import {
 } from "../../modals/UserModals";
 import { BE_URL } from "../../utils/Constants";
 import { Severity } from "../../utils/modal/notification";
+import { Loader } from "../../utils/utils";
 
 const UserContextProvider = createContext<UserContext | null>(null);
 const socket = io(BE_URL);
@@ -25,7 +26,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   const [totalMessages, setTotalMessages] = useState<number>(0);
   const [notificationRooms, setNotificationRooms] = useState<number>(0);
   const [showAlertModal, setShowAlertModal] = useState<boolean>(false);
-  const [isUserFetching, setIsUserFetching] = useState<boolean>(false);
+  const [isUserFetching, setIsUserFetching] = useState<boolean>(true);
   const [alertModalContent, setAlertModalContent] = useState<AlertModalProps>({
     content: "",
     severity: Severity.NULL,
@@ -80,27 +81,32 @@ const AuthContext = ({ children }: AuthContextProps) => {
     setIsUserFetching(true);
     const token = localStorage.getItem("accessToken") ?? "";
     if (token) {
-      httpMethods
-        .get<UserModal>("/get-user")
-        .then((data) => {
-          setCurrentUser(data);
-          setIsLoggedIn(true);
-          socket.emit("newUser", { userId: data._id });
-        })
-        .catch((e: any) => {
-          setIsLoggedIn(false);
-          setCurrentUser({} as UserModal);
-        })
-        .finally(() => {
-          setIsUserFetching(false);
-        });
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        httpMethods
+          .get<UserModal>(
+            `/get-user?latitude=${latitude}&longitude=${longitude}`,
+          )
+          .then((data) => {
+            setCurrentUser(data);
+            setIsLoggedIn(true);
+            socket.emit("newUser", { userId: data._id });
+          })
+          .catch((e: any) => {
+            setIsLoggedIn(false);
+            setCurrentUser({} as UserModal);
+          })
+          .finally(() => {
+            setIsUserFetching(false);
+          });
+      });
     } else {
       setIsUserFetching(false);
     }
   }, []);
   return (
     <UserContextProvider.Provider value={value}>
-      {children}
+      {isUserFetching ? <Loader /> : children}
     </UserContextProvider.Provider>
   );
 };

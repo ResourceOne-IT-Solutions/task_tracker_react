@@ -119,22 +119,35 @@ const AuthContext = ({ children }: AuthContextProps) => {
 export const useUserContext = () => useContext(UserContextProvider);
 export const useAuth = () => {
   const { setCurrentUser, setIsLoggedIn } = useUserContext() as UserContext;
+  const [isLoading, setIsLoading] = useState(false);
   const getLogin = () => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      httpMethods
-        .get<UserModal>(`/get-user?latitude=${latitude}&longitude=${longitude}`)
-        .then((data) => {
-          setCurrentUser(data);
-          setIsLoggedIn(true);
-          socket.emit("newUser", { userId: data._id });
-        })
-        .catch((e: any) => {
-          setIsLoggedIn(false);
-          setCurrentUser({} as UserModal);
-        });
-    });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setIsLoading(true);
+        httpMethods
+          .get<UserModal>(
+            `/get-user?latitude=${latitude}&longitude=${longitude}`,
+          )
+          .then((data) => {
+            setCurrentUser(data);
+            setIsLoggedIn(true);
+            socket.emit("newUser", { userId: data._id });
+          })
+          .catch(() => {
+            setIsLoggedIn(false);
+            setCurrentUser({} as UserModal);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      },
+      () => {
+        setIsLoggedIn(false);
+        setIsLoading(false);
+      },
+    );
   };
-  return { getLogin };
+  return { getLogin, isLoading };
 };
 export default AuthContext;

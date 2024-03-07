@@ -15,7 +15,8 @@ export const FileRenderer = ({
     case "application/pdf": {
       return <iframe src={fileUrl} width="100%" title="PDF Viewer"></iframe>;
     }
-    case "image/jpeg": {
+    case "image/jpeg":
+    case "image/png": {
       return <img src={fileUrl} alt={type} className="img-content" />;
     }
     case "video": {

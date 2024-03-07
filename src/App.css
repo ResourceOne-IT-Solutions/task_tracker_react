@@ -139,4 +139,10 @@
     margin: 0;
     padding: 10px;
   }
+  .side-bar {
+    width: 100%;
+    z-index: 2;
+    position: sticky;
+    top: 6%;
+  }
 }

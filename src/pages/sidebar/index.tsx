@@ -40,11 +40,11 @@ const Sidebar = () => {
     }
   }, [modalName]);
   return (
-    <div
-      className="side-bar me-auto mb-2 mb-lg-0 collapse navbar-collapse flex-column sidebar-m-view"
-      id="sidebarContent"
-    >
-      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+    <div className="side-bar">
+      <ul
+        className={`me-auto mb-2 mb-lg-0 collapse show navbar-collapse flex-column p-0`}
+        id="sidebarContent"
+      >
         {isLoggedin && currentUser.isAdmin && (
           <>
             <li className="nav-item adduser">

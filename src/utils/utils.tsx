@@ -508,3 +508,12 @@ export const getPath = (type: string) => {
       return "ticket-raise-messages";
   }
 };
+
+export const checkIsMobileView = () => {
+  const screenWidth =
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
+  const mobileThreshold = 768;
+  return screenWidth < mobileThreshold;
+};

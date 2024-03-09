@@ -10,7 +10,7 @@ import {
 } from "../../modals/UserModals";
 import { BE_URL } from "../../utils/Constants";
 import { Severity } from "../../utils/modal/notification";
-import { Loader } from "../../utils/utils";
+import { Loader, checkIsMobileView } from "../../utils/utils";
 
 const UserContextProvider = createContext<UserContext | null>(null);
 const socket = io(BE_URL);
@@ -39,6 +39,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
       content: "",
     });
   const [requestMessageCount, setRequestMessageCount] = useState<string[]>([]);
+  const [isMobileView, setIsMobileView] = useState(false);
   const alertModal = ({
     content,
     severity,
@@ -76,7 +77,18 @@ const AuthContext = ({ children }: AuthContextProps) => {
     requestMessageCount,
     setRequestMessageCount,
     isUserFetching,
+    isMobileView,
   };
+  const handleResize = () => {
+    setIsMobileView(checkIsMobileView());
+  };
+  useEffect(() => {
+    handleResize();
+    document.addEventListener("resize", handleResize);
+    return () => {
+      document.removeEventListener("resize", handleResize);
+    };
+  }, []);
   useEffect(() => {
     setIsUserFetching(true);
     const token = localStorage.getItem("accessToken") ?? "";

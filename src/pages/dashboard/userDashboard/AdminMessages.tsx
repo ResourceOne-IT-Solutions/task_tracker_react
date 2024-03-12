@@ -150,11 +150,14 @@ function AdminMessages() {
   return (
     <div className="text-center">
       <div className="table-heading">
-        <Button className="go-back" onClick={() => navigate(-1)}>
-          <i className="fa fa-angle-left"></i>
-          Go Back
-        </Button>
-        <h1>Messages from Admin</h1>
+        <h1>
+          {" "}
+          <Button className="go-back" onClick={() => navigate(-1)}>
+            <i className="fa fa-angle-left"></i>
+            Go Back
+          </Button>
+          Messages from Admin
+        </h1>
       </div>
       <div className="d-flex justify-content-center gap-5 mb-2">
         {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST].map((btn, idx) => (

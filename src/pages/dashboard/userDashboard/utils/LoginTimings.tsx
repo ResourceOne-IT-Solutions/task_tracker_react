@@ -5,6 +5,7 @@ import {
   getFormattedTime,
   isEmptyObject,
 } from "../../../../utils/utils";
+import { calculateLoginHours } from ".";
 
 interface LoginTimingsProps {
   user: UserModal;
@@ -17,12 +18,14 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
   );
 
   useEffect(() => {
-    const today = getFormattedDate(new Date());
-    const todayLogin =
-      user.loginTimings.find(
-        (time) => getFormattedDate(time.inTime) === today,
-      ) || {};
-    setTodayLogin(todayLogin as LoginTimingInterface);
+    if (todayOnly) {
+      const today = getFormattedDate(new Date());
+      const todayLogin =
+        user.loginTimings.find(
+          (time) => getFormattedDate(time.inTime) === today,
+        ) || {};
+      setTodayLogin(todayLogin as LoginTimingInterface);
+    }
   }, []);
   return (
     <>
@@ -60,7 +63,7 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
                 <td>
                   {timing.outTime ? getFormattedTime(timing.outTime) : "---"}
                 </td>
-                <td>2 hrs</td>
+                <td>{calculateLoginHours(timing.inTime, timing.outTime)}</td>
               </tr>
             ))}
           </tbody>

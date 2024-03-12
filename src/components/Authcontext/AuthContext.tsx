@@ -8,12 +8,12 @@ import {
   UserContext,
   UserModal,
 } from "../../modals/UserModals";
-import { BE_URL } from "../../utils/Constants";
+import { BE_URL, SOCKET_URL } from "../../utils/Constants";
 import { Severity } from "../../utils/modal/notification";
 import { Loader, checkIsMobileView } from "../../utils/utils";
 
 const UserContextProvider = createContext<UserContext | null>(null);
-const socket = io(BE_URL);
+const socket = io(SOCKET_URL);
 interface AuthContextProps {
   children: React.ReactNode;
 }

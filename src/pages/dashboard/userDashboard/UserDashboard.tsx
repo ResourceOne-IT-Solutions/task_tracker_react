@@ -42,7 +42,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     });
   });
   useEffect(() => {
-    getData<TicketModal>("tickets/user/pending-tickets/" + presentUser._id)
+    getData<TicketModal>("tickets/user/pending-tickets/" + user._id)
       .then((result) => {
         setTableData(result);
         const ticketStats: { [key: string]: number } = {
@@ -80,8 +80,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           title: "User Tickets",
         });
       });
-    if (currentUser.isAdmin) {
-      getData<TicketModal>("tickets/user/tickets/" + presentUser._id)
+    if (user.isAdmin) {
+      getData<TicketModal>("tickets/user/" + user._id)
         .then((result) => result)
         .catch((err: ErrorMessageInterface) => {
           alertModal({
@@ -91,11 +91,8 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           });
         });
     }
-  }, [presentUser._id]);
-
-  useEffect(() => {
     setPresentUser(user);
-  }, [user]);
+  }, [user._id]);
 
   const handleSelect = (item: string | null) => {
     setSelected(item as string);
@@ -130,7 +127,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
     setSelected("");
     setShowChatRequestPopup(false);
   };
-
   return (
     <>
       <div className="userdashboard">
@@ -178,15 +174,17 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           {currentUser.isAdmin && (
             <>
               <div
-                className="w-30"
+                className="w-30 login-timings-data"
                 style={{ maxHeight: "300px", overflow: "hidden scroll" }}
               >
+                <h3 style={{ backgroundColor: "#055e94" }}>Login Timings</h3>
                 <LoginTimings user={presentUser} />
               </div>
               <div
-                className="w-30"
+                className="w-30 break-timings-data"
                 style={{ maxHeight: "300px", overflow: "hidden scroll" }}
               >
+                <h3 style={{ backgroundColor: "#055e94" }}>Break Timings</h3>
                 <BreakTimings user={presentUser} />
               </div>
             </>

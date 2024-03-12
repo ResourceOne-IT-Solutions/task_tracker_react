@@ -15,3 +15,18 @@ export const getBreakTimings = (duration: number) => {
   }
   return `${addZero(min)}: ${addZero(sec)}`;
 };
+export const calculateLoginHours = (inTime: Date, outTime: Date) => {
+  if (!inTime) {
+    return "00:00hrs";
+  }
+  inTime = new Date(inTime);
+  if (!outTime) {
+    outTime = new Date(inTime);
+    outTime.setHours(15);
+    outTime.setMinutes(30);
+  } else {
+    outTime = new Date(outTime);
+  }
+  const secs = (outTime.getTime() - inTime.getTime()) / 1000;
+  return getBreakTimings(secs);
+};

@@ -88,7 +88,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
     return () => {
       document.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [window.innerHeight, window.innerWidth]);
   useEffect(() => {
     setIsUserFetching(true);
     const token = localStorage.getItem("accessToken") ?? "";

@@ -25,15 +25,13 @@
 }
 
 @media only screen and (max-width: 767px) {
-
-  .show-range .user-list{
+  .show-range .user-list {
     margin-bottom: 10px;
   }
 }
 
-
 @media only screen and (min-width: 768px) {
-  .side-bar{
+  .side-bar {
     display: block !important;
   }
 }

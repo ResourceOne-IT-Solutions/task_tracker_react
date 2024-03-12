@@ -136,3 +136,22 @@
 .chat-request-toggle-btns {
   background-color: #055e94;
 }
+
+.view-request-msgs .table-heading h1 {
+  font-size: 35px;
+  position: relative;
+}
+
+@media only screen and (max-width: 767px) {
+  .view-request-msgs .table-heading h1 {
+    font-size: 15px;
+    height: 40px;
+  }
+  .view-request-msgs .table-heading h1 button {
+    font-size: 12px;
+    top: -5px;
+  }
+  .chat-request button {
+    font-size: 12px;
+  }
+}

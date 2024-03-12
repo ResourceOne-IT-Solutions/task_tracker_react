@@ -50,12 +50,11 @@
 .header-user-name {
   color: white;
   position: relative;
-  top:-10px;
+  top: -10px;
   width: 100%;
 }
 
-
-.header-user-name p{
+.header-user-name p {
   position: absolute;
   top: 20px;
   width: 70%;

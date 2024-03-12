@@ -103,46 +103,66 @@ const TicketFilters = ({
   }, [filteredData]);
 
   return (
-    <div className="filters">
-      <div className="d-flex">
-        <Button className="back-btn" onClick={() => navigate(-1)}>
-          <i className="fa fa-angle-left"></i>
-          Back
-        </Button>{" "}
-        <Dropdown onSelect={handleSelectStatus} className="mx-2">
-          <Dropdown.Toggle
-            variant="secondary"
-            id="dropdown-basic-ticket-filter"
+    <>
+      <div className="filters">
+        <div className="d-flex">
+          <div className="d-flex my-1">
+            <Button className="back-btn" onClick={() => navigate(-1)}>
+              <i className="fa fa-angle-left"></i>
+              Back
+            </Button>{" "}
+            <Dropdown onSelect={handleSelectStatus} className="mx-2">
+              <Dropdown.Toggle
+                variant="secondary"
+                id="dropdown-basic-ticket-filter"
+              >
+                {selected ? selected : "Select a filter"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {FILTERS.map((filterType, idx) => {
+                  return (
+                    <Dropdown.Item key={idx} eventKey={filterType}>
+                      <b>{filterType}</b>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown onSelect={handleStatusSelect} className="mx-2">
+              <Dropdown.Toggle
+                variant="secondary"
+                id="dropdown-basic-ticket-filter"
+              >
+                {selectedStatus ? selectedStatus : "Select Status"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {Object.values(TICKET_STATUS_TYPES).map((filterType, idx) => {
+                  return (
+                    <Dropdown.Item key={idx} eventKey={filterType}>
+                      <b>{filterType}</b>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </div>
+
+        <div>
+          <button
+            className="btn btn-info"
+            onClick={() => handleDateRangeSubmit()}
+            disabled={!dateRange.from || !dateRange.to ? true : false}
           >
-            {selected ? selected : "Select a filter"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-            {FILTERS.map((filterType, idx) => {
-              return (
-                <Dropdown.Item key={idx} eventKey={filterType}>
-                  <b>{filterType}</b>
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown onSelect={handleStatusSelect} className="mx-2">
-          <Dropdown.Toggle
-            variant="secondary"
-            id="dropdown-basic-ticket-filter"
-          >
-            {selectedStatus ? selectedStatus : "Select Status"}
-          </Dropdown.Toggle>
-          <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-            {Object.values(TICKET_STATUS_TYPES).map((filterType, idx) => {
-              return (
-                <Dropdown.Item key={idx} eventKey={filterType}>
-                  <b>{filterType}</b>
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
+            GetTickets
+          </button>
+          <Button onClick={handleResetFilter} className="mx-2">
+            Reset Filters
+          </Button>
+          {currentUser.isAdmin && (
+            <XlSheet data={formattedTicketforXL(filteredData)} />
+          )}
+        </div>
       </div>
       <div className="from-to">
         <label htmlFor="from">From</label>
@@ -164,22 +184,7 @@ const TicketFilters = ({
           className="form-control"
         />
       </div>
-      <div>
-        <button
-          className="btn btn-info mx-2"
-          onClick={() => handleDateRangeSubmit()}
-          disabled={!dateRange.from || !dateRange.to ? true : false}
-        >
-          GetTickets
-        </button>
-        <Button onClick={handleResetFilter} className="mx-2">
-          Reset Filters
-        </Button>
-        {currentUser.isAdmin && (
-          <XlSheet data={formattedTicketforXL(filteredData)} />
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 

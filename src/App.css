@@ -134,7 +134,7 @@
   .ful-content {
     flex-direction: column;
   }
-  .router-outlet{
+  .router-outlet {
     width: 100%;
     margin: 0;
     padding: 10px;

@@ -80,6 +80,19 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           title: "User Tickets",
         });
       });
+    if (currentUser.isAdmin) {
+      getData<TicketModal>("tickets/user/tickets/" + presentUser._id)
+        .then((result) => {
+          console.log("TICKETS:::", result);
+        })
+        .catch((err: ErrorMessageInterface) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "User Tickets",
+          });
+        });
+    }
   }, [presentUser._id]);
 
   useEffect(() => {
@@ -180,6 +193,15 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               </div>
             </>
           )}
+        </div>
+        <div className="user-ticket-stats">
+          <h3>Ticket Stats</h3>
+          <div className="d-flex justify-content-around">
+            <p>Pending Tickets: 10</p>
+            <p>In Progress Tickets: 10</p>
+            <p>Closed Tickets: 10</p>
+            <p>Helped Tickets: 10</p>
+          </div>
         </div>
         <div className="admin-pie-chart">
           <div className="pie-chart">

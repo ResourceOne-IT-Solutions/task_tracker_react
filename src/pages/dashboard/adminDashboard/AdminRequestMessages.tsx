@@ -207,7 +207,6 @@ function AdminRequestMessages() {
       </div>
       <div className="request-msgs">
         <div className="request-sub-msg">
-          <h3>{showingTable}</h3>
           {isLoading ? (
             <Spinner />
           ) : (

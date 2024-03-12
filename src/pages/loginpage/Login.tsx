@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "./Login.css";
@@ -9,7 +9,7 @@ import { LoginPayload } from "../../modals/UserModals";
 
 const Login = () => {
   const navigate = useNavigate();
-  const path = useLocation().state;
+  const path = useLocation().state || "User";
   const [data, setData] = useState<LoginPayload>({
     userId: "",
     password: "",

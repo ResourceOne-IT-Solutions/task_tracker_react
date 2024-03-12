@@ -59,6 +59,11 @@ const Sidebar = () => {
                 Create Ticket
               </a>
             </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to={"/stats"}>
+                User Stats
+              </NavLink>
+            </li>
             <li className="nav-item adduser">
               <NavLink
                 className="nav-link"

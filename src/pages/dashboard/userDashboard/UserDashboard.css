@@ -6,6 +6,11 @@
   display: flex;
   justify-content: space-between;
 }
+.user-ticket-stats {
+  border: 1px solid rgb(37, 155, 151);
+  margin: 10px 5px 5px 5px;
+  border-radius: 10px;
+}
 .userdetails .user-data {
   width: 40%;
 }

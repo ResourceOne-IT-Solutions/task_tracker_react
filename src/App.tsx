@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import Routespage from "./Routes/Routespage";
 import { useUserContext } from "./components/Authcontext/AuthContext";
@@ -25,6 +25,7 @@ function App() {
     setShowNotification,
     isUserFetching,
   } = userContext as UserContext;
+  const [offline, setOffline] = useState(false);
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;
   status = currentUser.status;
@@ -47,7 +48,9 @@ function App() {
       socket.emit("changeStatus", { id: currentUser._id, status: SLEEP });
     }
   }
-
+  const handleOffline = (e: any) => {
+    setOffline(e.type === "offline");
+  };
   useEffect(() => {
     if (currentUser._id) {
       const roomsCount = Object.keys(currentUser.newMessages).length;
@@ -68,6 +71,12 @@ function App() {
         }
       });
     }
+    window.addEventListener("offline", handleOffline);
+    window.addEventListener("online", handleOffline);
+    return () => {
+      window.removeEventListener("offline", handleOffline);
+      window.removeEventListener("online", handleOffline);
+    };
   }, []);
   useEffect(() => {
     if (!currentUser.isAdmin && isLoggedin) {
@@ -82,31 +91,39 @@ function App() {
   }, [isLoggedin]);
   return (
     <>
-      {isUserFetching ? (
-        <Loader />
-      ) : (
-        <div className="App">
-          <Routespage />
-          <SocketEvents />
-          {showAlertModal && (
-            <Alert
-              content={alertModalContent.content}
-              severity={alertModalContent.severity}
-              onClose={(val) => setShowAlertModal(val)}
-              title={alertModalContent.title}
-              show={showAlertModal}
-            />
-          )}
-          {showNotification.show && (
-            <Notifications
-              content={showNotification.content}
-              severity={showNotification.severity}
-              onClose={(show) =>
-                setShowNotification({ ...showNotification, show })
-              }
-            />
-          )}
+      {offline ? (
+        <div className="offline-page">
+          <h1>Please Check your network connection</h1>
         </div>
+      ) : (
+        <>
+          {isUserFetching ? (
+            <Loader />
+          ) : (
+            <div className="App">
+              <Routespage />
+              <SocketEvents />
+              {showAlertModal && (
+                <Alert
+                  content={alertModalContent.content}
+                  severity={alertModalContent.severity}
+                  onClose={(val) => setShowAlertModal(val)}
+                  title={alertModalContent.title}
+                  show={showAlertModal}
+                />
+              )}
+              {showNotification.show && (
+                <Notifications
+                  content={showNotification.content}
+                  severity={showNotification.severity}
+                  onClose={(show) =>
+                    setShowNotification({ ...showNotification, show })
+                  }
+                />
+              )}
+            </div>
+          )}
+        </>
       )}
     </>
   );

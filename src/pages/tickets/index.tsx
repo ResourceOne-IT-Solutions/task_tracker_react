@@ -46,7 +46,7 @@ const Tickets = ({ url = "/tickets" }: Props) => {
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant Name", key: "client.name" },
     { title: "Status", key: "status" },
-    { title: "User", key: "user.name" },
+    { title: "Owner", key: "user.name" },
     { title: "Technology", key: "technology" },
     {
       title: "Received Date",
@@ -62,7 +62,6 @@ const Tickets = ({ url = "/tickets" }: Props) => {
         </span>
       ),
     },
-    { title: "Comments", key: "comments" },
     {
       title: "TargetDate",
       key: "targetDate",
@@ -83,6 +82,7 @@ const Tickets = ({ url = "/tickets" }: Props) => {
         </p>
       ),
     },
+    { title: "Comments", key: "comments" },
     {
       title: "Description",
       key: "description",

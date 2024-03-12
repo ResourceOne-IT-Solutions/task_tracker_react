@@ -100,3 +100,24 @@ tr:hover {
   position: sticky;
   top: 0;
 }
+
+@media only screen and (max-width: 767px) {
+  .table-heading h1 {
+    font-size: 15px;
+    height: 40px;
+  }
+  .table-heading h1 button {
+    font-size: 12px;
+    top: -5px;
+  }
+  .chat-request button {
+    font-size: 12px;
+  }
+  .userdetails {
+    display: block;
+  }
+  .login-timings-data , .break-timings-data, .user-data {
+    width: 100% !important;
+    margin-block: 10px;
+  }
+}

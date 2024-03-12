@@ -40,7 +40,7 @@ const Routespage = () => {
         {isLoggedin && <Navbar />}
         <div className="ful-content">
           {isLoggedin && <Sidebar />}
-          <div className="router-outlet">
+          <div className={`${isLoggedin ? "router-outlet" : "w-100"}`}>
             <Routes>
               <Route
                 path="/"

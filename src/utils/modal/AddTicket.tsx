@@ -22,7 +22,7 @@ interface TicketmodalInterface {
 
 function AddTicket(props: TicketmodalInterface) {
   const userContext = useUserContext();
-  const { currentUser, alertModal } = userContext as UserContext;
+  const { currentUser, alertModal, socket } = userContext as UserContext;
   const [selectedItem, setSelectedItem] = useState(null);
   const [ticketData, setTicketData] = useState<CreateTicketModal>({
     client: { name: "", id: "", mobile: "", email: "" },
@@ -89,6 +89,7 @@ function AddTicket(props: TicketmodalInterface) {
             content: `Ticket Created succesfully`,
             title: "Alert",
           });
+          socket.emit("dashboardStats");
           props.setShowModal(false);
         })
         .catch((e: ErrorMessageInterface) => {

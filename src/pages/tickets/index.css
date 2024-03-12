@@ -25,3 +25,12 @@
   display: inline-block;
   margin: 0 5px;
 }
+
+@media only screen and (max-width: 767px) {
+  .filters{
+    flex-direction: column;
+  }
+  .filters button{
+    font-size: 15px;
+  }
+} 

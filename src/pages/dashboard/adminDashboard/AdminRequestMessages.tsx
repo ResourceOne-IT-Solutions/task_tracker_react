@@ -182,15 +182,17 @@ function AdminRequestMessages() {
     getTableData(ADMIN_MESSAGE);
   }, []);
   return (
-    <div className="text-center">
+    <div className="text-center view-request-msgs ">
       <div className="table-heading">
-        <Button className="go-back" onClick={() => navigate(-1)}>
-          <i className="fa fa-angle-left"></i>
-          Go Back
-        </Button>
-        <h1>Total Requests From Users</h1>
+        <h1>
+          <Button className="go-back" onClick={() => navigate(-1)}>
+            <i className="fa fa-angle-left"></i>
+            Go Back
+          </Button>
+          Total Requests From Users
+        </h1>
       </div>
-      <div className="d-flex justify-content-center gap-5 mb-2">
+      <div className="d-flex justify-content-center gap-2 chat-request mb-2">
         {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST, TICKETRAISE_MESSAGE].map(
           (btn, idx) => (
             <Button

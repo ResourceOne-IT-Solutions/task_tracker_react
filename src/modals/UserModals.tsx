@@ -44,6 +44,7 @@ export interface UserContext {
   setRequestMessageCount: React.Dispatch<React.SetStateAction<string[]>>;
   requestMessageCount: string[];
   isUserFetching: boolean;
+  isMobileView: boolean;
 }
 export type Status =
   | "Available"

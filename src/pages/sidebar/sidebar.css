@@ -1,5 +1,5 @@
 .side-bar {
-  min-width: 240px;
+  max-width: 240px;
   background: #212529;
 }
 .side-bar ul {
@@ -22,4 +22,16 @@
   color: #fff;
   text-decoration: none;
   padding: 0;
+}
+
+@media only screen and (max-width: 767px) {
+  .show-range .user-list {
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .side-bar {
+    display: block !important;
+  }
 }

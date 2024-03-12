@@ -123,8 +123,8 @@ function AddClient({ setShowModal }: prop) {
   return (
     <div className="create-client-modal">
       <Form>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6">
+        <Row>
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="text"
               name="firstName"
@@ -137,7 +137,7 @@ function AddClient({ setShowModal }: prop) {
               Alphabets Only, Minimum 3 Characters
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="6">
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="email"
               name="email"
@@ -151,8 +151,8 @@ function AddClient({ setShowModal }: prop) {
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6">
+        <Row>
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="tel"
               name="mobile"
@@ -165,7 +165,7 @@ function AddClient({ setShowModal }: prop) {
               Enter Country Code and Numbers only
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group as={Col} md="6">
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="text"
               name="technology"
@@ -175,8 +175,8 @@ function AddClient({ setShowModal }: prop) {
             />
           </Form.Group>
         </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6">
+        <Row>
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="text"
               name="companyName"
@@ -185,7 +185,7 @@ function AddClient({ setShowModal }: prop) {
               placeholder="Enter CompanyName"
             />
           </Form.Group>
-          <Form.Group as={Col} md="3">
+          <Form.Group as={Col} md="3" className="mb-3">
             <Form.Control
               type="text"
               name="area"
@@ -194,7 +194,7 @@ function AddClient({ setShowModal }: prop) {
               placeholder="Location"
             />
           </Form.Group>
-          <Form.Group as={Col} md="3">
+          <Form.Group as={Col} md="3" className="mb-3">
             <Dropdown onSelect={handleDropdownSelect}>
               <Dropdown.Toggle variant="success" id="location-zone">
                 {clientData.zone ? clientData.zone : "Zone"}
@@ -213,8 +213,8 @@ function AddClient({ setShowModal }: prop) {
             </Dropdown>
           </Form.Group>
         </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="6">
+        <Row>
+          <Form.Group as={Col} md="6" className="mb-3">
             <Form.Control
               type="text"
               name="applicationType"
@@ -228,8 +228,8 @@ function AddClient({ setShowModal }: prop) {
             </Form.Control.Feedback>
           </Form.Group>
         </Row>
-        <Row className="mb-3">
-          <Form.Group as={Col} md="12" className="sbt-btn">
+        <Row>
+          <Form.Group as={Col} md="12" className="sbt-btn mb-3">
             <Button variant="primary" onClick={(e) => submitClientData(e)}>
               {loading ? "Creating" : "Add Client"}
             </Button>{" "}

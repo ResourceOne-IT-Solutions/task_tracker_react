@@ -41,10 +41,10 @@
 /* chatbox*/
 .chatbox {
   width: 70%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .resource-logo {
   height: 100%;
@@ -57,7 +57,7 @@
   padding: 8px 10px;
 }
 .chat-body {
-  height:calc(100% - 120px);
+  height: calc(100% - 120px);
   background-color: #eeeeee;
 }
 .chat-footer {
@@ -65,4 +65,11 @@
   padding: 7px;
   color: #fff;
   position: relative;
+}
+
+@media only screen and (max-width: 767px) {
+  .sidebar,
+  .chatbox {
+    width: 100%;
+  }
 }

@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/task_tracker_react/static/css/main.b390679e.css",
-    "main.js": "/task_tracker_react/static/js/main.e902adf7.js",
+    "main.css": "/task_tracker_react/static/css/main.ef2372e3.css",
+    "main.js": "/task_tracker_react/static/js/main.c158049d.js",
     "static/js/239.06ac379b.chunk.js": "/task_tracker_react/static/js/239.06ac379b.chunk.js",
     "static/js/213.6d7f726c.chunk.js": "/task_tracker_react/static/js/213.6d7f726c.chunk.js",
     "static/js/732.7ce39495.chunk.js": "/task_tracker_react/static/js/732.7ce39495.chunk.js",
@@ -12,14 +12,14 @@
     "static/media/OnWork.png": "/task_tracker_react/static/media/OnWork.34bcf0dbc224f84488ae.png",
     "static/media/sleep.png": "/task_tracker_react/static/media/sleep.1e5bb75895fc2be0bad9.png",
     "index.html": "/task_tracker_react/index.html",
-    "main.b390679e.css.map": "/task_tracker_react/static/css/main.b390679e.css.map",
-    "main.e902adf7.js.map": "/task_tracker_react/static/js/main.e902adf7.js.map",
+    "main.ef2372e3.css.map": "/task_tracker_react/static/css/main.ef2372e3.css.map",
+    "main.c158049d.js.map": "/task_tracker_react/static/js/main.c158049d.js.map",
     "239.06ac379b.chunk.js.map": "/task_tracker_react/static/js/239.06ac379b.chunk.js.map",
     "213.6d7f726c.chunk.js.map": "/task_tracker_react/static/js/213.6d7f726c.chunk.js.map",
     "732.7ce39495.chunk.js.map": "/task_tracker_react/static/js/732.7ce39495.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.b390679e.css",
-    "static/js/main.e902adf7.js"
+    "static/css/main.ef2372e3.css",
+    "static/js/main.c158049d.js"
   ]
 }

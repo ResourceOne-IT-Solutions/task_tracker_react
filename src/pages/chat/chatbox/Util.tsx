@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import httpMethods from "../../../api/Service";
 import { FileModel, MessageModel } from "../../../modals/MessageModals";
 import "./styles/utils.css";
-import { getFormattedTime } from "../../../utils/utils";
+import { ImageShowModal, getFormattedTime } from "../../../utils/utils";
 
 export const FileRenderer = ({
   type,
@@ -42,6 +42,7 @@ export const FileComponent = ({
   author: string;
 }) => {
   const [fileUrl, setFileUrl] = useState("");
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     const getFileFromDb = async (id = "") => {
       const file = await fileDownload(id);
@@ -63,21 +64,32 @@ export const FileComponent = ({
     <div
       style={{ width: "200px", border: "1px solid #ddd", display: "block" }}
       className={className}
-      onClick={(e) => downloadFile(e, fileUrl, file.content)}
     >
       <div className="message-sender fw-semibold">{author} : </div>
       <div className="img-wrapper text-center">
         {fileUrl && (
-          <div>
+          <div onClick={() => setOpenModal(true)}>
             <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
           </div>
         )}
-        <span className="download-icon">
+        <span
+          className="download-icon"
+          onClick={(e) => downloadFile(e, fileUrl, file.content)}
+        >
           <i className="bi bi-download"></i>
         </span>
       </div>
       <div className="content text-center">{file.content}</div>
       <p className="time-display">{getFormattedTime(file.time)}</p>
+      {openModal && (
+        <ImageShowModal
+          show={openModal}
+          onHide={() => setOpenModal(false)}
+          imageUrl={fileUrl}
+        >
+          <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
+        </ImageShowModal>
+      )}
     </div>
   );
 };

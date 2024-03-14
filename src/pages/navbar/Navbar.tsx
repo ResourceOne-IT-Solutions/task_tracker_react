@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Button, Dropdown, DropdownButton } from "react-bootstrap";
+import {
+  Button,
+  Dropdown,
+  DropdownButton,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { Status, UserContext, UserModal } from "../../modals/UserModals";
@@ -46,9 +52,14 @@ function Navbar() {
   return (
     <nav className="header-nav navbar navbar-expand-lg navbar-dark bg-dark justify-content-around main-nav">
       <div className="container-fluid">
-        <a className="navbar-brand" onClick={() => navigate("/dashboard")}>
-          <b>ResourceOne IT Solutions</b>
-        </a>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip>Go to dashboard</Tooltip>}
+        >
+          <a className="navbar-brand" onClick={() => navigate("/dashboard")}>
+            <b>ResourceOne IT Solutions</b>
+          </a>
+        </OverlayTrigger>
         <button
           className="navbar-toggler"
           type="button"
@@ -108,11 +119,6 @@ function Navbar() {
               )}
             </div>
             {currentUser.status.includes(BREAK) && <Timer />}
-            <div className="admin-logout-button">
-              <Button variant="danger" onClick={handleLogoutClick}>
-                Logout
-              </Button>
-            </div>
             <div
               className="position-relative profile-button mx-1"
               ref={profilRef}
@@ -149,7 +155,13 @@ function Navbar() {
                     <li>
                       <span>Designation :</span> {currentUser.designation}
                     </li>
+                    Tickets Table
                   </ul>
+                  <div className="admin-logout-button">
+                    <Button variant="danger" onClick={handleLogoutClick}>
+                      Logout
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

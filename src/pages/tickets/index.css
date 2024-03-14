@@ -27,10 +27,10 @@
 }
 
 @media only screen and (max-width: 767px) {
-  .filters{
+  .filters {
     flex-direction: column;
   }
-  .filters button{
+  .filters button {
     font-size: 15px;
   }
-} 
+}

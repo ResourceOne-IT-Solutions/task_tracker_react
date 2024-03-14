@@ -75,39 +75,62 @@ function UsersTable() {
       title: "User Name",
       key: "firstName",
       tdFormat: (user) => (
-        <OverlayTrigger
-          placement="top"
-          overlay={<Tooltip>Click here to view User details</Tooltip>}
-        >
-          <div onClick={() => gotoDashboards(user)}>{getFullName(user)}</div>
-        </OverlayTrigger>
+        <>
+          <div className="d-flex gap-1">
+            <div
+              style={{
+                width: "30px",
+                height: "30px",
+                cursor: "pointer",
+              }}
+            >
+              <ProfileImage
+                className="w-100 h-100"
+                filename={user.profileImageUrl}
+              />
+            </div>
+            <OverlayTrigger
+              placement="top"
+              overlay={<Tooltip>Click here to view User details</Tooltip>}
+            >
+              <div style={{ position: "relative" }}>
+                <div onClick={() => gotoDashboards(user)}>
+                  {getFullName(user)}
+                </div>
+                <span style={STATUS_INDICATOR_STYLES}>
+                  {statusIndicator(user.status)}
+                </span>
+              </div>
+            </OverlayTrigger>
+          </div>
+        </>
       ),
     },
     { title: "Email", key: "email" },
     { title: "Mobile", key: "mobile" },
     { title: "Role", key: "designation" },
-    {
-      title: "Profile Image",
-      key: "",
-      tdFormat: (user) => (
-        <div
-          style={{
-            width: "100px",
-            height: "30px",
-            cursor: "pointer",
-            position: "relative",
-          }}
-        >
-          <span style={STATUS_INDICATOR_STYLES}>
-            {statusIndicator(user.status)}
-          </span>
-          <ProfileImage
-            className="w-100 h-100"
-            filename={user.profileImageUrl}
-          />
-        </div>
-      ),
-    },
+    // {
+    //   title: "Profile Image",
+    //   key: "",
+    //   tdFormat: (user) => (
+    //     <div
+    //       style={{
+    //         width: "100px",
+    //         height: "30px",
+    //         cursor: "pointer",
+    //         position: "relative",
+    //       }}
+    //     >
+    //       <span style={STATUS_INDICATOR_STYLES}>
+    //         {statusIndicator(user.status)}
+    //       </span>
+    //       <ProfileImage
+    //         className="w-100 h-100"
+    //         filename={user.profileImageUrl}
+    //       />
+    //     </div>
+    //   ),
+    // },
     {
       title: "Active User",
       key: "isActive",

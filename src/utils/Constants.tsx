@@ -57,7 +57,7 @@ export const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/;
 export const STATUS_INDICATOR_STYLES: React.CSSProperties = {
   position: "absolute",
   top: "0",
-  right: "0",
+  right: "-20px",
 };
 export const CHAT_REQUEST = "Chat Requests";
 export const TICKET_REQUEST = "Ticket Requests";

@@ -252,17 +252,36 @@ export const ProfileImage = ({
     <>
       <img src={imageUrl} className={className} onClick={handleImageClick} />
       {showImage && (
-        <Modal
-          className="profileimg-zoom"
+        <ImageShowModal
           show={showImage}
           onHide={() => setShowImage(false)}
-        >
-          <Modal.Body>
-            <img src={imageUrl} />
-          </Modal.Body>
-        </Modal>
+          imageUrl={imageUrl}
+        />
       )}
     </>
+  );
+};
+interface ImageSHowModal {
+  show: boolean;
+  onHide: () => void;
+  imageUrl: string;
+  children?: JSX.Element;
+}
+export const ImageShowModal = ({
+  show,
+  onHide,
+  imageUrl,
+  children,
+}: ImageSHowModal) => {
+  return (
+    <Modal className="profileimg-zoom" show={show} onHide={onHide}>
+      <Modal.Body>
+        <div style={{ width: "300px", height: "300px" }}>
+          <img src={imageUrl} width="100%" height="100%" />
+        </div>
+        {children}
+      </Modal.Body>
+    </Modal>
   );
 };
 
@@ -346,14 +365,10 @@ export const AdminRequestCard = ({
   onApprove,
   type,
   time,
+  isNew,
 }: AdminRequestCardProps) => {
-  const { requestMessageCount } = useUserContext() as UserContext;
   return (
-    <div
-      className={`request-content-wrapper ${
-        requestMessageCount.includes(id) && "bg-warning"
-      } `}
-    >
+    <div className={`request-content-wrapper ${isNew && "bg-warning"} `}>
       <div>
         {getContent(type, sender, receiver)}
         <div>Time: {new Date(time).toLocaleString()}</div>
@@ -392,13 +407,12 @@ export const AdminMessageCard = ({
   message,
   isAdmin,
   onConfirm,
+  isNew,
+  currentUserId,
 }: AdminMessageCardProps) => {
-  const { requestMessageCount, currentUser } = useUserContext() as UserContext;
   return (
     <div
-      className={`request-content-wrapper ${
-        requestMessageCount.includes(message._id) && "bg-warning"
-      } `}
+      className={`request-content-wrapper ${isNew && "bg-warning"} `}
       key={message._id}
     >
       <div className="message-request-content">
@@ -421,7 +435,7 @@ export const AdminMessageCard = ({
           </>
         ) : (
           <div className="message-seen-btn">
-            {message.viewedBy.includes(currentUser._id) ? (
+            {message.viewedBy.includes(currentUserId) ? (
               <Button variant="success">Seen</Button>
             ) : (
               <Button
@@ -467,13 +481,10 @@ export const UserRequestCard = ({
   );
 };
 
-export const TicketRaiseCard = ({ message }: TicketRaiseCardProps) => {
-  const { requestMessageCount } = useUserContext() as UserContext;
+export const TicketRaiseCard = ({ message, isNew }: TicketRaiseCardProps) => {
   return (
     <div
-      className={`request-content-wrapper ${
-        requestMessageCount.includes(message._id) && "bg-warning"
-      } `}
+      className={`request-content-wrapper ${isNew && "bg-warning"} `}
       key={message._id}
     >
       <div className="message-request-content">

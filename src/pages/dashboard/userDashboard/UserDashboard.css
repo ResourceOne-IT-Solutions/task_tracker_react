@@ -116,7 +116,9 @@ tr:hover {
   .userdetails {
     display: block;
   }
-  .login-timings-data , .break-timings-data, .user-data {
+  .login-timings-data,
+  .break-timings-data,
+  .user-data {
     width: 100% !important;
     margin-block: 10px;
   }

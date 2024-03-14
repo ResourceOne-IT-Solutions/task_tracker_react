@@ -71,6 +71,7 @@ export interface MessageModel {
 }
 export interface TicketRaiseCardProps {
   message: TicketRaiseInterface;
+  isNew: boolean;
 }
 
 export interface AdminRequestCardProps {
@@ -81,12 +82,15 @@ export interface AdminRequestCardProps {
   onApprove: (id: string, type: string) => void;
   type: string;
   time: Date;
+  isNew: boolean;
 }
 
 export interface AdminMessageCardProps {
   message: AdminMessageInterface;
   isAdmin: boolean;
   onConfirm?: (message: AdminMessageInterface) => void;
+  isNew: boolean;
+  currentUserId: string;
 }
 export interface UserRequestCardProps {
   sender: string;

@@ -109,28 +109,6 @@ function UsersTable() {
     { title: "Email", key: "email" },
     { title: "Mobile", key: "mobile" },
     { title: "Role", key: "designation" },
-    // {
-    //   title: "Profile Image",
-    //   key: "",
-    //   tdFormat: (user) => (
-    //     <div
-    //       style={{
-    //         width: "100px",
-    //         height: "30px",
-    //         cursor: "pointer",
-    //         position: "relative",
-    //       }}
-    //     >
-    //       <span style={STATUS_INDICATOR_STYLES}>
-    //         {statusIndicator(user.status)}
-    //       </span>
-    //       <ProfileImage
-    //         className="w-100 h-100"
-    //         filename={user.profileImageUrl}
-    //       />
-    //     </div>
-    //   ),
-    // },
     {
       title: "Active User",
       key: "isActive",

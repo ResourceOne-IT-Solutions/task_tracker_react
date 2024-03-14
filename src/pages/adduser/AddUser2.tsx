@@ -20,7 +20,10 @@ function AddUser2() {
   const validationSchema = Yup.object().shape({
     empId: Yup.number().required("Required"),
     mobile: Yup.string()
-      .matches(/^\+[0-9]{1,2}\s\d{10}$/, "Enter Country Code and Numbers only")
+      .matches(
+        /^(\+[0-9]{1,3}\s?)?\d{10}$/,
+        "Enter a valid 10-digit mobile number",
+      )
       .required("Required"),
     firstName: Yup.string()
       .matches(/^[A-Za-z]+\s{0,1}[A-Za-z]*$/, "Invalid name")
@@ -84,6 +87,7 @@ function AddUser2() {
       setIsLoading(true);
       const formData = new FormData();
       formData.append("file", values.profileImageUrl);
+      values.mobile = "+91 " + values.mobile;
       const data = {
         ...values,
         createdBy: {
@@ -155,12 +159,15 @@ function AddUser2() {
                   <b>Mobile</b>
                 </label>
                 <div className="input-filed">
-                  <Field
-                    name="mobile"
-                    type="tel"
-                    placeholder="Enter Mobile"
-                    className="form-control"
-                  />
+                  <div className="input-group">
+                    <span className="input-group-text">+91</span>
+                    <Field
+                      name="mobile"
+                      type="tel"
+                      placeholder="Enter Mobile"
+                      className="form-control"
+                    />
+                  </div>
                   <ErrorMessage
                     name="mobile"
                     component="div"
@@ -360,7 +367,7 @@ function AddUser2() {
             <div className="mb-3 d-flex w-100">
               <div className="w-50">
                 <label>
-                  <b>Gender</b>
+                  <b>Address</b>
                 </label>
                 <div className="input-filed">
                   <Field

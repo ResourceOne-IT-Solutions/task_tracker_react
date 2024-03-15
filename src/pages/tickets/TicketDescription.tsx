@@ -104,12 +104,29 @@ const TicketDescription = () => {
     setResource(x);
   }, []);
   return (
-    <>
-      <h3 className="text-center">TICKETS BY ID</h3>
-      <Button className="mx-2" variant="warning" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
-      <div className="ticket-details d-flex w-75">
+    <div className="container">
+      <div className="ticketsById">
+        <div>
+          <Button
+            className="mx-2 back-btn"
+            variant="warning"
+            onClick={() => navigate(-1)}
+          >
+            <i className="fa fa-angle-left"></i>
+            Go Back
+          </Button>
+        </div>
+        <h3 className="text-center">TICKETS BY ID</h3>
+        {currentUser.isAdmin && (
+          <div className="text-center">
+            <Button className="mx-2" onClick={() => setShowModal(!showModal)}>
+              Send Email
+            </Button>
+            <XlSheet data={convertTicketToExcel(selectedTicket)} />
+          </div>
+        )}
+      </div>
+      <div className="ticket-details d-flex w-100">
         <div className="">
           <p className="m-2">
             <b>Client Name : </b> {selectedTicket.client.name}
@@ -163,14 +180,6 @@ const TicketDescription = () => {
             })}
           </ul>
         </div>
-        {currentUser.isAdmin && (
-          <div>
-            <Button className="m-3" onClick={() => setShowModal(!showModal)}>
-              Send Email
-            </Button>
-            <XlSheet data={convertTicketToExcel(selectedTicket)} />
-          </div>
-        )}
       </div>
 
       {showModal && (
@@ -216,7 +225,7 @@ const TicketDescription = () => {
           </div>
         </ReusableModal>
       )}
-    </>
+    </div>
   );
 };
 

@@ -32,9 +32,16 @@ import httpMethods from "../../../api/Service";
 
 function AdminRequestMessages() {
   const navigate = useNavigate();
-  const { socket, currentUser, alertModal } = useUserContext() as UserContext;
+  const {
+    socket,
+    currentUser,
+    alertModal,
+    requestMessageCount,
+    setRequestMessageCount,
+  } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [showingTable, setShowingTable] = useState(ADMIN_MESSAGE);
+  const [newRequests, setNewRequests] = useState<string[]>(requestMessageCount);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
@@ -180,6 +187,7 @@ function AdminRequestMessages() {
   useEffect(() => {
     setIsLoading(true);
     getTableData(ADMIN_MESSAGE);
+    setRequestMessageCount([]);
   }, []);
   return (
     <div className="text-center view-request-msgs container">
@@ -227,6 +235,7 @@ function AdminRequestMessages() {
                           receiver={chat.opponent.name}
                           isPending={chat.isPending}
                           onApprove={handleRequestClick}
+                          isNew={newRequests.includes(chat._id)}
                         />
                       );
                     })
@@ -249,6 +258,7 @@ function AdminRequestMessages() {
                           receiver={ticket.client.name}
                           isPending={ticket.isPending}
                           onApprove={handleRequestClick}
+                          isNew={newRequests.includes(ticket._id)}
                         />
                       );
                     })
@@ -266,6 +276,8 @@ function AdminRequestMessages() {
                           key={message._id}
                           message={message}
                           isAdmin={true}
+                          isNew={newRequests.includes(message._id)}
+                          currentUserId={currentUser._id}
                         />
                       );
                     })
@@ -279,7 +291,11 @@ function AdminRequestMessages() {
                   {ticketRaiseMsgs.length > 0 ? (
                     ticketRaiseMsgs?.map((message) => {
                       return (
-                        <TicketRaiseCard key={message._id} message={message} />
+                        <TicketRaiseCard
+                          key={message._id}
+                          message={message}
+                          isNew={newRequests.includes(message._id)}
+                        />
                       );
                     })
                   ) : (

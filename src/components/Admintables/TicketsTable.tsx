@@ -132,11 +132,8 @@ function TicketsTable() {
       title: "Close Ticket",
       key: "",
       tdFormat: (ticket) => (
-        <Button
-          onClick={() => handleTicketClose(ticket)}
-          disabled={ticket.isClosed}
-        >
-          {ticket.isClosed ? "Closed" : "Close Ticket"}
+        <Button onClick={() => handleTicketClose(ticket)}>
+          {ticket.isClosed ? "Reopen" : "Close Ticket"}
         </Button>
       ),
     },

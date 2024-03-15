@@ -27,9 +27,16 @@ import httpMethods from "../../../api/Service";
 
 function AdminMessages() {
   const navigate = useNavigate();
-  const { currentUser, setSelectedUser, socket, alertModal } =
-    useUserContext() as UserContext;
+  const {
+    currentUser,
+    setSelectedUser,
+    socket,
+    alertModal,
+    requestMessageCount,
+    setRequestMessageCount,
+  } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
+  const [newRequests, setNewRequests] = useState<string[]>(requestMessageCount);
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
@@ -113,7 +120,11 @@ function AdminMessages() {
   };
   const getTableData = (tableName: string) => {
     httpMethods
-      .get<any>(`/message/${getPath(tableName)}`)
+      .get<any>(
+        `/message/${getPath(tableName)}/${
+          ADMIN_MESSAGE !== tableName ? currentUser._id : ""
+        }`,
+      )
       .then((data: any[]) => {
         if (tableName === CHAT_REQUEST) {
           setChatRequests(data);
@@ -146,6 +157,7 @@ function AdminMessages() {
   useEffect(() => {
     setIsLoading(true);
     getTableData(ADMIN_MESSAGE);
+    setRequestMessageCount([]);
   }, []);
   return (
     <div className="text-center">
@@ -228,6 +240,8 @@ function AdminMessages() {
                           message={message}
                           isAdmin={false}
                           onConfirm={handleAdminMessageSeen}
+                          isNew={newRequests.includes(message._id)}
+                          currentUserId={currentUser._id}
                         />
                       );
                     })

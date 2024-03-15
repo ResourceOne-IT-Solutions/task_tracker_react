@@ -107,6 +107,7 @@ function UserDashboardTickets() {
                 ticketData: ticket,
               })
             }
+            disabled={ticket.isClosed}
           >
             Update Ticket
           </Button>

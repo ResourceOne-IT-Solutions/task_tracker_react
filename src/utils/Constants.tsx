@@ -5,7 +5,8 @@ const BE_SERVER = "https://task-tracker-server-2njm.onrender.com";
 const BE_LOCAL = "http://192.168.10.30:1234";
 const BE_LOCAL2 = "http://192.168.29.110:1234";
 const VERSION1 = "/api/v1";
-export const SOCKET_URL = BE_SERVER;
+// change socket url if u want to change server url for API calls
+export const SOCKET_URL = BE_LOCAL;
 export const BE_URL = SOCKET_URL + VERSION1;
 export const TOKEN = () => cookieComp();
 export const GROUP_IMG_URL =
@@ -63,3 +64,5 @@ export const CHAT_REQUEST = "Chat Requests";
 export const TICKET_REQUEST = "Ticket Requests";
 export const ADMIN_MESSAGE = "Admin Messages";
 export const TICKETRAISE_MESSAGE = "TicketRaise Messages";
+export const NO_DATA_AVAILBALE = () => <span>Data not available</span>;
+export const RED_STAR = () => <span className="text-danger">*</span>;

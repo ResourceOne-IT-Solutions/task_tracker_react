@@ -97,9 +97,9 @@ function TaskTable<R>(props: TableProps<R>) {
         );
     }
   };
-  const renderBodyRow = (obj: any) => {
+  const renderBodyRow = (obj: any, idx: number) => {
     return (
-      <tr onClick={() => handleRowClick(obj)} key={obj._id}>
+      <tr onClick={() => handleRowClick(obj)} key={obj._id || idx}>
         {headers.map((val1: any, index) => {
           if (val1?.key == "serialNo") {
             return <td key={index}>{obj.serialNo}. </td>;
@@ -149,7 +149,9 @@ function TaskTable<R>(props: TableProps<R>) {
             ) : (
               <>
                 {currentPageData.length ? (
-                  currentPageData.map((obj: any) => renderBodyRow(obj))
+                  currentPageData.map((obj: any, idx: number) =>
+                    renderBodyRow(obj, idx),
+                  )
                 ) : (
                   <tr>
                     <td colSpan={headers.length}>No Data Available</td>

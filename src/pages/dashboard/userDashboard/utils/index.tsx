@@ -21,6 +21,11 @@ export const calculateLoginHours = (inTime: Date, outTime: Date) => {
   }
   inTime = new Date(inTime);
   if (!outTime) {
+    const isToday =
+      new Date(inTime).toLocaleDateString() === new Date().toLocaleDateString();
+    if (isToday) {
+      return "Working...";
+    }
     outTime = new Date(inTime);
     outTime.setHours(15);
     outTime.setMinutes(30);

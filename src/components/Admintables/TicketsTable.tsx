@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { TicketModal } from "../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
@@ -49,7 +49,6 @@ function TicketsTable() {
     setShowModal(true);
   };
   const handleTicketClose = (ticket: TicketModal) => {
-    // const confirm = window.confirm("Are you sure You want To Close the Ticket");
     setModalname("Close Ticket");
     setUpdateReference(ticket);
     setModalProps({
@@ -58,35 +57,14 @@ function TicketsTable() {
       show: !showModal,
     });
     setShowModal(true);
-    // if (confirm) {
-    //   httpMethods
-    //     .put<any, any>("/tickets/update", {
-    //       id: ticket._id,
-    //       data: {
-    //         isClosed: true,
-    //         closedBy: { name: getFullName(currentUser), id: currentUser._id },
-    //       },
-    //     })
-    //     .then((res) => {
-    //       setTicketsData((prevTableData) =>
-    //         prevTableData.map((ticket) =>
-    //           ticket._id === res._id ? res : ticket,
-    //         ),
-    //       );
-    //     })
-    //     .catch((err: any) => {
-    //       alertModal({
-    //         severity: Severity.ERROR,
-    //         content: err.message,
-    //         title: "Ticket Update",
-    //       });
-    //     });
-    // }
   };
   const updateTicketsTable = (res: any) => {
     setTicketsData((prevTableData) =>
       prevTableData.map((ticket) => (ticket._id === res._id ? res : ticket)),
     );
+  };
+  const handleDescription = (ticket: TicketModal) => {
+    navigate(`/tickets/${ticket._id}`, { state: ticket });
   };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
     { title: "Client Name", key: "client.name" },
@@ -98,7 +76,23 @@ function TicketsTable() {
       key: "",
       tdFormat: (ticket) => <>{getFormattedDate(ticket.receivedDate)}</>,
     },
-    { title: "Description", key: "description" },
+    {
+      title: "Description",
+      key: "description",
+      tdFormat: (tkt) => (
+        <>
+          {tkt.description}
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>Click here to see full description</Tooltip>}
+          >
+            <p onClick={() => handleDescription(tkt)} className="desc-link">
+              Click here
+            </p>
+          </OverlayTrigger>
+        </>
+      ),
+    },
     {
       title: "Helped By",
       key: "",
@@ -115,6 +109,7 @@ function TicketsTable() {
             className="btn btn-info"
             onClick={() => handleAddResource(ticket)}
             style={{ fontWeight: "700" }}
+            disabled={ticket.isClosed}
           >
             {ticket.user.name ? "Assign Resource" : "Assign User"}
           </button>

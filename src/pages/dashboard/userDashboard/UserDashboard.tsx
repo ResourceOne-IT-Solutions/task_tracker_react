@@ -173,17 +173,11 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           </div>
           {currentUser.isAdmin && (
             <>
-              <div
-                className="w-30 login-timings-data"
-                style={{ maxHeight: "300px", overflow: "hidden scroll" }}
-              >
+              <div className="w-30 login-timings-data">
                 <h3 style={{ backgroundColor: "#055e94" }}>Login Timings</h3>
                 <LoginTimings user={presentUser} />
               </div>
-              <div
-                className="w-30 break-timings-data"
-                style={{ maxHeight: "300px", overflow: "hidden scroll" }}
-              >
+              <div className="w-30 break-timings-data">
                 <h3 style={{ backgroundColor: "#055e94" }}>Break Timings</h3>
                 <BreakTimings user={presentUser} />
               </div>

@@ -116,7 +116,7 @@ const TicketDescription = () => {
             Go Back
           </Button>
         </div>
-        <h3 className="text-center">TICKETS BY ID</h3>
+        <h3 className="text-center">Ticket Description</h3>
         {currentUser.isAdmin && (
           <div className="text-center">
             <Button className="mx-2" onClick={() => setShowModal(!showModal)}>
@@ -139,6 +139,9 @@ const TicketDescription = () => {
           </p>
           <p className="m-2">
             <b>Status :</b> {selectedTicket.status}
+          </p>
+          <p className="m-2">
+            <b>Created By :</b> {selectedTicket.createdBy.name}
           </p>
           {(selectedTicket.isClosed || selectedTicket.status == CLOSED) && (
             <p className="m-2">

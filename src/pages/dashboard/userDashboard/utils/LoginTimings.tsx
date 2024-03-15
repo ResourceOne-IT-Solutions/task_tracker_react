@@ -6,6 +6,7 @@ import {
   isEmptyObject,
 } from "../../../../utils/utils";
 import { calculateLoginHours } from ".";
+import { NO_DATA_AVAILBALE } from "../../../../utils/Constants";
 
 interface LoginTimingsProps {
   user: UserModal;
@@ -28,11 +29,14 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
     }
   }, []);
   return (
-    <>
+    <div
+      style={{ maxHeight: "300px", overflow: "hidden scroll" }}
+      className="fw-semibold"
+    >
       {todayOnly ? (
         <>
           {isEmptyObject(todayLogin) ? (
-            <span>Data not available</span>
+            <NO_DATA_AVAILBALE />
           ) : (
             <>
               <span className="fw-semibold">
@@ -46,30 +50,40 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
           )}
         </>
       ) : (
-        <table>
-          <thead className="timings-table-header">
-            <tr>
-              <th>Date</th>
-              <th>Login</th>
-              <th>Logout</th>
-              <th>Active</th>
-            </tr>
-          </thead>
-          <tbody>
-            {user.loginTimings.map((timing) => (
-              <tr key={timing._id}>
-                <td>{getFormattedDate(timing.date, "dd-mm-yyyy")}</td>
-                <td>{getFormattedTime(timing.inTime)}</td>
-                <td>
-                  {timing.outTime ? getFormattedTime(timing.outTime) : "---"}
-                </td>
-                <td>{calculateLoginHours(timing.inTime, timing.outTime)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <>
+          {user.loginTimings.length ? (
+            <table>
+              <thead className="timings-table-header">
+                <tr>
+                  <th>Date</th>
+                  <th>Login</th>
+                  <th>Logout</th>
+                  <th>Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                {user.loginTimings.map((timing) => (
+                  <tr key={timing._id}>
+                    <td>{getFormattedDate(timing.date, "dd-mm-yyyy")}</td>
+                    <td>{getFormattedTime(timing.inTime)}</td>
+                    <td>
+                      {timing.outTime
+                        ? getFormattedTime(timing.outTime)
+                        : "---"}
+                    </td>
+                    <td>
+                      {calculateLoginHours(timing.inTime, timing.outTime)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <NO_DATA_AVAILBALE />
+          )}
+        </>
       )}
-    </>
+    </div>
   );
 };
 

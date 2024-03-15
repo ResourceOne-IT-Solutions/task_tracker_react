@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Row, Col, Button, Dropdown } from "react-bootstrap";
-import { TICKET_STATUS_TYPES } from "../Constants";
+import { RED_STAR, TICKET_STATUS_TYPES } from "../Constants";
 import httpMethods from "../../api/Service";
 import { getNameId } from "../utils";
 import { Severity } from "./notification";
@@ -27,43 +27,52 @@ function CloseTicketModal({
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setCloseError("");
     let data;
-    if (ischecked && description && selectedItem) {
-      data = {
-        isClosed: true,
-        description,
-        status: selectedItem,
-        updatedBy: getNameId(currentUser),
-      };
+    const updateTicket = (data: any) => {
+      setLoading(true);
+      httpMethods
+        .put<any, any>("/tickets/update", {
+          id: updateReference._id,
+          data,
+        })
+        .then((res) => {
+          updateTicketsTable(res);
+          setCloseSuccess(true);
+          setTimeout(() => {
+            setShowModal(false);
+          });
+        })
+        .catch((err: any) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "Ticket Update",
+          });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
+    if (ischecked) {
+      if (description && selectedItem) {
+        data = {
+          isClosed: !updateReference.isClosed,
+          description,
+          status: selectedItem,
+          updatedBy: getNameId(currentUser),
+        };
+        updateTicket(data);
+      } else {
+        setCloseError("Description and Status required");
+      }
     } else {
       data = {
-        isClosed: true,
+        isClosed: !updateReference.isClosed,
         updatedBy: getNameId(currentUser),
       };
+      updateTicket(data);
     }
-    httpMethods
-      .put<any, any>("/tickets/update", {
-        id: updateReference._id,
-        data,
-      })
-      .then((res) => {
-        updateTicketsTable(res);
-        setCloseSuccess(true);
-        setTimeout(() => {
-          setShowModal(false);
-        });
-      })
-      .catch((err: any) => {
-        alertModal({
-          severity: Severity.ERROR,
-          content: err.message,
-          title: "Ticket Update",
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
   };
   return (
     <div>
@@ -83,7 +92,9 @@ function CloseTicketModal({
           <>
             <Row className="mb-3">
               <Form.Label>
-                <b>Select A Client</b>
+                <b>
+                  Select A Client <RED_STAR />
+                </b>
               </Form.Label>
               <Form.Group as={Col} md="12">
                 <Dropdown onSelect={handleSelect}>
@@ -112,7 +123,9 @@ function CloseTicketModal({
             <Row className="mb-3">
               <Form.Group as={Col} md="12">
                 <Form.Label>
-                  <b>Enter Description</b>
+                  <b>
+                    Enter Description <RED_STAR />
+                  </b>
                 </Form.Label>
                 <Form.Control
                   as={"textarea"}
@@ -129,13 +142,21 @@ function CloseTicketModal({
         <Row className="mb-3">
           <Form.Group as={Col} md="12" className="sbt-btn">
             <Button variant="primary" type="submit">
-              {loading ? "Creating" : "Close Ticket"}
+              {loading
+                ? "Updating..."
+                : updateReference.isClosed
+                  ? "Reopen Ticket"
+                  : "Close Ticket"}
             </Button>{" "}
           </Form.Group>
         </Row>
-        {closeSuccess ? (
-          <div className="scc-msg">Ticket Closed Successfully</div>
-        ) : null}
+        {closeSuccess && (
+          <div className="scc-msg">
+            Ticket {updateReference.isClosed ? "Reopened" : "Closed"}{" "}
+            Successfully
+          </div>
+        )}
+        {closeError && <div className="err-msg text-danger">{closeError}</div>}
       </Form>
 
       {/* <Form>

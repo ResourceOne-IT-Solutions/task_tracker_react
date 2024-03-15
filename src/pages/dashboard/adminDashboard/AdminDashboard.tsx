@@ -77,47 +77,45 @@ const AdminDashboard = () => {
       navigate("/dashboard/ticketsTable");
     }
   };
-  socket
-    .off("dashboardStats")
-    .on("dashboardStats", ({ ticketStats, pendingTickets }) => {
-      const pendingTicketsData = (status: string) => {
-        return (
-          pendingTickets.find((v: TicketStatsInterface) => v.status === status)
-            ?.count || 0
-        );
-      };
-      const totalPending = pendingTickets.reduce(
-        (a: number, c: TicketStatsInterface) => a + c.count,
-        0,
+  socket.off("dashboardStats").on("dashboardStats", ({ pendingTickets }) => {
+    const pendingTicketsData = (status: string) => {
+      return (
+        pendingTickets.find((v: TicketStatsInterface) => v.status === status)
+          ?.count || 0
       );
-      setTotalPendingTickets(totalPending);
-      setPendingTicketPieChartData([
-        {
-          name: "NotAssigned Tickets",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.NOT_ASSIGNED),
-        },
-        {
-          name: "Assigned Tickets",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.ASSIGNED),
-        },
-        {
-          name: "In Progress Tickets",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.IN_PROGRESS),
-        },
-        {
-          name: "Pending Tickets",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.PENDING),
-        },
-        {
-          name: "Closed Tickets",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.CLOSED),
-        },
-        {
-          name: "Improper Requirment",
-          value: pendingTicketsData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
-        },
-      ]);
-    });
+    };
+    const totalPending = pendingTickets.reduce(
+      (a: number, c: TicketStatsInterface) => a + c.count,
+      0,
+    );
+    setTotalPendingTickets(totalPending);
+    setPendingTicketPieChartData([
+      {
+        name: "NotAssigned Tickets",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.NOT_ASSIGNED),
+      },
+      {
+        name: "Assigned Tickets",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.ASSIGNED),
+      },
+      {
+        name: "In Progress Tickets",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.IN_PROGRESS),
+      },
+      {
+        name: "Pending Tickets",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.PENDING),
+      },
+      {
+        name: "Closed Tickets",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.CLOSED),
+      },
+      {
+        name: "Improper Requirment",
+        value: pendingTicketsData(TICKET_STATUS_TYPES.IMPROPER_REQUIRMENT),
+      },
+    ]);
+  });
   useEffect(() => {
     const userStats: { [key: string]: number } = {
       Available: 0,

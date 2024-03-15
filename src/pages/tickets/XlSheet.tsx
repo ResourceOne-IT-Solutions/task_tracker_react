@@ -7,7 +7,9 @@ interface Prop {
 }
 function XlSheet({ data }: Prop) {
   const handleExportClick = () => {
-    const download_or_not = window.confirm("Are you sure to download Excel");
+    const download_or_not = window.confirm(
+      "Are you sure want to download Excel",
+    );
     if (download_or_not) {
       const wb = XLSX.utils.book_new();
       const ws = XLSX.utils.json_to_sheet(data);

@@ -22,6 +22,8 @@ const TicketFilters = ({
   const [filteredData, setFilteredData] = useState<TicketModal[]>(allTickets);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [selectedClient, setSelectedClient] = useState("");
+  const [clients, setClients] = useState<string[]>([]);
   const handleSelectStatus = (item: any) => {
     const date = new Date();
     setSelected(item);
@@ -40,6 +42,13 @@ const TicketFilters = ({
       setFilteredData(lastMonthArray);
     }
     setDateRange({ from: "", to: "" });
+  };
+  const handleClientFilter = (client: any) => {
+    setSelectedClient(client);
+    const filteredTickets = allTickets.filter(
+      (ticket) => ticket.client.name == client,
+    );
+    setFilteredData(filteredTickets);
   };
   const handleStatusSelect = (status: any) => {
     const filteredTickets = allTickets.filter(
@@ -67,6 +76,7 @@ const TicketFilters = ({
     setSelectedStatus("");
     setSelected("");
     setDateRange({ from: "", to: "" });
+    setSelectedClient("");
   };
   const formattedTicketforXL = (tickets: TicketModal[]) => {
     const formatedData = tickets.map((item, idx) => {
@@ -101,12 +111,16 @@ const TicketFilters = ({
   useEffect(() => {
     setShowingTickets(filteredData);
   }, [filteredData]);
+  useEffect(() => {
+    const clients = [...new Set(allTickets.map((tkt) => tkt.client.name))];
+    setClients(clients);
+  }, [allTickets]);
 
   return (
     <div className="container">
       <div className="filters">
         <div className="d-flex">
-          <div className="d-flex my-1">
+          <div className="d-flex my-1 flex-wrap">
             <Button className="back-btn" onClick={() => navigate(-1)}>
               <i className="fa fa-angle-left"></i>
               Back
@@ -114,7 +128,7 @@ const TicketFilters = ({
             <Dropdown onSelect={handleSelectStatus} className="mx-2">
               <Dropdown.Toggle
                 variant="secondary"
-                id="dropdown-basic-ticket-filter"
+                id="dropdown-ticket-date-filter"
               >
                 {selected ? selected : "Select a filter"}
               </Dropdown.Toggle>
@@ -131,7 +145,7 @@ const TicketFilters = ({
             <Dropdown onSelect={handleStatusSelect} className="mx-2">
               <Dropdown.Toggle
                 variant="secondary"
-                id="dropdown-basic-ticket-filter"
+                id="dropdown-ticket-status-filter"
               >
                 {selectedStatus ? selectedStatus : "Select Status"}
               </Dropdown.Toggle>
@@ -140,6 +154,23 @@ const TicketFilters = ({
                   return (
                     <Dropdown.Item key={idx} eventKey={filterType}>
                       <b>{filterType}</b>
+                    </Dropdown.Item>
+                  );
+                })}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown onSelect={handleClientFilter} className="mx-2">
+              <Dropdown.Toggle
+                variant="secondary"
+                id="dropdown-ticket-client-filter"
+              >
+                {selectedClient ? selectedClient : "Select Client"}
+              </Dropdown.Toggle>
+              <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+                {clients.map((client, idx) => {
+                  return (
+                    <Dropdown.Item key={idx} eventKey={client}>
+                      <b>{client}</b>
                     </Dropdown.Item>
                   );
                 })}

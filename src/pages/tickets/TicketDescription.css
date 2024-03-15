@@ -10,3 +10,27 @@
 .all-desc li {
   list-style-type: disc;
 }
+.ticketsById{
+  padding: 20px 0;
+  display: flex;
+  justify-content: space-between;
+}
+.back-btn{
+  color: #fff;
+}
+
+
+@media only screen and (max-width: 767px) {
+  
+.ticketsById{
+  display: block;
+  position: relative;
+}
+  .back-btn{
+    font-size: 0;
+    
+  }
+  .back-btn i{
+    font-size: 15px;
+  }
+}

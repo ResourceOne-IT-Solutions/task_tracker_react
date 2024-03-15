@@ -148,8 +148,11 @@
     height: 40px;
   }
   .view-request-msgs .table-heading h1 button {
-    font-size: 12px;
+    font-size: 0px;
     top: -5px;
+  }
+  .view-request-msgs .table-heading h1 button i{
+    font-size: 20px;
   }
   .chat-request button {
     font-size: 12px;

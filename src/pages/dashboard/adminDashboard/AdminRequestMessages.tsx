@@ -182,7 +182,7 @@ function AdminRequestMessages() {
     getTableData(ADMIN_MESSAGE);
   }, []);
   return (
-    <div className="text-center view-request-msgs ">
+    <div className="text-center view-request-msgs container">
       <div className="table-heading">
         <h1>
           <Button className="go-back" onClick={() => navigate(-1)}>

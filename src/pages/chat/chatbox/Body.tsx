@@ -18,7 +18,7 @@ const ChatBody = ({
   totalMessages,
 }: ChatBodyProps) => {
   const ScrollRef = useRef<HTMLDivElement>(null);
-
+  const height = window.innerHeight;
   useEffect(() => {
     if (ScrollRef.current) {
       ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
@@ -81,7 +81,11 @@ const ChatBody = ({
   };
 
   return (
-    <div className="chat-body-container" ref={ScrollRef}>
+    <div
+      className="chat-body-container"
+      ref={ScrollRef}
+      style={{ height: height - 195 }}
+    >
       {totalMessages.map((daymessages: RoomMessages) => (
         <div key={daymessages._id}>
           <h3 className="text-center">{daymessages._id}</h3>

@@ -103,7 +103,7 @@ const TicketFilters = ({
   }, [filteredData]);
 
   return (
-    <>
+    <div className="container">
       <div className="filters">
         <div className="d-flex">
           <div className="d-flex my-1">
@@ -148,7 +148,7 @@ const TicketFilters = ({
           </div>
         </div>
 
-        <div>
+        <div className="d-flex">
           <button
             className="btn btn-info"
             onClick={() => handleDateRangeSubmit()}
@@ -184,7 +184,7 @@ const TicketFilters = ({
           className="form-control"
         />
       </div>
-    </>
+    </div>
   );
 };
 

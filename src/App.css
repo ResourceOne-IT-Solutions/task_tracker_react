@@ -129,9 +129,17 @@
   width: calc(100% - 240px);
   padding-left: 10px;
 }
+.footer {
+  background: gray;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 @media only screen and (max-width: 767px) {
-  html,body{
+  html,
+  body {
     height: 99%;
   }
   .ful-content {

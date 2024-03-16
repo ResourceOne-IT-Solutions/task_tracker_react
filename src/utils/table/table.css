@@ -77,7 +77,6 @@ th {
   width: 100%;
   max-height: 500px;
   overflow: auto;
-  /* overflow: auto; */
 }
 
 .c-pointer {
@@ -89,6 +88,6 @@ th {
 }
 .task-table-header {
   position: sticky;
-  top: 0;
+  top: -1px;
   z-index: 1;
 }

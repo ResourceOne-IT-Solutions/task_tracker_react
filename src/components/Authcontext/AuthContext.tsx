@@ -8,7 +8,7 @@ import {
   UserContext,
   UserModal,
 } from "../../modals/UserModals";
-import { BE_URL, SOCKET_URL } from "../../utils/Constants";
+import { ACCESS_TOKEN, SOCKET_URL } from "../../utils/Constants";
 import { Severity } from "../../utils/modal/notification";
 import { Loader, checkIsMobileView } from "../../utils/utils";
 
@@ -91,8 +91,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   }, [window.innerHeight, window.innerWidth]);
   useEffect(() => {
     setIsUserFetching(true);
-    const token = localStorage.getItem("accessToken") ?? "";
-    if (token) {
+    if (ACCESS_TOKEN) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;

@@ -1,10 +1,9 @@
-import { BE_URL, TOKEN } from "../utils/Constants";
+import { BE_URL } from "../utils/Constants";
 import { fetchWithAccessToken } from "./api";
 
 async function login<T, R>(path: string, data: T): Promise<R> {
   try {
     const headers = {
-      Authorization: TOKEN(),
       "Content-Type": "application/json",
     } as any;
     const response = await fetch(BE_URL + path, {
@@ -23,9 +22,7 @@ async function login<T, R>(path: string, data: T): Promise<R> {
 }
 async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
   try {
-    const headers = {
-      Authorization: TOKEN(),
-    } as any;
+    const headers = {} as any;
     if (!isFile) {
       headers["Content-Type"] = "application/json";
     }

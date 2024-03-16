@@ -8,6 +8,7 @@ import { AVAILABLE, SLEEP } from "./utils/Constants";
 import Alert from "./utils/modal/alert";
 import Notifications from "./utils/modal/notification";
 import { Loader } from "./utils/utils";
+import Footer from "./pages/footer/Footer";
 
 let isInSleep = false;
 let status = "";
@@ -103,6 +104,7 @@ function App() {
             <div className="App">
               <Routespage />
               <SocketEvents />
+              <Footer />
               {showAlertModal && (
                 <Alert
                   content={alertModalContent.content}

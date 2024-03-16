@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { MouseEventHandler, useEffect, useRef, useState } from "react";
 import {
   Button,
   Dropdown,
@@ -12,22 +12,19 @@ import { Status, UserContext, UserModal } from "../../modals/UserModals";
 import {
   ProfileImage,
   Timer,
+  checkIsMobileView,
   setCookie,
   statusIndicator,
 } from "../../utils/utils";
 import "./Navbar.css";
-import { BREAK, STATUS_TYPES } from "../../utils/Constants";
+import { BREAK, COMPANY_NAME, STATUS_TYPES } from "../../utils/Constants";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
 
 function Navbar() {
   const navigate = useNavigate();
   const profilRef = useRef<HTMLDivElement>(null);
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket } =
+  const { currentUser, setCurrentUser, setIsLoggedIn, socket, isMobileView } =
     useUserContext() as UserContext;
-  const [sendingStatuses, setSendingStatuses] = useState({
-    id: "",
-    data: { status: "" },
-  });
   const [openProfileModal, setOpenProfileModal] = useState(false);
   useOutsideClick(profilRef, () => setOpenProfileModal(false));
   const handleSelectStatus = (status: string | null) => {
@@ -46,8 +43,30 @@ function Navbar() {
   };
   const handleProfileModal = () => setOpenProfileModal(!openProfileModal);
   useEffect(() => {
-    setSendingStatuses({ ...sendingStatuses, id: currentUser._id });
-  }, []);
+    const toggleBtn = document.getElementById(
+      "navbarToggleBtn",
+    ) as HTMLButtonElement;
+    if (toggleBtn) {
+      const icon = toggleBtn?.querySelector(".navbar-toggler-i");
+      toggleBtn.addEventListener("click", function () {
+        if (icon) {
+          if (toggleBtn.getAttribute("aria-expanded") === "true") {
+            icon.classList.remove("bi-list"); // Replace 'bi-list' with your preferred open icon class
+            icon.classList.add("bi-x"); // Replace 'bi-x' with the Bootstrap cross icon class
+          } else {
+            icon.classList.remove("bi-x"); // Replace 'bi-x' with the Bootstrap cross icon class
+            icon.classList.add("bi-list"); // Replace 'bi-list' with your preferred open icon class
+          }
+        }
+      });
+    }
+
+    return () => {
+      if (toggleBtn) {
+        toggleBtn.removeEventListener("click", () => "");
+      }
+    };
+  }, [isMobileView]);
 
   return (
     <nav className="header-nav navbar navbar-expand-lg navbar-dark bg-dark justify-content-around main-nav">
@@ -57,10 +76,11 @@ function Navbar() {
           overlay={<Tooltip>Go to dashboard</Tooltip>}
         >
           <a className="navbar-brand" onClick={() => navigate("/dashboard")}>
-            <b>ResourceOne IT Solutions</b>
+            <b>{COMPANY_NAME}</b>
           </a>
         </OverlayTrigger>
         <button
+          id="navbarToggleBtn"
           className="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
@@ -69,7 +89,7 @@ function Navbar() {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-i nav-btn bi-list"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex">

@@ -1,3 +1,4 @@
+import { ClientLocationModal } from "./ClientModals";
 import { NameIdInterface } from "./UserModals";
 
 interface TicketUserModal {
@@ -26,6 +27,7 @@ export interface TicketModal {
   addOnResource: TicketUserModal[];
   client: TicketUserModal;
   comments: string;
+  requirement: string;
   conversation: string[];
   description: string;
   receivedDate: Date;
@@ -67,7 +69,13 @@ export interface AddOnUserResourcePayload {
 }
 
 export interface CreateTicketModal {
-  client: { name: string; id: string; mobile: string; email: string };
+  client: {
+    name: string;
+    id: string;
+    mobile: string;
+    email: string;
+    location: ClientLocationModal;
+  };
   user: NameIdInterface;
   technology: string;
   description: string;

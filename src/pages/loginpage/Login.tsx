@@ -44,7 +44,6 @@ const Login = () => {
       .then((result) => {
         localStorage.setItem("accessToken", result.token);
         localStorage.setItem("refreshToken", result.refreshToken);
-        setCookie(result.token, 8);
         setIsLoading(false);
         navigate("/dashboard");
       })

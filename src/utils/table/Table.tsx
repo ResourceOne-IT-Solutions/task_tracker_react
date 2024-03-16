@@ -24,6 +24,7 @@ interface TableProps<R> {
   paginationClassName?: string;
   Loader?: any;
   loading: boolean;
+  height?: string;
 }
 
 function TaskTable<R>(props: TableProps<R>) {
@@ -39,6 +40,7 @@ function TaskTable<R>(props: TableProps<R>) {
     paginationClassName = "table-pagination",
     Loader = Spinner,
     loading = false,
+    height = "400px",
     ...args
   } = props;
   const dt = tableData.map((val, idx) => {
@@ -120,7 +122,7 @@ function TaskTable<R>(props: TableProps<R>) {
   };
   return (
     <>
-      <div className="table-scroll">
+      <div className="table-scroll" style={{ height }}>
         <table className={className} {...args}>
           <thead className={tHeadClassName}>
             <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>

@@ -1,5 +1,5 @@
 import * as jwt_decode from "jwt-decode";
-import { BE_URL } from "../utils/Constants";
+import { ACCESS_TOKEN, BE_URL, REFRESH_TOKEN } from "../utils/Constants";
 
 // Check if access token is expired
 const isAccessTokenExpired = (accessToken: string | null): boolean => {
@@ -14,13 +14,12 @@ const isAccessTokenExpired = (accessToken: string | null): boolean => {
 // Token refresh function
 const refreshToken = async (): Promise<string> => {
   try {
-    const refreshToken = localStorage.getItem("refreshToken");
     const response = await fetch(`${BE_URL}/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refreshToken: REFRESH_TOKEN }),
     });
     if (!response.ok) {
       throw new Error("Failed to refresh token");
@@ -41,7 +40,7 @@ const fetchWithAccessToken = async (
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<Response> => {
-  let accessToken = localStorage.getItem("accessToken");
+  let accessToken = ACCESS_TOKEN;
   if (!accessToken || isAccessTokenExpired(accessToken)) {
     // Access token is expired, refresh it
     accessToken = await refreshToken();

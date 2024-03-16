@@ -4,8 +4,8 @@ import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 import httpMethods from "../../../api/Service";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext } from "../../../modals/UserModals";
-import { Button } from "react-bootstrap";
-import { getFullName } from "../../../utils/utils";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Description, getFullName } from "../../../utils/utils";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
@@ -50,6 +50,9 @@ function UserDashboardTickets() {
       sender: { id: currentUser._id, name: getFullName(currentUser) },
     });
   };
+  const handleDescription = (ticket: TicketModal) => {
+    navigate(`/tickets/${ticket._id}`, { state: ticket });
+  };
   const userDashbHeaders: TableHeaders<TicketModal>[] = [
     { title: "Sl. No", key: "serialNo" },
     { title: "Consultant", key: "client.name" },
@@ -73,7 +76,23 @@ function UserDashboardTickets() {
         </>
       ),
     },
-    { title: "Description", key: "description" },
+    {
+      title: "Description",
+      key: "description",
+      tdFormat: (tkt) => (
+        <>
+          <Description content={tkt.description} />
+          <OverlayTrigger
+            placement="top"
+            overlay={<Tooltip>Click here to see full description</Tooltip>}
+          >
+            <p onClick={() => handleDescription(tkt)} className="desc-link">
+              Click here
+            </p>
+          </OverlayTrigger>
+        </>
+      ),
+    },
     { title: "Comments", key: "comments" },
     {
       title: "Target Date",
@@ -119,7 +138,11 @@ function UserDashboardTickets() {
       key: "",
       tdFormat: (ticket: TicketModal) => (
         <>
-          <Button variant={"dark"} onClick={() => handleRequest(ticket)}>
+          <Button
+            variant={"dark"}
+            onClick={() => handleRequest(ticket)}
+            disabled={ticket.isClosed}
+          >
             Request Ticket
           </Button>
         </>

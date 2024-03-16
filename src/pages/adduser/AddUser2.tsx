@@ -20,10 +20,7 @@ function AddUser2() {
   const validationSchema = Yup.object().shape({
     empId: Yup.number().required("Required"),
     mobile: Yup.string()
-      .matches(
-        /^(\+[0-9]{1,3}\s?)?\d{10}$/,
-        "Enter a valid 10-digit mobile number",
-      )
+      .matches(/^\d{10}$/, "Enter a valid 10-digit mobile number")
       .required("Required"),
     firstName: Yup.string()
       .matches(/^[A-Za-z]+\s{0,1}[A-Za-z]*$/, "Invalid name")

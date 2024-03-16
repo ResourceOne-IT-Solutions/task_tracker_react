@@ -3,12 +3,11 @@ import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { TicketModal } from "../../modals/TicketModals";
 import TaskTable, { TableHeaders } from "../../utils/table/Table";
-import { getData, getFormattedDate, getFullName } from "../../utils/utils";
+import { Description, getData, getFormattedDate } from "../../utils/utils";
 import AssignTicket from "../../utils/modal/AssignTicket";
 import ReusableModal from "../../utils/modal/ReusableModal";
 import { UserContext, UserModal } from "../../modals/UserModals";
 import MailSender from "../../utils/modal/MailSender";
-import httpMethods from "../../api/Service";
 import { useUserContext } from "../Authcontext/AuthContext";
 import { Severity } from "../../utils/modal/notification";
 import CloseTicketModal from "../../utils/modal/CloseTicketModal";
@@ -81,7 +80,7 @@ function TicketsTable() {
       key: "description",
       tdFormat: (tkt) => (
         <>
-          {tkt.description}
+          <Description content={tkt.description} />
           <OverlayTrigger
             placement="top"
             overlay={<Tooltip>Click here to see full description</Tooltip>}

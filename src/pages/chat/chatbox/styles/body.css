@@ -31,9 +31,9 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding:5px 10px;
+  padding: 5px 10px;
 }
-.message-left::before{
+.message-left::before {
   content: "";
   left: -9px;
   width: 0;
@@ -44,7 +44,6 @@
   border-right: 10px solid #fff;
   top: 0;
 }
-
 
 .message-right {
   display: flex;
@@ -65,7 +64,7 @@
   color: #fff;
 }
 
-.message-right::before{
+.message-right::before {
   content: "";
   right: -9px;
   width: 0;
@@ -76,7 +75,6 @@
   border-left: 10px solid #085693;
   top: -0.5%;
 }
-
 
 .message-sender {
   align-self: self-start;
@@ -94,7 +92,7 @@
   align-self: end;
 }
 
-.message-left .time-display{
+.message-left .time-display {
   color: #000;
 }
 

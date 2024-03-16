@@ -345,7 +345,7 @@ const AdminDashboard = () => {
       {showModal && modalName === "USERS" && (
         <ReusableModal vals={modalProps}>
           <TaskTable<UserModal>
-            pagination
+            height="300px"
             headers={rangeUserHeaders}
             tableData={usersData.filter(
               (user) => user.status === selectedRangeStatus,

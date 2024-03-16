@@ -145,6 +145,7 @@ export const DayWiseBreakTimings = ({
           )}
           <div>
             <TaskTable<BreakInterface>
+              height="300px"
               headers={BREAK_TABLE_HEADERS}
               tableData={dayTimings}
               loading={false}

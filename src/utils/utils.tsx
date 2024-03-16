@@ -9,6 +9,7 @@ import {
 } from "../modals/UserModals";
 import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
 import {
+  ACCESS_TOKEN,
   ADMIN_MESSAGE,
   AVAILABLE,
   BE_URL,
@@ -23,7 +24,6 @@ import {
   SLEEP,
   TICKETRAISE_MESSAGE,
   TICKET_REQUEST,
-  TOKEN,
 } from "./Constants";
 import { useUserContext } from "../components/Authcontext/AuthContext";
 import { Severity } from "./modal/notification";
@@ -166,7 +166,7 @@ export const getImage = async (path: string) => {
   try {
     const response = await fetch(`${BE_URL}${path}`, {
       headers: {
-        Authorization: TOKEN(),
+        Authorization: ACCESS_TOKEN,
       },
     });
     if (!response.ok) {
@@ -527,4 +527,12 @@ export const checkIsMobileView = () => {
     document.body.clientWidth;
   const mobileThreshold = 768;
   return screenWidth < mobileThreshold;
+};
+
+export const Description = ({ content }: { content: string }) => {
+  return (
+    <>
+      {content.length >= 30 ? <>{content.slice(0, 30)}...</> : <>{content} </>}
+    </>
+  );
 };

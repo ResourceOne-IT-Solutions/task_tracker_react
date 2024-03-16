@@ -31,9 +31,9 @@ const updateContent = (updates: TicketUpdates[]) => {
 const mailContent = (ticket: TicketModal) => {
   return `Consultant Name: ${ticket.client.name},\nTicket Owner: ${
     ticket.user.name
-  },\nFinal Status: ${ticket.status},\nTotal Updates:\n${updateContent(
-    ticket.updates,
-  )},`;
+  },\nRequirement: ${ticket.requirement},\nFinal Status: ${
+    ticket.status
+  },\nTotal Updates:\n${updateContent(ticket.updates)},`;
 };
 
 const TicketDescription = () => {
@@ -132,7 +132,7 @@ const TicketDescription = () => {
             <b>Client Name : </b> {selectedTicket.client.name}
           </p>
           <p className="m-2">
-            <b>User Name :</b> {selectedTicket.user.name}
+            <b>Owner Name :</b> {selectedTicket.user.name}
           </p>
           <p className="m-2">
             <b>Technology :</b> {selectedTicket.technology}
@@ -149,7 +149,10 @@ const TicketDescription = () => {
             </p>
           )}
           <p className="m-2">
-            <b>Description :</b> {selectedTicket.description}
+            <b>Requirement :</b> {selectedTicket.requirement}
+          </p>
+          <p className="m-2">
+            <b>Final Description :</b> {selectedTicket.description}
           </p>
           <p className="m-2">
             <b>Comments :</b> {selectedTicket.comments}
@@ -172,12 +175,12 @@ const TicketDescription = () => {
             {selectedTicket.updates.map((item, index) => {
               return (
                 <li key={item._id}>
-                  <p className="fw-bold">Update {index + 1}: </p>
-                  <p>Date: {new Date(item.date).toLocaleString()}</p>
-                  <p>Description: {item.description}</p>
-                  <p>Comments: {item.comments}</p>
-                  <p>Status: {item.status}</p>
-                  <p>Updated by : {item.updatedBy.name}</p>
+                  <div className="fw-bold">Update {index + 1}: </div>
+                  <div>Date: {new Date(item.date).toLocaleString()}</div>
+                  <div>Description: {item.description}</div>
+                  <div>Comments: {item.comments}</div>
+                  <div>Status: {item.status}</div>
+                  <div>Updated by : {item.updatedBy.name}</div>
                 </li>
               );
             })}

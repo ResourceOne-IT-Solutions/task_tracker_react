@@ -1,36 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import "./styles/AddTicket.css";
 import httpMethods from "../../api/Service";
 import { ClientModal } from "../../modals/ClientModals";
 import { CreateTicketModal, TicketModal } from "../../modals/TicketModals";
-import {
-  getCurrentDate,
-  getFormattedDate,
-  getFullName,
-  getNameId,
-} from "../utils";
+import { getCurrentDate, getNameId } from "../utils";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
 import { Severity } from "./notification";
 import { ErrorMessageInterface } from "../../modals/interfaces";
+import { NEW_TICKET_EMPTY_OBJ } from "../ConstantObjects";
 interface TicketmodalInterface {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
   clientsData: ClientModal | any;
 }
 
-function AddTicket(props: TicketmodalInterface) {
+function AddTicket({ setShowModal, clientsData }: TicketmodalInterface) {
   const userContext = useUserContext();
   const { currentUser, alertModal, socket } = userContext as UserContext;
   const [selectedItem, setSelectedItem] = useState(null);
-  const [ticketData, setTicketData] = useState<CreateTicketModal>({
-    client: { name: "", id: "", mobile: "", email: "" },
-    user: { name: "", id: "" },
-    technology: "",
-    description: "",
-    targetDate: getFormattedDate(new Date()),
-  });
+  const [ticketData, setTicketData] =
+    useState<CreateTicketModal>(NEW_TICKET_EMPTY_OBJ);
   const [ticketError, setTicketError] = useState<string>("");
   const [ticketSuccess, setTicketSuccess] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,7 +34,7 @@ function AddTicket(props: TicketmodalInterface) {
     Boolean(ticketData.description);
   const handleSelect = (item: any) => {
     setSelectedItem(item);
-    props.clientsData.forEach((val: ClientModal) => {
+    clientsData.forEach((val: ClientModal) => {
       if (val.firstName == item) {
         setTicketData({
           ...ticketData,
@@ -52,6 +43,7 @@ function AddTicket(props: TicketmodalInterface) {
             id: val._id,
             mobile: val.mobile,
             email: val.email,
+            location: val.location,
           },
           technology: val.technology,
         });
@@ -75,13 +67,7 @@ function AddTicket(props: TicketmodalInterface) {
           setCreatedTicket(result);
           setTicketError("");
           setLoading(false);
-          setTicketData({
-            client: { name: "", id: "", mobile: "", email: "" },
-            user: { name: "", id: "" },
-            technology: "",
-            description: "",
-            targetDate: "",
-          });
+          setTicketData(NEW_TICKET_EMPTY_OBJ);
           setSelectedItem(null);
           setTicketSuccess(true);
           alertModal({
@@ -90,7 +76,7 @@ function AddTicket(props: TicketmodalInterface) {
             title: "Alert",
           });
           socket.emit("dashboardStats");
-          props.setShowModal(false);
+          setShowModal(false);
         })
         .catch((e: ErrorMessageInterface) => {
           setTicketSuccess(false);
@@ -124,8 +110,8 @@ function AddTicket(props: TicketmodalInterface) {
                 {selectedItem ? selectedItem : "Select an Client"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
-                {props.clientsData !== null
-                  ? props.clientsData.map((item: ClientModal, index: any) => {
+                {clientsData !== null
+                  ? clientsData.map((item: ClientModal, index: any) => {
                       return (
                         <Dropdown.Item key={index} eventKey={item.firstName}>
                           {item.firstName}
@@ -157,12 +143,12 @@ function AddTicket(props: TicketmodalInterface) {
           <Form.Group as={Col} md="12">
             <Form.Label>
               <b>
-                Enter Description <span className="text-danger">*</span>
+                Add Requirement <span className="text-danger">*</span>
               </b>
             </Form.Label>
             <Form.Control
               as={"textarea"}
-              placeholder="Enter Description"
+              placeholder="Enter Requirement"
               rows={2}
               name="description"
               onChange={handleChange}

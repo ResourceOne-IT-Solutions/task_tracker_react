@@ -19,7 +19,6 @@
   padding: 12px;
   width: 50%;
   margin: auto;
-
 }
 .back-btn {
   background-color: #000;
@@ -40,12 +39,11 @@
   .from-to {
     width: 100%;
   }
-  .filters button.back-btn{
+  .filters button.back-btn {
     font-size: 0;
   }
-  
-  .filters button.back-btn i{
+
+  .filters button.back-btn i {
     font-size: 15px;
   }
-} 
-
+}

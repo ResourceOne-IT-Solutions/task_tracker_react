@@ -2,7 +2,22 @@ import React from "react";
 import { BreakInterface } from "../modals/UserModals";
 import { getBreakTimings } from "../pages/dashboard/userDashboard/utils";
 import { TableHeaders } from "./table/Table";
-import { getFormattedTime } from "./utils";
+import { getFormattedDate, getFormattedTime } from "./utils";
+import { ClientLocationModal } from "../modals/ClientModals";
+
+export const NEW_TICKET_EMPTY_OBJ = {
+  client: {
+    name: "",
+    id: "",
+    mobile: "",
+    email: "",
+    location: {} as ClientLocationModal,
+  },
+  user: { name: "", id: "" },
+  technology: "",
+  description: "",
+  targetDate: getFormattedDate(new Date()),
+};
 
 export const BREAK_TABLE_HEADERS: TableHeaders<BreakInterface>[] = [
   { title: "Sl. No", key: "serialNo" },

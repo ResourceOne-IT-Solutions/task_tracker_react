@@ -78,6 +78,10 @@
   border-bottom: none;
   border-left: none;
 }
+.nav-btn {
+  width: 1.5em;
+  height: 1.5em;
+}
 
 .profile-modal {
   right: 0;

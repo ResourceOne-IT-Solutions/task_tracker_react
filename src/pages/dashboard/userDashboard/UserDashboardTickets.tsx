@@ -55,7 +55,18 @@ function UserDashboardTickets() {
   };
   const userDashbHeaders: TableHeaders<TicketModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "Consultant", key: "client.name" },
+    {
+      title: "Consultant",
+      key: "client.name",
+      tdFormat: (tikcet) => (
+        <>
+          <span>{tikcet.client.name}</span>
+          <span className="fw-semibold">
+            {tikcet.client.location.area}-{tikcet.client.location.zone}
+          </span>
+        </>
+      ),
+    },
     { title: "User", key: "user.name" },
     { title: "Technology", key: "technology" },
     {

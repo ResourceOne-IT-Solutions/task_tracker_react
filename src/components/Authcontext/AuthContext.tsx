@@ -91,7 +91,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   }, [window.innerHeight, window.innerWidth]);
   useEffect(() => {
     setIsUserFetching(true);
-    if (ACCESS_TOKEN) {
+    if (ACCESS_TOKEN()) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;

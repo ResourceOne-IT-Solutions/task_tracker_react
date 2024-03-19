@@ -5,6 +5,7 @@ interface TicketUserModal {
   name: string;
   id: string;
   email: string;
+  location: ClientLocationModal
 }
 type Status =
   | "Not Assigned"

@@ -19,15 +19,13 @@ const ChatBody = ({
 }: ChatBodyProps) => {
   const ScrollRef = useRef<HTMLDivElement>(null);
   const height = window.innerHeight;
-  socket
-    .off("notifications")
-    .on("notifications", ({ id }) => {
-      if (currentUser._id == id) {
-        if (ScrollRef.current) {
-          ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
-        }
+  socket.off("notifications").on("notifications", ({ id }) => {
+    if (currentUser._id == id) {
+      if (ScrollRef.current) {
+        ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
       }
-    });
+    }
+  });
   useEffect(() => {
     if (ScrollRef.current) {
       ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;

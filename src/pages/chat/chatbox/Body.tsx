@@ -19,18 +19,20 @@ const ChatBody = ({
 }: ChatBodyProps) => {
   const ScrollRef = useRef<HTMLDivElement>(null);
   const height = window.innerHeight;
+  socket
+    .off("notifications")
+    .on("notifications", ({ id }) => {
+      if (currentUser._id == id) {
+        if (ScrollRef.current) {
+          ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
+        }
+      }
+    });
   useEffect(() => {
     if (ScrollRef.current) {
       ScrollRef.current.scrollTop = ScrollRef.current.scrollHeight;
     }
   }, [totalMessages]);
-
-  const mszAuthor = (msz: MessageModel) => {
-    if (currentUser._id === msz.from.id) {
-      return "You";
-    }
-    return msz.from.name;
-  };
 
   socket.off("roomMessages").on("roomMessages", (messages: RoomMessages[]) => {
     setTotalMessages(messages);
@@ -38,6 +40,47 @@ const ChatBody = ({
   const handleDeleteMessage = async (msz: MessageModel) => {
     socket.emit("deleteMessage", msz._id);
   };
+
+  return (
+    <div
+      className="chat-body-container"
+      ref={ScrollRef}
+      style={{ height: height - 195 }}
+    >
+      {totalMessages.map((daymessages: RoomMessages) => (
+        <div key={daymessages._id}>
+          <h3 className="text-center">{daymessages._id}</h3>
+          {daymessages.messageByDate.map((message: MessageModel) => (
+            <MessageCard
+              key={message._id}
+              message={message}
+              currentUser={currentUser}
+              handleDeleteMessage={handleDeleteMessage}
+            />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+export interface MessageCardProps {
+  message: MessageModel;
+  currentUser: UserModal;
+  handleDeleteMessage: (msz: MessageModel) => void;
+}
+
+const MessageCard = ({
+  message,
+  currentUser,
+  handleDeleteMessage,
+}: MessageCardProps) => {
+  const mszAuthor = (msz: MessageModel) => {
+    if (currentUser._id === msz.from.id) {
+      return "You";
+    }
+    return msz.from.name;
+  };
+
   const messageRender = (msz: MessageModel) => {
     const className =
       msz.from.id === currentUser._id ? "message-right" : "message-left";
@@ -79,48 +122,31 @@ const ChatBody = ({
       );
     }
   };
-
   return (
     <div
-      className="chat-body-container"
-      ref={ScrollRef}
-      style={{ height: height - 195 }}
+      className={
+        currentUser._id !== message.from.id
+          ? "main-left-container"
+          : "main-right-container"
+      }
     >
-      {totalMessages.map((daymessages: RoomMessages) => (
-        <div key={daymessages._id}>
-          <h3 className="text-center">{daymessages._id}</h3>
-          {daymessages.messageByDate.map((message: MessageModel) => (
-            <div
-              key={message._id}
-              className={
-                currentUser._id !== message.from.id
-                  ? "main-left-container"
-                  : "main-right-container"
-              }
-            >
-              {message.type === "message" ? (
-                <div
-                  className={
-                    currentUser._id !== message.from.id
-                      ? "message-left"
-                      : "message-right"
-                  }
-                >
-                  <div className="message-sender fw-semibold">
-                    {mszAuthor(message)} :{" "}
-                  </div>
-                  <div className="message-display">{message.content}</div>
-                  <p className="time-display">
-                    {getFormattedTime(message.time)}
-                  </p>
-                </div>
-              ) : (
-                <div> {messageRender(message)}</div>
-              )}
-            </div>
-          ))}
+      {message.type === "message" ? (
+        <div
+          className={
+            currentUser._id !== message.from.id
+              ? "message-left"
+              : "message-right"
+          }
+        >
+          <div className="message-sender fw-semibold">
+            {mszAuthor(message)} :{" "}
+          </div>
+          <div className="message-display">{message.content}</div>
+          <p className="time-display">{getFormattedTime(message.time)}</p>
         </div>
-      ))}
+      ) : (
+        <div> {messageRender(message)}</div>
+      )}
     </div>
   );
 };

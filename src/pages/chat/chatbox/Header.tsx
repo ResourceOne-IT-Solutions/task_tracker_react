@@ -12,16 +12,16 @@ import jsPDF from "jspdf";
 
 interface Chatprops {
   selectedUser: UserModal;
-  setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   totalMessages: RoomMessages[];
   currentUser: UserModal;
+  handleBack: () => void;
 }
 
 const ChatHeader = ({
   selectedUser,
-  setSelectedUser,
   totalMessages,
   currentUser,
+  handleBack,
 }: Chatprops) => {
   const [isPopupOpen, setPopupOpen] = useState(false);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -39,9 +39,7 @@ const ChatHeader = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [popupRef]);
-  const handleBackHeader = () => {
-    setSelectedUser({} as UserModal);
-  };
+
   const handleOpenBtn = () => {
     setPopupOpen(!isPopupOpen);
   };
@@ -97,7 +95,7 @@ const ChatHeader = ({
             fill="currentColor"
             className="bi bi-arrow-left-circle"
             viewBox="0 0 16 16"
-            onClick={handleBackHeader}
+            onClick={handleBack}
             color="white"
           >
             <path

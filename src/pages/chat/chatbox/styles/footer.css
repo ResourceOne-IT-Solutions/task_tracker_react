@@ -89,6 +89,7 @@
   margin: 10px;
   border-radius: 10px;
   background-color: #eeeeee;
+  color: #000;
 }
 .contact-list:hover {
   cursor: pointer;

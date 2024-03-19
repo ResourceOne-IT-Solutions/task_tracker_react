@@ -1,5 +1,5 @@
 import React from "react";
-import { cookieComp } from "./utils";
+import { FileModel } from "../modals/MessageModals";
 
 const BE_SERVER = "https://task-tracker-server-2njm.onrender.com";
 const BE_LOCAL = "http://192.168.10.30:1234";
@@ -65,6 +65,7 @@ export const ADMIN_MESSAGE = "Admin Messages";
 export const TICKETRAISE_MESSAGE = "TicketRaise Messages";
 export const NO_DATA_AVAILBALE = () => <span>Data not available</span>;
 export const RED_STAR = () => <span className="text-danger">*</span>;
-export const ACCESS_TOKEN = localStorage.getItem("accessToken") || "";
-export const REFRESH_TOKEN = localStorage.getItem("refreshToken") || "";
+export const ACCESS_TOKEN = () => localStorage.getItem("accessToken") || "";
+export const REFRESH_TOKEN = () => localStorage.getItem("refreshToken") || "";
 export const COMPANY_NAME = "ResourceOne IT Solutions";
+export const CHAT_CACHE_FILES: { [key: string]: FileModel } = {};

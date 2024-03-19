@@ -175,7 +175,6 @@ function Navbar() {
                     <li>
                       <span>Designation :</span> {currentUser.designation}
                     </li>
-                    Tickets Table
                   </ul>
                   <div className="admin-logout-button">
                     <Button variant="danger" onClick={handleLogoutClick}>

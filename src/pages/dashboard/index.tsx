@@ -11,15 +11,16 @@ import { Loader } from "../../utils/utils";
 
 const Dashboard = () => {
   const userContext = useUserContext();
-  const { getLogin, isLoading } = useAuth();
+  const { getLogin, isLoading, setIsLoading } = useAuth();
   const { currentUser, isLoggedin } = userContext as UserContext;
 
   useEffect(() => {
     if (!currentUser.firstName) {
       getLogin();
+    } else {
+      setIsLoading(false);
     }
   }, [currentUser.firstName]);
-
   if (!isLoading && !isLoggedin) {
     return <Navigate to="/" />;
   }

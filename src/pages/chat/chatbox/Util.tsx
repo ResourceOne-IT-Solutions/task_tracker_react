@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import httpMethods from "../../../api/Service";
 import { FileModel, MessageModel } from "../../../modals/MessageModals";
 import "./styles/utils.css";
-import { ImageShowModal, getFormattedTime } from "../../../utils/utils";
+import { ImageShowModal, Loader, getFormattedTime } from "../../../utils/utils";
+import { CHAT_CACHE_FILES } from "../../../utils/Constants";
 
 export const FileRenderer = ({
   type,
@@ -45,7 +46,13 @@ export const FileComponent = ({
   const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     const getFileFromDb = async (id = "") => {
-      const file = await fileDownload(id);
+      let file;
+      if (CHAT_CACHE_FILES[id]) {
+        file = CHAT_CACHE_FILES[id];
+      } else {
+        file = await fileDownload(id);
+        CHAT_CACHE_FILES[id] = file;
+      }
       if (file) {
         const base64 = new Uint8Array(file.data.data);
         const url = URL.createObjectURL(
@@ -68,25 +75,27 @@ export const FileComponent = ({
       <div className="message-sender fw-semibold">{author} : </div>
       <div className="img-wrapper text-center">
         {fileUrl && (
-          <div onClick={() => setOpenModal(true)}>
-            <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
-          </div>
+          <>
+            <div onClick={() => setOpenModal(true)}>
+              <FileRenderer
+                type={getMessageType(file.type)}
+                fileUrl={fileUrl}
+              />
+            </div>
+            <span
+              className="download-icon"
+              onClick={(e) => downloadFile(e, fileUrl, file.content)}
+            >
+              <i className="bi bi-download"></i>
+            </span>
+          </>
         )}
-        <span
-          className="download-icon"
-          onClick={(e) => downloadFile(e, fileUrl, file.content)}
-        >
-          <i className="bi bi-download"></i>
-        </span>
+        {!fileUrl && <Loader fullScreen={false} />}
       </div>
       <div className="content text-center">{file.content}</div>
       <p className="time-display">{getFormattedTime(file.time)}</p>
       {openModal && (
-        <ImageShowModal
-          show={openModal}
-          onHide={() => setOpenModal(false)}
-          imageUrl={fileUrl}
-        >
+        <ImageShowModal show={openModal} onHide={() => setOpenModal(false)}>
           <FileRenderer type={getMessageType(file.type)} fileUrl={fileUrl} />
         </ImageShowModal>
       )}

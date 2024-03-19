@@ -19,10 +19,10 @@ const refreshToken = async (): Promise<string> => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ refreshToken: REFRESH_TOKEN }),
+      body: JSON.stringify({ refreshToken: REFRESH_TOKEN() }),
     });
     if (!response.ok) {
-      throw new Error("Failed to refresh token");
+      throw new Error("Failed to refresh token, Please Login  again..!");
     }
     const data = await response.json();
     const newAccessToken = data.accessToken;
@@ -40,7 +40,7 @@ const fetchWithAccessToken = async (
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<Response> => {
-  let accessToken = ACCESS_TOKEN;
+  let accessToken = ACCESS_TOKEN();
   if (!accessToken || isAccessTokenExpired(accessToken)) {
     // Access token is expired, refresh it
     accessToken = await refreshToken();

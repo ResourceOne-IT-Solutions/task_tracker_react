@@ -91,7 +91,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   }, [window.innerHeight, window.innerWidth]);
   useEffect(() => {
     setIsUserFetching(true);
-    if (ACCESS_TOKEN) {
+    if (ACCESS_TOKEN()) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -130,7 +130,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
 export const useUserContext = () => useContext(UserContextProvider);
 export const useAuth = () => {
   const { setCurrentUser, setIsLoggedIn } = useUserContext() as UserContext;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const getLogin = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
@@ -159,6 +159,6 @@ export const useAuth = () => {
       },
     );
   };
-  return { getLogin, isLoading };
+  return { getLogin, isLoading, setIsLoading };
 };
 export default AuthContext;

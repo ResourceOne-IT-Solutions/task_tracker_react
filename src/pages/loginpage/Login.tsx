@@ -22,7 +22,7 @@ const Login = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setData({
       ...data,
-      isAdmin: path === "Admin" ? true : false,
+      isAdmin: path === "Admin",
       [event.target.name]: event.target.value,
     });
   };
@@ -39,7 +39,7 @@ const Login = () => {
     httpMethods
       .login<LoginPayload, { token: string; refreshToken: string }>(
         "/verify-login",
-        data,
+        { ...data, isAdmin: path === "Admin" },
       )
       .then((result) => {
         localStorage.setItem("accessToken", result.token);

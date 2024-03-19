@@ -13,11 +13,12 @@ const SocketEvents = () => {
     alertModal,
     popupNotification,
     setRequestMessageCount,
+    currentRoom,
   } = useUserContext() as UserContext;
   socket
     .off("notifications")
     .on("notifications", ({ id, from, type, room }) => {
-      if (currentUser._id == id) {
+      if (currentUser._id == id && currentRoom !== room) {
         currentUser.newMessages[room] =
           (currentUser.newMessages[room] || 0) + 1;
         const totalMessage =

@@ -166,7 +166,7 @@ export const getImage = async (path: string) => {
   try {
     const response = await fetch(`${BE_URL}${path}`, {
       headers: {
-        Authorization: ACCESS_TOKEN,
+        Authorization: ACCESS_TOKEN(),
       },
     });
     if (!response.ok) {
@@ -264,21 +264,23 @@ export const ProfileImage = ({
 interface ImageSHowModal {
   show: boolean;
   onHide: () => void;
-  imageUrl: string;
+  imageUrl?: string;
   children?: JSX.Element;
 }
 export const ImageShowModal = ({
   show,
   onHide,
-  imageUrl,
+  imageUrl = "",
   children,
 }: ImageSHowModal) => {
   return (
     <Modal className="profileimg-zoom" show={show} onHide={onHide}>
       <Modal.Body>
-        <div style={{ width: "300px", height: "300px" }}>
-          <img src={imageUrl} width="100%" height="100%" />
-        </div>
+        {!children && (
+          <div style={{ width: "300px", height: "300px" }}>
+            <img src={imageUrl} width="100%" height="100%" />
+          </div>
+        )}
         {children}
       </Modal.Body>
     </Modal>
@@ -331,9 +333,16 @@ export const Timer = () => {
   );
 };
 
-export const Loader = () => {
+interface LoaderProps {
+  fullScreen?: boolean;
+}
+export const Loader = ({ fullScreen = true }: LoaderProps) => {
   return (
-    <div className="align-items-center d-flex vh-100 justify-content-center">
+    <div
+      className={`align-items-center d-flex justify-content-center ${
+        fullScreen ? "vh-100" : ""
+      }`}
+    >
       <Spinner variant="succss" />
     </div>
   );

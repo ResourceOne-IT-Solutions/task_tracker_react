@@ -11,15 +11,18 @@ import {
 } from "../../../modals/UserModals";
 
 export const ChatBox = () => {
-  const userContext = useUserContext();
-  const [totalMessages, setTotalMessages] = useState<RoomMessages[]>([]);
   const { selectedUser, setSelectedUser, socket, currentUser, currentRoom } =
-    userContext as UserContext;
+    useUserContext() as UserContext;
+  const [totalMessages, setTotalMessages] = useState<RoomMessages[]>([]);
   useEffect(() => {
     return () => {
       setSelectedUser({} as UserModal);
     };
   }, []);
+  const handleBack = () => {
+    setSelectedUser({} as UserModal);
+    socket.emit("leaveRoom", currentRoom);
+  };
   return (
     <div className="chatbox">
       {selectedUser._id ? (
@@ -27,9 +30,9 @@ export const ChatBox = () => {
           <div className="chat-header">
             <ChatHeader
               selectedUser={selectedUser}
-              setSelectedUser={setSelectedUser}
               totalMessages={totalMessages}
               currentUser={currentUser}
+              handleBack={handleBack}
             />
           </div>
           <div className="chat-body">

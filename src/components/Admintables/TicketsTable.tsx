@@ -66,7 +66,19 @@ function TicketsTable() {
     navigate(`/tickets/${ticket._id}`, { state: ticket });
   };
   const ticketTableHeaders: TableHeaders<TicketModal>[] = [
-    { title: "Client Name", key: "client.name" },
+    {
+      title: "Client Name",
+      key: "client.name",
+      tdFormat: (tikcet) => (
+        <>
+          <span>{tikcet.client.name}</span>
+          <div className="fw-semibold">
+            {tikcet?.client?.location?.area || "N/A"}-
+            {tikcet.client.location.zone}
+          </div>
+        </>
+      ),
+    },
     { title: "User Name", key: "user.name" },
     { title: "Status", key: "status" },
     { title: "Technology", key: "technology" },

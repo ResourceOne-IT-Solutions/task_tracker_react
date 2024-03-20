@@ -44,7 +44,19 @@ const Tickets = ({ url = "/tickets" }: Props) => {
   };
   const ticketHeaders: TableHeaders<TicketModal>[] = [
     { title: "Sl. No", key: "serialNo" },
-    { title: "Consultant Name", key: "client.name" },
+    {
+      title: "Consultant Name",
+      key: "client.name",
+      tdFormat: (tikcet) => (
+        <>
+          <span>{tikcet.client.name}</span>
+          <div className="fw-semibold">
+            {tikcet?.client?.location?.area || "N/A"}-
+            {tikcet.client.location.zone}
+          </div>
+        </>
+      ),
+    },
     { title: "Status", key: "status" },
     { title: "Owner", key: "user.name" },
     { title: "Technology", key: "technology" },

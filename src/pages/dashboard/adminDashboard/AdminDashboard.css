@@ -168,6 +168,7 @@ th {
   }
   .dashboard-actions {
     flex-direction: column;
+    width: 100%;
   }
   .admin-pie-chart .pie-chart {
     width: 100%;

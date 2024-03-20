@@ -339,20 +339,6 @@ const AdminDashboard = () => {
         </div>
         <div className="ranges"></div>
       </div>
-      {/* <div className="d-flex flex-direction-row gap-5 m-3 dashboard-actions">
-        <Button variant="danger" onClick={handleAdminBroadCastMessage}>
-          Send Message to All
-        </Button>
-        <Button onClick={() => displayTable("users")} variant="info">
-          Show Users
-        </Button>
-        <Button onClick={() => displayTable("clients")} variant="success">
-          Show Clients
-        </Button>
-        <Button variant="secondary" onClick={() => displayTable("tickets")}>
-          Today Tickets
-        </Button>
-      </div> */}
       {showModal && modalName == "messageModal" && (
         <ReusableModal vals={modalProps}>
           <MessageAllUsersModal setShowModal={setShowModal} />

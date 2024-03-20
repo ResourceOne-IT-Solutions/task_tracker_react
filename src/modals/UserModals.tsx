@@ -89,7 +89,7 @@ export interface UserModal {
   empId: string;
   joinedDate: Date;
   isAdmin: boolean;
-  lastActive: string;
+  lastActive: Date;
   isActive: boolean;
   designation: string;
   address: string;

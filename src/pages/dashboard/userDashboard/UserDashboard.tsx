@@ -17,6 +17,7 @@ import { Severity } from "../../../utils/modal/notification";
 import { ErrorMessageInterface } from "../../../modals/interfaces";
 import LoginTimings from "./utils/LoginTimings";
 import BreakTimings from "./utils/BreakTimings";
+import { OFFLINE } from "../../../utils/Constants";
 
 const UserDashboard = ({ user }: { user: UserModal }) => {
   const navigate = useNavigate();
@@ -161,6 +162,12 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               <li>Dob : {dateConversion(presentUser.dob)}</li>
               <li>Phone : {presentUser.mobile}</li>
               <li>Role : {presentUser.designation}</li>
+              {presentUser.status === OFFLINE && (
+                <li>
+                  Last Active On :{" "}
+                  {new Date(presentUser.lastActive).toLocaleString()}
+                </li>
+              )}
               <li>
                 <span className="fw-bold d-block">Login</span>
                 <LoginTimings user={presentUser} todayOnly={true} />

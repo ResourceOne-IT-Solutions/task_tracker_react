@@ -77,6 +77,7 @@ function AdminRequestMessages() {
   socket
     .off("chatRequest")
     .on("chatRequest", ({ sender, opponent, time, isPending, date, _id }) => {
+      setNewRequests([...newRequests, _id]);
       if (currentUser.isAdmin) {
         const payloadData = {
           date,
@@ -92,6 +93,7 @@ function AdminRequestMessages() {
   socket
     .off("ticketsRequest")
     .on("ticketsRequest", ({ client, date, isPending, sender, time, _id }) => {
+      setNewRequests([...newRequests, _id]);
       if (currentUser.isAdmin) {
         const payloadData = {
           client,
@@ -109,6 +111,7 @@ function AdminRequestMessages() {
     .on(
       "userRaisedTicket",
       ({ sender, content, date, time, isPending, _id }) => {
+        setNewRequests([...newRequests, _id]);
         const payloadData = {
           sender,
           content,

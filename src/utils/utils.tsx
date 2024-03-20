@@ -385,7 +385,7 @@ export const AdminRequestCard = ({
 
       <div>
         {isPending ? (
-          <Button variant="success" onClick={() => onApprove(id, "CHAT")}>
+          <Button variant="success" onClick={() => onApprove(id, type)}>
             Give Access
           </Button>
         ) : (

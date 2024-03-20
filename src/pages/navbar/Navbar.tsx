@@ -37,6 +37,7 @@ function Navbar() {
     setCurrentUser({} as UserModal);
     setIsLoggedIn(false);
     socket.emit("logout", currentUser._id);
+    socket.disconnect();
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     navigate("/");

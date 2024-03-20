@@ -33,7 +33,9 @@ function App() {
   function resetInactivityTimer() {
     if (isInSleep) {
       isInSleep = false;
-      socket.emit("changeStatus", { id: currentUser._id, status: AVAILABLE });
+      if (currentUser._id) {
+        socket.emit("changeStatus", { id: currentUser._id, status: AVAILABLE });
+      }
     }
     clearTimeout(inactivityTimer);
     inactivityTimer = setTimeout(
@@ -85,7 +87,7 @@ function App() {
       resetInactivityTimer();
     }
     return () => {
-      if (!currentUser.isAdmin && isLoggedin) {
+      if (!currentUser.isAdmin) {
         document.removeEventListener("click", resetInactivityTimer);
       }
     };

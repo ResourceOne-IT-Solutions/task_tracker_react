@@ -61,9 +61,9 @@ function UserDashboardTickets() {
       tdFormat: (tikcet) => (
         <>
           <span>{tikcet.client.name}</span>
-          <span className="fw-semibold">
+          <div className="fw-semibold">
             {tikcet.client.location.area}-{tikcet.client.location.zone}
-          </span>
+          </div>
         </>
       ),
     },

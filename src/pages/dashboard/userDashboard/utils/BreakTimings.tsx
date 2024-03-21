@@ -67,7 +67,7 @@ const BreakTimings = ({ user, todayOnly = false }: BreakTimingProps) => {
     const todayTiming = groupedByStartDate[getFormattedDate(new Date())] ?? [];
     setTodayTimings(todayTiming);
     setBreakTimings(groupedByStartDate);
-  }, []);
+  }, [user.breakTime]);
   return (
     <div style={{ maxHeight: "300px", overflow: "hidden scroll" }}>
       {todayOnly ? (

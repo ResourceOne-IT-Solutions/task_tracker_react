@@ -3,7 +3,14 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+html{
+  height: 100%;
+}
+body{
+  position: relative;
+  min-height: 100%;
+  padding-bottom: 60px;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -130,11 +137,16 @@
   padding-left: 10px;
 }
 .footer {
-  background: gray;
+  background: #212529;
+  color: #fff;
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 @media only screen and (max-width: 767px) {

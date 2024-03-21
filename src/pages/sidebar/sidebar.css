@@ -1,6 +1,7 @@
 .side-bar {
   max-width: 240px;
   background: #212529;
+  min-height: 621px;
 }
 .side-bar ul {
   position: sticky;

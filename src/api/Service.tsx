@@ -54,14 +54,16 @@ async function get<S>(path: string): Promise<S> {
   }
 }
 
-async function put<T, R>(url: string, data: T): Promise<R> {
+async function put<T, R>(url: string, data: T, isFile = false): Promise<R> {
   try {
+    const headers = {} as any;
+    if (!isFile) {
+      headers["Content-Type"] = "application/json";
+    }
     const response = await fetchWithAccessToken(BE_URL + url, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      headers,
+      body: isFile ? (data as FormData) : JSON.stringify(data),
     });
     const result = await response.json();
     if (!response.ok) {

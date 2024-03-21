@@ -114,3 +114,26 @@
 .profile ul li span {
   font-weight: bold;
 }
+.medium-size-image{
+  text-align: center;
+  position: relative;
+}
+.medium-size-image img{
+  width: 80px;
+  height: 80px;
+}
+.medium-size-image i{
+  position: absolute;
+  right: 41%;
+  color:red;
+  font-size: 20px;
+}
+.medium-size-image i:hover{
+  cursor: pointer;
+}
+.edit-img-modal{
+  text-align: center;
+}
+.edit-img-modal img{
+  width: 55%;
+}

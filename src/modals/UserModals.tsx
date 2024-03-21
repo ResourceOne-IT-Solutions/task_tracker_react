@@ -141,3 +141,7 @@ export interface OtpInterface {
   userId?: string;
   email?: string;
 }
+export interface ImageupdateModal{
+  id:string,
+  profileImageUrl:string
+}

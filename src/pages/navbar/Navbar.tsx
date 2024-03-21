@@ -8,7 +8,12 @@ import {
 } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
-import { Status, UserContext, UserModal } from "../../modals/UserModals";
+import {
+  ImageupdateModal,
+  Status,
+  UserContext,
+  UserModal,
+} from "../../modals/UserModals";
 import {
   ProfileImage,
   Timer,
@@ -19,13 +24,82 @@ import {
 import "./Navbar.css";
 import { BREAK, COMPANY_NAME, STATUS_TYPES } from "../../utils/Constants";
 import useOutsideClick from "../../utils/hooks/useOutsideClick";
+import ReusableModal from "../../utils/modal/ReusableModal";
+import { Severity } from "../../utils/modal/notification";
+import httpMethods from "../../api/Service";
 
 function Navbar() {
   const navigate = useNavigate();
   const profilRef = useRef<HTMLDivElement>(null);
-  const { currentUser, setCurrentUser, setIsLoggedIn, socket, isMobileView } =
-    useUserContext() as UserContext;
+  const {
+    currentUser,
+    setCurrentUser,
+    setIsLoggedIn,
+    socket,
+    isMobileView,
+    alertModal,
+  } = useUserContext() as UserContext;
   const [openProfileModal, setOpenProfileModal] = useState(false);
+  const [showimgUrl, setShowImgUrl] = useState<string>("");
+  const [imgUrl, setImgUrl] = useState<File>({} as File);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [modalProps, setModalProps] = useState({
+    title: "",
+    setShowModal,
+    show: showModal,
+  });
+  const handleEditProfileImage = () => {
+    setModalProps({
+      title: "Update Profile Image",
+      setShowModal: setShowModal,
+      show: !showModal,
+    });
+    setShowModal(true);
+  };
+  const handleImageUpdate = (e: any) => {
+    const file = e.target.files?.[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = (reader.result as string).split(",")[1];
+      const url = `data:image/jpeg;base64,${base64String}`;
+      setShowImgUrl(url);
+      setImgUrl(file);
+    };
+    reader.readAsDataURL(file);
+  };
+  const handleImageSubmit = (e: any) => {
+    if (imgUrl?.size >= 300 * 1024) {
+      alertModal({
+        severity: Severity.ERROR,
+        content: "Image size not more than 300kb",
+        title: "Image Update",
+      });
+    } else {
+      const formData = new FormData();
+      formData.append("file", imgUrl);
+      formData.append("id", currentUser._id);
+      httpMethods
+        .put<FormData, ImageupdateModal>(
+          "/users/update/profile-image",
+          formData,
+          true,
+        )
+        .then((res) => {
+          setCurrentUser({
+            ...currentUser,
+            profileImageUrl: res.profileImageUrl,
+          });
+          setShowModal(false);
+        })
+        .catch((err: any) => {
+          alertModal({
+            severity: Severity.ERROR,
+            content: err.message,
+            title: "Image Update",
+          });
+        });
+    }
+  };
   useOutsideClick(profilRef, () => setOpenProfileModal(false));
   const handleSelectStatus = (status: string | null) => {
     if (status) {
@@ -68,7 +142,6 @@ function Navbar() {
       }
     };
   }, [isMobileView]);
-
   return (
     <nav className="header-nav navbar navbar-expand-lg navbar-dark bg-dark justify-content-around main-nav">
       <div className="container-fluid">
@@ -157,6 +230,17 @@ function Navbar() {
               {openProfileModal && (
                 <div className="profile position-absolute profile-modal top-100 rounded-2 shadow-lg">
                   <h6>{currentUser.isAdmin ? "Admin" : "User"} Details</h6>
+                  <div className="medium-size-image">
+                    <ProfileImage
+                      filename={currentUser.profileImageUrl}
+                      className="rounded-circle"
+                      imgPopup={false}
+                    />
+                    <i
+                      className="bi bi-pencil-square"
+                      onClick={() => handleEditProfileImage()}
+                    ></i>
+                  </div>
                   <ul>
                     <li>
                       <span>Employee Id :</span> {currentUser.empId}
@@ -188,6 +272,28 @@ function Navbar() {
           </form>
         </div>
       </div>
+      {showModal && (
+        <>
+          <ReusableModal vals={modalProps}>
+            <div className="edit-img-modal">
+              {showimgUrl ? (
+                <img src={showimgUrl} />
+              ) : (
+                <ProfileImage
+                  filename={currentUser.profileImageUrl}
+                  className="rounded-circle"
+                  imgPopup={false}
+                />
+              )}
+            </div>
+            <div className="mb-2">
+              {" "}
+              <input type="file" onChange={handleImageUpdate} />
+            </div>
+            <Button onClick={handleImageSubmit}>Update</Button>
+          </ReusableModal>
+        </>
+      )}
     </nav>
   );
 }

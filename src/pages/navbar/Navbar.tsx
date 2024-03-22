@@ -230,15 +230,17 @@ function Navbar() {
                 <div className="profile position-absolute profile-modal top-100 rounded-2 shadow-lg">
                   <h6>{currentUser.isAdmin ? "Admin" : "User"} Details</h6>
                   <div className="medium-size-image">
-                    <ProfileImage
-                      filename={currentUser.profileImageUrl}
-                      className="rounded-circle"
-                      imgPopup={false}
-                    />
-                    <i
-                      className="bi bi-pencil-square"
-                      onClick={() => handleEditProfileImage()}
-                    ></i>
+                    <div className="pfimg-wrapper">
+                      <ProfileImage
+                        filename={currentUser.profileImageUrl}
+                        className="rounded-circle"
+                        imgPopup={false}
+                      />
+                      <i
+                        className="bi bi-pencil-square"
+                        onClick={() => handleEditProfileImage()}
+                      ></i>
+                    </div>
                   </div>
                   <ul>
                     <li>

@@ -242,7 +242,7 @@ export const ProfileImage = ({
           });
         });
     }
-  }, []);
+  }, [filename]);
   const handleImageClick = () => {
     if (imgPopup) {
       setShowImage(!showImage);

@@ -85,11 +85,11 @@ function Navbar() {
           true,
         )
         .then((res) => {
-          setCurrentUser({
-            ...currentUser,
-            profileImageUrl: res.profileImageUrl,
-          });
-          setShowModal(false);
+          const user = { ...currentUser, profileImageUrl: res.profileImageUrl };
+          setCurrentUser(user);
+          setTimeout(() => {
+            setShowModal(false);
+          }, 1500);
         })
         .catch((err: any) => {
           alertModal({
@@ -135,7 +135,6 @@ function Navbar() {
         }
       });
     }
-
     return () => {
       if (toggleBtn) {
         toggleBtn.removeEventListener("click", () => "");

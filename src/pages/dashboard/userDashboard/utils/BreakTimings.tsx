@@ -69,11 +69,11 @@ const BreakTimings = ({ user, todayOnly = false }: BreakTimingProps) => {
     setBreakTimings(groupedByStartDate);
   }, [user.breakTime]);
   return (
-    <div style={{ maxHeight: "300px", overflow: "hidden scroll" }}>
+    <div className="fw-semibold">
       {todayOnly ? (
         <DayWiseBreakTimings dayTimings={todayTimings} />
       ) : (
-        <>
+        <div style={{ maxHeight: "300px", overflow: "hidden scroll" }}>
           {Object.entries(breakTimings).length ? (
             <table>
               <thead className="timings-table-header">
@@ -104,7 +104,7 @@ const BreakTimings = ({ user, todayOnly = false }: BreakTimingProps) => {
           ) : (
             <NO_DATA_AVAILBALE />
           )}
-        </>
+        </div>
       )}
       {showBreakTable.show && (
         <Modal show={showBreakTable.show} onHide={modalClose}>

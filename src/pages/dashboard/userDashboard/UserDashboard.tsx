@@ -218,7 +218,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
       {currentUser._id === presentUser._id && (
         <div className="chat-link">
           <div className="user-btns">
-            <Button onClick={handleChatRequest}>Request User to Chat</Button>
+            <Button onClick={handleChatRequest}>Request Chat With User</Button>
             <Button
               onClick={() => navigate("/dashboard/userdashboardtickets")}
               variant="primary"

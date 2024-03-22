@@ -122,7 +122,7 @@ function TaskTable<R>(props: TableProps<R>) {
   };
   return (
     <>
-      <div className="table-scroll" style={{ height }}>
+      <div className="table-scroll" style={{ maxHeight: height }}>
         <table className={className} {...args}>
           <thead className={tHeadClassName}>
             <tr>{headers.map((header, idx) => renderHeader(header, idx))}</tr>

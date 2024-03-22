@@ -86,10 +86,10 @@ function Navbar() {
         )
         .then((res) => {
           const user = { ...currentUser, profileImageUrl: res.profileImageUrl };
-          setCurrentUser(user);
           setTimeout(() => {
+            setCurrentUser(user);
             setShowModal(false);
-          }, 1500);
+          }, 1000);
         })
         .catch((err: any) => {
           alertModal({
@@ -274,7 +274,7 @@ function Navbar() {
       {showModal && (
         <>
           <ReusableModal vals={modalProps}>
-            <div className="edit-img-modal">
+            <div className="edit-img-modal mb-3">
               {showimgUrl ? (
                 <img src={showimgUrl} />
               ) : (

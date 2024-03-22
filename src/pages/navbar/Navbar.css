@@ -132,8 +132,10 @@
   cursor: pointer;
 }
 .edit-img-modal {
-  text-align: center;
+  width: 200px;
+  height: 200px;
 }
 .edit-img-modal img {
-  width: 55%;
+  width: 100%;
+  height: 100%;
 }

@@ -3,10 +3,10 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-html{
+html {
   height: 100%;
 }
-body{
+body {
   position: relative;
   min-height: 100%;
   padding-bottom: 60px;

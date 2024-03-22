@@ -17,6 +17,7 @@ const socket = io(SOCKET_URL);
 interface AuthContextProps {
   children: React.ReactNode;
 }
+const LOCATION: { [key: string]: string } = {};
 
 const AuthContext = ({ children }: AuthContextProps) => {
   const [currentUser, setCurrentUser] = useState<UserModal>({} as UserModal);
@@ -82,6 +83,33 @@ const AuthContext = ({ children }: AuthContextProps) => {
   const handleResize = () => {
     setIsMobileView(checkIsMobileView());
   };
+  function success(position: { coords: { latitude: any; longitude: any } }) {
+    const { latitude, longitude } = position.coords;
+    LOCATION["Latitude"] = latitude;
+    LOCATION["Longitude"] = longitude;
+  }
+  function error() {
+    console.error("Unable to retrieve your location");
+  }
+  const handleOnLoad = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      console.error("Geolocation is not supported by your browser");
+    }
+
+    if ("Notification" in window) {
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          new Notification("Wel-Come", {
+            body: `Welcome to ResourceOne ChatBox`,
+            icon: "#",
+            tag: "Welcome Message",
+          });
+        }
+      });
+    }
+  };
   useEffect(() => {
     handleResize();
     document.addEventListener("resize", handleResize);
@@ -91,6 +119,7 @@ const AuthContext = ({ children }: AuthContextProps) => {
   }, [window.innerHeight, window.innerWidth]);
   useEffect(() => {
     setIsUserFetching(true);
+    window.addEventListener("load", handleOnLoad);
     if (ACCESS_TOKEN()) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -120,6 +149,9 @@ const AuthContext = ({ children }: AuthContextProps) => {
     } else {
       setIsUserFetching(false);
     }
+    return () => {
+      window.removeEventListener("load", handleOnLoad);
+    };
   }, []);
   return (
     <UserContextProvider.Provider value={value}>

@@ -230,7 +230,7 @@ function Navbar() {
                 <div className="profile position-absolute profile-modal top-100 rounded-2 shadow-lg">
                   <h6>{currentUser.isAdmin ? "Admin" : "User"} Details</h6>
                   <div className="medium-size-image">
-                    <div className="pfimg-wrapper">
+                    <div className="profileimg-wrapper">
                       <ProfileImage
                         filename={currentUser.profileImageUrl}
                         className="rounded-circle"

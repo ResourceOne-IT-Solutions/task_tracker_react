@@ -93,7 +93,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
         });
     }
     setPresentUser(user);
-  }, [user._id]);
+  }, [user]);
 
   const handleSelect = (item: string | null) => {
     setSelected(item as string);

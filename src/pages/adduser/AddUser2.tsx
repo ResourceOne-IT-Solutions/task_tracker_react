@@ -84,9 +84,9 @@ function AddUser2() {
       setIsLoading(true);
       const formData = new FormData();
       formData.append("file", values.profileImageUrl);
-      values.mobile = "+91 " + values.mobile;
       const data = {
         ...values,
+        mobile: "+91 " + values.mobile,
         createdBy: {
           name: getFullName(currentUser),
           id: currentUser._id,

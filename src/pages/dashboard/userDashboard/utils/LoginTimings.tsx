@@ -27,7 +27,7 @@ const LoginTimings = ({ user, todayOnly = false }: LoginTimingsProps) => {
         ) || {};
       setTodayLogin(todayLogin as LoginTimingInterface);
     }
-  }, []);
+  }, [user.loginTimings]);
   return (
     <div
       style={{ maxHeight: "300px", overflow: "hidden scroll" }}

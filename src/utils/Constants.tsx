@@ -6,7 +6,7 @@ const BE_LOCAL = "http://192.168.10.30:1234";
 const BE_LOCAL2 = "http://192.168.29.110:1234";
 const VERSION1 = "/api/v1";
 // change socket url if u want to change server url for API calls
-export const SOCKET_URL = BE_LOCAL;
+export const SOCKET_URL = BE_SERVER;
 export const BE_URL = SOCKET_URL + VERSION1;
 export const GROUP_IMG_URL =
   "https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp";

@@ -213,7 +213,7 @@ export const ProfileImage = ({
 }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [showImage, setShowImage] = useState<boolean>(false);
-  const { alertModal } = useUserContext() as UserContext;
+  const { alertModal, popupNotification } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
     const img = base64Cache[`img-${filename}`];
@@ -235,10 +235,9 @@ export const ProfileImage = ({
             });
         })
         .catch((err) => {
-          alertModal({
+          popupNotification({
             severity: Severity.ERROR,
             content: err.message,
-            title: "Profile Image",
           });
         });
     }

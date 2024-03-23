@@ -90,6 +90,11 @@ const AuthContext = ({ children }: AuthContextProps) => {
   }
   function error() {
     console.error("Unable to retrieve your location");
+    alertModal({
+      severity: Severity.ERROR,
+      content: "Location Needed to access the page",
+      title: "Login Error",
+    });
   }
   const handleOnLoad = () => {
     if ("geolocation" in navigator) {
@@ -161,7 +166,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
 };
 export const useUserContext = () => useContext(UserContextProvider);
 export const useAuth = () => {
-  const { setCurrentUser, setIsLoggedIn } = useUserContext() as UserContext;
+  const { setCurrentUser, setIsLoggedIn, alertModal } =
+    useUserContext() as UserContext;
   const [isLoading, setIsLoading] = useState(true);
   const getLogin = () => {
     navigator.geolocation.getCurrentPosition(
@@ -188,6 +194,11 @@ export const useAuth = () => {
       () => {
         setIsLoggedIn(false);
         setIsLoading(false);
+        alertModal({
+          severity: Severity.ERROR,
+          content: "Location Needed to access the page",
+          title: "Login Error",
+        });
       },
     );
   };

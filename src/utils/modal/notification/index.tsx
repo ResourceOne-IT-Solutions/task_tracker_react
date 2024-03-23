@@ -22,17 +22,10 @@ const Notification = ({ content, severity, onClose }: NotificationProps) => {
     }, 5000);
   }, []);
   return (
-    <div className={`notification ${severity}`}>
-      <span className="content">{content}</span>
+    <div className={`popup-notification ${severity}`}>
+      <span className="close-icon fa fa-times" onClick={handleClose}></span>{" "}
+      <p className="content">{content}</p>
       <span className={`line ${severity}`}></span>{" "}
-      <span className="icon">
-        {" "}
-        &#9432;{" "}
-        <span className="close-icon" onClick={handleClose}>
-          {" "}
-          X{" "}
-        </span>{" "}
-      </span>{" "}
     </div>
   );
 };

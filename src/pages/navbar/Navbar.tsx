@@ -43,6 +43,7 @@ function Navbar() {
   const [showimgUrl, setShowImgUrl] = useState<string>("");
   const [imgUrl, setImgUrl] = useState<File>({} as File);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [modalProps, setModalProps] = useState({
     title: "",
     setShowModal,
@@ -78,6 +79,7 @@ function Navbar() {
       const formData = new FormData();
       formData.append("file", imgUrl);
       formData.append("id", currentUser._id);
+      setIsUpdating(true);
       httpMethods
         .put<FormData, ImageupdateModal>(
           "/users/update/profile-image",
@@ -97,6 +99,9 @@ function Navbar() {
             content: err.message,
             title: "Image Update",
           });
+        })
+        .finally(() => {
+          setIsUpdating(false);
         });
     }
   };
@@ -291,7 +296,9 @@ function Navbar() {
               {" "}
               <input type="file" onChange={handleImageUpdate} />
             </div>
-            <Button onClick={handleImageSubmit}>Update</Button>
+            <Button onClick={handleImageSubmit}>
+              {isUpdating ? "Updating..." : "Update"}
+            </Button>
           </ReusableModal>
         </>
       )}

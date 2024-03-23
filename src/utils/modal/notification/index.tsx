@@ -17,9 +17,10 @@ const Notification = ({ content, severity, onClose }: NotificationProps) => {
     onClose(false);
   };
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       handleClose();
     }, 5000);
+    return () => clearTimeout(timeout);
   }, []);
   return (
     <div className={`popup-notification ${severity}`}>

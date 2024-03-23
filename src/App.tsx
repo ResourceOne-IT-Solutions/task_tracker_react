@@ -15,7 +15,6 @@ let status = "";
 function App() {
   const {
     currentUser,
-    popupNotification,
     socket,
     setNotificationRooms,
     isLoggedin,

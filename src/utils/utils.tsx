@@ -228,7 +228,7 @@ export const ProfileImage = ({
   const { alertModal, popupNotification } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
-    const img = base64Cache[`img-65fd1dd867bfcf98af519b90`];
+    const img = base64Cache[`img-${filename}`];
     if (img) {
       setImageUrl(img);
     } else {
@@ -254,7 +254,6 @@ export const ProfileImage = ({
         });
       // getProfileImage("65fd1dd867bfcf98af519b90").then((file) => {
       //   if (file) {
-      //     // addNewCache("65fd1dd867bfcf98af519b90", file.data.data);
       //     const str = bufferToBase64(file.data.data);
       //     const base64 = `data:image/jpeg;base64,${str}`;
       //     addCache(`img-65fd1dd867bfcf98af519b90`, base64 as string);
@@ -274,7 +273,7 @@ export const ProfileImage = ({
         src={imageUrl}
         className={className}
         onClick={handleImageClick}
-        alt={filename.slice(0, 5) || "user-img"}
+        alt={filename?.slice(0, 5) || "user-img"}
       />
       {showImage && (
         <ImageShowModal

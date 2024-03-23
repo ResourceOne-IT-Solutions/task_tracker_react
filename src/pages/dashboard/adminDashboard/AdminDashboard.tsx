@@ -227,7 +227,11 @@ const AdminDashboard = () => {
               <div className="user-list mx-2">
                 <Button className="btn user-details icon-avaliable col-8">
                   <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={avalable} />
+                    <img
+                      className="user-icons"
+                      src={avalable}
+                      alt={AVAILABLE}
+                    />
 
                     <h4>
                       <span>{`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}</span>
@@ -246,7 +250,7 @@ const AdminDashboard = () => {
               <div className="user-list mx-2">
                 <Button className="btn user-details icon-offline col-8">
                   <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={Offline} />
+                    <img className="user-icons" src={Offline} alt={OFFLINE} />
 
                     <h4>
                       <span>
@@ -265,7 +269,7 @@ const AdminDashboard = () => {
               <div className="user-list mx-2">
                 <Button className="btn user-details icon-break col-8 ">
                   <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={Brack} />
+                    <img className="user-icons" src={Brack} alt={BREAK} />
                     <h4>
                       <span>
                         {" "}
@@ -283,7 +287,7 @@ const AdminDashboard = () => {
               <div className="user-list mx-2">
                 <Button className="btn user-details icon-onTrack col-8">
                   <div className="d-flex p-2 px-4">
-                    <img className="user-icons" src={OnTrack} />
+                    <img className="user-icons" src={OnTrack} alt={ON_TICKET} />
 
                     <h4>
                       <span>
@@ -305,7 +309,7 @@ const AdminDashboard = () => {
               <div className="user-list mx-2">
                 <Button className="btn user-details icon-sleep col-8">
                   <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={sleep} />
+                    <img className="user-icons" src={sleep} alt={SLEEP} />
 
                     <h4>
                       <span>

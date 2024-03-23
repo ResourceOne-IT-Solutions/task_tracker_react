@@ -54,6 +54,7 @@ function App() {
   const handleOffline = (e: any) => {
     setOffline(e.type === "offline");
   };
+
   useEffect(() => {
     if (currentUser._id) {
       const roomsCount = Object.keys(currentUser.newMessages).length;
@@ -61,19 +62,6 @@ function App() {
     }
   }, [currentUser.newMessages]);
   useEffect(() => {
-    if ("Notification" in window) {
-      Notification.requestPermission().then((permission) => {
-        if (permission === "granted") {
-          // Permission granted, you can now show notifications
-          new Notification("Wel-Come", {
-            body: `Welcome to ResourceOne ChatBox`,
-            icon: "#",
-            tag: "Welcome Message",
-            // Other options like icon, badge, etc.
-          });
-        }
-      });
-    }
     window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOffline);
     return () => {

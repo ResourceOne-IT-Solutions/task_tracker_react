@@ -32,6 +32,21 @@ export const FileRenderer = ({
       return <div>{type}</div>;
   }
 };
+const getFileFromDb = async (id = "") => {
+  let file;
+  if (CHAT_CACHE_FILES[id]) {
+    file = CHAT_CACHE_FILES[id];
+  } else {
+    file = await fileDownload(id);
+    CHAT_CACHE_FILES[id] = file;
+  }
+  if (file) {
+    const base64 = new Uint8Array(file.data.data);
+    const url = URL.createObjectURL(new Blob([base64], { type: file.type }));
+    return url;
+  }
+  return "";
+};
 
 export const FileComponent = ({
   file,
@@ -45,26 +60,10 @@ export const FileComponent = ({
   const [fileUrl, setFileUrl] = useState("");
   const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
-    const getFileFromDb = async (id = "") => {
-      let file;
-      if (CHAT_CACHE_FILES[id]) {
-        file = CHAT_CACHE_FILES[id];
-      } else {
-        file = await fileDownload(id);
-        CHAT_CACHE_FILES[id] = file;
-      }
-      if (file) {
-        const base64 = new Uint8Array(file.data.data);
-        const url = URL.createObjectURL(
-          new Blob([base64], { type: file.type }),
-        );
-        setFileUrl(url);
-        return url;
-      }
-      return "";
-    };
     if (file.fileLink) {
-      getFileFromDb(file.fileLink);
+      getFileFromDb(file.fileLink).then((url) => {
+        setFileUrl(url);
+      });
     }
   }, []);
   return (

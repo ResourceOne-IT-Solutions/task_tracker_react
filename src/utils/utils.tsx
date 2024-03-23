@@ -34,6 +34,7 @@ import {
   TicketRaiseCardProps,
   UserRequestCardProps,
 } from "../modals/MessageModals";
+import { fileDownload } from "../pages/chat/chatbox/Util";
 
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
@@ -192,12 +193,23 @@ const blobToBase64 = (blob: Blob): Promise<string | ArrayBuffer> => {
     reader.readAsDataURL(blob);
   });
 };
+const getProfileImage = async (id: string) => {
+  return await fileDownload("profile-image/" + id);
+};
 
 let base64Cache: { [key: string]: string } = {};
 
 const addCache = (name: string, data: string) => {
   base64Cache = { ...base64Cache, [name]: data };
 };
+function bufferToBase64(buffer: Buffer) {
+  const binary = Array.from(new Uint8Array(buffer))
+    .map((byte) => String.fromCharCode(byte))
+    .join("");
+
+  const base64String = btoa(binary);
+  return base64String;
+}
 const isValidBase64 = (base64String: string) => {
   const base64Regex = /^data:[\w/]+;base64,[a-zA-Z0-9+/]+={0,2}$/;
   return base64Regex.test(base64String);
@@ -216,7 +228,7 @@ export const ProfileImage = ({
   const { alertModal, popupNotification } = useUserContext() as UserContext;
   useEffect(() => {
     if (!filename) return;
-    const img = base64Cache[`img-${filename}`];
+    const img = base64Cache[`img-65fd1dd867bfcf98af519b90`];
     if (img) {
       setImageUrl(img);
     } else {
@@ -240,6 +252,15 @@ export const ProfileImage = ({
             content: err.message,
           });
         });
+      // getProfileImage("65fd1dd867bfcf98af519b90").then((file) => {
+      //   if (file) {
+      //     // addNewCache("65fd1dd867bfcf98af519b90", file.data.data);
+      //     const str = bufferToBase64(file.data.data);
+      //     const base64 = `data:image/jpeg;base64,${str}`;
+      //     addCache(`img-65fd1dd867bfcf98af519b90`, base64 as string);
+      //     setImageUrl(base64 as string);
+      //   }
+      // });
     }
   }, [filename]);
   const handleImageClick = () => {
@@ -249,7 +270,12 @@ export const ProfileImage = ({
   };
   return (
     <>
-      <img src={imageUrl} className={className} onClick={handleImageClick} />
+      <img
+        src={imageUrl}
+        className={className}
+        onClick={handleImageClick}
+        alt={filename.slice(0, 5) || "user-img"}
+      />
       {showImage && (
         <ImageShowModal
           show={showImage}
@@ -277,7 +303,7 @@ export const ImageShowModal = ({
       <Modal.Body>
         {!children && (
           <div style={{ width: "300px", height: "300px" }}>
-            <img src={imageUrl} width="100%" height="100%" />
+            <img src={imageUrl} width="100%" height="100%" alt="user-profile" />
           </div>
         )}
         {children}

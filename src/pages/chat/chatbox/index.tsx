@@ -62,7 +62,7 @@ export const ChatBox = () => {
           > */}
           {/* <h4> Welcome To </h4>
             <h4> ResourceOne Chat</h4> */}
-          <img src={logo} />
+          <img src={logo} alt="company-logo" />
           {/* </h3> */}
         </div>
       )}

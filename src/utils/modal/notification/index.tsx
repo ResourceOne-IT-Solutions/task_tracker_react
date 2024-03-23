@@ -17,22 +17,16 @@ const Notification = ({ content, severity, onClose }: NotificationProps) => {
     onClose(false);
   };
   useEffect(() => {
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       handleClose();
     }, 5000);
+    return () => clearTimeout(timeout);
   }, []);
   return (
-    <div className={`notification ${severity}`}>
-      <span className="content">{content}</span>
+    <div className={`popup-notification ${severity}`}>
+      <span className="close-icon fa fa-times" onClick={handleClose}></span>{" "}
+      <p className="content">{content}</p>
       <span className={`line ${severity}`}></span>{" "}
-      <span className="icon">
-        {" "}
-        &#9432;{" "}
-        <span className="close-icon" onClick={handleClose}>
-          {" "}
-          X{" "}
-        </span>{" "}
-      </span>{" "}
     </div>
   );
 };

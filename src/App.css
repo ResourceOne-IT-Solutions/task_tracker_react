@@ -34,7 +34,6 @@ body {
     transform: rotate(360deg);
   }
 }
-
 .notification {
   padding: 10px;
   border-radius: 10px;
@@ -45,50 +44,79 @@ body {
   top: 50px;
 }
 
-.content {
+.popup-notification {
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+  text-align: center;
+  position: fixed;
+  right: 35px;
+  top: 53px;
+  z-index: 100;
+  background: #fff;
+}
+
+.popup-notification .content {
   display: inline-block;
   width: 85%;
+  max-width: 180px;
 }
-.icon {
+
+.popup-notification .close-icon {
+  margin-left: 2px;
+  font-size: 14px;
   font-weight: bold;
-  position: absolute;
-  right: 10px;
   display: flex;
+  font-size: 14px;
   align-items: center;
-}
-.line {
   position: absolute;
-  bottom: 0px;
-  left: 2px;
-  animation: widthReducer 5s 0s normal none;
+  right: 5px;
+  top: 3px;
 }
-.close-icon {
+.popup-notification .line {
+  animation: widthReducer 5s normal none;
+  display: block;
+}
+.popup-notification .close-icon {
   cursor: pointer;
 }
-.error > div,
+.notification.error > div,
+.popup-notification.error,
 .line.error {
   border: 2px solid #f00;
   border-radius: 11px;
-  .icon {
+  .close-icon {
+    color: #f00;
+  }
+  .content {
     color: #f00;
   }
 }
-.success > div,
+.notification.success > div,
+.popup-notification.success,
 .line.success {
-  border: 2px solid #5acf5a;
+  border: 2px solid #157347;
   border-radius: 11px;
-  .icon {
-    color: #5acf5a;
+  .close-icon {
+    color: #157347;
+  }
+  .content {
+    color: #157347;
   }
 }
-.warning > div,
+.notification.warning > div,
+.popup-notification.warning,
 .line.warning {
-  border: 2px solid #e0e040;
+  border: 2px solid #ffa500;
   border-radius: 11px;
-  .icon {
-    color: #e0e040;
+  .close-icon {
+    color: #ffa500;
+  }
+  .content {
+    color: #ffa500;
   }
 }
+
 .nav-item a.active {
   color: #999 !important;
   /* font-weight: 700; */
@@ -124,7 +152,6 @@ body {
   }
   100% {
     width: 0;
-    border: none;
   }
 }
 
@@ -168,5 +195,8 @@ body {
     z-index: 2;
     position: sticky;
     top: 6%;
+  }
+  .footer {
+    position: relative;
   }
 }

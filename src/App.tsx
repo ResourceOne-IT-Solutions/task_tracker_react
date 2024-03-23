@@ -13,19 +13,18 @@ import Footer from "./pages/footer/Footer";
 let isInSleep = false;
 let status = "";
 function App() {
-  const userContext = useUserContext();
   const {
-    socket,
     currentUser,
+    socket,
     setNotificationRooms,
     isLoggedin,
     showAlertModal,
-    setShowAlertModal,
     alertModalContent,
+    setShowAlertModal,
     showNotification,
-    setShowNotification,
     isUserFetching,
-  } = userContext as UserContext;
+    setShowNotification,
+  } = useUserContext() as UserContext;
   const [offline, setOffline] = useState(false);
   //  when there is no clicks for 15 minutes status will be changed to Break
   let inactivityTimer: NodeJS.Timeout | undefined;

@@ -143,13 +143,93 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             </div>
           )}
         </div>
-        <div className="usernavbar">
-          <div className="nav_img_container">
-            <ProfileImage filename={presentUser.profileImageUrl} />
+        <div className="user-header">
+          <div className="usernavbar fw-semibold">
+            <div className="nav_img_container">
+              <ProfileImage filename={presentUser.profileImageUrl} />
+            </div>
+            <p> {getFullName(presentUser)} </p>
+            <span>{statusIndicator(presentUser.status)}</span>
+            <p>({presentUser.userId})</p>
           </div>
-          <p> {getFullName(presentUser)} </p>
-          <span>{statusIndicator(presentUser.status)}</span>
-          <p>({presentUser.userId})</p>
+          {currentUser._id === presentUser._id && (
+            <>
+              <div className="user-btns">
+                <Button onClick={handleChatRequest}>
+                  Request Chat With User
+                </Button>
+                <Button
+                  onClick={() => navigate("/dashboard/userdashboardtickets")}
+                  variant="primary"
+                >
+                  Today Tickets
+                </Button>
+                <Button
+                  onClick={() => navigate("/dashboard/helpedtickets")}
+                  variant="primary"
+                >
+                  Helped Tickets
+                </Button>
+              </div>
+              <Modal
+                show={showChatRequestPopup}
+                onHide={() => setShowChatRequestPopup(false)}
+              >
+                <Modal.Header closeButton className="popup-header">
+                  <Modal.Title>Chat Request</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <Form>
+                    <Row className="mb-3">
+                      <Form.Group as={Col} md="12">
+                        <Dropdown onSelect={handleSelect}>
+                          <Dropdown.Toggle
+                            variant="success"
+                            id="dropdown-basic-chat-request"
+                          >
+                            {selected ? selected : "Select a User"}
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu
+                            style={{ maxHeight: "180px", overflowY: "auto" }}
+                          >
+                            {userData !== null
+                              ? userData
+                                  .filter(
+                                    (item: UserModal) =>
+                                      !item.isAdmin &&
+                                      item._id !== presentUser._id,
+                                  )
+                                  .map((item: UserModal, index: number) => {
+                                    return (
+                                      <Dropdown.Item
+                                        key={index}
+                                        eventKey={getFullName(item)}
+                                      >
+                                        {getFullName(item)}
+                                      </Dropdown.Item>
+                                    );
+                                  })
+                              : null}
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Form.Group>
+                    </Row>
+                  </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button variant="success" onClick={handleSubmitRequest}>
+                    Submit
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setShowChatRequestPopup(false)}
+                  >
+                    Close
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            </>
+          )}
         </div>
         <div className="userdetails">
           <div className="user-data">
@@ -215,81 +295,6 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           </div>
         </div>
       </div>
-      {currentUser._id === presentUser._id && (
-        <div className="chat-link">
-          <div className="user-btns">
-            <Button onClick={handleChatRequest}>Request Chat With User</Button>
-            <Button
-              onClick={() => navigate("/dashboard/userdashboardtickets")}
-              variant="primary"
-            >
-              Today Tickets
-            </Button>
-            <Button
-              onClick={() => navigate("/dashboard/helpedtickets")}
-              variant="primary"
-            >
-              Helped Tickets
-            </Button>
-          </div>
-          <Modal
-            show={showChatRequestPopup}
-            onHide={() => setShowChatRequestPopup(false)}
-          >
-            <Modal.Header closeButton className="popup-header">
-              <Modal.Title>Chat Request</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form>
-                <Row className="mb-3">
-                  <Form.Group as={Col} md="12">
-                    <Dropdown onSelect={handleSelect}>
-                      <Dropdown.Toggle
-                        variant="success"
-                        id="dropdown-basic-chat-request"
-                      >
-                        {selected ? selected : "Select a User"}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu
-                        style={{ maxHeight: "180px", overflowY: "auto" }}
-                      >
-                        {userData !== null
-                          ? userData
-                              .filter(
-                                (item: UserModal) =>
-                                  !item.isAdmin && item._id !== presentUser._id,
-                              )
-                              .map((item: UserModal, index: number) => {
-                                return (
-                                  <Dropdown.Item
-                                    key={index}
-                                    eventKey={getFullName(item)}
-                                  >
-                                    {getFullName(item)}
-                                  </Dropdown.Item>
-                                );
-                              })
-                          : null}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Form.Group>
-                </Row>
-              </Form>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="success" onClick={handleSubmitRequest}>
-                Submit
-              </Button>
-              <Button
-                variant="secondary"
-                onClick={() => setShowChatRequestPopup(false)}
-              >
-                Close
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      )}
     </>
   );
 };

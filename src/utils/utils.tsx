@@ -243,6 +243,7 @@ export const ProfileImage = ({
               }
             })
             .catch((err) => {
+              addCache(`img-${filename}`, "");
               console.error("blob_err:::", err);
             });
         })

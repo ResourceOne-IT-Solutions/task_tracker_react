@@ -36,6 +36,7 @@
   display: flex;
   align-items: baseline;
   margin-left: 90px;
+  margin: auto;
 }
 .nav_img_container img {
   width: 40px;
@@ -85,9 +86,10 @@ tr:hover {
 .user-nav-header div {
   margin-right: 4px;
 }
-.chat-link {
-  text-align: left;
-  padding: 10px;
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .user-btns {
   display: flex;
@@ -121,5 +123,11 @@ tr:hover {
   .user-data {
     width: 100% !important;
     margin-block: 10px;
+  }
+  .usernavbar {
+    margin: 10px auto;
+    box-shadow: 1px 1px 10px 1px;
+    padding: 13px;
+    border-radius: 10px;
   }
 }

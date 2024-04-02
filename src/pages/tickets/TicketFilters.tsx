@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Button, Dropdown } from "react-bootstrap";
-import { FILTERS, TICKET_STATUS_TYPES } from "../../utils/Constants";
-import { TicketModal } from "../../modals/TicketModals";
+import {
+  EMPTY_TICKET_FILTER_OBJ,
+  FILTERS,
+  TICKET_STATUS_TYPES,
+} from "../../utils/Constants";
+import { TICKET_FILTERTYPE, TicketModal } from "../../modals/TicketModals";
 import { useNavigate } from "react-router-dom";
 import XlSheet from "./XlSheet";
 import { useUserContext } from "../../components/Authcontext/AuthContext";
 import { UserContext } from "../../modals/UserModals";
+import {
+  checkClientName,
+  checkDateWise,
+  checkDuration,
+  checkStatus,
+} from "../../utils/utils";
 
 interface TicketFilterProps {
   allTickets: TicketModal[];
@@ -18,65 +28,42 @@ const TicketFilters = ({
 }: TicketFilterProps) => {
   const navigate = useNavigate();
   const { currentUser } = useUserContext() as UserContext;
-  const [selected, setSelected] = useState<string>("");
   const [filteredData, setFilteredData] = useState<TicketModal[]>(allTickets);
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
-  const [selectedStatus, setSelectedStatus] = useState<string>("");
-  const [selectedClient, setSelectedClient] = useState("");
   const [clients, setClients] = useState<string[]>([]);
-  const handleSelectStatus = (item: any) => {
-    const date = new Date();
-    setSelected(item);
-    if (item == "last 1 week") {
-      date.setDate(date.getDate() - 7);
-      const lastWeekArray = allTickets.filter(
-        (item) => new Date(item.receivedDate) >= date,
-      );
-      setFilteredData(lastWeekArray);
-    } else if (item == "last 1 month" || item == "last 2 months") {
-      const month = item == "last 1 month" ? 1 : 2;
-      date.setMonth(date.getMonth() - month);
-      const lastMonthArray = allTickets.filter(
-        (item) => new Date(item.receivedDate) >= date,
-      );
-      setFilteredData(lastMonthArray);
-    }
-    setDateRange({ from: "", to: "" });
-  };
-  const handleClientFilter = (client: any) => {
-    setSelectedClient(client);
-    const filteredTickets = allTickets.filter(
-      (ticket) => ticket.client.name == client,
-    );
-    setFilteredData(filteredTickets);
-  };
-  const handleStatusSelect = (status: any) => {
-    const filteredTickets = allTickets.filter(
-      (ticket) => ticket.status == status,
-    );
-    setSelectedStatus(status);
-    setFilteredData(filteredTickets);
+  const [filters, setFilters] = useState(EMPTY_TICKET_FILTER_OBJ);
+
+  const handleFilters = (name: TICKET_FILTERTYPE, value: string) => {
+    const newFilters = { ...filters, [name]: value };
+    setFilters(newFilters);
+    const selectedDate = newFilters.date.split(":");
+    const from = new Date(selectedDate[0]);
+    const to = new Date(selectedDate[1]);
+    const filteredData = allTickets.filter((ticket) => {
+      if (
+        checkDuration(ticket, newFilters.duration) &&
+        checkClientName(ticket, newFilters.clientName) &&
+        checkStatus(ticket, newFilters.status) &&
+        checkDateWise(ticket, from, to)
+      ) {
+        return true;
+      }
+      return false;
+    });
+    setShowingTickets(filteredData);
+    setFilteredData(filteredData);
   };
   const handleDateRange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDateRange({ ...dateRange, [e.target.name]: e.target.value });
   };
   const handleDateRangeSubmit = () => {
-    const filtered_data = allTickets.filter((item) => {
-      const receivedDate = new Date(item.receivedDate);
-      return (
-        receivedDate >= new Date(dateRange.from) &&
-        receivedDate <= new Date(dateRange.to)
-      );
-    });
-    setFilteredData(filtered_data);
-    setSelected("");
+    const newRange = dateRange.from + ":" + dateRange.to;
+    handleFilters(TICKET_FILTERTYPE.DATE, newRange);
   };
   const handleResetFilter = () => {
-    setFilteredData(allTickets);
-    setSelectedStatus("");
-    setSelected("");
+    setShowingTickets(allTickets);
     setDateRange({ from: "", to: "" });
-    setSelectedClient("");
+    setFilters(EMPTY_TICKET_FILTER_OBJ);
   };
   const formattedTicketforXL = (tickets: TicketModal[]) => {
     const formatedData = tickets.map((item, idx) => {
@@ -125,12 +112,17 @@ const TicketFilters = ({
               <i className="fa fa-angle-left"></i>
               Back
             </Button>{" "}
-            <Dropdown onSelect={handleSelectStatus} className="mx-2">
+            <Dropdown
+              onSelect={(item: any) =>
+                handleFilters(TICKET_FILTERTYPE.DURATION, item)
+              }
+              className="mx-2"
+            >
               <Dropdown.Toggle
                 variant="secondary"
                 id="dropdown-ticket-date-filter"
               >
-                {selected ? selected : "Select a filter"}
+                {filters.duration ? filters.duration : "Select duration"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {FILTERS.map((filterType, idx) => {
@@ -142,12 +134,17 @@ const TicketFilters = ({
                 })}
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown onSelect={handleStatusSelect} className="mx-2">
+            <Dropdown
+              onSelect={(status: any) =>
+                handleFilters(TICKET_FILTERTYPE.STATUS, status)
+              }
+              className="mx-2"
+            >
               <Dropdown.Toggle
                 variant="secondary"
                 id="dropdown-ticket-status-filter"
               >
-                {selectedStatus ? selectedStatus : "Select Status"}
+                {filters.status ? filters.status : "Select Status"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {Object.values(TICKET_STATUS_TYPES).map((filterType, idx) => {
@@ -159,12 +156,17 @@ const TicketFilters = ({
                 })}
               </Dropdown.Menu>
             </Dropdown>
-            <Dropdown onSelect={handleClientFilter} className="mx-2">
+            <Dropdown
+              onSelect={(client: any) =>
+                handleFilters(TICKET_FILTERTYPE.CLIENT_NAME, client)
+              }
+              className="mx-2"
+            >
               <Dropdown.Toggle
                 variant="secondary"
                 id="dropdown-ticket-client-filter"
               >
-                {selectedClient ? selectedClient : "Select Client"}
+                {filters.clientName ? filters.clientName : "Select Client"}
               </Dropdown.Toggle>
               <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
                 {clients.map((client, idx) => {

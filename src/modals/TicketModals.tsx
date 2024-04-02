@@ -7,6 +7,13 @@ interface TicketUserModal {
   email: string;
   location: ClientLocationModal;
 }
+
+export enum TICKET_FILTERTYPE {
+  DURATION = "duration",
+  CLIENT_NAME = "clientName",
+  STATUS = "status",
+  DATE = "date",
+}
 type Status =
   | "Not Assigned"
   | "Assigned"

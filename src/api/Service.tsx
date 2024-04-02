@@ -1,4 +1,4 @@
-import { BE_URL } from "../utils/Constants";
+import { BE_URL, CURRENT_ORIGIN } from "../utils/Constants";
 import { fetchWithAccessToken } from "./api";
 
 async function login<T, R>(path: string, data: T): Promise<R> {
@@ -25,6 +25,7 @@ async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
     const headers = {} as any;
     if (!isFile) {
       headers["Content-Type"] = "application/json";
+      headers["Origin"] = CURRENT_ORIGIN;
     }
     const response = await fetchWithAccessToken(BE_URL + path, {
       method: "POST",

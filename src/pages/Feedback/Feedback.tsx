@@ -10,6 +10,7 @@ import { Severity } from "../../utils/modal/notification";
 const Feedback = () => {
   const userContext = useUserContext();
   const { currentUser, alertModal } = userContext as UserContext;
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -101,6 +102,7 @@ const Feedback = () => {
       for (const file of formData.files) {
         formdata.append("files", file);
       }
+      setIsLoading(true);
       httpMethods
         .post("/users/feedback", formdata, true)
         .then((res: any) => {
@@ -130,6 +132,9 @@ const Feedback = () => {
             content: `${err.message}`,
             title: "Feedback Submit",
           });
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
@@ -187,8 +192,8 @@ const Feedback = () => {
         />
         <span className="error">{errors.files}</span>
       </div>
-      <Button className="m-2" type="submit">
-        Submit
+      <Button className="m-2" type="submit" disabled={isLoading}>
+        {isLoading ? "Submitting..." : "Submit"}
       </Button>
     </form>
   );

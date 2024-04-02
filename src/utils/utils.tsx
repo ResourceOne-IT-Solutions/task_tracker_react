@@ -35,6 +35,7 @@ import {
   UserRequestCardProps,
 } from "../modals/MessageModals";
 import { fileDownload } from "../pages/chat/chatbox/Util";
+import { TicketModal } from "../modals/TicketModals";
 
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
@@ -569,4 +570,45 @@ export const Description = ({ content }: { content: string }) => {
       {content.length >= 30 ? <>{content.slice(0, 30)}...</> : <>{content} </>}
     </>
   );
+};
+
+export const checkDuration = (
+  ticket: TicketModal,
+  duration: string,
+): boolean => {
+  const date = new Date();
+  if (!duration) return true;
+  if (duration == "last 1 week") {
+    date.setDate(date.getDate() - 7);
+    return new Date(ticket.receivedDate) >= date;
+  } else if (duration == "last 1 month" || duration == "last 2 months") {
+    const month = duration == "last 1 month" ? 1 : 2;
+    date.setMonth(date.getMonth() - month);
+    return new Date(ticket.receivedDate) >= date;
+  }
+  return false;
+};
+
+export const checkClientName = (ticket: TicketModal, name: string): boolean => {
+  if (!name) return true;
+  if (ticket.client.name === name) {
+    return true;
+  }
+  return false;
+};
+export const checkStatus = (ticket: TicketModal, status: string): boolean => {
+  if (!status) return true;
+  if (ticket.status === status) {
+    return true;
+  }
+  return false;
+};
+export const checkDateWise = (
+  ticket: TicketModal,
+  from: Date,
+  to: Date,
+): boolean => {
+  if (!from.getTime() || !to.getTime()) return true;
+  const receivedDate = new Date(ticket.receivedDate);
+  return receivedDate >= new Date(from) && receivedDate <= new Date(to);
 };

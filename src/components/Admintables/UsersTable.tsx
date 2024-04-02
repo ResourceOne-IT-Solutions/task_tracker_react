@@ -57,7 +57,7 @@ function UsersTable() {
           setUsersData(filtered_data);
           popupNotification({
             severity: Severity.SUCCESS,
-            content: `${getFullName(resp)} account is deleted Successfully`,
+            content: `${getFullName(user)} account is deleted Successfully`,
           });
         })
         .catch((err: ErrorMessageInterface) => {

@@ -49,6 +49,13 @@ export const EMPTY_USER_PAYLOAD = {
   profileImageUrl: null,
   address: "",
   gender: "",
+  empId: "",
+};
+export const EMPTY_TICKET_FILTER_OBJ = {
+  duration: "",
+  clientName: "",
+  status: "",
+  date: "",
 };
 export const NAME_PATTERN = /^[A-Za-z]+\s{0,1}[A-Za-z]*$/;
 export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -69,3 +76,4 @@ export const ACCESS_TOKEN = () => localStorage.getItem("accessToken") || "";
 export const REFRESH_TOKEN = () => localStorage.getItem("refreshToken") || "";
 export const COMPANY_NAME = "ResourceOne IT Solutions";
 export const CHAT_CACHE_FILES: { [key: string]: FileModel } = {};
+export const CURRENT_ORIGIN = window.location.origin;

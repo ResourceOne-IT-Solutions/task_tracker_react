@@ -15,6 +15,8 @@ import MessageAllUsersModal from "../../../utils/modal/MessageAllUsersModal";
 import {
   AVAILABLE,
   BREAK,
+  BREAKFAST_BREAK,
+  LUNCH_BREAK,
   OFFLINE,
   ON_TICKET,
   SLEEP,
@@ -29,11 +31,20 @@ import TaskTable, { TableHeaders } from "../../../utils/table/Table";
 
 import "./AdminDashboard.css";
 // icons
-import avalable from "../../../assets/images/Available.png";
+import Avalable from "../../../assets/images/Available.png";
 import Offline from "../../../assets/images/ofline.png";
-import Brack from "../../../assets/images/break.png";
-import OnTrack from "../../../assets/images/OnWork.png";
-import sleep from "../../../assets/images/sleep.png";
+import Break from "../../../assets/images/break.png";
+import OnTicket from "../../../assets/images/OnWork.png";
+import Sleep from "../../../assets/images/sleep.png";
+import { StatusCard } from "../../../utils/UtilComponents";
+
+export const statusCardTypes: { src: string; type: Status; id: number }[] = [
+  { src: Avalable, type: AVAILABLE, id: 1 },
+  { src: Offline, type: OFFLINE, id: 2 },
+  { src: Break, type: BREAK, id: 3 },
+  { src: OnTicket, type: ON_TICKET, id: 4 },
+  { src: Sleep, type: SLEEP, id: 5 },
+];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -57,14 +68,16 @@ const AdminDashboard = () => {
     { name: "Improper Requirment", value: 0 },
   ]);
 
-  const [usersStatuses, setUsersStatuses] = useState({
-    totalUsers: 0,
-    availableUsers: 0,
-    breakUsers: 0,
-    offlineUsers: 0,
-    onTicketUsers: 0,
-    sleepUsers: 0,
-  });
+  const [usersStatuses, setUsersStatuses] = useState<{ [key: string]: number }>(
+    {
+      totalUsers: 0,
+      availableUsers: 0,
+      breakUsers: 0,
+      offlineUsers: 0,
+      onTicketUsers: 0,
+      sleepUsers: 0,
+    },
+  );
   socket.off("newUser").on("newUser", ({ userPayload }) => {
     setUsersData(userPayload.filter((user: UserModal) => !user.isAdmin));
   });
@@ -121,19 +134,22 @@ const AdminDashboard = () => {
       Available: 0,
       Break: 0,
       Offline: 0,
-      "On Ticket": 0,
+      [ON_TICKET]: 0,
+      [LUNCH_BREAK]: 0,
+      [BREAKFAST_BREAK]: 0,
       Sleep: 0,
     };
     usersData.forEach((user) => {
-      userStats[user.status] = userStats[user.status] + 1;
+      userStats[user.status] = (userStats[user.status] || 0) + 1;
     });
     setUsersStatuses({
       totalUsers: usersData.length,
-      availableUsers: userStats[AVAILABLE],
-      breakUsers: userStats[BREAK],
-      offlineUsers: userStats[OFFLINE],
-      onTicketUsers: userStats[ON_TICKET],
-      sleepUsers: userStats[SLEEP],
+      [AVAILABLE]: userStats[AVAILABLE],
+      [BREAK]:
+        userStats[BREAK] + userStats[LUNCH_BREAK] + userStats[BREAKFAST_BREAK],
+      [OFFLINE]: userStats[OFFLINE],
+      [ON_TICKET]: userStats[ON_TICKET],
+      [SLEEP]: userStats[SLEEP],
     });
   }, [usersData]);
   useEffect(() => {
@@ -224,107 +240,15 @@ const AdminDashboard = () => {
           <h3 className="text-primary">Users Data: </h3>
           <div className="main-container text-center">
             <div className="show-range">
-              <div className="user-list mx-2">
-                <Button className="btn user-details icon-avaliable col-8">
-                  <div className="d-flex p-2 px-4 col-12">
-                    <img
-                      className="user-icons"
-                      src={avalable}
-                      alt={AVAILABLE}
-                    />
-
-                    <h4>
-                      <span>{`${usersStatuses.availableUsers}/${usersStatuses.totalUsers}`}</span>
-                      Available
-                    </h4>
-                  </div>
-                  <p
-                    className="m-0"
-                    onClick={() => handleRangeClick(AVAILABLE)}
-                  >
-                    View Details
-                    <i className="fa fa-arrow-circle-o-right"></i>
-                  </p>
-                </Button>
-              </div>
-              <div className="user-list mx-2">
-                <Button className="btn user-details icon-offline col-8">
-                  <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={Offline} alt={OFFLINE} />
-
-                    <h4>
-                      <span>
-                        {" "}
-                        {`${usersStatuses.offlineUsers}/${usersStatuses.totalUsers}`}
-                      </span>
-                      Offline
-                    </h4>
-                  </div>
-                  <p className="m-0" onClick={() => handleRangeClick(OFFLINE)}>
-                    View Details
-                    <i className="fa fa-arrow-circle-o-right"></i>
-                  </p>
-                </Button>
-              </div>
-              <div className="user-list mx-2">
-                <Button className="btn user-details icon-break col-8 ">
-                  <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={Brack} alt={BREAK} />
-                    <h4>
-                      <span>
-                        {" "}
-                        {`${usersStatuses.breakUsers}/${usersStatuses.totalUsers}`}
-                      </span>
-                      Break
-                    </h4>
-                  </div>
-                  <p className="m-0" onClick={() => handleRangeClick(BREAK)}>
-                    View Details
-                    <i className="fa fa-arrow-circle-o-right"></i>
-                  </p>
-                </Button>
-              </div>
-              <div className="user-list mx-2">
-                <Button className="btn user-details icon-onTrack col-8">
-                  <div className="d-flex p-2 px-4">
-                    <img className="user-icons" src={OnTrack} alt={ON_TICKET} />
-
-                    <h4>
-                      <span>
-                        {" "}
-                        {`${usersStatuses.onTicketUsers}/${usersStatuses.totalUsers}`}
-                      </span>
-                      On Ticket
-                    </h4>
-                  </div>
-                  <p
-                    className="m-0"
-                    onClick={() => handleRangeClick(ON_TICKET)}
-                  >
-                    View Details
-                    <i className="fa fa-arrow-circle-o-right"></i>
-                  </p>
-                </Button>
-              </div>
-              <div className="user-list mx-2">
-                <Button className="btn user-details icon-sleep col-8">
-                  <div className="d-flex p-2 px-4 col-12">
-                    <img className="user-icons" src={sleep} alt={SLEEP} />
-
-                    <h4>
-                      <span>
-                        {" "}
-                        {`${usersStatuses.sleepUsers}/${usersStatuses.totalUsers}`}
-                      </span>
-                      Sleep
-                    </h4>
-                  </div>
-                  <p className="m-0" onClick={() => handleRangeClick(SLEEP)}>
-                    View Details
-                    <i className="fa fa-arrow-circle-o-right"></i>
-                  </p>
-                </Button>
-              </div>
+              {statusCardTypes.map(({ id, type, src }) => (
+                <StatusCard
+                  key={id}
+                  type={type}
+                  src={src}
+                  count={`${usersStatuses[type]}/${usersStatuses.totalUsers}`}
+                  onClick={handleRangeClick}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -333,7 +257,7 @@ const AdminDashboard = () => {
             <Timezones />
           </div>
           <div className="admin-btns pie-chart">
-            <h3 className="sub-heading">Today Tickets Data: </h3>
+            <h3 className="sub-heading">Today Tickets Data</h3>
             <PieChartComponent
               data={pendingticketPieChartData}
               totalTickets={totalpendingTickets}
@@ -353,8 +277,8 @@ const AdminDashboard = () => {
           <TaskTable<UserModal>
             height="300px"
             headers={rangeUserHeaders}
-            tableData={usersData.filter(
-              (user) => user.status === selectedRangeStatus,
+            tableData={usersData.filter((user) =>
+              user.status.includes(selectedRangeStatus),
             )}
             loading={false}
           />

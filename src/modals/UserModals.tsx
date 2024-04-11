@@ -145,3 +145,10 @@ export interface ImageupdateModal {
   id: string;
   profileImageUrl: string;
 }
+
+export interface StatusCardProps {
+  type: Status;
+  src: string;
+  count: string;
+  onClick: (status: Status) => void;
+}

@@ -116,6 +116,11 @@ const Sidebar = () => {
               </NavLink>
             </li>
           )}
+          <li className="nav-item adduser">
+            <NavLink className="nav-link" to="/tasklist">
+              Tasks
+            </NavLink>
+          </li>
         </>
       </ul>
       {showModal && modalName === "Client" && (

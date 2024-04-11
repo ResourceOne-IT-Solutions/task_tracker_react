@@ -4,7 +4,14 @@ import Routespage from "./Routes/Routespage";
 import { useUserContext } from "./components/Authcontext/AuthContext";
 import { UserContext } from "./modals/UserModals";
 import SocketEvents from "./utils/SocketEvents";
-import { AVAILABLE, SLEEP } from "./utils/Constants";
+import {
+  AVAILABLE,
+  BREAK,
+  BREAKFAST_BREAK,
+  LUNCH_BREAK,
+  ON_TICKET,
+  SLEEP,
+} from "./utils/Constants";
 import Alert from "./utils/modal/alert";
 import Notifications from "./utils/modal/notification";
 import { Loader } from "./utils/utils";
@@ -45,7 +52,12 @@ function App() {
     );
   }
   function changeStatus() {
-    if (!currentUser.isAdmin && currentUser._id && status !== "On Ticket") {
+    const fixedStatus = [ON_TICKET, LUNCH_BREAK, BREAKFAST_BREAK, BREAK];
+    if (
+      !currentUser.isAdmin &&
+      currentUser._id &&
+      !fixedStatus.includes(status)
+    ) {
       isInSleep = true;
       socket.emit("changeStatus", { id: currentUser._id, status: SLEEP });
     }

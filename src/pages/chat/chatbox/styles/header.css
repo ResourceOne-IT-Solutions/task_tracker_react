@@ -70,4 +70,8 @@
   position: absolute;
   right: 20px;
   top: 84px;
+  z-index: 1000;
+}
+.popup-nav ul{
+  list-style: none;
 }

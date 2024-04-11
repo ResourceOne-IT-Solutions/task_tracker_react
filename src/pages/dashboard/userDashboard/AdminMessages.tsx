@@ -184,7 +184,7 @@ function AdminMessages() {
           </Button>
         ))}
       </div>
-      <div className="request-msgs">
+      <div className="request-msgs container">
         <div className="request-sub-msg">
           {isLoading ? (
             <Spinner variant="success" />

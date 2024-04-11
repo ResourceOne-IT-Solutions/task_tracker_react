@@ -170,10 +170,16 @@ function UsersTable() {
   }, []);
   return (
     <div className="text-center">
-      <h2>Users Table</h2>
-      <Button variant="warning" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
+      <h2 className="py-2">
+        <Button
+          className="pull-left"
+          variant="warning"
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
+        Users Table
+      </h2>
       <TaskTable<UserModal>
         pagination
         headers={empTableHeaders}

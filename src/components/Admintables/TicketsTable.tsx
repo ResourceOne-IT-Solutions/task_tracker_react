@@ -116,21 +116,25 @@ function TicketsTable() {
       key: "",
       tdFormat: (ticket: any) => (
         <div>
-          <button
-            className="btn btn-info"
-            onClick={() => handleAddResource(ticket)}
-            style={{ fontWeight: "700" }}
-            disabled={ticket.isClosed}
-          >
-            {ticket.user.name ? "Assign Resource" : "Assign User"}
-          </button>
-          <button
-            className="btn btn-warning"
-            style={{ fontWeight: "700" }}
-            onClick={() => handleSendEmail(ticket)}
-          >
-            Send Email
-          </button>
+          <div className="my-1">
+            <button
+              className="btn btn-info m-1"
+              onClick={() => handleAddResource(ticket)}
+              style={{ fontWeight: "700" }}
+              disabled={ticket.isClosed}
+            >
+              {ticket.user.name ? "Assign Resource" : "Assign User"}
+            </button>
+          </div>
+          <div className="my-1">
+            <button
+              className="btn btn-warning m-1"
+              style={{ fontWeight: "700" }}
+              onClick={() => handleSendEmail(ticket)}
+            >
+              Send Email
+            </button>
+          </div>
         </div>
       ),
     },
@@ -185,10 +189,16 @@ function TicketsTable() {
   }, []);
   return (
     <div className="text-center">
-      <h2>Tickets Table</h2>
-      <Button variant="warning" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
+      <h2 className="py-2">
+        <Button
+          className="pull-left"
+          variant="warning"
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
+        Tickets Table
+      </h2>
       <TaskTable<TicketModal>
         pagination
         headers={ticketTableHeaders}

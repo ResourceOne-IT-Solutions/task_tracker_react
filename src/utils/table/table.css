@@ -7,6 +7,14 @@
   padding: 10px 5px;
   position: relative;
 }
+
+.task-table tr td{
+  text-align: left;
+}
+
+.task-table tr td button{
+  margin: 0 5px !important;
+}
 .table-pagination {
   display: flex;
   justify-content: center;
@@ -91,3 +99,4 @@ th {
   top: -1px;
   z-index: 1;
 }
+

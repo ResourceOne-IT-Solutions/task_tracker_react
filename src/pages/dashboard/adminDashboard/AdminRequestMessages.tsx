@@ -218,7 +218,7 @@ function AdminRequestMessages() {
           ),
         )}
       </div>
-      <div className="request-msgs">
+      <div className="request-msgs container">
         <div className="request-sub-msg">
           {isLoading ? (
             <Spinner />

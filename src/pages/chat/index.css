@@ -20,6 +20,7 @@
   border-left: 1px solid grey;
   border-bottom: 1px solid grey;
   overflow: hidden;
+  height: 100%;
 }
 .chat-tabs {
   border: 1px solid grey;

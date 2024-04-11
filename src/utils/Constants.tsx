@@ -5,7 +5,7 @@ const BE_SERVER = "https://task-tracker-server-2njm.onrender.com";
 const BE_LOCAL = "http://192.168.10.30:1234";
 const BE_LOCAL2 = "http://192.168.29.110:1234";
 const VERSION1 = "/api/v1";
-// change socket url if u want to change server url for API calls
+// change socket url if u want to cha nge server url for API calls
 export const SOCKET_URL = BE_SERVER;
 export const BE_URL = SOCKET_URL + VERSION1;
 export const GROUP_IMG_URL =
@@ -13,6 +13,8 @@ export const GROUP_IMG_URL =
 export const OFFLINE = "Offline";
 export const AVAILABLE = "Available";
 export const BREAK = "Break";
+export const LUNCH_BREAK = "Lunch Break";
+export const BREAKFAST_BREAK = "Breakfast Break";
 export const ON_TICKET = "On Ticket";
 export const SLEEP = "Sleep";
 export const STATUS_TYPES = [OFFLINE, AVAILABLE, BREAK, ON_TICKET, SLEEP];
@@ -77,3 +79,105 @@ export const REFRESH_TOKEN = () => localStorage.getItem("refreshToken") || "";
 export const COMPANY_NAME = "ResourceOne IT Solutions";
 export const CHAT_CACHE_FILES: { [key: string]: FileModel } = {};
 export const CURRENT_ORIGIN = window.location.origin;
+export const TASKS = [
+  {
+    id: 1,
+    title: "Todo List",
+    description:
+      "Create a simple todo list application where users can add, edit, and delete tasks.",
+  },
+  {
+    id: 2,
+    title: "Weather App",
+    description:
+      "Develop a weather application that fetches weather data from an API and displays it to the user.",
+  },
+  {
+    id: 3,
+    title: "Pagination Component",
+    description:
+      " Design a pagination component that handles navigation between pages of data.",
+  },
+  {
+    id: 4,
+    title: "Login Form",
+    description:
+      "Build a login form with validation for email and password fields.",
+  },
+  {
+    id: 5,
+    title: "Countdown Timer",
+    description:
+      "Develop a countdown timer component that starts from a specified time and decrements until it reaches zero.",
+  },
+  {
+    id: 6,
+    title: "Modal Component",
+    description:
+      "Design a modal component that can be toggled open and closed.",
+  },
+  {
+    id: 7,
+    title: "Drag and Drop",
+    description:
+      "Develop a feature that allows users to drag and drop items within a list.",
+  },
+  {
+    id: 8,
+    title: "Chat Application",
+    description:
+      " Develop a real-time chat application using WebSockets or a library like Socket.io.",
+  },
+  {
+    id: 9,
+    title: "Dropdown Component",
+    description:
+      "Design a dropdown component with options that can be selected by the user.",
+  },
+  {
+    id: 10,
+    title: "Form Validation",
+    description:
+      "Develop a form with validation for various fields such as email, password, and phone number.",
+  },
+  {
+    id: 11,
+    title: "Carousel Component",
+    description:
+      "Design a carousel component that displays a slideshow of images or content.",
+  },
+  {
+    id: 12,
+    title: "Responsive Layout",
+    description:
+      "Develop a responsive layout that adjusts based on the screen size and orientation.",
+  },
+  {
+    id: 13,
+    title: "Redux Store",
+    description:
+      "Set up a Redux store and integrate it with a React application to manage state.",
+  },
+  {
+    id: 14,
+    title: "Infinite Scroll Component",
+    description:
+      "Develop a component that loads more data as the user scrolls down the page.",
+  },
+  {
+    id: 15,
+    title: "Quiz Application",
+    description:
+      " Develop a quiz application where users can answer multiple-choice questions and see their score at the end.",
+  },
+  {
+    id: 16,
+    title: "Calculator",
+    description: "Able to to mathematic operations",
+  },
+  {
+    id: 17,
+    title: "E-Commerce",
+    description: "Recomendations, type of items, add to cart",
+  },
+];

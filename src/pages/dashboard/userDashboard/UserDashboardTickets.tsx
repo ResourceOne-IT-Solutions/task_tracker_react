@@ -180,7 +180,7 @@ function UserDashboardTickets() {
   return (
     <div className="text-center">
       <h1>
-        My Tickets{" "}
+        Today Tickets{" "}
         <Button variant="danger" onClick={() => navigate(-1)}>
           Go Back
         </Button>

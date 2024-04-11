@@ -33,7 +33,7 @@ const Timezones = () => {
   return (
     <>
       <h4 className="sub-heading" style={{ textAlign: "center" }}>
-        Timezones :{" "}
+        Timezones
       </h4>
       <div className="timezone-btns text-center">
         <div className="bg-info bg-opacity-25 rounded">

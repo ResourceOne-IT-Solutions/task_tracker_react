@@ -138,26 +138,31 @@ const ChatHeader = ({
           </>
         )}
       </div>
-      <div className="vertical-dots-header" onClick={handleOpenBtn}>
-        <i
-          className="bi bi-three-dots-vertical"
-          style={{ fontSize: "20px", color: "white" }}
-        ></i>
-      </div>
-      {currentUser.isAdmin && isPopupOpen && (
-        <div className="popup-nav m-2" ref={popupRef}>
-          <ul>
-            <li className="mb-1">
-              <Button variant="success" onClick={handleExportBtn}>
-                Export Chat
-              </Button>
-            </li>
-            <li>
-              <Button>Show Users</Button>
-            </li>
-          </ul>
+      <div ref={popupRef}>
+        <div className="vertical-dots-header" onClick={handleOpenBtn}>
+          <i
+            className="bi bi-three-dots-vertical"
+            style={{ fontSize: "20px", color: "white" }}
+          ></i>
         </div>
-      )}
+        {currentUser.isAdmin && isPopupOpen && (
+          <div className="popup-nav m-2">
+            <ul>
+              <li className="mb-1">
+                <Button variant="success" onClick={handleExportBtn}>
+                  Export Chat
+                </Button>
+              </li>
+              <li className="mb-1">
+                <Button>Show Users</Button>
+              </li>
+              <li>
+                <Button>Delete</Button>
+              </li>
+            </ul>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -151,6 +151,16 @@ function TicketsTable() {
       ),
     );
   }
+  // Trying to create Server Sent Event
+  // const getUpdatedTickets = () => {
+  //   getData<any>("tickets/updated-ticket")
+  //     .then((res) => {
+  //       getUpdatedTickets();
+  //     })
+  //     .catch((err) => {
+  //       console.log("ERR::", err);
+  //     });
+  // };
   useEffect(() => {
     setLoading(true);
     Promise.all([
@@ -160,6 +170,7 @@ function TicketsTable() {
       .then((results) => {
         setUsersData(results[0]);
         setTicketsData(results[1]);
+        //getUpdatedTickets();
       })
       .catch((err) => {
         alertModal({

@@ -79,8 +79,7 @@
 .user-details h4 span {
   display: block;
 }
-
-.icon-avaliable {
+.icon-Available {
   background-color: #00f02c;
   border: 1px solid#00f02c;
 }
@@ -97,39 +96,39 @@
   font-size: 18px;
   width: 100%;
 }
-.icon-avaliable p {
+.icon-Available p {
   color: #337ab7;
 }
 
-.icon-offline {
+.icon-Offline {
   background-color: #d9534f;
   border: 1px solid #d9534f;
 }
 
-.icon-offline p {
+.icon-Offline p {
   color: #d9534f;
 }
-.icon-break {
+.icon-Break {
   background-color: #6c757d;
   border: 1px solid #6c757d;
 }
-.icon-break p {
+.icon-Break p {
   color: #6c757d;
 }
 
-.icon-onTrack {
+.icon-OnTicket {
   background-color: #198754;
   border: 1px solid #198754;
 }
-.icon-onTrack p {
+.icon-OnTicket p {
   color: #198754;
 }
 
-.icon-sleep {
+.icon-Sleep {
   background-color: #0dcaf0;
   border: 1px solid #0dcaf0;
 }
-.icon-sleep p {
+.icon-Sleep p {
   color: #0dcaf0;
 }
 

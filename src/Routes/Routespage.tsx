@@ -26,6 +26,7 @@ import AddUser2 from "../pages/adduser/AddUser2";
 import ForgotPassword from "../pages/forgotpassword/ForgotPassword";
 import Sidebar from "../pages/sidebar";
 import UsersStats from "../pages/users-stats/UserStats";
+import TaskList from "../pages/taskpage";
 
 const Routespage = () => {
   const userContext = useUserContext();
@@ -65,6 +66,10 @@ const Routespage = () => {
               <Route
                 path="/stats"
                 element={isLoggedin ? <UsersStats /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/tasklist"
+                element={isLoggedin ? <TaskList /> : <Navigate to="/" />}
               />
               <Route
                 path="/tickets"

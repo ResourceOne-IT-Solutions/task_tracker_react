@@ -17,6 +17,9 @@
 .userdetails ul {
   list-style-type: none;
 }
+.user-data .keys {
+  width: 100px;
+}
 .username {
   font-size: 40px;
   font-family: sans-serif;

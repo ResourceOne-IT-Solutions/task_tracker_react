@@ -232,17 +232,17 @@ function AddUser2() {
               </div>
               <div className="w-50 ms-2">
                 <label>
-                  <b>Password</b>
+                  <b>Gender</b>
                 </label>
                 <div className="input-filed">
-                  <Field
-                    name="password"
-                    type="password"
-                    placeholder="Enter Password"
-                    className="form-control"
-                  />
+                  <Field name="gender" as="select" className="form-control">
+                    <option value="">Select a Gender</option>
+                    <option value="Male">MALE</option>
+                    <option value="Female">FEMALE</option>
+                    <option value="Prefer not to say">PREFER NOT TO SAY</option>
+                  </Field>
                   <ErrorMessage
-                    name="password"
+                    name="gender"
                     component="div"
                     className="text-danger error"
                   />
@@ -289,51 +289,29 @@ function AddUser2() {
                 </div>
               </div>
             </div>
-            <div className="mb-3 image-genders d-flex w-100">
-              <div className="w-50 genders row m-0">
-                <div className="col-3 px-0">
-                  <label htmlFor="isAdmin">
-                    <b>Admin: </b>
-                  </label>
-                  <div className="input-filed">
-                    <div className="form-control">
-                      <Field
-                        type="radio"
-                        name="isAdmin"
-                        value="true"
-                        className="ms-2"
-                      />{" "}
-                      Yes
-                      <Field
-                        type="radio"
-                        name="isAdmin"
-                        value="false"
-                        className="ms-2"
-                      />{" "}
-                      No
-                      <ErrorMessage
-                        name="isAdmin"
-                        component="div"
-                        className="text-danger error"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-9">
-                  <label>
-                    <b>Gender</b>
-                  </label>
-                  <div className="input-filed">
-                    <Field name="gender" as="select" className="form-control">
-                      <option value="">Select a Gender</option>
-                      <option value="Male">MALE</option>
-                      <option value="Female">FEMALE</option>
-                      <option value="Prefer not to say">
-                        PREFER NOT TO SAY
-                      </option>
-                    </Field>
+            <div className="mb-3 d-flex w-100">
+              <div className="w-50 m-0">
+                <label htmlFor="isAdmin">
+                  <b>Admin: </b>
+                </label>
+                <div className="input-filed">
+                  <div className="form-control">
+                    <Field
+                      type="radio"
+                      name="isAdmin"
+                      value="true"
+                      className="ms-2"
+                    />{" "}
+                    Yes
+                    <Field
+                      type="radio"
+                      name="isAdmin"
+                      value="false"
+                      className="ms-2"
+                    />{" "}
+                    No
                     <ErrorMessage
-                      name="gender"
+                      name="isAdmin"
                       component="div"
                       className="text-danger error"
                     />

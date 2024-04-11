@@ -235,16 +235,43 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
           <div className="user-data">
             <ul>
               <b>Employee Details</b>
-              <li>Employee ID: {presentUser.empId}</li>
-              <li>Employee Name: {getFullName(presentUser)}</li>
-              <li>Email : {presentUser.email}</li>
-              <li>Gender: {presentUser.gender}</li>
-              <li>Dob : {dateConversion(presentUser.dob)}</li>
-              <li>Phone : {presentUser.mobile}</li>
-              <li>Role : {presentUser.designation}</li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">
+                  Employee ID:{" "}
+                </span>{" "}
+                {presentUser.empId}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">
+                  Employee Name:
+                </span>{" "}
+                {getFullName(presentUser)}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">Email :</span>{" "}
+                {presentUser.email}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">Gender:</span>{" "}
+                {presentUser.gender}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">Dob :</span>{" "}
+                {dateConversion(presentUser.dob)}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">Phone :</span>{" "}
+                {presentUser.mobile}
+              </li>
+              <li>
+                <span className="keys d-inline-block fw-semibold">Role :</span>{" "}
+                {presentUser.designation}
+              </li>
               {presentUser.status === OFFLINE && (
                 <li>
-                  Last Active On :{" "}
+                  <span className="keys d-inline-block fw-semibold">
+                    Last Active On :
+                  </span>{" "}
                   {new Date(presentUser.lastActive).toLocaleString()}
                 </li>
               )}

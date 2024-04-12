@@ -24,6 +24,7 @@ import {
 } from "../../../utils/Constants";
 import { Severity } from "../../../utils/modal/notification";
 import httpMethods from "../../../api/Service";
+import { RectangularSkeleton } from "../../../utils/shimmer";
 
 function AdminMessages() {
   const navigate = useNavigate();
@@ -187,7 +188,7 @@ function AdminMessages() {
       <div className="request-msgs">
         <div className="request-sub-msg">
           {isLoading ? (
-            <Spinner variant="success" />
+            <RectangularSkeleton styles={{ height: "50px" }} count={5} />
           ) : (
             <>
               {showingTable === CHAT_REQUEST && (

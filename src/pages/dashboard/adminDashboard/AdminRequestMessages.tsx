@@ -10,6 +10,7 @@ import {
 import {
   AdminMessageCard,
   AdminRequestCard,
+  Loader,
   TicketRaiseCard,
   getDate,
   getFullName,
@@ -29,6 +30,7 @@ import {
 } from "../../../utils/Constants";
 import { Severity } from "../../../utils/modal/notification";
 import httpMethods from "../../../api/Service";
+import { RectangularSkeleton } from "../../../utils/shimmer";
 
 function AdminRequestMessages() {
   const navigate = useNavigate();
@@ -221,7 +223,7 @@ function AdminRequestMessages() {
       <div className="request-msgs">
         <div className="request-sub-msg">
           {isLoading ? (
-            <Spinner />
+            <RectangularSkeleton styles={{ height: "50px" }} count={5} />
           ) : (
             <>
               {showingTable === CHAT_REQUEST && (

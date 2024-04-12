@@ -183,13 +183,13 @@ const TicketFilters = ({
 
         <div className="d-flex">
           <button
-            className="btn btn-info"
+            className="btn btn-info m-1"
             onClick={() => handleDateRangeSubmit()}
             disabled={!dateRange.from || !dateRange.to ? true : false}
           >
             GetTickets
           </button>
-          <Button onClick={handleResetFilter} className="mx-2">
+          <Button onClick={handleResetFilter} className="mx-2 m-1">
             Reset Filters
           </Button>
           {currentUser.isAdmin && (

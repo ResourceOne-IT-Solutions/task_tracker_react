@@ -60,6 +60,7 @@
   border: 1px solid #ddd;
   margin-right: 3px;
   box-shadow: 0px 1px 9px #0006;
+  background-color: #fff;
 }
 
 .has-submenu:hover .submenu {

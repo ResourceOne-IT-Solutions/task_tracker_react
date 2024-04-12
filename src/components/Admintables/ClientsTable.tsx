@@ -126,10 +126,16 @@ function ClientsTable() {
   }, []);
   return (
     <div className="text-center">
-      <h2>Clients Table</h2>
-      <Button variant="warning" onClick={() => navigate(-1)}>
-        Go Back
-      </Button>
+      <h2 className="py-2">
+        <Button
+          className="pull-left"
+          variant="warning"
+          onClick={() => navigate(-1)}
+        >
+          Go Back
+        </Button>
+        Clients Table
+      </h2>
       <TaskTable<ClientModal>
         pagination
         headers={clientTableHeaders}

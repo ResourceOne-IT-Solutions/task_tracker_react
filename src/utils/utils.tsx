@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { CSSProperties, useEffect, useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import httpMethods from "../api/Service";
 import {
@@ -7,7 +7,7 @@ import {
   UserContext,
   UserModal,
 } from "../modals/UserModals";
-import { BlueDot, GreenDot, GreyDot, OrangeDot, RedDot } from "./Dots/Dots";
+import { Dot, DotColors } from "./Dots/Dots";
 import {
   ACCESS_TOKEN,
   ADMIN_MESSAGE,
@@ -71,17 +71,20 @@ export function getData<T>(url: string): Promise<T[]> {
   return httpMethods.get(`/${url}`);
 }
 
-export const statusIndicator = (status: Status = "") => {
+export const statusIndicator = (
+  status: Status = "",
+  styles: CSSProperties = {},
+) => {
   if (status === AVAILABLE) {
-    return <GreenDot title={status} />;
+    return <Dot title={status} color={DotColors.GREEN} styles={styles} />;
   } else if (status.includes(BREAK)) {
-    return <OrangeDot title={status} />;
+    return <Dot title={status} color={DotColors.ORANGE} styles={styles} />;
   } else if (status === ON_TICKET) {
-    return <BlueDot title={status} />;
+    return <Dot title={status} color={DotColors.BLUE} styles={styles} />;
   } else if (status === OFFLINE) {
-    return <RedDot title={status} />;
+    return <Dot title={status} color={DotColors.RED} styles={styles} />;
   } else if (status === SLEEP) {
-    return <GreyDot title={status} />;
+    return <Dot title={status} color={DotColors.GREY} styles={styles} />;
   }
 };
 export interface FullNameType {

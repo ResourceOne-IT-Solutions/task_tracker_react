@@ -17,7 +17,7 @@ function UserStatsPage() {
   const [isLoading, setIsloading] = useState(true);
   const [error, setError] = useState(false);
   useEffect(() => {
-    if (!user?.mobile) {
+    if (user?._id) {
       setIsloading(true);
       const userId = user?._id ? user._id : id;
       httpMethods
@@ -38,7 +38,7 @@ function UserStatsPage() {
   }, []);
 
   if (error) {
-    return <Navigate to="/" />;
+    return <Navigate to="/dashboard/usersTable" />;
   }
   return <>{isLoading ? <Loader /> : <UserDashboard user={user} />}</>;
 }

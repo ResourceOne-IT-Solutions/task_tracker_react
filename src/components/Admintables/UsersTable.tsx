@@ -98,7 +98,10 @@ function UsersTable() {
                   {getFullName(user)}
                 </div>
                 <span style={STATUS_INDICATOR_STYLES}>
-                  {statusIndicator(user.status)}
+                  {statusIndicator(user.status, {
+                    height: "10px",
+                    width: "10px",
+                  })}
                 </span>
               </div>
             </OverlayTrigger>

@@ -15,8 +15,10 @@ import httpMethods from "../../api/Service";
 import XlSheet from "./XlSheet";
 import { ErrorMessageInterface } from "../../modals/interfaces";
 import { CLOSED } from "../../utils/Constants";
+import { Loader } from "../../utils/utils";
 
 const updateContent = (updates: TicketUpdates[]) => {
+  if (!updates) return "";
   let str = "";
   updates.forEach((update, i) => {
     const content = `Update ${i + 1}:,\nDate: ${new Date(
@@ -40,7 +42,12 @@ const TicketDescription = () => {
   const { state } = useLocation();
   const userContext = useUserContext();
   const { currentUser } = userContext as UserContext;
-  const [selectedTicket, setSelectedTicket] = useState<TicketModal>(state);
+  const [ticketId, setTicketId] = useState<string>(state?._id);
+  const [selectedTicket, setSelectedTicket] = useState<TicketModal>(
+    {} as TicketModal,
+  );
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isTicketLoading, setIsTicketLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [responseMessage, setResponseMessage] = useState({
     status: "",
@@ -83,11 +90,11 @@ const TicketDescription = () => {
   };
   const convertTicketToExcel = (ticket: TicketModal) => {
     const format = {
-      "Consultant Name": ticket.client.name,
-      "Owner Name:": ticket.user.name,
-      "Created Date": new Date(ticket.receivedDate).toLocaleString(),
+      "Consultant Name": ticket.client?.name,
+      "Owner Name:": ticket.user?.name,
+      "Created Date": new Date(ticket?.receivedDate).toLocaleString(),
       "Final Status": ticket.status,
-      Updates: updateContent(ticket.updates),
+      Updates: updateContent(ticket?.updates),
     };
     return [format];
   };
@@ -95,100 +102,139 @@ const TicketDescription = () => {
     setShowModal(false);
     setResponseMessage({ status: "", message: "" });
   };
+  const getTicket = async () => {
+    httpMethods
+      .get<TicketModal>("/tickets/" + ticketId)
+      .then((ticket) => {
+        setSelectedTicket(ticket);
+        let resourceNames = "";
+        ticket.addOnResource?.forEach((resource: NameIdInterface) => {
+          resourceNames += resource.name + ", ";
+        });
+        setResource(resourceNames);
+      })
+      .catch((err) => {
+        setErrorMessage(err.message);
+        console.error("TICKET__ERROR::", err);
+      })
+      .finally(() => {
+        setIsTicketLoading(false);
+      });
+  };
 
   useEffect(() => {
-    let x = "";
-    selectedTicket.addOnResource?.forEach((item: NameIdInterface) => {
-      x += item.name + ", ";
-    });
-    setResource(x);
+    ticketId && getTicket();
   }, []);
+  if (!ticketId) {
+    return <div>No Ticket ID </div>;
+  }
   return (
     <div className="container">
-      <div
-        className={`ticketsById ${!currentUser.isAdmin ? "user-login" : ""}`}
-      >
-        <div>
-          <Button
-            className="mx-2 back-btn"
-            variant="warning"
-            onClick={() => navigate(-1)}
-          >
-            <i className="fa fa-angle-left"></i>
-            Go Back
-          </Button>
-        </div>
-        <h3 className="text-center">Ticket Description</h3>
-        {currentUser.isAdmin && (
-          <div className="text-center">
-            <Button className="mx-2" onClick={() => setShowModal(!showModal)}>
-              Send Email
-            </Button>
-            <XlSheet data={convertTicketToExcel(selectedTicket)} />
-          </div>
-        )}
-      </div>
-      <div className="ticket-details d-flex w-100">
-        <div className="">
-          <p className="m-2">
-            <b>Client Name : </b> {selectedTicket.client.name}
-          </p>
-          <p className="m-2">
-            <b>Owner Name :</b> {selectedTicket.user.name}
-          </p>
-          <p className="m-2">
-            <b>Technology :</b> {selectedTicket.technology}
-          </p>
-          <p className="m-2">
-            <b>Status :</b> {selectedTicket.status}
-          </p>
-          <p className="m-2">
-            <b>Created By :</b> {selectedTicket.createdBy.name}
-          </p>
-          {(selectedTicket.isClosed || selectedTicket.status == CLOSED) && (
-            <p className="m-2">
-              <b>Closed By :</b> {selectedTicket?.closedBy?.name}
-            </p>
+      {isTicketLoading ? (
+        <Loader />
+      ) : (
+        <>
+          {errorMessage ? (
+            <div className="fw-bold text-danger text-center">
+              <h3>{errorMessage}</h3>
+            </div>
+          ) : (
+            <>
+              <div 
+                className={`ticketsById ${!currentUser.isAdmin ? "user-login" : ""}`}
+               >
+                <div>
+                  <Button
+                    className="mx-2 back-btn"
+                    variant="warning"
+                    onClick={() => navigate(-1)}
+                  >
+                    <i className="fa fa-angle-left"></i>
+                    Go Back
+                  </Button>
+                </div>
+                <h3 className="text-center">Ticket Description</h3>
+                {currentUser.isAdmin && (
+                  <div className="text-center">
+                    <Button
+                      className="mx-2"
+                      onClick={() => setShowModal(!showModal)}
+                    >
+                      Send Email
+                    </Button>
+                    <XlSheet data={convertTicketToExcel(selectedTicket)} />
+                  </div>
+                )}
+              </div>
+              <div className="ticket-details d-flex w-100">
+                <div className="">
+                  <p className="m-2">
+                    <b>Client Name : </b> {selectedTicket.client.name}
+                  </p>
+                  <p className="m-2">
+                    <b>Owner Name :</b> {selectedTicket.user.name}
+                  </p>
+                  <p className="m-2">
+                    <b>Technology :</b> {selectedTicket.technology}
+                  </p>
+                  <p className="m-2">
+                    <b>Status :</b> {selectedTicket.status}
+                  </p>
+                  <p className="m-2">
+                    <b>Created By :</b> {selectedTicket.createdBy.name}
+                  </p>
+                  {(selectedTicket.isClosed ||
+                    selectedTicket.status == CLOSED) && (
+                    <p className="m-2">
+                      <b>Closed By :</b> {selectedTicket?.closedBy?.name} on{" "}
+                      {new Date(selectedTicket.closedDate).toLocaleString()}
+                    </p>
+                  )}
+                  <p className="m-2">
+                    <b>Requirement :</b> {selectedTicket.requirement}
+                  </p>
+                  <p className="m-2">
+                    <b>Final Description :</b> {selectedTicket.description}
+                  </p>
+                  <p className="m-2">
+                    <b>Comments :</b> {selectedTicket.comments}
+                  </p>
+                  <p className="m-2">
+                    <b>ReceivedDate :</b>{" "}
+                    {new Date(selectedTicket.receivedDate).toLocaleString()}
+                  </p>
+                  <p className="m-2">
+                    <span className="fw-bold">Last Update :</span>
+                    {new Date(selectedTicket.updatedAt).toLocaleString()}
+                  </p>
+                  {resource && (
+                    <p className="m-2">
+                      <b>Helped Resource :</b> {resource}
+                    </p>
+                  )}
+                  <p className="fw-bold m-2">Total Updates:</p>
+                  <ul className="all-desc m-2">
+                    {selectedTicket.updates.map((item, index) => {
+                      return (
+                        <li key={item._id}>
+                          <div className="fw-bold">Update {index + 1}: </div>
+                          <div>
+                            Date: {new Date(item.date).toLocaleString()}
+                          </div>
+                          <div>Description: {item.description}</div>
+                          <div>Comments: {item.comments}</div>
+                          <div>Status: {item.status}</div>
+                          <div>Updated by : {item.updatedBy.name}</div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </>
           )}
-          <p className="m-2">
-            <b>Requirement :</b> {selectedTicket.requirement}
-          </p>
-          <p className="m-2">
-            <b>Final Description :</b> {selectedTicket.description}
-          </p>
-          <p className="m-2">
-            <b>Comments :</b> {selectedTicket.comments}
-          </p>
-          <p className="m-2">
-            <b>ReceivedDate :</b>{" "}
-            {new Date(selectedTicket.receivedDate).toLocaleString()}
-          </p>
-          <p className="m-2">
-            <span className="fw-bold">Last Update :</span>
-            {new Date(selectedTicket.updatedAt).toLocaleString()}
-          </p>
-          {resource && (
-            <p className="m-2">
-              <b>addOnResource :</b> {resource}
-            </p>
-          )}
-          <p className="fw-bold m-2">Total Updates:</p>
-          <ul className="all-desc m-2">
-            {selectedTicket.updates.map((item, index) => {
-              return (
-                <li key={item._id}>
-                  <div className="fw-bold">Update {index + 1}: </div>
-                  <div>Date: {new Date(item.date).toLocaleString()}</div>
-                  <div>Description: {item.description}</div>
-                  <div>Comments: {item.comments}</div>
-                  <div>Status: {item.status}</div>
-                  <div>Updated by : {item.updatedBy.name}</div>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </div>
+        </>
+      )}
 
       {showModal && (
         <ReusableModal

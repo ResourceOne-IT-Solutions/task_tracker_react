@@ -9,11 +9,13 @@ import { Description, getFullName } from "../../../utils/utils";
 import ReusableModal from "../../../utils/modal/ReusableModal";
 import TicketRaiseModal from "../../../utils/modal/TicketRaiseModal";
 import UpdateTicket from "../../../utils/modal/UpdateUserModal";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function UserDashboardTickets() {
   const userContext = useUserContext();
   const { currentUser, socket } = userContext as UserContext;
+  const { state } = useLocation();
+  const [ticketPath, setTicketPath] = useState<string>(state);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [tableData, setTableData] = useState<TicketModal[]>([]);
@@ -169,8 +171,10 @@ function UserDashboardTickets() {
   };
   useEffect(() => {
     setLoading(true);
+    const path =
+      ticketPath === "helped-tickets" ? ticketPath : "user/pending-tickets";
     httpMethods
-      .get<TicketModal[]>("/tickets/user/pending-tickets/" + currentUser._id)
+      .get<TicketModal[]>(`/tickets/${path}/${currentUser._id}`)
       .then((result) => {
         setTableData(result);
         setLoading(false);
@@ -180,7 +184,7 @@ function UserDashboardTickets() {
   return (
     <div className="text-center">
       <h1>
-        Today Tickets{" "}
+        {ticketPath === "helped-tickets" ? "Helped" : "Today"} Tickets{" "}
         <Button variant="danger" onClick={() => navigate(-1)}>
           Go Back
         </Button>

@@ -36,7 +36,7 @@ const UpdateTicket: React.FC<UpdateTicketProps> = ({
         clientName: ticketData.client.name,
         description: ticketData.description,
         comments: ticketData.comments,
-        status: ticketData.status,
+        status: "",
       });
     }
   }, [ticketData]);

@@ -104,7 +104,7 @@ const Routespage = () => {
                 }
               />
               <Route
-                path="/dashboard/userdashboardtickets"
+                path="/dashboard/tickets/:path"
                 element={
                   isLoggedin ? <UserDashboardTickets /> : <Navigate to="/" />
                 }

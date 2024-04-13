@@ -237,42 +237,42 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
               <b>Employee Details</b>
               <li>
                 <span className="keys d-inline-block fw-semibold">
-                  Employee ID:{" "}
+                  Employee ID{" "}
                 </span>{" "}
-                {presentUser.empId}
+                : {presentUser.empId}
               </li>
               <li>
                 <span className="keys d-inline-block fw-semibold">
-                  Employee Name:
+                  Employee Name
                 </span>{" "}
-                {getFullName(presentUser)}
+                : {getFullName(presentUser)}
               </li>
               <li>
-                <span className="keys d-inline-block fw-semibold">Email :</span>{" "}
+                <span className="keys d-inline-block fw-semibold">Email</span> :{" "}
                 {presentUser.email}
               </li>
               <li>
-                <span className="keys d-inline-block fw-semibold">Gender:</span>{" "}
-                {presentUser.gender}
+                <span className="keys d-inline-block fw-semibold">Gender</span>{" "}
+                : {presentUser.gender}
               </li>
               <li>
-                <span className="keys d-inline-block fw-semibold">Dob :</span>{" "}
+                <span className="keys d-inline-block fw-semibold">Dob</span> :{" "}
                 {dateConversion(presentUser.dob)}
               </li>
               <li>
-                <span className="keys d-inline-block fw-semibold">Phone :</span>{" "}
+                <span className="keys d-inline-block fw-semibold">Phone</span> :{" "}
                 {presentUser.mobile}
               </li>
               <li>
-                <span className="keys d-inline-block fw-semibold">Role :</span>{" "}
+                <span className="keys d-inline-block fw-semibold">Role</span> :{" "}
                 {presentUser.designation}
               </li>
               {presentUser.status === OFFLINE && (
                 <li>
                   <span className="keys d-inline-block fw-semibold">
-                    Last Active On :
+                    Last Active On
                   </span>{" "}
-                  {new Date(presentUser.lastActive).toLocaleString()}
+                  : {new Date(presentUser.lastActive).toLocaleString()}
                 </li>
               )}
               <li>

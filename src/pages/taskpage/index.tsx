@@ -12,6 +12,9 @@ export interface TaskCardProps {
   isAdmin: boolean;
 }
 const TaskCard = ({ title, description, id, isAdmin }: TaskCardProps) => {
+  const handleAssignClick = () => {
+    alert("Development is in Progress...");
+  };
   return (
     <div className="task-card">
       <div>
@@ -22,7 +25,9 @@ const TaskCard = ({ title, description, id, isAdmin }: TaskCardProps) => {
       </div>
       {isAdmin && (
         <div>
-          <Button className="mx-3">Assign to</Button>
+          <Button className="mx-3" onClick={handleAssignClick}>
+            Assign to
+          </Button>
         </div>
       )}
     </div>

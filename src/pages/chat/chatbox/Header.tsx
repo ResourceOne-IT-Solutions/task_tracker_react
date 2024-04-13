@@ -145,23 +145,31 @@ const ChatHeader = ({
             style={{ fontSize: "20px", color: "white" }}
           ></i>
         </div>
-        {currentUser.isAdmin && isPopupOpen && (
-          <div className="popup-nav m-2">
-            <ul>
+
+        <div className="popup-nav m-2">
+          <ul>
+            {currentUser.isAdmin && isPopupOpen && (
+              <>
+                <li className="mb-1">
+                  <Button variant="success" onClick={handleExportBtn}>
+                    Export Chat
+                  </Button>
+                </li>
+                <li className="mb-1">
+                  <Button>Show Users</Button>
+                </li>
+                <li className="mb-1">
+                  <Button>Delete</Button>
+                </li>
+              </>
+            )}
+            {selectedUser.members && isPopupOpen && (
               <li className="mb-1">
-                <Button variant="success" onClick={handleExportBtn}>
-                  Export Chat
-                </Button>
+                <Button>Exit Group</Button>
               </li>
-              <li className="mb-1">
-                <Button>Show Users</Button>
-              </li>
-              <li>
-                <Button>Delete</Button>
-              </li>
-            </ul>
-          </div>
-        )}
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

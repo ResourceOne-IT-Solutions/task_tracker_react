@@ -23,10 +23,16 @@ const TaskCard = ({ title, description, id, isAdmin }: TaskCardProps) => {
         </h3>
         <div>{description}</div>
       </div>
-      {isAdmin && (
+      {isAdmin ? (
         <div>
           <Button className="mx-3" onClick={handleAssignClick}>
             Assign to
+          </Button>
+        </div>
+      ) : (
+        <div>
+          <Button className="mx-3" onClick={handleAssignClick}>
+            Complete
           </Button>
         </div>
       )}

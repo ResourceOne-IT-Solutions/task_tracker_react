@@ -18,10 +18,15 @@
   color: #fff;
   background: #343651;
   position: relative;
+  height: auto;
 }
 
 .popup-header .btn-close::before {
   content: "X";
   font-weight: bold;
   color: #fff;
+  font-size: 20px;
+}
+.form-switch .form-check-input{
+  border-color: #6c6c6c;
 }

@@ -105,7 +105,9 @@ const TicketDescription = () => {
   }, []);
   return (
     <div className="container">
-      <div className="ticketsById">
+      <div
+        className={`ticketsById ${!currentUser.isAdmin ? "user-login" : ""}`}
+      >
         <div>
           <Button
             className="mx-2 back-btn"

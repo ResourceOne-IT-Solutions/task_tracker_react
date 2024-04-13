@@ -36,7 +36,7 @@ const ChatBody = ({
     <div
       className="chat-body-container"
       ref={ScrollRef}
-      style={{ height: height - 195 }}
+      style={{ height: height - 205 }}
     >
       {totalMessages.map((daymessages: RoomMessages) => (
         <div key={daymessages._id}>

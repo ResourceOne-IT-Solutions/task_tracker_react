@@ -89,7 +89,7 @@ function ClientsTable() {
           <Button
             variant="info"
             onClick={() => handleUpdate(client)}
-            style={{ marginRight: "4px" }}
+            style={{ margin: "4px" }}
           >
             Update
           </Button>

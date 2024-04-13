@@ -184,7 +184,8 @@ const TicketDescription = () => {
                   {(selectedTicket.isClosed ||
                     selectedTicket.status == CLOSED) && (
                     <p className="m-2">
-                      <b>Closed By :</b> {selectedTicket?.closedBy?.name}
+                      <b>Closed By :</b> {selectedTicket?.closedBy?.name} on{" "}
+                      {new Date(selectedTicket.closedDate).toLocaleString()}
                     </p>
                   )}
                   <p className="m-2">

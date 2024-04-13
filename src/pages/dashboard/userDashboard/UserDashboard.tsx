@@ -159,13 +159,21 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                   Request Chat With User
                 </Button>
                 <Button
-                  onClick={() => navigate("/dashboard/userdashboardtickets")}
+                  onClick={() =>
+                    navigate("/dashboard/tickets/today", {
+                      state: "pending-tickets",
+                    })
+                  }
                   variant="primary"
                 >
                   Today Tickets
                 </Button>
                 <Button
-                  onClick={() => navigate("/dashboard/helpedtickets")}
+                  onClick={() =>
+                    navigate("/dashboard/tickets/helped", {
+                      state: "helped-tickets",
+                    })
+                  }
                   variant="primary"
                 >
                   Helped Tickets

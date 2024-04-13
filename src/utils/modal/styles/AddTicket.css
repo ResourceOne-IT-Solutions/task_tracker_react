@@ -9,6 +9,9 @@
 .err-msg {
   text-align: center;
 }
+.err-msg {
+  color: #f00
+}
 
 .popup-header {
   background: #343651;

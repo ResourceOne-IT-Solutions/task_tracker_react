@@ -140,9 +140,11 @@ const TicketDescription = () => {
             </div>
           ) : (
             <>
-              <div 
-                className={`ticketsById ${!currentUser.isAdmin ? "user-login" : ""}`}
-               >
+              <div
+                className={`ticketsById ${
+                  !currentUser.isAdmin ? "user-login" : ""
+                }`}
+              >
                 <div>
                   <Button
                     className="mx-2 back-btn"

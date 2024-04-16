@@ -10,6 +10,7 @@ body {
   position: relative;
   min-height: 100%;
   padding-bottom: 60px;
+  max-height: 720px;
 }
 .App-header {
   background-color: #282c34;

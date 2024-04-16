@@ -81,6 +81,7 @@ function CloseTicketModal({
         <div className="d-flex">
           <p>Do you want to add Description? </p>
           <Form.Check
+            className="mx-2"
             type="switch"
             id="custom-switch"
             label=""

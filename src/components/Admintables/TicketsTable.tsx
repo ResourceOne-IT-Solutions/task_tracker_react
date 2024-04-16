@@ -118,7 +118,7 @@ function TicketsTable() {
         <div>
           <div className="my-1">
             <button
-              className="btn btn-info m-1"
+              className="btn btn-info m-1 w-100"
               onClick={() => handleAddResource(ticket)}
               style={{ fontWeight: "700" }}
               disabled={ticket.isClosed}
@@ -128,7 +128,7 @@ function TicketsTable() {
           </div>
           <div className="my-1">
             <button
-              className="btn btn-warning m-1"
+              className="btn btn-warning m-1 w-100"
               style={{ fontWeight: "700" }}
               onClick={() => handleSendEmail(ticket)}
             >

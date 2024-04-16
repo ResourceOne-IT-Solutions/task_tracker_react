@@ -160,6 +160,10 @@ th {
 .recharts-legend-wrapper {
   width: 330px !important;
 }
+.dashboard-content{
+  max-height: 620px;
+  overflow: auto;
+}
 
 @media only screen and (max-width: 767px) {
   .show-range,

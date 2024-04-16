@@ -15,8 +15,20 @@
   display: flex;
   justify-content: space-between;
 }
+.ticketsById.user-login{
+  justify-content: normal;
+}
+
+.ticketsById.user-login h3{
+  flex: 1;
+  text-align: center;
+}
 .back-btn {
   color: #fff;
+}
+.ticketsById h3{
+  font-size: 30px;
+  color: #212529;
 }
 
 @media only screen and (max-width: 767px) {

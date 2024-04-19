@@ -6,6 +6,7 @@ import { TicketModal } from "../../../modals/TicketModals";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import Tickets from "../../tickets";
 import { Button } from "react-bootstrap";
+import { ClientModal } from "../../../modals/ClientModals";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
@@ -59,23 +60,10 @@ const ClientDashboard = () => {
   }, [state]);
   return (
     <>
-      <h3>CLIENT DASHBOARD</h3>
-
+      <h3 className="text-center">CLIENT DASHBOARD</h3>
       <div className="client-details">
-        <div className="sub-details">
-          <p>FirstName : {clientState.firstName}</p>
-          <p>Mobile : {clientState.mobile}</p>
-          <p>Email : {clientState.email}</p>
-          <p>
-            Location : {clientState.location.area}
-            {", "}
-            {clientState.location.zone}
-          </p>
-          <p>Technology : {clientState.technology}</p>
-          <p>TicketsCount : {clientState.ticketsCount}</p>
-          <p>CompanyName : {clientState.companyName}</p>
-          <p>CreatedAt : {clientState.createdAt}</p>
-          <p>UpdatedAt : {clientState.updatedAt}</p>
+        <div className="sub-details px-1">
+          <ClientCard client={clientState} />
         </div>
         <div className="pie-chart-main">
           <PieChartComponent
@@ -95,3 +83,23 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
+export const ClientCard = ({ client }: { client: ClientModal }) => {
+  return (
+    <>
+      <p>FirstName : {client.firstName}</p>
+      <p>Mobile : {client.mobile}</p>
+      <p>Email : {client.email}</p>
+      <p>
+        Location : {client.location.area}
+        {", "}
+        {client.location.zone}
+      </p>
+      <p>Technology : {client.technology}</p>
+      <p>TicketsCount : {client.ticketsCount}</p>
+      <p>CompanyName : {client.companyName}</p>
+      <p>CreatedAt : {client.createdAt}</p>
+      <p>UpdatedAt : {client.updatedAt}</p>
+    </>
+  );
+};

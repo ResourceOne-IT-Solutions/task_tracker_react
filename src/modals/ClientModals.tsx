@@ -17,6 +17,7 @@ export interface ClientModal {
   createdAt: string;
   createdBy: NameIdInterface;
   ticketsCount: number;
+  updatedAt: string;
 }
 export interface Location {
   area: string;

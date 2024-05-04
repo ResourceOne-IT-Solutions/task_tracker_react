@@ -5,12 +5,10 @@ import httpMethods from "../../../api/Service";
 import { TicketModal } from "../../../modals/TicketModals";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import Tickets from "../../tickets";
-import { Button } from "react-bootstrap";
 import { ClientModal } from "../../../modals/ClientModals";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
-  const navigate = useNavigate();
   const [clientState, setClientState] = useState(state);
   const [selectedTickets, setSelectedTickets] = useState<TicketModal[]>([]);
   const [pieChartData, setPieChartData] = useState([

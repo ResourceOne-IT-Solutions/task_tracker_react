@@ -9,7 +9,6 @@ import { ClientModal } from "../../../modals/ClientModals";
 
 const ClientDashboard = () => {
   const { state } = useLocation();
-  const navigate = useNavigate();
   const [clientState, setClientState] = useState(state);
   const [selectedTickets, setSelectedTickets] = useState<TicketModal[]>([]);
   const [pieChartData, setPieChartData] = useState([

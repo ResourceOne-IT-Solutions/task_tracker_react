@@ -85,7 +85,7 @@ const AdminDashboard = () => {
     if (name == "users") {
       navigate("/dashboard/usersTable");
     } else if (name == "clients") {
-      navigate("/dashboard/clients");
+      navigate("/dashboard/clientsTable");
     } else if (name == "tickets") {
       navigate("/dashboard/ticketsTable");
     }

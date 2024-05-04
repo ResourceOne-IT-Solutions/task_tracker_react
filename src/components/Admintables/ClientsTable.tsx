@@ -24,7 +24,7 @@ function ClientsTable() {
   });
   const [updateReference, setUpdateReference] = useState<any>({});
   const gotoDashboards = (client: ClientModal) => {
-    navigate(`/clients/${client._id}`, { state: client });
+    navigate(`/client/${client._id}`, { state: client });
   };
   const handleUpdate = <T,>(client: T) => {
     setUpdateReference(client);

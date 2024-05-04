@@ -65,9 +65,9 @@ const Routespage = () => {
                 path="/login"
                 element={isLoggedin ? <Navigate to="/dashboard" /> : <Login />}
               />
+              <Route path="/dashboard" element={<Dashboard />} />
               {/* Protected Routes */}
               <Route element={<ProtectedRoute isAuthenticated={isLoggedin} />}>
-                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/chat" element={<Chat />} />
                 <Route path="/stats" element={<UsersStats />} />
                 <Route path="/tasklist" element={<TaskList />} />

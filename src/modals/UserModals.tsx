@@ -23,8 +23,6 @@ export interface UserContext {
   setCurrentUser: React.Dispatch<React.SetStateAction<UserModal>>;
   setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
   socket: Socket;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   selectedUser: UserModal;
   setSelectedUser: React.Dispatch<React.SetStateAction<UserModal>>;
   currentRoom: string;

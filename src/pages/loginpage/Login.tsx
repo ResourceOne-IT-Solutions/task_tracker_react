@@ -5,15 +5,11 @@ import Button from "react-bootstrap/Button";
 import "./Login.css";
 import httpMethods from "../../api/Service";
 import { LoginPayload, UserContext } from "../../modals/UserModals";
-import {
-  useAuth,
-  useUserContext,
-} from "../../components/Authcontext/AuthContext";
+import { useUserContext } from "../../components/Authcontext/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
   const { socket } = useUserContext() as UserContext;
-  const { getLogin } = useAuth();
   const path = useLocation().state || "User";
   const [data, setData] = useState<LoginPayload>({
     userId: "",
@@ -51,7 +47,7 @@ const Login = () => {
         localStorage.setItem("refreshToken", result.refreshToken);
         setIsLoading(false);
         socket.connect();
-        getLogin().then(() => navigate("/dashboard"));
+        navigate("/dashboard");
       })
       .catch((e: any) => {
         setError(e.message);

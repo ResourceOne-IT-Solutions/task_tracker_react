@@ -22,6 +22,7 @@ const LOCATION: { [key: string]: string } = {};
 const AuthContext = ({ children }: AuthContextProps) => {
   const [currentUser, setCurrentUser] = useState<UserModal>({} as UserModal);
   const [isLoggedin, setIsLoggedIn] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedUser, setSelectedUser] = useState<UserModal>({} as UserModal);
   const [currentRoom, setCurrentRoom] = useState("");
   const [totalMessages, setTotalMessages] = useState<number>(0);
@@ -79,6 +80,8 @@ const AuthContext = ({ children }: AuthContextProps) => {
     setRequestMessageCount,
     isUserFetching,
     isMobileView,
+    isLoading,
+    setIsLoading,
   };
   const handleResize = () => {
     setIsMobileView(checkIsMobileView());
@@ -166,10 +169,9 @@ const AuthContext = ({ children }: AuthContextProps) => {
 };
 export const useUserContext = () => useContext(UserContextProvider);
 export const useAuth = () => {
-  const { setCurrentUser, setIsLoggedIn, alertModal } =
+  const { setCurrentUser, setIsLoggedIn, alertModal, isLoading, setIsLoading } =
     useUserContext() as UserContext;
-  const [isLoading, setIsLoading] = useState(true);
-  const getLogin = () => {
+  const getLogin = async () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;

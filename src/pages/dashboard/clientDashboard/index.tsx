@@ -5,7 +5,6 @@ import httpMethods from "../../../api/Service";
 import { TicketModal } from "../../../modals/TicketModals";
 import PieChartComponent from "../../../components/pieChart/PieChart";
 import Tickets from "../../tickets";
-import { Button } from "react-bootstrap";
 import { ClientModal } from "../../../modals/ClientModals";
 
 const ClientDashboard = () => {

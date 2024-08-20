@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/task_tracker_react/static/css/main.c9fcf93b.css",
+    "main.css": "/task_tracker_react/static/css/main.12ef657f.css",
     "main.js": "/task_tracker_react/static/js/main.1385e2ab.js",
     "static/js/239.06ac379b.chunk.js": "/task_tracker_react/static/js/239.06ac379b.chunk.js",
     "static/js/213.6d7f726c.chunk.js": "/task_tracker_react/static/js/213.6d7f726c.chunk.js",
@@ -12,14 +12,14 @@
     "static/media/OnWork.png": "/task_tracker_react/static/media/OnWork.34bcf0dbc224f84488ae.png",
     "static/media/sleep.png": "/task_tracker_react/static/media/sleep.1e5bb75895fc2be0bad9.png",
     "index.html": "/task_tracker_react/index.html",
-    "main.c9fcf93b.css.map": "/task_tracker_react/static/css/main.c9fcf93b.css.map",
+    "main.12ef657f.css.map": "/task_tracker_react/static/css/main.12ef657f.css.map",
     "main.1385e2ab.js.map": "/task_tracker_react/static/js/main.1385e2ab.js.map",
     "239.06ac379b.chunk.js.map": "/task_tracker_react/static/js/239.06ac379b.chunk.js.map",
     "213.6d7f726c.chunk.js.map": "/task_tracker_react/static/js/213.6d7f726c.chunk.js.map",
     "732.7ce39495.chunk.js.map": "/task_tracker_react/static/js/732.7ce39495.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.c9fcf93b.css",
+    "static/css/main.12ef657f.css",
     "static/js/main.1385e2ab.js"
   ]
 }

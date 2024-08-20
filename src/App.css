@@ -170,11 +170,11 @@ body {
 .footer {
   background: #212529;
   color: #fff;
-  height: 60px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;

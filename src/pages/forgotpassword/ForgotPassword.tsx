@@ -71,7 +71,7 @@ function ForgotPassword() {
     if (name === "user-email") {
       if (payload.trim().length) {
         httpMethods
-          .post<MailVerifyInterface, OtpInterface>("/mail-verify", {
+          .refresh<MailVerifyInterface, OtpInterface>("/mail-verify", {
             data: payload,
           })
           .then((res: OtpInterface) => {

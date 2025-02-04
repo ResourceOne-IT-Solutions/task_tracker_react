@@ -66,9 +66,11 @@ const TicketFilters = ({
     setFilters(EMPTY_TICKET_FILTER_OBJ);
   };
   const formattedTicketforXL = (tickets: TicketModal[]) => {
-    const formatedData = tickets.map((item, idx) => {
-      const resources = item.addOnResource.map((item) => item.name).join(",\n");
-      const updates = item.updates.map((item, idx) => {
+    const formatedData = tickets?.map((item, idx) => {
+      const resources = item.addOnResource
+        ?.map((item) => item.name)
+        .join(",\n");
+      const updates = item.updates?.map((item, idx) => {
         const up = `UPDATE ${idx + 1}:\nUpdatedBy : ${
           item.updatedBy.name
         }\nDate: ${new Date(item.date).toLocaleString()},\nDescription : ${

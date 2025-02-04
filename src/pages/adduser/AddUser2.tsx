@@ -31,12 +31,6 @@ function AddUser2() {
       .min(3, "Alphabets Only, Minimum 3 Characters")
       .required("Required"),
     email: Yup.string().email("Invalid email address").required("Required"),
-    password: Yup.string()
-      .matches(
-        /^(?=.*[A-Z])(?=.*\d)(?=.*\W).{8,}$/,
-        "An Uppercase,Special symbol,Number,8 Characters Required",
-      )
-      .required("Required"),
     dob: Yup.date().required("Required"),
     joinedDate: Yup.date().required("Required"),
     isAdmin: Yup.boolean().required("Required"),

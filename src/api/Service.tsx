@@ -42,6 +42,26 @@ async function post<T, R>(path: string, data: T, isFile = false): Promise<R> {
   }
 }
 
+async function refresh<T, R>(path: string, data: T): Promise<R> {
+  try {
+    const headers = {} as any;
+    headers["Content-Type"] = "application/json";
+    headers["Origin"] = CURRENT_ORIGIN;
+
+    const response = await fetch(BE_URL + path, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(result.error);
+    }
+    return result;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
 async function get<S>(path: string): Promise<S> {
   try {
     const response = await fetchWithAccessToken(BE_URL + path, {});
@@ -91,5 +111,5 @@ async function deleteCall<T>(url: string): Promise<T> {
   }
 }
 
-const httpMethods = { post, put, deleteCall, get, login };
+const httpMethods = { post, put, deleteCall, get, login, refresh };
 export default httpMethods;

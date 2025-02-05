@@ -1,9 +1,10 @@
 import { Socket } from "socket.io-client";
 import { MessageModel } from "./MessageModals";
 import { Severity } from "../utils/modal/notification";
+import React from "react";
 
 export interface AlertModalProps {
-  content: string;
+  content: string | React.ReactElement;
   severity: Severity;
   title?: string;
   onClose?: (val: boolean) => void;

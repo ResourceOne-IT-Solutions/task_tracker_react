@@ -99,7 +99,9 @@ function AddClient({ setShowModal }: prop) {
             zone: "",
           });
           setShowModal(false);
-          const content = `Client created successfully!\nName: ${result.firstName}\nEmail: ${result.email}\nMobile: ${result.mobile} `;
+          const content = (
+            <pre>{`Client created successfully!\nName: ${result.firstName}\nEmail: ${result.email}\nMobile: ${result.mobile} `}</pre>
+          );
           alertModal({
             severity: Severity.SUCCESS,
             content,

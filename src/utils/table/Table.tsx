@@ -164,7 +164,7 @@ function TaskTable<R>(props: TableProps<R>) {
           </tbody>
         </table>
       </div>
-      {!loading && pagination && (
+      {!loading && pagination && tableData.length > 0 && (
         <TablePagination
           paginationClassName={paginationClassName}
           paginationAlign={paginationAlign}

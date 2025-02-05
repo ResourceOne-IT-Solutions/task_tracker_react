@@ -9,6 +9,7 @@ import {
   BREAK,
   BREAKFAST_BREAK,
   LUNCH_BREAK,
+  OFFLINE,
   ON_TICKET,
   SLEEP,
 } from "./utils/Constants";
@@ -16,6 +17,7 @@ import Alert from "./utils/modal/alert";
 import Notifications from "./utils/modal/notification";
 import { Loader } from "./utils/utils";
 import Footer from "./pages/footer/Footer";
+import httpMethods from "./api/Service";
 
 let isInSleep = false;
 let status = "";
@@ -73,13 +75,19 @@ function App() {
     }
   }, [currentUser.newMessages]);
   useEffect(() => {
+    const handleTabClose = () => {
+      socket.emit("changeStatus", { id: currentUser._id, status: OFFLINE });
+      httpMethods.post("/timer-logout", { id: currentUser._id });
+    };
     window.addEventListener("offline", handleOffline);
     window.addEventListener("online", handleOffline);
+    window.addEventListener("beforeunload", handleTabClose);
     return () => {
       window.removeEventListener("offline", handleOffline);
       window.removeEventListener("online", handleOffline);
+      window.removeEventListener("beforeunload", handleTabClose);
     };
-  }, []);
+  }, [currentUser._id]);
   useEffect(() => {
     if (!currentUser.isAdmin && isLoggedin) {
       document.addEventListener("click", resetInactivityTimer);

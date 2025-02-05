@@ -166,7 +166,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
                   }
                   variant="primary"
                 >
-                  Today Tickets
+                  Active Tickets
                 </Button>
                 <Button
                   onClick={() =>
@@ -322,7 +322,7 @@ const UserDashboard = ({ user }: { user: UserModal }) => {
             <Timezones />
           </div>
           <div className="admin-btns pie-chart">
-            <h3 className="sub-heading">Today Tickets Data</h3>
+            <h3 className="sub-heading">Active Tickets Data</h3>
             <PieChartComponent
               data={pieChartData}
               totalTickets={tableData.length}

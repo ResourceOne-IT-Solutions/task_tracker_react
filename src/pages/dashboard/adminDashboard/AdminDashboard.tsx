@@ -220,7 +220,6 @@ const AdminDashboard = () => {
       {/* <div className="d-flex"> */}
       <div className="dashboard-content">
         <div className="d-flex justify-content-between flex-wrap">
-          <h1>DASHBOARD</h1>
           <div className="d-flex flex-direction-row gap-1 m-2 dashboard-actions">
             <Button variant="danger" onClick={handleAdminBroadCastMessage}>
               Send Message to All
@@ -237,7 +236,6 @@ const AdminDashboard = () => {
           </div>
         </div>
         <div className="sub-ranges">
-          <h3 className="text-primary">Users Data: </h3>
           <div className="main-container text-center">
             <div className="show-range">
               {statusCardTypes.map(({ id, type, src }) => (

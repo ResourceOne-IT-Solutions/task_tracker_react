@@ -1,5 +1,5 @@
 import React, { CSSProperties, useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Dropdown, Spinner, Form, InputGroup } from "react-bootstrap";
 import httpMethods from "../api/Service";
 import {
   NameIdInterface,
@@ -11,16 +11,21 @@ import { Dot, DotColors } from "./Dots/Dots";
 import {
   ACCESS_TOKEN,
   ADMIN_MESSAGE,
+  ALL,
+  APPROVED,
   AVAILABLE,
   BE_URL,
   BREAK,
   CHAT_REQUEST,
   EMAIL_PATTERN,
+  GIVE_ACCESS,
   MOBILE_PATTERN,
   NAME_PATTERN,
+  NOT_APPROVED,
   OFFLINE,
   ON_TICKET,
   PASSWORD_PATTERN,
+  RESOLVED,
   SLEEP,
   TICKETRAISE_MESSAGE,
   TICKET_REQUEST,
@@ -31,6 +36,7 @@ import { Modal } from "react-bootstrap";
 import {
   AdminMessageCardProps,
   AdminRequestCardProps,
+  ChatRequestInterface,
   TicketRaiseCardProps,
   UserRequestCardProps,
 } from "../modals/MessageModals";
@@ -306,7 +312,7 @@ export const ImageShowModal = ({
 }: ImageSHowModal) => {
   return (
     <Modal className="profileimg-zoom" show={show} onHide={onHide}>
-      <Modal.Body>
+      <Modal.Body className="d-flex justify-content-center">
         {!children && (
           <div style={{ width: "300px", height: "300px" }}>
             <img src={imageUrl} width="100%" height="100%" alt="user-profile" />
@@ -406,12 +412,29 @@ export const AdminRequestCard = ({
   type,
   time,
   isNew,
+  accessIds,
+  handleCheckBoxChange,
 }: AdminRequestCardProps) => {
   return (
     <div className={`request-content-wrapper ${isNew && "bg-warning"} `}>
-      <div>
-        {getContent(type, sender, receiver)}
-        <div>Time: {new Date(time).toLocaleString()}</div>
+      <div
+        className={
+          ["CHAT", "TICKET"].includes(type) ? "d-flex align-items-center" : ""
+        }
+      >
+        {["CHAT", "TICKET"].includes(type) && (
+          <Form.Check
+            type="checkbox"
+            label=""
+            disabled={!isPending}
+            checked={accessIds?.includes(id)}
+            onChange={(e) => handleCheckBoxChange?.(e, id)}
+          />
+        )}
+        <div>
+          {getContent(type, sender, receiver)}
+          <div>Time: {new Date(time).toLocaleString()}</div>
+        </div>
       </div>
 
       <div>
@@ -442,6 +465,126 @@ export const getAdminMessageFormat = (
     </>
   );
 };
+const adminOptions = [ALL, RESOLVED, GIVE_ACCESS];
+const userOptions = [ALL, APPROVED, NOT_APPROVED];
+export const FilterComponent = ({
+  selected,
+  setSelected,
+  searchedVal,
+  setSearchedVal,
+  handleUserSearch,
+  handleGrantAccess,
+  isAdmin,
+  AccessIdsLength,
+}: {
+  selected: string;
+  setSelected: React.Dispatch<React.SetStateAction<string>>;
+  searchedVal: string;
+  setSearchedVal: React.Dispatch<React.SetStateAction<string>>;
+  handleUserSearch: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void;
+  handleGrantAccess?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => void;
+  isAdmin: boolean;
+  AccessIdsLength?: number;
+}) => {
+  const handleSelect = (item: string | null) => {
+    setSelected(item as string);
+  };
+  const options = isAdmin ? adminOptions : userOptions;
+  return (
+    <div className="d-flex justify-content-center gap-3 mb-2">
+      <Dropdown onSelect={handleSelect}>
+        <Dropdown.Toggle variant="success" id="dropdown-basic-chat-request">
+          {selected ? selected : "Select an Option"}
+        </Dropdown.Toggle>
+        <Dropdown.Menu style={{ maxHeight: "180px", overflowY: "auto" }}>
+          {options.map((item: string, index: number) => {
+            return (
+              <Dropdown.Item key={index} eventKey={item}>
+                {item}
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
+      <InputGroup className="w-25">
+        <Form.Control
+          type="text"
+          placeholder="Search For Users Or Clients"
+          value={searchedVal}
+          onChange={(e) => setSearchedVal(e.target.value)}
+        />
+      </InputGroup>
+      <Button className="btn btn-primary" onClick={handleUserSearch}>
+        Search
+      </Button>
+      <Button
+        className="btn btn-secondary"
+        onClick={handleGrantAccess}
+        disabled={AccessIdsLength === 0}
+      >
+        Grant Access
+      </Button>
+    </div>
+  );
+};
+
+export const filterAdminRequests = (
+  requests: any,
+  selected: string,
+  searchedVal: string,
+) => {
+  let reqs = requests.filter((item: any) => {
+    return (
+      selected === ALL ||
+      (selected === RESOLVED && !item.isPending) ||
+      (selected === GIVE_ACCESS && item.isPending)
+    );
+  });
+  if (searchedVal.length) {
+    reqs = filterByName(reqs, searchedVal);
+  }
+  return reqs;
+};
+
+export const filterUserRequests = (
+  requests: any,
+  selected: string,
+  searchedVal: string,
+) => {
+  let reqs = requests.filter((item: any) => {
+    return (
+      selected === ALL ||
+      (selected === APPROVED && !item.isPending) ||
+      (selected === NOT_APPROVED && item.isPending)
+    );
+  });
+  if (searchedVal.length) {
+    reqs = filterByName(reqs, searchedVal);
+  }
+  return reqs;
+};
+
+export function filterByName<
+  T extends {
+    sender: { name: string };
+    opponent?: { name: string };
+    client?: { name: string };
+  },
+>(requests: T[], searchedVal: string) {
+  const searchedText = searchedVal.toLowerCase().trim();
+  const reqs = requests.filter(
+    (req: T) =>
+      req.sender.name.toLowerCase().includes(searchedText) ||
+      (req?.opponent &&
+        req.opponent?.name.toLowerCase().includes(searchedText)) ||
+      (req?.client && req.client?.name.toLowerCase().includes(searchedText)),
+  );
+  return reqs;
+}
 
 export const AdminMessageCard = ({
   message,

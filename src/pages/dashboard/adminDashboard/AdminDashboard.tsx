@@ -232,7 +232,7 @@ const AdminDashboard = () => {
               Show Clients
             </Button>
             <Button variant="secondary" onClick={() => displayTable("tickets")}>
-              Today Tickets
+              Active Tickets
             </Button>
           </div>
         </div>
@@ -257,7 +257,7 @@ const AdminDashboard = () => {
             <Timezones />
           </div>
           <div className="admin-btns pie-chart">
-            <h3 className="sub-heading">Today Tickets Data</h3>
+            <h3 className="sub-heading">Active Tickets Data</h3>
             <PieChartComponent
               data={pendingticketPieChartData}
               totalTickets={totalpendingTickets}

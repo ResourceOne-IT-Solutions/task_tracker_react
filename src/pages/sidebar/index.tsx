@@ -94,7 +94,7 @@ const Sidebar = () => {
           </li>
           <li className="nav-item adduser">
             <NavLink className="nav-link" to={"/tickets"}>
-              Tickets
+              Closed Tickets
             </NavLink>
           </li>
           {isLoggedin && !currentUser.isAdmin && (

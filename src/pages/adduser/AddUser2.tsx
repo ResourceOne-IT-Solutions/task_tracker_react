@@ -90,11 +90,13 @@ function AddUser2() {
       httpMethods
         .post<FormData, UserModal>("/users/create", formData, true)
         .then((result) => {
-          const content = `${getFullName(
-            result,
-          )} account created Successfully, \nUser ID: ${
-            result.userId
-          }, \nEmployee ID : ${result.empId}\n`;
+          const content = (
+            <pre>{`${getFullName(
+              result,
+            )} account created Successfully, \nUser ID: ${
+              result.userId
+            }, \nEmployee ID : ${result.empId}\n`}</pre>
+          );
           setUserId(result._id);
           alertModal({
             severity: Severity.SUCCESS,

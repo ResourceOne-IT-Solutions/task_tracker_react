@@ -2,7 +2,7 @@ import React from "react";
 import { Severity } from "../notification";
 import { Modal, Button } from "react-bootstrap";
 interface AlertProps {
-  content: string;
+  content: string | React.ReactElement;
   severity: Severity;
   title?: string;
   onClose: (status: boolean) => void;

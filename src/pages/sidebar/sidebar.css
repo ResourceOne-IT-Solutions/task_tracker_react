@@ -8,7 +8,6 @@
   top: 6%;
 }
 .side-bar ul li {
-  padding: 10px;
   margin: 0;
 }
 
@@ -22,7 +21,7 @@
 .side-bar ul li a {
   color: #fff;
   text-decoration: none;
-  padding: 0;
+  padding: 10px;
 }
 
 @media only screen and (max-width: 767px) {

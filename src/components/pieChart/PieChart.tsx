@@ -68,7 +68,7 @@ const PieChartComponent: React.FC<PieChartProps> = ({
         {name == USER_STATUSES
           ? "Users"
           : name == "pending tickets"
-            ? "Today Tickets"
+            ? "Active Tickets"
             : "Tickets"}
         : {totalTickets}
       </h4>

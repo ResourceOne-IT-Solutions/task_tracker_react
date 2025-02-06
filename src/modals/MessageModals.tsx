@@ -83,6 +83,11 @@ export interface AdminRequestCardProps {
   type: string;
   time: Date;
   isNew: boolean;
+  accessIds?: string[];
+  handleCheckBoxChange?: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => void;
 }
 
 export interface AdminMessageCardProps {

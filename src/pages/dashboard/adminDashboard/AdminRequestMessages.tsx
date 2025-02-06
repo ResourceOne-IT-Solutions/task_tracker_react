@@ -10,8 +10,10 @@ import {
 import {
   AdminMessageCard,
   AdminRequestCard,
+  FilterComponent,
   Loader,
   TicketRaiseCard,
+  filterAdminRequests,
   getDate,
   getFullName,
   getPath,
@@ -21,6 +23,7 @@ import { UserContext } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_MESSAGE,
+  ALL,
   CHAT_REQUEST,
   NO_CHAT_REQUEST,
   NO_MESSAGES_TO_DISPLAY,
@@ -47,6 +50,15 @@ function AdminRequestMessages() {
   const [ticketRequests, setTicketRequests] = useState<
     TicketRequestInterface[]
   >([]);
+  const [selected, setSelected] = useState(ALL);
+  const [searchedVal, setSearchedVal] = useState("");
+  const [showingChatRequests, setShowingChatRequests] = useState<
+    ChatRequestInterface[]
+  >([]);
+  const [showingTicketRequests, setShowingTicketRequests] = useState<
+    TicketRequestInterface[]
+  >([]);
+  const [giveAccessIds, setGiveAccessIds] = useState<string[]>([]);
   const [messageRequests, setMessageRequests] = useState<
     AdminMessageInterface[]
   >([]);
@@ -59,21 +71,21 @@ function AdminRequestMessages() {
     .on("userRequestApproved", ({ result, type }) => {
       if (type === "CHAT") {
         const latestData = chatRequests.map((msz) => {
-          if (msz._id === result._id) {
-            return result;
-          }
-          return msz;
+          const updatedMessage = result.find(
+            (item: any) => item._id === msz._id,
+          );
+          return updatedMessage ? updatedMessage : msz;
         });
         setChatRequests(latestData);
       }
       if (type === "TICKET") {
-        const LatestTicketData = ticketRequests.map((msz) => {
-          if (msz._id === result._id) {
-            return result;
-          }
-          return msz;
+        const latestTicketData = ticketRequests.map((msz) => {
+          const updatedTicket = result.find(
+            (item: any) => item._id === msz._id,
+          );
+          return updatedTicket ? updatedTicket : msz;
         });
-        setTicketRequests(LatestTicketData);
+        setTicketRequests(latestTicketData);
       }
     });
   socket
@@ -125,7 +137,7 @@ function AdminRequestMessages() {
         setTicketRaiseMsgs([payloadData, ...ticketRaiseMsgs]);
       },
     );
-  const handleRequestClick = (id: string, type: string) => {
+  const handleRequestClick = (id: string | string[], type: string) => {
     const payload = {
       user: {
         name: getFullName(currentUser),
@@ -133,11 +145,16 @@ function AdminRequestMessages() {
         time: getDate(),
         date: getDate(),
       },
-      requestId: id,
+      requestId: typeof id === "string" ? [id] : id,
       type,
       status: false,
     };
     socket.emit("approveUserRequest", payload);
+    if (typeof id !== "string") {
+      setGiveAccessIds([]);
+    } else if (giveAccessIds.includes(id)) {
+      setGiveAccessIds((prev) => prev.filter((i) => i !== id));
+    }
   };
   const checkIsFirstTime = (type: string) => {
     if (type === ADMIN_MESSAGE) {
@@ -189,11 +206,61 @@ function AdminRequestMessages() {
     }
     getTableData(tableName);
   };
+  const filterLogic = () => {
+    if (showingTable === CHAT_REQUEST) {
+      const filteredRequests = filterAdminRequests(
+        chatRequests,
+        selected,
+        searchedVal,
+      );
+      setShowingChatRequests(filteredRequests);
+    } else if (showingTable === TICKET_REQUEST) {
+      const filteredRequests = filterAdminRequests(
+        ticketRequests,
+        selected,
+        searchedVal,
+      );
+      setShowingTicketRequests(filteredRequests);
+    }
+  };
+  const handleUserSearch = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    filterLogic();
+  };
+  const handleCheckBoxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    id: string,
+  ) => {
+    setGiveAccessIds((prevIds) => {
+      if (e.target.checked) {
+        return [...prevIds, id];
+      } else {
+        return prevIds.filter((prevId) => prevId !== id);
+      }
+    });
+  };
+  const handleGrantAccess = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    const type = showingTable === CHAT_REQUEST ? "CHAT" : "TICKET";
+    handleRequestClick(giveAccessIds, type);
+  };
   useEffect(() => {
     setIsLoading(true);
     getTableData(ADMIN_MESSAGE);
     setRequestMessageCount([]);
   }, []);
+  useEffect(() => {
+    filterLogic();
+  }, [selected, ticketRequests, chatRequests]);
+  useEffect(() => {
+    setSelected(ALL);
+    setSearchedVal("");
+    setGiveAccessIds([]);
+  }, [showingTable]);
   return (
     <div className="text-center view-request-msgs container">
       <div className="table-heading">
@@ -220,6 +287,20 @@ function AdminRequestMessages() {
           ),
         )}
       </div>
+      <>
+        {[CHAT_REQUEST, TICKET_REQUEST].includes(showingTable) && (
+          <FilterComponent
+            selected={selected}
+            setSelected={setSelected}
+            searchedVal={searchedVal}
+            setSearchedVal={setSearchedVal}
+            handleUserSearch={handleUserSearch}
+            isAdmin={true}
+            handleGrantAccess={handleGrantAccess}
+            AccessIdsLength={giveAccessIds?.length}
+          />
+        )}
+      </>
       <div className="request-msgs container">
         <div className="request-sub-msg">
           {isLoading ? (
@@ -228,8 +309,8 @@ function AdminRequestMessages() {
             <>
               {showingTable === CHAT_REQUEST && (
                 <>
-                  {chatRequests.length > 0 ? (
-                    chatRequests?.map((chat) => {
+                  {showingChatRequests.length > 0 ? (
+                    showingChatRequests?.map((chat) => {
                       return (
                         <AdminRequestCard
                           type="CHAT"
@@ -241,6 +322,8 @@ function AdminRequestMessages() {
                           isPending={chat.isPending}
                           onApprove={handleRequestClick}
                           isNew={newRequests.includes(chat._id)}
+                          handleCheckBoxChange={handleCheckBoxChange}
+                          accessIds={giveAccessIds}
                         />
                       );
                     })
@@ -251,8 +334,8 @@ function AdminRequestMessages() {
               )}
               {showingTable === TICKET_REQUEST && (
                 <>
-                  {ticketRequests.length > 0 ? (
-                    ticketRequests?.map((ticket) => {
+                  {showingTicketRequests.length > 0 ? (
+                    showingTicketRequests?.map((ticket) => {
                       return (
                         <AdminRequestCard
                           type="TICKET"
@@ -264,6 +347,8 @@ function AdminRequestMessages() {
                           isPending={ticket.isPending}
                           onApprove={handleRequestClick}
                           isNew={newRequests.includes(ticket._id)}
+                          handleCheckBoxChange={handleCheckBoxChange}
+                          accessIds={giveAccessIds}
                         />
                       );
                     })

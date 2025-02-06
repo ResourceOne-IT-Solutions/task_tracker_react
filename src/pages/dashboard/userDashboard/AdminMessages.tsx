@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
   AdminMessageCard,
+  FilterComponent,
   UserRequestCard,
+  filterUserRequests,
   getData,
   getPath,
 } from "../../../utils/utils";
@@ -16,6 +18,7 @@ import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import {
   ADMIN_MESSAGE,
+  ALL,
   CHAT_REQUEST,
   NO_CHAT_REQUEST,
   NO_MESSAGES_TO_DISPLAY,
@@ -46,6 +49,14 @@ function AdminMessages() {
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showingTable, setShowingTable] = useState(ADMIN_MESSAGE);
+  const [selected, setSelected] = useState(ALL);
+  const [searchedVal, setSearchedVal] = useState("");
+  const [showingChatRequests, setShowingChatRequests] = useState<
+    ChatRequestInterface[]
+  >([]);
+  const [showingTicketRequests, setShowingTicketRequests] = useState<
+    TicketRequestInterface[]
+  >([]);
 
   const handleApprovedChat = (id: string) => {
     getData<UserModal>(`users/${id}`).then((res: any) => {
@@ -155,6 +166,36 @@ function AdminMessages() {
     }
     getTableData(tableName);
   };
+  const filterLogic = () => {
+    if (showingTable === CHAT_REQUEST) {
+      const filteredRequests = filterUserRequests(
+        chatRequests,
+        selected,
+        searchedVal,
+      );
+      setShowingChatRequests(filteredRequests);
+    } else if (showingTable === TICKET_REQUEST) {
+      const filteredRequests = filterUserRequests(
+        ticketRequests,
+        selected,
+        searchedVal,
+      );
+      setShowingTicketRequests(filteredRequests);
+    }
+  };
+  const handleUserSearch = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    e.preventDefault();
+    filterLogic();
+  };
+  useEffect(() => {
+    filterLogic();
+  }, [selected, ticketRequests, chatRequests]);
+  useEffect(() => {
+    setSelected(ALL);
+    setSearchedVal("");
+  }, [showingTable]);
   useEffect(() => {
     setIsLoading(true);
     getTableData(ADMIN_MESSAGE);
@@ -185,6 +226,18 @@ function AdminMessages() {
           </Button>
         ))}
       </div>
+      <>
+        {[CHAT_REQUEST, TICKET_REQUEST].includes(showingTable) && (
+          <FilterComponent
+            selected={selected}
+            setSelected={setSelected}
+            searchedVal={searchedVal}
+            setSearchedVal={setSearchedVal}
+            handleUserSearch={handleUserSearch}
+            isAdmin={false}
+          />
+        )}
+      </>
       <div className="request-msgs container">
         <div className="request-sub-msg">
           {isLoading ? (
@@ -193,8 +246,8 @@ function AdminMessages() {
             <>
               {showingTable === CHAT_REQUEST && (
                 <>
-                  {chatRequests.length > 0 ? (
-                    chatRequests.map((chat) => (
+                  {showingChatRequests.length > 0 ? (
+                    showingChatRequests.map((chat) => (
                       <UserRequestCard
                         key={chat._id}
                         type="CHAT"
@@ -212,8 +265,8 @@ function AdminMessages() {
               )}
               {showingTable === TICKET_REQUEST && (
                 <>
-                  {ticketRequests.length > 0 ? (
-                    ticketRequests?.map((ticket) => {
+                  {showingTicketRequests.length > 0 ? (
+                    showingTicketRequests?.map((ticket) => {
                       return (
                         <UserRequestCard
                           key={ticket._id}

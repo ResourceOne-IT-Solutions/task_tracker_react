@@ -80,6 +80,11 @@ export const REFRESH_TOKEN = () => localStorage.getItem("refreshToken") || "";
 export const COMPANY_NAME = "ResourceOne IT Solutions";
 export const CHAT_CACHE_FILES: { [key: string]: FileModel } = {};
 export const CURRENT_ORIGIN = window.location.origin;
+export const ALL = "All";
+export const RESOLVED = "Resolved";
+export const GIVE_ACCESS = "Give Acccess";
+export const APPROVED = "Approved";
+export const NOT_APPROVED = "Not Approved";
 export const TASKS = [
   {
     id: 1,

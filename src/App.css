@@ -30,6 +30,10 @@ body {
   color: #61dafb;
 }
 
+button.btn {
+  font-size: 14px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

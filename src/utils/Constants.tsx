@@ -29,6 +29,7 @@ export const IN_PROGRESS = "In Progress";
 export const PENDING = "Pending";
 export const IMPROPER_REQUIRMENT = "Improper Requirment";
 export const CLOSED = "Closed";
+export const Reopen = "Reopen";
 export const TICKET_STATUS_TYPES = {
   ASSIGNED,
   IN_PROGRESS,

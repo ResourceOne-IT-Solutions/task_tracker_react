@@ -20,7 +20,8 @@ type Status =
   | "In Progress"
   | "Pending"
   | "Closed"
-  | "Improper Requirment";
+  | "Improper Requirment"
+  | "Reopen";
 export interface TicketUpdates {
   description: string;
   comments: string;

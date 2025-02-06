@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Row, Col, Button, Dropdown } from "react-bootstrap";
-import { RED_STAR, TICKET_STATUS_TYPES } from "../Constants";
+import { CLOSED, RED_STAR, Reopen, TICKET_STATUS_TYPES } from "../Constants";
 import httpMethods from "../../api/Service";
 import { getNameId } from "../utils";
 import { Severity } from "./notification";
@@ -13,7 +13,9 @@ function CloseTicketModal({
   updateTicketsTable,
 }: any) {
   const { alertModal, currentUser } = useUserContext() as UserContext;
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState(
+    updateReference.isClosed ? Reopen : "",
+  );
   const [description, setDescription] = useState("");
   const [closeError, setCloseError] = useState<string>("");
   const [closeSuccess, setCloseSuccess] = useState<boolean>(false);
@@ -70,6 +72,7 @@ function CloseTicketModal({
       data = {
         isClosed: !updateReference.isClosed,
         updatedBy: getNameId(currentUser),
+        status: updateReference.isClosed ? Reopen : CLOSED,
       };
       updateTicket(data);
     }
@@ -94,12 +97,13 @@ function CloseTicketModal({
             <Row className="mb-3">
               <Form.Label>
                 <b>
-                  Select A Client <RED_STAR />
+                  Select Status <RED_STAR />
                 </b>
               </Form.Label>
               <Form.Group as={Col} md="12">
                 <Dropdown onSelect={handleSelect}>
                   <Dropdown.Toggle
+                    disabled={updateReference.isClosed}
                     variant="success"
                     id="dropdown-basic-ticket-client"
                   >

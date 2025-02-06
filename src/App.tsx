@@ -113,7 +113,7 @@ function App() {
             <div className="App">
               <Routespage />
               <SocketEvents />
-              <Footer />
+              {/* <Footer /> */}
               {showAlertModal && (
                 <Alert
                   content={alertModalContent.content}

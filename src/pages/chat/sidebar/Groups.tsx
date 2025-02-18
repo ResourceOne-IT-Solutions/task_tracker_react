@@ -69,19 +69,17 @@ const Groups = ({
   };
   return (
     <div className="group-list-container">
-      {currentUser.isAdmin && (
-        <div className="create-group" onClick={handleModalClick}>
-          <p className="m-0">
-            <b>Add New Group</b>
-          </p>{" "}
-          <p className="m-0">
-            <i
-              className="bi bi-plus-circle-fill"
-              style={{ fontSize: "20px" }}
-            ></i>
-          </p>
-        </div>
-      )}
+      <div className="create-group" onClick={handleModalClick}>
+        <p className="m-0">
+          <b>Add New Group</b>
+        </p>{" "}
+        <p className="m-0">
+          <i
+            className="bi bi-plus-circle-fill"
+            style={{ fontSize: "20px" }}
+          ></i>
+        </p>
+      </div>
       {showModal && modalName == "Create Group" && (
         <ReusableModal vals={modalProps}>
           <CreateGroup

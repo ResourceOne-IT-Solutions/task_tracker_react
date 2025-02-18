@@ -15,6 +15,6 @@
     "plugins": ["react", "react-hooks", "prettier", "@typescript-eslint"],
     "rules": {
       //add customize rules here as per your project's needs
-      "no-console": ["error", { "allow": ["warn", "error"] }]
+      //"no-console": ["error", { "allow": ["warn", "error"] }]
     }
 }

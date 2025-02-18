@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { Dropdown } from "react-bootstrap";
 import { UserContext, UserModal } from "../../../modals/UserModals";
@@ -24,7 +24,8 @@ interface CreateGroupModel {
 }
 
 const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
-  const { currentUser, socket } = useUserContext() as UserContext;
+  const { currentUser, socket, popupNotification } =
+    useUserContext() as UserContext;
   const [users, setUsers] = useState<UserModal[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [groupDetails, setGroupDetails] = useState<CreateGroupModel>({
@@ -59,7 +60,7 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
       setUsers(res);
     });
   }, []);
-  const handleCreateClick = (
+  const handleCreateClick = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     e.preventDefault();
@@ -70,14 +71,57 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
         groupMembers.push({ name: getFullName(user), id: user._id });
       }
     });
-    const groups = {
-      ...groupDetails,
-      members: groupMembers,
-    };
-    setGroupDetails(groups);
-    socket.emit("createGroup", groups);
+    if (currentUser.isAdmin) {
+      try {
+        const groups = {
+          ...groupDetails,
+          members: groupMembers,
+        };
+        const response = await httpMethods.post<
+          any,
+          { data: GroupInterface; message: string }
+        >("/message/createGroup", groups);
+        setShowModal(false);
+        onCreateGroup(response.data);
+        popupNotification({
+          content: response.message,
+          severity: Severity.SUCCESS,
+        });
+      } catch (error) {
+        popupNotification({
+          content: "Error While Creating A Group",
+          severity: Severity.ERROR,
+        });
+      }
+    } else {
+      try {
+        const payload = {
+          name: groupDetails.name,
+          members: groupMembers,
+          description: groupDetails.description,
+          requestdBy: {
+            name: getFullName(currentUser),
+            id: currentUser._id,
+          },
+        };
+        const response = await httpMethods.post<any, { message: string }>(
+          "/message/createGroupByUser",
+          payload,
+        );
+        setShowModal(false);
+        popupNotification({
+          content: response.message,
+          severity: Severity.SUCCESS,
+        });
+      } catch (error) {
+        popupNotification({
+          content: "Error While Creating A Group",
+          severity: Severity.ERROR,
+        });
+      }
+    }
   };
-
+  console.log("USER::::", currentUser);
   return (
     <>
       <Form>

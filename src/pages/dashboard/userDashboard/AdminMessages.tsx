@@ -6,6 +6,7 @@ import {
   filterUserRequests,
   getData,
   getPath,
+  getRoomId,
 } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
 import { UserContext, UserModal } from "../../../modals/UserModals";
@@ -38,6 +39,8 @@ function AdminMessages() {
     alertModal,
     requestMessageCount,
     setRequestMessageCount,
+    setCurrentRoom,
+    currentRoom,
   } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
   const [newRequests, setNewRequests] = useState<string[]>(requestMessageCount);
@@ -61,6 +64,9 @@ function AdminMessages() {
   const handleApprovedChat = (id: string) => {
     getData<UserModal>(`users/${id}`).then((res: any) => {
       setSelectedUser(res);
+      const roomId = getRoomId(currentUser._id, id);
+      socket.emit("joinRoom", { room: roomId, previousRoom: currentRoom });
+      setCurrentRoom(roomId);
       navigate("/chat");
     });
   };
@@ -137,15 +143,15 @@ function AdminMessages() {
           ADMIN_MESSAGE !== tableName ? currentUser._id : ""
         }`,
       )
-      .then((data: any[]) => {
+      .then((dt: { data: any[] }) => {
         if (tableName === CHAT_REQUEST) {
-          setChatRequests(data);
+          setChatRequests(dt.data);
         }
         if (tableName === TICKET_REQUEST) {
-          setTicketRequests(data);
+          setTicketRequests(dt.data);
         }
         if (tableName === ADMIN_MESSAGE) {
-          setMessageRequests(data);
+          setMessageRequests(dt.data);
         }
       })
       .catch((err) =>

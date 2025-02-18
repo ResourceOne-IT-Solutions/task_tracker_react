@@ -8,6 +8,16 @@ export interface ChatRequestInterface {
   time: Date;
   _id: string;
 }
+export interface GroupChatRequestInterface {
+  date: string;
+  description: string;
+  members: NameIdInterface[];
+  requestdBy: NameIdInterface;
+  name: string;
+  status: string;
+  time: Date;
+  _id: string;
+}
 export interface TicketRequestInterface {
   date: Date;
   isPending: boolean;
@@ -77,8 +87,9 @@ export interface TicketRaiseCardProps {
 export interface AdminRequestCardProps {
   id: string;
   sender: string;
-  receiver: string;
-  isPending: boolean;
+  receiver?: string;
+  members?: NameIdInterface[]
+  isPending: boolean | string;
   onApprove: (id: string, type: string) => void;
   type: string;
   time: Date;
@@ -88,6 +99,7 @@ export interface AdminRequestCardProps {
     e: React.ChangeEvent<HTMLInputElement>,
     id: string,
   ) => void;
+  handleChatExport?: (id: string) => void;
 }
 
 export interface AdminMessageCardProps {

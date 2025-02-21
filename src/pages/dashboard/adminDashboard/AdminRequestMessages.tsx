@@ -6,6 +6,7 @@ import {
   AdminMessageInterface,
   TicketRaiseInterface,
   TicketRequestInterface,
+  GroupChatRequestInterface,
 } from "../../../modals/MessageModals";
 import {
   AdminMessageCard,
@@ -14,17 +15,25 @@ import {
   Loader,
   TicketRaiseCard,
   filterAdminRequests,
+  generatePdf,
   getDate,
   getFullName,
   getPath,
+  getRoomId,
 } from "../../../utils/utils";
 import { useUserContext } from "../../../components/Authcontext/AuthContext";
-import { UserContext } from "../../../modals/UserModals";
+import {
+  RoomMessages,
+  UserContext,
+  UserModal,
+} from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 import {
+  ADMIN_BTNS,
   ADMIN_MESSAGE,
   ALL,
   CHAT_REQUEST,
+  GROUP_CHAT_REQUESTS,
   NO_CHAT_REQUEST,
   NO_MESSAGES_TO_DISPLAY,
   NO_TICKET_REQUEST,
@@ -43,8 +52,14 @@ function AdminRequestMessages() {
     alertModal,
     requestMessageCount,
     setRequestMessageCount,
+    selectedUser,
+    setSelectedUser,
+    popupNotification,
   } = useUserContext() as UserContext;
   const [chatRequests, setChatRequests] = useState<ChatRequestInterface[]>([]);
+  const [groupChatRequests, setGroupChatRequests] = useState<
+    GroupChatRequestInterface[]
+  >([]);
   const [showingTable, setShowingTable] = useState(ADMIN_MESSAGE);
   const [newRequests, setNewRequests] = useState<string[]>(requestMessageCount);
   const [ticketRequests, setTicketRequests] = useState<
@@ -137,23 +152,68 @@ function AdminRequestMessages() {
         setTicketRaiseMsgs([payloadData, ...ticketRaiseMsgs]);
       },
     );
-  const handleRequestClick = (id: string | string[], type: string) => {
-    const payload = {
-      user: {
-        name: getFullName(currentUser),
-        id: currentUser._id,
-        time: getDate(),
-        date: getDate(),
-      },
-      requestId: typeof id === "string" ? [id] : id,
-      type,
-      status: false,
-    };
-    socket.emit("approveUserRequest", payload);
-    if (typeof id !== "string") {
-      setGiveAccessIds([]);
-    } else if (giveAccessIds.includes(id)) {
-      setGiveAccessIds((prev) => prev.filter((i) => i !== id));
+  const handleRequestClick = async (
+    id: string | string[],
+    type: string,
+    isRejected?: boolean,
+  ) => {
+    if (showingTable === GROUP_CHAT_REQUESTS) {
+      const chatRequest = groupChatRequests?.find((req) => req._id === id);
+      const payload = {
+        id: chatRequest?._id,
+        name: chatRequest?.name,
+        members: chatRequest?.members,
+        description: chatRequest?.description,
+        admin: {
+          name: getFullName(currentUser),
+          id: currentUser._id,
+        },
+        ...(isRejected && { status: "Rejected" }),
+      };
+      try {
+        const resp: any = await httpMethods.post(
+          "/message/createGroup",
+          payload,
+        );
+        if (resp.success) {
+          const updatedReqs = [...groupChatRequests].map((req) => {
+            if (req._id === id) {
+              return {
+                ...req,
+                status: resp.message.includes("Approved")
+                  ? "Approved"
+                  : "Rejected",
+              };
+            }
+            return req;
+          });
+          setGroupChatRequests(updatedReqs);
+          popupNotification({
+            content: resp.message,
+            severity: Severity.SUCCESS,
+          });
+        }
+      } catch (error) {
+        console.log("ERROR:::", error);
+      }
+    } else {
+      const payload = {
+        user: {
+          name: getFullName(currentUser),
+          id: currentUser._id,
+          time: getDate(),
+          date: getDate(),
+        },
+        requestId: typeof id === "string" ? [id] : id,
+        type,
+        status: false,
+      };
+      socket.emit("approveUserRequest", payload);
+      if (typeof id !== "string") {
+        setGiveAccessIds([]);
+      } else if (giveAccessIds.includes(id)) {
+        setGiveAccessIds((prev) => prev.filter((i) => i !== id));
+      }
     }
   };
   const checkIsFirstTime = (type: string) => {
@@ -174,18 +234,23 @@ function AdminRequestMessages() {
   const getTableData = (tableName: string) => {
     httpMethods
       .get<any>(`/message/${getPath(tableName)}`)
-      .then((data: any[]) => {
-        if (tableName === CHAT_REQUEST) {
-          setChatRequests(data);
-        }
-        if (tableName === TICKET_REQUEST) {
-          setTicketRequests(data);
-        }
-        if (tableName === ADMIN_MESSAGE) {
-          setMessageRequests(data);
-        }
-        if (tableName === TICKETRAISE_MESSAGE) {
-          setTicketRaiseMsgs(data);
+      .then((dt: { data: any[] }) => {
+        switch (tableName) {
+          case CHAT_REQUEST:
+            setChatRequests(dt.data);
+            break;
+          case TICKET_REQUEST:
+            setTicketRequests(dt.data);
+            break;
+          case ADMIN_MESSAGE:
+            setMessageRequests(dt.data);
+            break;
+          case TICKETRAISE_MESSAGE:
+            setTicketRaiseMsgs(dt.data);
+            break;
+          case GROUP_CHAT_REQUESTS:
+            setGroupChatRequests(dt.data);
+            break;
         }
       })
       .catch((err) =>
@@ -248,6 +313,26 @@ function AdminRequestMessages() {
     const type = showingTable === CHAT_REQUEST ? "CHAT" : "TICKET";
     handleRequestClick(giveAccessIds, type);
   };
+  const handleChatExport = async (id: string) => {
+    const matchedRequest = showingChatRequests.find((req) => req._id === id);
+    const roomId = getRoomId(
+      matchedRequest?.sender.id as string,
+      matchedRequest?.opponent.id as string,
+    );
+    try {
+      const response = (await httpMethods.get(
+        `/message/usersChatHistory/${roomId}`,
+      )) as { data: RoomMessages[] };
+      generatePdf(response.data, currentUser, {
+        name: matchedRequest?.opponent.name as string,
+      });
+    } catch (error) {
+      popupNotification({
+        content: "Error While Fetching the Chat",
+        severity: Severity.ERROR,
+      });
+    }
+  };
   useEffect(() => {
     setIsLoading(true);
     getTableData(ADMIN_MESSAGE);
@@ -273,19 +358,17 @@ function AdminRequestMessages() {
         </h1>
       </div>
       <div className="d-flex justify-content-center gap-2 chat-request mb-2">
-        {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST, TICKETRAISE_MESSAGE].map(
-          (btn, idx) => (
-            <Button
-              className={`chat-request-toggle-btns ${
-                showingTable === btn && "active"
-              }`}
-              onClick={() => handleButtonClick(btn)}
-              key={idx}
-            >
-              {btn}
-            </Button>
-          ),
-        )}
+        {ADMIN_BTNS.map((btn, idx) => (
+          <Button
+            className={`chat-request-toggle-btns ${
+              showingTable === btn && "active"
+            }`}
+            onClick={() => handleButtonClick(btn)}
+            key={idx}
+          >
+            {btn}
+          </Button>
+        ))}
       </div>
       <>
         {[CHAT_REQUEST, TICKET_REQUEST].includes(showingTable) && (
@@ -324,6 +407,31 @@ function AdminRequestMessages() {
                           isNew={newRequests.includes(chat._id)}
                           handleCheckBoxChange={handleCheckBoxChange}
                           accessIds={giveAccessIds}
+                          handleChatExport={handleChatExport}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_CHAT_REQUEST}</p>
+                  )}
+                </>
+              )}
+              {showingTable === GROUP_CHAT_REQUESTS && (
+                <>
+                  {groupChatRequests.length > 0 ? (
+                    groupChatRequests?.map((chat) => {
+                      return (
+                        <AdminRequestCard
+                          type="GROUP_CHAT"
+                          key={chat._id}
+                          id={chat._id}
+                          time={chat.time}
+                          sender={chat.requestdBy.name}
+                          members={chat.members}
+                          isPending={chat?.status}
+                          onApprove={handleRequestClick}
+                          isNew={newRequests.includes(chat._id)}
+                          handleCheckBoxChange={handleCheckBoxChange}
                         />
                       );
                     })

@@ -50,11 +50,11 @@ const ChatSideBar = () => {
     setIsUsersLoading(true);
     socket.emit("newUser", { userId: currentUser._id });
     httpMethods
-      .get<GroupInterface[]>(
+      .get<{ data: GroupInterface[] }>(
         `/message/groups/${!currentUser.isAdmin ? currentUser._id : ""}`,
       )
       .then((groups) => {
-        setTotalGroups(groups);
+        setTotalGroups(groups.data);
       })
       .catch((error) => error)
       .finally(() => {

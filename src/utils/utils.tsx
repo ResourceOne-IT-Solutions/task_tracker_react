@@ -3,6 +3,7 @@ import { Button, Dropdown, Spinner, Form, InputGroup } from "react-bootstrap";
 import httpMethods from "../api/Service";
 import {
   NameIdInterface,
+  RoomMessages,
   Status,
   UserContext,
   UserModal,
@@ -19,6 +20,7 @@ import {
   CHAT_REQUEST,
   EMAIL_PATTERN,
   GIVE_ACCESS,
+  GROUP_CHAT_REQUESTS,
   MOBILE_PATTERN,
   NAME_PATTERN,
   NOT_APPROVED,
@@ -36,12 +38,13 @@ import { Modal } from "react-bootstrap";
 import {
   AdminMessageCardProps,
   AdminRequestCardProps,
-  ChatRequestInterface,
+  GroupChatRequestInterface,
   TicketRaiseCardProps,
   UserRequestCardProps,
 } from "../modals/MessageModals";
 import { fileDownload } from "../pages/chat/chatbox/Util";
 import { TicketModal } from "../modals/TicketModals";
+import jsPDF from "jspdf";
 
 export const setCookie = (cvalue: string, hours: number) => {
   const d = new Date();
@@ -94,8 +97,8 @@ export const statusIndicator = (
   }
 };
 export interface FullNameType {
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   name?: string;
 }
 export type DateFormat = "dd-mm-yyyy" | "mm-dd-yyyy" | "";
@@ -392,13 +395,25 @@ export const isEmptyObject = (object: object) => {
   return true;
 };
 
-export const getContent = (type: string, sender: string, receiver: string) => {
+export const getContent = (
+  type: string,
+  sender: string,
+  receiver: string,
+  members?: NameIdInterface[],
+) => {
   switch (type) {
     case "CHAT": {
       return `${sender} is Requesting to Chat with ${receiver}`;
     }
     case "TICKET": {
       return `${sender} is Requesting for ${receiver} tickets.`;
+    }
+    case "GROUP_CHAT": {
+      const names = [] as string[];
+      members?.forEach((member) => {
+        names.push(member.name);
+      });
+      return `${sender} is Requesting to Create Group With ${names}.`;
     }
   }
 };
@@ -407,6 +422,7 @@ export const AdminRequestCard = ({
   id,
   sender,
   receiver,
+  members,
   isPending,
   onApprove,
   type,
@@ -414,6 +430,7 @@ export const AdminRequestCard = ({
   isNew,
   accessIds,
   handleCheckBoxChange,
+  handleChatExport,
 }: AdminRequestCardProps) => {
   return (
     <div className={`request-content-wrapper ${isNew && "bg-warning"} `}>
@@ -432,19 +449,43 @@ export const AdminRequestCard = ({
           />
         )}
         <div>
-          {getContent(type, sender, receiver)}
+          {type === "GROUP_CHAT"
+            ? getContent(type, sender, "", members as NameIdInterface[])
+            : getContent(type, sender, receiver as string)}
           <div>Time: {new Date(time).toLocaleString()}</div>
         </div>
       </div>
 
       <div>
-        {isPending ? (
-          <Button variant="success" onClick={() => onApprove(id, type)}>
+        {(type === "GROUP_CHAT" ? isPending === "Pending" : isPending) ? (
+          <Button
+            variant="success"
+            onClick={() => onApprove(id, type)}
+            className="me-3"
+          >
             Give Access
           </Button>
         ) : (
-          <Button variant="success" disabled>
-            Resolved
+          <>
+            {isPending === "Rejected" ? (
+              <Button variant="warning" disabled className="me-3">
+                Rejected
+              </Button>
+            ) : (
+              <Button variant="success" disabled className="me-3">
+                Resolved
+              </Button>
+            )}
+            {type === "CHAT" && (
+              <Button variant="primary" onClick={() => handleChatExport?.(id)}>
+                Export Chat
+              </Button>
+            )}
+          </>
+        )}
+        {type === "GROUP_CHAT" && isPending === "Pending" && (
+          <Button variant="warning" onClick={() => onApprove(id, type, true)}>
+            Reject
           </Button>
         )}
       </div>
@@ -664,6 +705,33 @@ export const UserRequestCard = ({
   );
 };
 
+export const UserGroupRequestCard = ({
+  message,
+}: {
+  message: GroupChatRequestInterface;
+}) => {
+  const { requestdBy, members, time, status } = message;
+  return (
+    <div className="request-content-wrapper">
+      <div className="chatrequest-message">
+        <div>{getContent("GROUP_CHAT", requestdBy.name, "", members)}</div>
+        <div>Time: {new Date(time).toLocaleString()}</div>
+      </div>
+      <p>
+        {status !== "Approved" ? (
+          <Button variant="danger" disabled>
+            {status === "Pending" ? "Not Approved" : "Rejected"}
+          </Button>
+        ) : (
+          <Button variant="success" disabled>
+            Approved
+          </Button>
+        )}
+      </p>
+    </div>
+  );
+};
+
 export const TicketRaiseCard = ({ message, isNew }: TicketRaiseCardProps) => {
   return (
     <div
@@ -700,6 +768,8 @@ export const getPath = (type: string) => {
       return "admin-messages";
     case TICKETRAISE_MESSAGE:
       return "ticket-raise-messages";
+    case GROUP_CHAT_REQUESTS:
+      return "getGroupRequests";
   }
 };
 
@@ -759,4 +829,50 @@ export const checkDateWise = (
   if (!from.getTime() || !to.getTime()) return true;
   const receivedDate = new Date(ticket.receivedDate);
   return receivedDate >= new Date(from) && receivedDate <= new Date(to);
+};
+
+export const generatePdf = (
+  msgs: RoomMessages[],
+  currentUser: UserModal,
+  selectedUser: UserModal | { name: string },
+) => {
+  const chatHistory = msgs.flatMap((messages) =>
+    messages.messageByDate.map((message) => {
+      return `${message.from.name}: ${message.content} - ${new Date(
+        message.date,
+      ).toLocaleDateString()} ${new Date(message.time).toLocaleTimeString()}`;
+    }),
+  );
+  const pdf = new jsPDF();
+  const pageSize = pdf.internal.pageSize;
+  const pageHeight = pageSize.height;
+  const lineHeight = 5; // Adjust as needed
+  const marginLeft = 10; // Adjust the left margin as needed
+  let cursorY = 10;
+  chatHistory.forEach((message) => {
+    if (cursorY + lineHeight > pageHeight) {
+      pdf.addPage(); // Add a new page
+      cursorY = 10; // Reset Y position
+    }
+    // Split the message into lines if it's too long
+    const lines = pdf.splitTextToSize(
+      message,
+      pdf.internal.pageSize.getWidth() - 2 * marginLeft,
+    );
+
+    // Output each line
+    lines.forEach((line: string, lineIndex: number) => {
+      if (lineIndex === 0) {
+        pdf.text(line, marginLeft, cursorY);
+      } else {
+        pdf.text(line, marginLeft + 5, cursorY);
+      }
+      cursorY += lineHeight;
+    });
+    cursorY += lineHeight;
+  });
+  const pdfName = `${getFullName(currentUser)}-${getFullName(
+    selectedUser,
+  )}-Chat.pdf`;
+  pdf.save(pdfName);
 };

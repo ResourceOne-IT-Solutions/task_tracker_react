@@ -3,6 +3,7 @@ import "./styles/header.css";
 import { RoomMessages, UserModal } from "../../../modals/UserModals";
 import {
   ProfileImage,
+  generatePdf,
   getFullName,
   statusIndicator,
 } from "../../../utils/utils";
@@ -44,45 +45,7 @@ const ChatHeader = ({
     setPopupOpen(!isPopupOpen);
   };
   const handleExportBtn = () => {
-    const chatHistory = totalMessages.flatMap((messages) =>
-      messages.messageByDate.map((message) => {
-        return `${message.from.name}: ${message.content} - ${new Date(
-          message.date,
-        ).toLocaleDateString()} ${new Date(message.time).toLocaleTimeString()}`;
-      }),
-    );
-    const pdf = new jsPDF();
-    const pageSize = pdf.internal.pageSize;
-    const pageHeight = pageSize.height;
-    const lineHeight = 5; // Adjust as needed
-    const marginLeft = 10; // Adjust the left margin as needed
-    let cursorY = 10;
-    chatHistory.forEach((message) => {
-      if (cursorY + lineHeight > pageHeight) {
-        pdf.addPage(); // Add a new page
-        cursorY = 10; // Reset Y position
-      }
-      // Split the message into lines if it's too long
-      const lines = pdf.splitTextToSize(
-        message,
-        pdf.internal.pageSize.getWidth() - 2 * marginLeft,
-      );
-
-      // Output each line
-      lines.forEach((line: string, lineIndex: number) => {
-        if (lineIndex === 0) {
-          pdf.text(line, marginLeft, cursorY);
-        } else {
-          pdf.text(line, marginLeft + 5, cursorY);
-        }
-        cursorY += lineHeight;
-      });
-      cursorY += lineHeight;
-    });
-    const pdfName = `${getFullName(currentUser)}-${getFullName(
-      selectedUser,
-    )}-Chat.pdf`;
-    pdf.save(pdfName);
+    generatePdf(totalMessages, currentUser, selectedUser);
   };
   return (
     <div className="header-container">

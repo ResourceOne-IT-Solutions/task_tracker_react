@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   AdminMessageCard,
   FilterComponent,
+  UserGroupRequestCard,
   UserRequestCard,
   filterUserRequests,
   getData,
@@ -14,6 +15,7 @@ import {
   ChatRequestInterface,
   AdminMessageInterface,
   TicketRequestInterface,
+  GroupChatRequestInterface,
 } from "../../../modals/MessageModals";
 import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -21,9 +23,12 @@ import {
   ADMIN_MESSAGE,
   ALL,
   CHAT_REQUEST,
+  GROUP_CHAT_REQUESTS,
   NO_CHAT_REQUEST,
+  NO_GROUP_CHAT_REQUEST,
   NO_MESSAGES_TO_DISPLAY,
   NO_TICKET_REQUEST,
+  REQUEST_TABS,
   TICKET_REQUEST,
 } from "../../../utils/Constants";
 import { Severity } from "../../../utils/modal/notification";
@@ -49,6 +54,9 @@ function AdminMessages() {
   >([]);
   const [messageRequests, setMessageRequests] = useState<
     AdminMessageInterface[]
+  >([]);
+  const [groupChatRequests, setGroupChatRequests] = useState<
+    GroupChatRequestInterface[]
   >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showingTable, setShowingTable] = useState(ADMIN_MESSAGE);
@@ -134,16 +142,20 @@ function AdminMessages() {
     if (type === TICKET_REQUEST) {
       return ticketRequests.length == 0;
     }
+    if (type === GROUP_CHAT_REQUESTS) {
+      return groupChatRequests.length == 0;
+    }
     return true;
   };
   const getTableData = (tableName: string) => {
     httpMethods
       .get<any>(
         `/message/${getPath(tableName)}/${
-          ADMIN_MESSAGE !== tableName ? currentUser._id : ""
+          !REQUEST_TABS.includes(tableName) ? currentUser._id : ""
         }`,
       )
       .then((dt: { data: any[] }) => {
+        console.log("DATA::::", dt, tableName);
         if (tableName === CHAT_REQUEST) {
           setChatRequests(dt.data);
         }
@@ -152,6 +164,9 @@ function AdminMessages() {
         }
         if (tableName === ADMIN_MESSAGE) {
           setMessageRequests(dt.data);
+        }
+        if (tableName === GROUP_CHAT_REQUESTS) {
+          setGroupChatRequests(dt.data);
         }
       })
       .catch((err) =>
@@ -220,17 +235,19 @@ function AdminMessages() {
         </h1>
       </div>
       <div className="d-flex justify-content-center gap-5 mb-2">
-        {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST].map((btn, idx) => (
-          <Button
-            className={`chat-request-toggle-btns ${
-              showingTable === btn && "active"
-            }`}
-            onClick={() => handleButtonClick(btn)}
-            key={idx}
-          >
-            {btn}
-          </Button>
-        ))}
+        {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST, GROUP_CHAT_REQUESTS].map(
+          (btn, idx) => (
+            <Button
+              className={`chat-request-toggle-btns ${
+                showingTable === btn && "active"
+              }`}
+              onClick={() => handleButtonClick(btn)}
+              key={idx}
+            >
+              {btn}
+            </Button>
+          ),
+        )}
       </div>
       <>
         {[CHAT_REQUEST, TICKET_REQUEST].includes(showingTable) && (
@@ -307,6 +324,22 @@ function AdminMessages() {
                     })
                   ) : (
                     <p className="fw-bold">{NO_MESSAGES_TO_DISPLAY}</p>
+                  )}
+                </>
+              )}
+              {showingTable === GROUP_CHAT_REQUESTS && (
+                <>
+                  {groupChatRequests.length > 0 ? (
+                    groupChatRequests?.map((message) => {
+                      return (
+                        <UserGroupRequestCard
+                          key={message._id}
+                          message={message}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="fw-bold">{NO_GROUP_CHAT_REQUEST}</p>
                   )}
                 </>
               )}

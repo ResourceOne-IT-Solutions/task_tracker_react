@@ -6,7 +6,7 @@ const BE_LOCAL = "http://192.168.10.29:1234";
 const BE_LOCAL2 = "http://192.168.29.110:1234";
 const VERSION1 = "/api/v1";
 // change socket url if u want to cha nge server url for API calls
-export const SOCKET_URL = BE_LOCAL;
+export const SOCKET_URL = BE_SERVER;
 export const BE_URL = SOCKET_URL + VERSION1;
 export const GROUP_IMG_URL =
   "https://cdn.vectorstock.com/i/1000x1000/59/50/business-office-group-team-people-vector-31385950.webp";
@@ -22,6 +22,7 @@ export const USER_STATUSES = "USER_STATUSES";
 export const FILTERS = ["last 1 week", "last 1 month", "last 2 months"];
 export const NO_TICKET_REQUEST = "No Ticket requests Available.";
 export const NO_CHAT_REQUEST = "No Chat Request Avaialble.";
+export const NO_GROUP_CHAT_REQUEST = "No Group Chat Requests Avaialble.";
 export const NO_MESSAGES_TO_DISPLAY = "No Messages To Display.";
 export const NOT_ASSIGNED = "Not Assigned";
 export const ASSIGNED = "Assigned";
@@ -74,6 +75,7 @@ export const TICKET_REQUEST = "Ticket Requests";
 export const ADMIN_MESSAGE = "Admin Messages";
 export const TICKETRAISE_MESSAGE = "TicketRaise Messages";
 export const GROUP_CHAT_REQUESTS = "Group Chat Requests";
+export const REQUEST_TABS = [ADMIN_MESSAGE, GROUP_CHAT_REQUESTS];
 export const NO_DATA_AVAILBALE = () => <span>Data not available</span>;
 export const RED_STAR = () => <span className="text-danger">*</span>;
 export const ACCESS_TOKEN = () => localStorage.getItem("accessToken") || "";

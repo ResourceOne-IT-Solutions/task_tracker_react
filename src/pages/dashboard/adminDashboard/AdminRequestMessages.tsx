@@ -151,10 +151,13 @@ function AdminRequestMessages() {
         setTicketRaiseMsgs([payloadData, ...ticketRaiseMsgs]);
       },
     );
-  const handleRequestClick = (id: string | string[], type: string) => {
+  const handleRequestClick = async (
+    id: string | string[],
+    type: string,
+    isRejected?: boolean,
+  ) => {
     if (showingTable === GROUP_CHAT_REQUESTS) {
       const chatRequest = groupChatRequests?.find((req) => req._id === id);
-      console.log("REQ::::", chatRequest);
       const payload = {
         id: chatRequest?._id,
         name: chatRequest?.name,
@@ -164,10 +167,31 @@ function AdminRequestMessages() {
           name: getFullName(currentUser),
           id: currentUser._id,
         },
+        ...(isRejected && { status: "Rejected" }),
       };
       try {
-        const resp = httpMethods.post("/message/createGroup", payload);
-        console.log("RESP:::::", resp);
+        const resp: any = await httpMethods.post(
+          "/message/createGroup",
+          payload,
+        );
+        if (resp.success) {
+          const updatedReqs = [...groupChatRequests].map((req) => {
+            if (req._id === id) {
+              return {
+                ...req,
+                status: resp.message.includes("Approved")
+                  ? "Approved"
+                  : "Rejected",
+              };
+            }
+            return req;
+          });
+          setGroupChatRequests(updatedReqs);
+          popupNotification({
+            content: resp.message,
+            severity: Severity.SUCCESS,
+          });
+        }
       } catch (error) {
         console.log("ERROR:::", error);
       }
@@ -321,7 +345,6 @@ function AdminRequestMessages() {
     setSearchedVal("");
     setGiveAccessIds([]);
   }, [showingTable]);
-  console.log("REQ::::", groupChatRequests);
   return (
     <div className="text-center view-request-msgs container">
       <div className="table-heading">

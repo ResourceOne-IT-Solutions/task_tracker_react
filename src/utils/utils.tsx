@@ -38,7 +38,7 @@ import { Modal } from "react-bootstrap";
 import {
   AdminMessageCardProps,
   AdminRequestCardProps,
-  ChatRequestInterface,
+  GroupChatRequestInterface,
   TicketRaiseCardProps,
   UserRequestCardProps,
 } from "../modals/MessageModals";
@@ -432,7 +432,6 @@ export const AdminRequestCard = ({
   handleCheckBoxChange,
   handleChatExport,
 }: AdminRequestCardProps) => {
-  console.log("TYPE::::", type);
   return (
     <div className={`request-content-wrapper ${isNew && "bg-warning"} `}>
       <div
@@ -484,8 +483,8 @@ export const AdminRequestCard = ({
             )}
           </>
         )}
-        {type === "GROUP_CHAT" && (
-          <Button variant="warning" disabled>
+        {type === "GROUP_CHAT" && isPending === "Pending" && (
+          <Button variant="warning" onClick={() => onApprove(id, type, true)}>
             Reject
           </Button>
         )}
@@ -698,6 +697,33 @@ export const UserRequestCard = ({
           </Button>
         ) : (
           <Button variant="success" onClick={onApprove}>
+            Approved
+          </Button>
+        )}
+      </p>
+    </div>
+  );
+};
+
+export const UserGroupRequestCard = ({
+  message,
+}: {
+  message: GroupChatRequestInterface;
+}) => {
+  const { requestdBy, members, time, status } = message;
+  return (
+    <div className="request-content-wrapper">
+      <div className="chatrequest-message">
+        <div>{getContent("GROUP_CHAT", requestdBy.name, "", members)}</div>
+        <div>Time: {new Date(time).toLocaleString()}</div>
+      </div>
+      <p>
+        {status !== "Approved" ? (
+          <Button variant="danger" disabled>
+            {status === "Pending" ? "Not Approved" : "Rejected"}
+          </Button>
+        ) : (
+          <Button variant="success" disabled>
             Approved
           </Button>
         )}

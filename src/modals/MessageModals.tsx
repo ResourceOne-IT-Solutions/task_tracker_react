@@ -88,9 +88,9 @@ export interface AdminRequestCardProps {
   id: string;
   sender: string;
   receiver?: string;
-  members?: NameIdInterface[]
+  members?: NameIdInterface[];
   isPending: boolean | string;
-  onApprove: (id: string, type: string) => void;
+  onApprove: (id: string, type: string, isRejected?: boolean) => void;
   type: string;
   time: Date;
   isNew: boolean;

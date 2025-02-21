@@ -76,6 +76,13 @@ export const ADMIN_MESSAGE = "Admin Messages";
 export const TICKETRAISE_MESSAGE = "TicketRaise Messages";
 export const GROUP_CHAT_REQUESTS = "Group Chat Requests";
 export const REQUEST_TABS = [ADMIN_MESSAGE, GROUP_CHAT_REQUESTS];
+export const ADMIN_BTNS = [
+  ADMIN_MESSAGE,
+  CHAT_REQUEST,
+  TICKET_REQUEST,
+  TICKETRAISE_MESSAGE,
+  GROUP_CHAT_REQUESTS,
+];
 export const NO_DATA_AVAILBALE = () => <span>Data not available</span>;
 export const RED_STAR = () => <span className="text-danger">*</span>;
 export const ACCESS_TOKEN = () => localStorage.getItem("accessToken") || "";

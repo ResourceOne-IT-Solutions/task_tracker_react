@@ -29,6 +29,7 @@ import {
 } from "../../../modals/UserModals";
 import { useNavigate } from "react-router-dom";
 import {
+  ADMIN_BTNS,
   ADMIN_MESSAGE,
   ALL,
   CHAT_REQUEST,
@@ -357,13 +358,7 @@ function AdminRequestMessages() {
         </h1>
       </div>
       <div className="d-flex justify-content-center gap-2 chat-request mb-2">
-        {[
-          ADMIN_MESSAGE,
-          CHAT_REQUEST,
-          TICKET_REQUEST,
-          TICKETRAISE_MESSAGE,
-          GROUP_CHAT_REQUESTS,
-        ].map((btn, idx) => (
+        {ADMIN_BTNS.map((btn, idx) => (
           <Button
             className={`chat-request-toggle-btns ${
               showingTable === btn && "active"

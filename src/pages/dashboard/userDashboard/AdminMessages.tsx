@@ -155,18 +155,19 @@ function AdminMessages() {
         }`,
       )
       .then((dt: { data: any[] }) => {
-        console.log("DATA::::", dt, tableName);
-        if (tableName === CHAT_REQUEST) {
-          setChatRequests(dt.data);
-        }
-        if (tableName === TICKET_REQUEST) {
-          setTicketRequests(dt.data);
-        }
-        if (tableName === ADMIN_MESSAGE) {
-          setMessageRequests(dt.data);
-        }
-        if (tableName === GROUP_CHAT_REQUESTS) {
-          setGroupChatRequests(dt.data);
+        switch (tableName) {
+          case CHAT_REQUEST:
+            setChatRequests(dt.data);
+            break;
+          case TICKET_REQUEST:
+            setTicketRequests(dt.data);
+            break;
+          case ADMIN_MESSAGE:
+            setMessageRequests(dt.data);
+            break;
+          case GROUP_CHAT_REQUESTS:
+            setGroupChatRequests(dt.data);
+            break;
         }
       })
       .catch((err) =>

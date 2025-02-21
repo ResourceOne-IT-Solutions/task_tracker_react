@@ -71,57 +71,47 @@ const CreateGroup = ({ onCreateGroup, setShowModal }: CreateGroupProps) => {
         groupMembers.push({ name: getFullName(user), id: user._id });
       }
     });
+    let payload;
     if (currentUser.isAdmin) {
-      try {
-        const groups = {
-          ...groupDetails,
-          members: groupMembers,
-        };
-        const response = await httpMethods.post<
-          any,
-          { data: GroupInterface; message: string }
-        >("/message/createGroup", groups);
-        setShowModal(false);
-        onCreateGroup(response.data);
-        popupNotification({
-          content: response.message,
-          severity: Severity.SUCCESS,
-        });
-      } catch (error) {
-        popupNotification({
-          content: "Error While Creating A Group",
-          severity: Severity.ERROR,
-        });
-      }
+      payload = {
+        ...groupDetails,
+        members: groupMembers,
+      };
     } else {
-      try {
-        const payload = {
-          name: groupDetails.name,
-          members: groupMembers,
-          description: groupDetails.description,
-          requestdBy: {
-            name: getFullName(currentUser),
-            id: currentUser._id,
-          },
-        };
-        const response = await httpMethods.post<any, { message: string }>(
-          "/message/createGroupByUser",
-          payload,
-        );
-        setShowModal(false);
-        popupNotification({
-          content: response.message,
-          severity: Severity.SUCCESS,
-        });
-      } catch (error) {
-        popupNotification({
-          content: "Error While Creating A Group",
-          severity: Severity.ERROR,
-        });
-      }
+      payload = {
+        name: groupDetails.name,
+        members: groupMembers,
+        description: groupDetails.description,
+        requestdBy: {
+          name: getFullName(currentUser),
+          id: currentUser._id,
+        },
+      };
+    }
+    try {
+      const response = await httpMethods.post<
+        any,
+        { data: GroupInterface; message: string }
+      >(
+        currentUser.isAdmin
+          ? "/message/createGroup"
+          : "/message/createGroupByUser",
+        payload,
+      );
+      setShowModal(false);
+      currentUser.isAdmin && onCreateGroup(response.data);
+      popupNotification({
+        content: response.message,
+        severity: Severity.SUCCESS,
+      });
+    } catch (error) {
+      popupNotification({
+        content: "Error While Creating A Group",
+        severity: Severity.ERROR,
+      });
     }
   };
-  console.log("USER::::", currentUser);
+
   return (
     <>
       <Form>

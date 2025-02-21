@@ -30,6 +30,7 @@ import {
   NO_TICKET_REQUEST,
   REQUEST_TABS,
   TICKET_REQUEST,
+  USER_BTNS,
 } from "../../../utils/Constants";
 import { Severity } from "../../../utils/modal/notification";
 import httpMethods from "../../../api/Service";
@@ -236,19 +237,17 @@ function AdminMessages() {
         </h1>
       </div>
       <div className="d-flex justify-content-center gap-5 mb-2">
-        {[ADMIN_MESSAGE, CHAT_REQUEST, TICKET_REQUEST, GROUP_CHAT_REQUESTS].map(
-          (btn, idx) => (
-            <Button
-              className={`chat-request-toggle-btns ${
-                showingTable === btn && "active"
-              }`}
-              onClick={() => handleButtonClick(btn)}
-              key={idx}
-            >
-              {btn}
-            </Button>
-          ),
-        )}
+        {USER_BTNS.map((btn, idx) => (
+          <Button
+            className={`chat-request-toggle-btns ${
+              showingTable === btn && "active"
+            }`}
+            onClick={() => handleButtonClick(btn)}
+            key={idx}
+          >
+            {btn}
+          </Button>
+        ))}
       </div>
       <>
         {[CHAT_REQUEST, TICKET_REQUEST].includes(showingTable) && (

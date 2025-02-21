@@ -83,6 +83,12 @@ export const ADMIN_BTNS = [
   TICKETRAISE_MESSAGE,
   GROUP_CHAT_REQUESTS,
 ];
+export const USER_BTNS = [
+  ADMIN_MESSAGE,
+  CHAT_REQUEST,
+  TICKET_REQUEST,
+  GROUP_CHAT_REQUESTS,
+];
 export const NO_DATA_AVAILBALE = () => <span>Data not available</span>;
 export const RED_STAR = () => <span className="text-danger">*</span>;
 export const ACCESS_TOKEN = () => localStorage.getItem("accessToken") || "";
